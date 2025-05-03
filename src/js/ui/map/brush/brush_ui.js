@@ -4,10 +4,15 @@
     //Declare local instance variables
     var brush_obj = main.brush;
 
-    main.cursor_layer = new maptalks.VectorLayer("cursor_layer").addTo(map);
+    main.cursor_layer = new maptalks.VectorLayer("cursor_layer", [], {
+      hitDetect: true,
+      interactive: true
+    }).addTo(map);
 
     //On mousemove event for map
     map.on("mousemove", function (e) {
+      window.mouse_dragged = true;
+
       //Set cursor
       {
         //Remove previous cursor
@@ -145,8 +150,9 @@
       //Bind tooltip to selection
       if (brush_obj.current_selection) {
         brush_obj.current_selection.setSymbol(brush_obj.entity_options);
-        brush_obj.current_selection.on("click", function (e) {
-          printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: true });
+        brush_obj.current_selection.addEventListener("mouseup", function (e) {
+          if (!window.mouse_dragged && main.events.left_mouse)
+            printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: true });
         });
       }
     }

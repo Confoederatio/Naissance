@@ -162,6 +162,9 @@ if (!global.config) global.config = {};
     //Update bottom-right sidebar UI
     printBrush();
   }, 100);
+  setInterval(function(){
+    window.mouse_dragged = false;
+  }, 500);
 }
 
 //Test scripts

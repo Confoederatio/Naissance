@@ -3,6 +3,7 @@
   map.on("popupopen", function (e) {
     var local_popup = e.popup;
 
+    console.log(`popupopen event triggered for entity ${entity_id}`);
     if (local_popup.options.id == "entity-ui-popup")
       setTimeout(function(){
         var entity_id = local_popup.options.class;
