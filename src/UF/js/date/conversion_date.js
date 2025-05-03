@@ -1,5 +1,8 @@
 /*
-  convertTimestampToDate() - Converts a given timestamp into a date object.
+convertTimestampToDate() - Parses a timestamp into a date object.
+arg0_timestamp: (String) - The timestamp to parse.
+
+Returns: (Object, Date)
 */
 function convertTimestampToDate (arg0_timestamp) {
   //Convert from parameters
@@ -17,8 +20,7 @@ function convertTimestampToDate (arg0_timestamp) {
   var local_date = {};
 
   //Guard clause
-  if (typeof timestamp == "object")
-    return timestamp;
+  if (typeof timestamp == "object") return timestamp;
 
   //Calculate years
   local_date.year = Math.floor(timestamp/(365.25*24*60));

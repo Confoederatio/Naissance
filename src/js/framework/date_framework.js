@@ -83,4 +83,38 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
     if (!options.reload_map)
       refreshHierarchy();
   }
+
+  /**
+   * setDate() - Sets the current date and reloads the map where necessary.
+   * @param {Object} arg0_date - The date to set.
+   * 
+   * @returns {Object}
+   */
+  function setDate (arg0_date, arg1_do_not_add_to_undo_redo) {
+    //Convert from parameters 
+    var date_obj = convertTimestampToDate(arg0_date);
+    var do_not_add_to_undo_redo = arg1_do_not_add_to_undo_redo;
+
+    //Declare local instance variables
+    var old_date_obj = JSON.parse(JSON.stringify(main.date));
+
+    //Set main.date
+    main.date = date_obj;
+
+    //Reload map
+    loadDate();
+
+    //Log action
+    if (!do_not_add_to_undo_redo)
+      performAction({
+        action_id: "change_date",
+        redo_function: "setDate",
+        redo_function_parameters: [date_obj, true],
+        undo_function: "setDate",
+        undo_function_parameters: [old_date_obj, true]
+      });
+
+    //Return statement
+    return date_obj;
+  }
 }

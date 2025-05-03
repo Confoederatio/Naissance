@@ -177,7 +177,13 @@
     });
   }
 
-  //finishEntity() - Finishes an entity's editing process.
+  /**
+   * finishEntity() - Finishes an entity's editing process.
+   * @param {Object} [arg0_options]
+   *  @param {boolean} [arg0_options.do_not_reload] - Optional. Whether to reload the current date.
+   * 
+   * @returns {String} - The entity ID of the newly created entity.
+  **/
   function finishEntity (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
@@ -718,6 +724,11 @@
 
     //Return statement
     return entity_name;
+  }
+
+  //[WIP] - Finish function body
+  function undoFinishEntity (arg0_entity_id) {
+
   }
 
   /*

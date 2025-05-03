@@ -19,8 +19,7 @@
 
     //Close entity UI, call editEntity()
     closeEntityContextMenu();
-    main.date = convertTimestampToDate(timestamp);
-    loadDate();
+    setDate(timestamp);
     editEntity(entity_id);
   }
 

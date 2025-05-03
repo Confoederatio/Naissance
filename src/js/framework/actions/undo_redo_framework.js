@@ -60,19 +60,42 @@
 
   //initialiseUndoRedoActions() - Sets up undo/redo actions.
   function initialiseUndoRedoActions () {
-    createAction("add_to_brush", {
-      name: "Add To Brush",
+    //Brush
+    {
+      createAction("add_to_brush", {
+        name: "Add To Brush",
+  
+        function: "addToBrush",
+        reverse_function: "removeFromBrush"
+      });
+  
+      createAction("remove_from_brush", {
+        name: "Remove From Brush",
+  
+        function: "removeFromBrush",
+        reverse_function: "addToBrush"
+      });
+    }
 
-      function: "addToBrush",
-      reverse_function: "removeFromBrush"
-    });
+    //Date
+    {
+      createAction("change_date", {
+        name: "Change Date",
 
-    createAction("remove_from_brush", {
-      name: "Remove From Brush",
+        function: "loadDate",
+        reverse_function: "loadDate"
+      });
+    }
+    
+    //Entities
+    {
+      createAction("finish_entity", {
+        name: "Finish Entity",
 
-      function: "removeFromBrush",
-      reverse_function: "addToBrush"
-    });
+        function: "finishEntity",
+        reverse_function: "undoFinishEntity"
+      });
+    }
 
     //Call initialiseUndoRedoUI()
     initialiseUndoRedoUI();

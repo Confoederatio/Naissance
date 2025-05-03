@@ -203,11 +203,8 @@
       new_date[all_fields[i]] = parseInt(new_date[all_fields[i]]);
 
     //Set date
-    var old_date = JSON.parse(JSON.stringify(main.date));
-    main.date = new_date;
-
+    setDate(new_date);
     autoFillDate();
-    loadDate(old_date);
   }
 }
 
