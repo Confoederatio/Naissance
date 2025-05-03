@@ -89,11 +89,20 @@
     
     //Entities
     {
+      //Entity Actions
       createAction("finish_entity", {
         name: "Finish Entity",
 
         function: "finishEntity",
         reverse_function: "undoFinishEntity"
+      });
+
+      //Keyframes
+      createAction("edit_keyframe", {
+        name: "Edit Keyframe",
+
+        function: "editKeyframe",
+        reverse_function: "undoEditKeyframe"
       });
     }
 

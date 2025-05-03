@@ -21,6 +21,14 @@
     closeEntityContextMenu();
     setDate(timestamp);
     editEntity(entity_id);
+
+    performAction({
+      action_id: "edit_keyframe",
+      redo_function: "editKeyframe",
+      redo_function_parameters: [entity_id, timestamp],
+      undo_function: "undoEditKeyframe",
+      undo_function_parameters: [entity_id]
+    });
   }
 
   function moveKeyframe (arg0_entity_id, arg1_date, arg2_date) { //[WIP] - This should update the bio and adjust any open context menus tied to a keyframe. ('placeholder: "timestamp"') It does not.
@@ -61,6 +69,21 @@
       } else {
         console.warn(`Could not find history entry for ${entity_id} at timestamp ${entry_date}!`);
       }
+  }
+
+  /**
+   * undoEditKeyframe() - Undoes an edit keyframe action by restoring the current history frame and clearing entity brush selection.
+   * @param {String} arg0_entity_id - The ID of the entity to undo the edit keyframe action for.
+   * 
+   * @returns {Object}
+   **/
+  function undoEditKeyframe (arg0_entity_id) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+
+    //Declare local instance variables
+    clearBrush();
+    loadDate();
   }
 }
 

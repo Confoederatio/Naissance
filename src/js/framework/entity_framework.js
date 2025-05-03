@@ -727,7 +727,11 @@
   }
 
   //[WIP] - Finish function body
-  function undoFinishEntity (arg0_entity_id) {
+  function undoFinishEntity (arg0_entity_id, arg1_options) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+
+    //Declare local instance variables
 
   }
 
