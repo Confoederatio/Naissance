@@ -90,6 +90,12 @@
     //Entities
     {
       //Entity Actions
+      createAction("delete_entity", {
+        name: "Delete Entity",
+
+        function: "deleteEntity",
+        reverse_function: "undoDeleteEntity"
+      });
       createAction("finish_entity", {
         name: "Finish Entity",
 

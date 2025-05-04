@@ -4,12 +4,15 @@
     deleteEntity() - Deletes an entity.
     arg0_entity_id: (String) - The entity ID for the entity to delete.
   */
-  function deleteEntity (arg0_entity_id) {
+  function deleteEntity (arg0_entity_id, arg1_do_not_add_to_undo_redo) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
+    var do_not_add_to_undo_redo = arg1_do_not_add_to_undo_redo;
 
     //Declare local instance variables
     var current_entity_class;
+    var group_memberships = [];
+    var old_entity_obj;
 
     //Close popups relating to entity first
     closeEntityContextMenu(entity_id);
@@ -30,8 +33,10 @@
       //Splice from entities
       if (local_group.entities)
         for (var x = 0; x < local_group.entities.length; x++)
-          if (local_group.entities[x] == entity_id)
+          if (local_group.entities[x] == entity_id) {
+            group_memberships.push(all_groups[i]);
             local_group.entities.splice(x, 1);
+          }
     }
 
     //Remove entity from all masks
@@ -44,11 +49,25 @@
     //Remove entity
     for (var i = 0; i < main.entities.length; i++)
       if (main.entities[i].options.className == entity_id) {
+        old_entity_obj = serialiseEntity(main.entities[i]);
+
         main.entities[i].remove();
         main.entities.splice(i, 1);
       }
 
     //Refresh sidebar
+    if (!do_not_add_to_undo_redo) {
+      
+      performAction({
+        action_id: "delete_entity",
+        redo_function: "deleteEntity",
+        redo_function_parameters: [entity_id, true],
+        undo_function: "undoDeleteEntity",
+        undo_function_parameters: [old_entity_obj, group_memberships, true]
+      });
+
+      console.log(old_entity_obj);
+    }
     refreshHierarchy();
   }
 
@@ -216,6 +235,22 @@
       polygonOpacity: "fillOpacity",
       weight: "lineWidth"
     });
+  }
+
+  function deserialiseEntity (arg0_serialised_entity_obj) {
+    //Convert from parameters
+    var serialised_entity_obj = arg0_serialised_entity_obj;
+
+    //Declare local instance variables
+    var geometry = new maptalks[serialised_entity_obj.type](serialised_entity_obj.coordinates, {
+      properties: serialised_entity_obj.properties,
+      ...serialised_entity_obj.options
+    });
+    if (serialised_entity_obj.symbol)
+      geometry.setSymbol(serialised_entity_obj.symbol);
+
+    //Return statement
+    return geometry;
   }
 
   /**
@@ -745,6 +780,20 @@
     }
   }
 
+  function serialiseEntity (arg0_entity_obj) {
+    //Convert from parameters
+    var entity_obj = arg0_entity_obj;
+
+    //Return statement
+    return {
+      type: entity_obj.getType(),
+      coordinates: entity_obj.getCoordinates(),
+      properties: entity_obj.getProperties(),
+      options: entity_obj.options,
+      symbol: entity_obj.getSymbol()
+    };
+  }
+
   /*
     setEntityCoords() - Sets current entity coords.
     arg0_entity_id: (String) - The entity ID to set coords for.
@@ -797,6 +846,32 @@
 
     //Return statement
     return entity_name;
+  }
+
+  function undoDeleteEntity (arg0_old_entity_obj, arg1_group_memberships, arg2_do_not_reload) {
+    //Convert from parameters
+    var old_entity_obj = arg0_old_entity_obj;
+    var group_memberships = arg1_group_memberships;
+    var do_not_reload = arg2_do_not_reload;
+    
+    //Declare local instance variables
+    var deserialised_entity_obj = deserialiseEntity(old_entity_obj);
+
+    var deserialised_entity_id = deserialised_entity_obj.options.className;
+    var entity_obj = getEntity(deserialised_entity_id);
+
+    //Add entity back to its groups and to main.entities
+    for (var i = 0; i < group_memberships.length; i++) {
+      var local_group = main.groups[group_memberships[i]];
+
+      if (!local_group.entities) local_group.entities = [];
+      local_group.entities.push(deserialised_entity_id);
+    }
+
+    main.entities.push(deserialised_entity_obj);
+
+    refreshHierarchy();
+    loadDate();
   }
 
   //[WIP] - Finish function body
