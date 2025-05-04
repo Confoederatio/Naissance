@@ -510,6 +510,12 @@
             onclick: function (e) {
               setEntityMinimumZoomLevel(entity_id, e.target.value);
             }
+          },
+
+          custom_data_fields: {
+            id: "custom_data_fields",
+            name: "<b>Custom Data Fields:</b>",
+            type: "html"
           }
         }
       }
