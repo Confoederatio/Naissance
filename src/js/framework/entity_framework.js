@@ -220,7 +220,7 @@
       if (Object.keys(current_entity_history_obj).length <= 0)
         current_entity_history_obj = undefined;
 
-    if (!do_not_add_to_undo_redo) {
+    if (!do_not_add_to_undo_redo)
       performAction({
         action_id: "finish_entity",
         redo_function: "internalFinishEntity",
@@ -228,7 +228,6 @@
         undo_function: "undoFinishEntity",
         undo_function_parameters: [internal_options.entity_id, current_entity_history_obj]
       });
-    }
 
     clearBrush();
 
@@ -455,7 +454,6 @@
     }
 
     if (!options.do_not_reload) {
-      console.log("do_not_reload is false");
       clearBrush();
       loadDate();
     }
