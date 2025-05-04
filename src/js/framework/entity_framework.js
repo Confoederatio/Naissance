@@ -199,76 +199,41 @@
 
     //Declare local instance variables
     var brush_obj = main.brush;
-    var coords = convertToNaissance(brush_obj.current_path);
-    var entity_id;
-    var entity_name;
-    var is_new_entity;
-    var new_entity = {
-      options: brush_obj.current_selection.options
-    };
+    var current_entity_history_obj = {};
+    var current_entity_obj = getEntity(brush_obj.entity_options.className);
+    var internal_options = JSON.parse(JSON.stringify({
+      coords: convertToNaissance(brush_obj.current_path),
+      entity_options: brush_obj.entity_options || {},
+      selection_options: brush_obj.current_selection.options || {},
+      selected_group_id: brush_obj.selected_group_id,
+      do_not_reload: options.do_not_reload,
+      entity_id: options.entity_id || (brush_obj.entity_options ? brush_obj.entity_options.className : undefined),
+      current_path: brush_obj.current_path,
+      date: main.date
+    }));
 
-    //Store old_entity_state for undo capability
-    if (!entity_id)
-      entity_id = (options.entity_id) ? 
-        options.entity_id : brush_obj.entity_options.className;
+    if (current_entity_obj)
+      if (current_entity_obj.options)
+        if (current_entity_obj.options.history)
+          current_entity_history_obj = current_entity_obj.options.history;
+    if (current_entity_history_obj)
+      if (Object.keys(current_entity_history_obj).length <= 0)
+        current_entity_history_obj = undefined;
 
-    //Set new_entity.options
-    if (!new_entity.options.type) new_entity.options.type = "polity";
-
-    //Create history entry; sort history object
-    createHistoryFrame(new_entity, main.date, {}, coords);
-    new_entity.options.history = sortObject(new_entity.options.history, "numeric_ascending");
-
-    //Edit options; append name and metadata
-    {
-      if (brush_obj.current_selection.options.entity_name)
-        entity_name = JSON.parse(JSON.stringify(brush_obj.current_selection.options.entity_name));
-      if (brush_obj.entity_options)
-        if (brush_obj.entity_options.className)
-          if (getEntity(brush_obj.entity_options.className, { return_is_new_entity: true }))
-            is_new_entity = true;
-    }
-
-    //new_entity, old entity handling
-    if (is_new_entity) { //If is_new_entity, create a new polygon and push it to main.entities
-      var new_entity_obj = createPolygon(brush_obj.current_path, new_entity.options);
-      main.entities.push(new_entity_obj);
-      renameEntity(entity_id, entity_name, main.date);
-
-      //Assign to current main.brush.selected_group_id if valid
-      if (main.brush.selected_group_id) {
-        var group_obj = getGroup("hierarchy", main.brush.selected_group_id);
-
-        if (!group_obj.entities) group_obj.entities = [];
-        if (brush_obj.entity_options)
-          group_obj.entities.push(brush_obj.entity_options.className);
-      }
-    } else {
-      if (brush_obj.entity_options) //If is old entity, edit the extant polygon and reload date
-        if (brush_obj.entity_options.className) {
-          var entity_obj = getEntity(brush_obj.entity_options.className);
-          entity_obj.options = new_entity.options;
-        }
-    }
-
-    //Record option for undo/redo functionality if not explicitly skipped
-    //if (!do_not_add_to_undo_redo)
-      /*performAction({
+    if (!do_not_add_to_undo_redo) {
+      performAction({
         action_id: "finish_entity",
-        redo_function: "finishEntity",
-        redo_function_parameters: [{ entity_id: JSON.parse(JSON.stringify(entity_id)) }, true],
+        redo_function: "internalFinishEntity",
+        redo_function_parameters: [internal_options, true],
         undo_function: "undoFinishEntity",
-        undo_function_parameters: [entity_id, old_entity_state]
-      });*/
-
-    //Clear brush and reload date
-    if (!options.do_not_reload) {
-      clearBrush();
-      loadDate();
+        undo_function_parameters: [internal_options.entity_id, current_entity_history_obj]
+      });
     }
+
+    clearBrush();
 
     //Return statement
-    return entity_id;
+    return internalFinishEntity(internal_options);
   }
 
   /*
@@ -337,6 +302,10 @@
           is_new_entity = true;
           entity_obj = brush_obj.current_selection;
         }
+
+    //Final is_new_entity check
+    if (options.return_is_new_entity && !entity_obj)
+      is_new_entity = true;
 
     //Return statement
     return (!options.return_is_new_entity) ? entity_obj : is_new_entity;
@@ -444,6 +413,55 @@
 
     //Return statement
     return (entity_name) ? entity_name : "Unnamed Polity";
+  }
+
+  function internalFinishEntity (arg0_options) {
+    //Convert from parameters
+    var options = (arg0_options) ? arg0_options : {};
+
+    //Declare local instance variables
+    var coords = options.coords;
+    var current_path = options.current_path;
+    var date = options.date;
+    var entity_id = options.entity_id;
+    var entity_options = (options.entity_options) ? options.entity_options : {};
+    var selected_group_id = options.selected_group_id;
+    var selection_options = (options.selection_options) ? options.selection_options : {};
+
+    var is_new_entity = getEntity(entity_id, { return_is_new_entity: true });
+    var new_entity = {
+      options: {
+        ...selection_options,
+        type: selection_options.type || "polity"
+      }
+    };
+
+    createHistoryFrame(new_entity, date, {}, coords);
+    var entity_name = selection_options.entity_name || "Unnamed Polity";
+
+    if (is_new_entity) {
+      var new_entity_obj = createPolygon(current_path, new_entity.options);
+      main.entities.push(new_entity_obj);
+      renameEntity(entity_id, entity_name, date);
+
+      if (selected_group_id) {
+        var group_obj = getGroup("hierarchy", selected_group_id);
+        group_obj.entities = group_obj.entities || [];
+        group_obj.entities.push(entity_id);
+      }
+    } else if (entity_options.className) {
+      var entity_obj = getEntity(entity_options.className);
+      entity_obj.options = new_entity.options;
+    }
+
+    if (!options.do_not_reload) {
+      console.log("do_not_reload is false");
+      clearBrush();
+      loadDate();
+    }
+
+    //Return statement
+    return entity_id;
   }
 
   /*
@@ -751,10 +769,21 @@
   }
 
   //[WIP] - Finish function body
-  function undoFinishEntity (arg0_entity_id, arg1_old_entity_obj) {
+  function undoFinishEntity (arg0_entity_id, arg1_old_history_obj) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
-    var old_entity_obj = arg1_old_entity_obj;
+    var old_history_obj = arg1_old_history_obj;
+
+    if (old_history_obj) {
+      var entity_obj = getEntity(entity_id);
+      entity_obj.options.history = old_history_obj;
+
+      loadDate();
+      clearBrush();
+    } else {
+      deleteEntity(entity_id);
+      clearBrush();
+    }
   }
 
   /*

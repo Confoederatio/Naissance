@@ -29,7 +29,6 @@
       if (!do_not_add_to_undo_redo) {
         var new_brush_obj = (brush_obj.current_path) ?
           JSON.parse(JSON.stringify(brush_obj.current_path)) : undefined;
-        var previous_action = getPreviousAction();
         var redo_function_parameters = [];
         var undo_function_parameters = [];
 
