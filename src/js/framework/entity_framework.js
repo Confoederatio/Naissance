@@ -96,12 +96,12 @@
     arg1_date: (Object, Date) - Optional. The date at which to hide the entity. main.date by default.
     arg2_do_not_reload: (Boolean) - Optional. Whether to reload the entity interface. False by default.
   */
-  function hideEntity (arg0_entity_id, arg1_date, arg2_do_not_reload) {
+  function hideEntity (arg0_entity_id, arg1_date, arg2_do_not_reload, arg3_do_not_add_to_undo_redo) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
     var date = (arg1_date) ? arg1_date : main.date;
     var do_not_reload = arg2_do_not_reload;
-
+    var do_not_add_to_undo_redo = arg3_do_not_add_to_undo_redo;
     //Declare local instance variables
     var entity_obj = getEntity(entity_id);
 
@@ -110,8 +110,18 @@
         extinct: true
       });
 
-      try { printEntityBio(entity_id); } catch {}
-      try { populateTimelineGraph(entity_id); } catch {}
+      if (!do_not_add_to_undo_redo) {
+        try { printEntityBio(entity_id); } catch {}
+        try { populateTimelineGraph(entity_id); } catch {}
+
+        performAction({
+          action_id: "hide_entity",
+          redo_function: "hideEntity",
+          redo_function_parameters: [entity_id, date, do_not_reload, true],
+          undo_function: "showEntity",
+          undo_function_parameters: [entity_id, date, do_not_reload, true]
+        });
+      }
 
       if (!do_not_reload)
         loadDate();
@@ -124,17 +134,29 @@
     arg1_entity_name: (String) - What to rename the entity to.
     arg2_date: (Object, Date) - Optional. The date at which to rename the entity. main.date by default.
   */
-  function renameEntity (arg0_entity_id, arg1_entity_name, arg2_date) {
+  function renameEntity (arg0_entity_id, arg1_entity_name, arg2_date, arg3_do_not_add_to_undo_redo) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
     var entity_name = (arg1_entity_name) ? arg1_entity_name : `Unnamed Polity`;
     var date = (arg2_date) ? getTimestamp(arg2_date) : main.date;
+    var do_not_add_to_undo_redo = arg3_do_not_add_to_undo_redo;
 
     //Declare local instance variables
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
+    var old_entity_name = JSON.parse(JSON.stringify(entity_obj.options.entity_name));
 
-    if (entity_obj)
+    if (entity_obj) {
       createHistoryFrame(entity_obj, date, { entity_name: entity_name });
+
+      if (!do_not_add_to_undo_redo)
+        performAction({
+          action_id: "rename_entity",
+          redo_function: "renameEntity",
+          redo_function_parameters: [entity_id, JSON.parse(JSON.stringify(entity_name)), date, true],
+          undo_function: "renameEntity",
+          undo_function_parameters: [entity_id, old_entity_name, date, true]
+        });
+    }
 
     //Return statement
     return entity_name;
@@ -146,11 +168,12 @@
     arg1_date: (Object, Date) - Optional. The date at which to hide the entity. main.date by default.
     arg2_do_not_reload: (Boolean) - Optional. Whether to reload the entity interface. False by default.
   */
-  function showEntity (arg0_entity_id, arg1_date, arg2_do_not_reload) {
+  function showEntity (arg0_entity_id, arg1_date, arg2_do_not_reload, arg3_do_not_add_to_undo_redo) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
     var date = (arg1_date) ? arg1_date : main.date;
     var do_not_reload = arg2_do_not_reload;
+    var do_not_add_to_undo_redo = arg3_do_not_add_to_undo_redo;
 
     //Declare local instance variables
     var entity_obj = getEntity(entity_id);
@@ -160,8 +183,18 @@
         extinct: false
       });
 
-      try { printEntityBio(entity_id); } catch {}
-      try { populateTimelineGraph(entity_id); } catch {}
+      if (!do_not_add_to_undo_redo) {
+        try { printEntityBio(entity_id); } catch {}
+        try { populateTimelineGraph(entity_id); } catch {}
+
+        performAction({
+          action_id: "show_entity",
+          redo_function: "showEntity",
+          redo_function_parameters: [entity_id, date, do_not_reload, true],
+          undo_function: "hideEntity",
+          undo_function_parameters: [entity_id, date, do_not_reload, true]
+        });
+      }
 
       if (!do_not_reload)
         loadDate();

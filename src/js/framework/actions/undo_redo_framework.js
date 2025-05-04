@@ -96,6 +96,24 @@
         function: "finishEntity",
         reverse_function: "undoFinishEntity"
       });
+      createAction("hide_entity", {
+        name: "Hide Entity",
+
+        function: "hideEntity",
+        reverse_function: "showEntity"
+      });
+      createAction("rename_entity", {
+        name: "Rename Entity",
+
+        function: "renameEntity",
+        reverse_function: "renameEntity"
+      });
+      createAction("show_entity", {
+        name: "Show Entity",
+
+        function: "showEntity",
+        reverse_function: "hideEntity"
+      });
 
       //Keyframes
       createAction("edit_keyframe", {
