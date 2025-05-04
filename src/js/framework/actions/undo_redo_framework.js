@@ -129,7 +129,13 @@
         reverse_function: "undoCleanKeyframes"
       });
 
-      //Keyframes
+      //Entity Keyframes
+      createAction("apply_path_to_keyframes", {
+        name: "Apply Path to Keyframes",
+
+        function: "applyPathToKeyframes",
+        reverse_function: "undoApplyPathToKeyframes"
+      });
       createAction("edit_keyframe", {
         name: "Edit Keyframe",
 

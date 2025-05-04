@@ -510,7 +510,7 @@
     if (is_new_entity) {
       var new_entity_obj = createPolygon(current_path, new_entity.options);
       main.entities.push(new_entity_obj);
-      renameEntity(entity_id, entity_name, date);
+      renameEntity(entity_id, entity_name, date, true);
 
       if (selected_group_id) {
         var group_obj = getGroup("hierarchy", selected_group_id);
