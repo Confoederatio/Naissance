@@ -858,7 +858,6 @@
     var deserialised_entity_obj = deserialiseEntity(old_entity_obj);
 
     var deserialised_entity_id = deserialised_entity_obj.options.className;
-    var entity_obj = getEntity(deserialised_entity_id);
 
     //Add entity back to its groups and to main.entities
     for (var i = 0; i < group_memberships.length; i++) {
