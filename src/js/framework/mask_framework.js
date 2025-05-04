@@ -223,7 +223,10 @@
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
 
     //Initialise local instance variables
-    entity_id = entity_obj.options.className;
+    if (entity_obj)
+      if (entity_obj.options)
+        if (entity_obj.options.className)
+          entity_id = entity_obj.options.className;
 
     //Iterate over all mask types
     for (var i = 0; i < all_mask_types_keys.length; i++) {

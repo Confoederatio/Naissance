@@ -17,7 +17,9 @@
     //Delete entity now
     try {
       clearBrush();
-    } catch {}
+    } catch (e) {
+      console.warn(e);
+    }
 
     //Remove entity from all groups
     var all_groups = Object.keys(main.groups);
@@ -33,7 +35,11 @@
     }
 
     //Remove entity from all masks
-    removeEntityMask(entity_id);
+    try {
+      removeEntityMask(entity_id);
+    } catch (e) {
+      console.warn(e);
+    }
 
     //Remove entity
     for (var i = 0; i < main.entities.length; i++)
@@ -65,7 +71,9 @@
     try {
       if (brush_obj.current_path)
         finishEntity();
-    } catch {}
+    } catch (e) {
+      console.warn(e);
+    }
 
     if (entity_obj) {
       brush_obj.editing_entity = entity_id;
@@ -184,9 +192,10 @@
    * 
    * @returns {String} - The entity ID of the newly created entity.
   **/
-  function finishEntity (arg0_options) {
+  function finishEntity (arg0_options, arg1_do_not_add_to_undo_redo) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
+    var do_not_add_to_undo_redo = arg1_do_not_add_to_undo_redo;
 
     //Declare local instance variables
     var brush_obj = main.brush;
@@ -197,6 +206,11 @@
     var new_entity = {
       options: brush_obj.current_selection.options
     };
+
+    //Store old_entity_state for undo capability
+    if (!entity_id)
+      entity_id = (options.entity_id) ? 
+        options.entity_id : brush_obj.entity_options.className;
 
     //Set new_entity.options
     if (!new_entity.options.type) new_entity.options.type = "polity";
@@ -236,6 +250,16 @@
           entity_obj.options = new_entity.options;
         }
     }
+
+    //Record option for undo/redo functionality if not explicitly skipped
+    //if (!do_not_add_to_undo_redo)
+      /*performAction({
+        action_id: "finish_entity",
+        redo_function: "finishEntity",
+        redo_function_parameters: [{ entity_id: JSON.parse(JSON.stringify(entity_id)) }, true],
+        undo_function: "undoFinishEntity",
+        undo_function_parameters: [entity_id, old_entity_state]
+      });*/
 
     //Clear brush and reload date
     if (!options.do_not_reload) {
@@ -727,14 +751,10 @@
   }
 
   //[WIP] - Finish function body
-  function undoFinishEntity (arg0_entity_id, arg1_old_history_frame) {
+  function undoFinishEntity (arg0_entity_id, arg1_old_entity_obj) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
-    var old_history_frame = arg1_old_history_frame;
-
-    //Declare local instance variables
-    var entity_obj = getEntity(entity_id);
-
+    var old_entity_obj = arg1_old_entity_obj;
   }
 
   /*
