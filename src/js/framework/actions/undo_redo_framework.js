@@ -89,7 +89,7 @@
     
     //Entities
     {
-      //Entity Actions
+      //Entity Actions (Generic)
       createAction("delete_entity", {
         name: "Delete Entity",
 
@@ -119,6 +119,14 @@
 
         function: "showEntity",
         reverse_function: "hideEntity"
+      });
+
+      //Entity Actions
+      createAction("clean_keyframes", {
+        name: "Clean Keyframes",
+
+        function: "cleanKeyframes",
+        reverse_function: "undoCleanKeyframes"
       });
 
       //Keyframes

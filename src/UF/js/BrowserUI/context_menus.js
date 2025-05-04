@@ -1026,6 +1026,9 @@
 
     if (options.type == "date") {
       populateDateFields(options.element, convertTimestampToDate(placeholder_obj));
+    } else if (options.type == "date_length") {
+      //Guard clause if typeof is invalid; i.e. a custom template
+      if (typeof placeholder_obj == "string") return;
     } else if (options.type == "range") {
       var actual_number_in_range = calculateNumberInRange(
         [returnSafeNumber(options.value.attributes.min, 0), returnSafeNumber(options.value.attributes.max, 100)],

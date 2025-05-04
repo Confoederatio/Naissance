@@ -76,4 +76,40 @@
     //Return statement
     return local_geometry;
   }
+  
+  /*
+    getPolityArea() - Fetches the total area of a given polity in square metres.
+    arg0_entity_id: (String) - The entity ID for which to fetch the total area.
+    arg1_date: (Object, Date) - The date for which to fetch the entity area.
+
+    Returns: (Number)
+  */
+    function getPolityArea (arg0_entity_id, arg1_date) {
+      //Convert from parameters
+      var entity_id = arg0_entity_id;
+      var date = arg1_date;
+  
+      //Declare local instance variables
+      var entity_area = 0;
+      var entity_obj = getEntity(entity_id);
+  
+      //Check to make sure entity_obj exists
+      if (entity_obj) {
+        var is_extinct = isEntityHidden(entity_id, date);
+        var last_coords = getEntityCoords(entity_id, date);
+  
+        if (last_coords)
+          try {
+            var local_coordinates = getTurfObject(last_coords);
+  
+            entity_area = (!is_extinct) ? turf.area(local_coordinates) : 0;
+          } catch (e) {
+            console.log(e);
+            entity_area = 0;
+          }
+      }
+  
+      //Return statement
+      return entity_area;
+    }
 }

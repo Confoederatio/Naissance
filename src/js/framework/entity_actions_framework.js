@@ -49,7 +49,6 @@
 
     //Declare local instance variables
     var entity_actions_exists = [false, ""]; //[entity_actions_exists, entity_actions_key];
-    console.log("Name: " , name);
     var search_name = name.toLowerCase().trim();
 
     //ID search - soft search 1st, hard search 2nd
