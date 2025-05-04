@@ -202,7 +202,7 @@
         //Delete all entities remaining in base group; reverse for-loop
         if (group_obj.entities)
           for (var i = group_obj.entities.length - 1; i >= 0; i--)
-            deleteEntity(group_obj.entities[i]);
+            deleteEntity(group_obj.entities[i], true);
 
         //Delete group proper
         deleteGroup(hierarchy_key, group_id);

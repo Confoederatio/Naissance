@@ -90,7 +90,7 @@
 
         //Delete entity if no history entries are left
         if (Object.keys(entity_obj.options.history).length == 0)
-          deleteEntity(entity_id);
+          deleteEntity(entity_id, true);
       }
   }
 
