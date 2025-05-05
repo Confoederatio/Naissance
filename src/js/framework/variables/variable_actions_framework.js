@@ -7,7 +7,7 @@
    * 
    * @returns {Array<Object>|Array<String>}
    */
-  function getAllVariableActions (arg0_options) { //[WIP] - Finish function body
+  function getAllVariableActions (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
 
