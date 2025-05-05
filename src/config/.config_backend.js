@@ -5,3 +5,4 @@ config.entity_actions = {};
 config.entity_keyframes = {};
 config.group_actions = {};
 config.mask_types = {};
+config.variables = {};
