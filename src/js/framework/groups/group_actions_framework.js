@@ -231,10 +231,7 @@
 
     Returns: (Number)
   */
-  function getGroupActionsLowestOrder (arg0_options) {
-    //Convert from parameters
-    var options = (arg0_options) ? arg0_options : {};
-
+  function getGroupActionsLowestOrder () {
     //Declare local instance variables
     var flattened_group_actions = config.flattened_group_actions;
     var min_order = Infinity;
