@@ -48,16 +48,65 @@ config.variables.variable_actions = { //[WIP] - Finish config body
       },
 
       //Row 2
-      global_variable_checkbox: {},
-      view_in_graph_checkbox: {},
+      settings_checkbox: {
+        id: "settings_checkbox",
+        type: "checkbox",
+        x: 0,
+        y: 1,
+        
+        default: false,
+        options: {
+          is_global_variable: "Global Variable",
+          is_view_in_graph: "View in Graph"
+        }
+      },
 
       //Row 3
-      zero_bound_interpolation_checkbox: {},
-      interpolation_select: {},
+      zero_bound_interpolation_checkbox: {
+        id: "zero_bound_interpolation_checkbox",
+        name: "Zero Bound Interpolation",
+        type: "checkbox",
+        x: 0,
+        y: 2,
+        
+        default: true,
+        options: {
+          zero_bound_interpolation: "Zero-bound Interpolation"
+        }
+      },
+      interpolation_select: {
+        id: "interpolation_select",
+        name: "Interpolation",
+        type: "select",
+        x: 1,
+        y: 2,
+
+        options: {
+          none: "None",
+          linear: "Linear",
+          cubic_spline: "Cubic Spline"
+        }
+      },
 
       //Row 4
-      current_variable_value_input: {},
-      variable_history: {} //HTML type; populates all keyframes for variable changes
+      current_variable_value_input: {
+        id: "current_variable_value_input",
+        name: "Current Value",
+        type: "text",
+        x: 0,
+        y: 3,
+        
+        placeholder: "0"
+      },
+      variable_history: {
+        id: "variable_history",
+        name: "Variable History",
+        type: "html",
+        x: 0,
+        y: 4,
+        
+        html: `<div class = "variable-history-container"></div>`
+      } //HTML type; populates all keyframes for variable changes
     }
   }
 };
