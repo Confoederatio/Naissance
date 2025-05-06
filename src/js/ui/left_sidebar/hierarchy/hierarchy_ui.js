@@ -51,7 +51,7 @@
       var target = e.target;
 
       //Check to make sure target is valid
-      if (target.className == "group" || target.className == "entity" || target.className == "hierarchy") {
+      if (target.className.includes("group") || target.className.includes("entity") || target.className.includes("hierarchy")) {
         var rect = target.getBoundingClientRect();
         var offset = e.clientY - rect.top;
 

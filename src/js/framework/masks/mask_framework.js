@@ -95,6 +95,8 @@
 
     //Declare local instance variables
     var all_scope_keys = Object.keys(scope);
+    var brush_obj = main.brush;
+    var selected_polity = brush_obj.current_selection;
 
     //Iterate over all_scope_keys
     for (var i = 0; i < all_scope_keys.length; i++) {
@@ -106,6 +108,9 @@
         for (var x = 0; x < mask_geometries.length; x++)
           if (mask_geometries[x]) {
             try {
+              //Guard clause if selected_polity is mask_geometries[x]
+              if (selected_polity.options.className == mask_geometries[x].options.className) continue;
+
               var local_coords = getEntityCoords(mask_geometries[x].options.className, main.date, { is_non_inclusive: true });
 
               var local_difference = difference(local_coords, geometry);
@@ -142,6 +147,9 @@
 
         for (var x = 0; x < mask_geometries.length; x++)
           try {
+            //Guard clause if selected_polity is mask_geometries[x]
+            if (selected_polity.options.className == mask_geometries[x].options.className) continue;
+
             var local_coords = getEntityCoords(mask_geometries[x], main.date);
 
             mask_union = (x == 0) ?
@@ -158,6 +166,9 @@
 
         for (var x = 0; x < mask_geometries.length; x++)
           try {
+            //Guard clause if selected_polity is mask_geometries[x]
+            if (selected_polity.options.className == mask_geometries[x].options.className) continue;
+
             var local_coords = getEntityCoords(mask_geometries[x], main.date);
 
             mask_union = (x == 0) ?
@@ -246,6 +257,9 @@
               }
             }
     }
+
+    //Delete entity_obj.options.mask for sure
+    delete entity_obj.options.mask;
   }
 
   /*

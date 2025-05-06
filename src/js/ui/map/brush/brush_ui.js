@@ -76,7 +76,7 @@
           brush_obj.current_path = addToBrush(brush_obj.current_path);
           refreshBrush();
         } else if (main.events.right_mouse) {
-          brush_obj.current_path = removeFromBrush(brush_obj.current_path);
+          removeFromBrush(brush_obj.current_path);
           refreshBrush();
         }
       }

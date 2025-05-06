@@ -52,6 +52,10 @@
     for (var i = 0; i < main.entities.length; i++) {
       var local_entity = main.entities[i];
 
+      //Make sure entity does not contain malformed variables
+      if (local_entity.options)
+        delete local_entity.options.mask;
+
       //Process .options.history, clean keyframes
       main.entities[i] = cleanKeyframes(local_entity, undefined, {
         do_not_display: true
