@@ -215,6 +215,9 @@
           let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
           if (!local_value.id) local_value.id = all_interface_keys[i];
 
+          if (options[local_value.placeholder])
+            local_value.placeholder = options[local_value.placeholder];
+
           //Type handlers: set placeholders where applicable
           autoFillInputs({
             element: local_element,
