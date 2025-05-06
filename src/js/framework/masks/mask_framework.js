@@ -144,16 +144,22 @@
       } else if (all_scope_keys[i] == "remove_brush_coords_outside_selected_polities") {
         var mask_geometries = main.brush.masks[options.mask_type];
         var mask_union;
+        var no_init = true;
 
         for (var x = 0; x < mask_geometries.length; x++)
           try {
             //Guard clause if selected_polity is mask_geometries[x]
-            if (selected_polity.options.className == mask_geometries[x].options.className) continue;
+            if (
+              selected_polity.options.className == mask_geometries[x].options.className ||
+              isEntityHidden(mask_geometries[x])
+            ) continue;
 
             var local_coords = getEntityCoords(mask_geometries[x], main.date);
+            if (!local_coords) continue;
 
-            mask_union = (x == 0) ?
+            mask_union = (no_init) ?
               local_coords : union(mask_union, local_coords);
+            no_init = false;
           } catch (e) {
             console.log(e);
           }
@@ -163,16 +169,22 @@
       } else if (all_scope_keys[i] == "remove_selected_polities_from_brush_coords") {
         var mask_geometries = main.brush.masks[options.mask_type];
         var mask_union;
+        var no_init = true;
 
         for (var x = 0; x < mask_geometries.length; x++)
           try {
             //Guard clause if selected_polity is mask_geometries[x]
-            if (selected_polity.options.className == mask_geometries[x].options.className) continue;
+            if (
+              selected_polity.options.className == mask_geometries[x].options.className ||
+              isEntityHidden(mask_geometries[x])
+            ) continue;
 
             var local_coords = getEntityCoords(mask_geometries[x], main.date);
+            if (!local_coords) continue;
 
-            mask_union = (x == 0) ?
+            mask_union = (no_init) ?
               local_coords : union(mask_union, local_coords);
+            no_init = false;
           } catch (e) {
             console.log(e);
           }
