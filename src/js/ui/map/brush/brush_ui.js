@@ -73,9 +73,11 @@
           brush_obj.current_path = simplify(brush_obj.current_path, brush_obj.simplify_tolerance);
 
         if (main.events.left_mouse) {
-          addToBrush(brush_obj.current_path);
+          brush_obj.current_path = addToBrush(brush_obj.current_path);
+          refreshBrush();
         } else if (main.events.right_mouse) {
-          removeFromBrush(brush_obj.current_path);
+          brush_obj.current_path = removeFromBrush(brush_obj.current_path);
+          refreshBrush();
         }
       }
     });
@@ -116,7 +118,9 @@
             } catch (e) {}
         try {
           polygon = processGeometryMasks(polygon);
-        } catch (e) {}
+        } catch (e) {
+          console.log(e);
+        }
 
         //Set new poly now
         refreshBrush();
