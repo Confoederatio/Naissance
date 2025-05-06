@@ -260,8 +260,12 @@
 
     //Declare local instance variables
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
-    var old_entity_name = (entity_obj.options.entity_name) ? 
-      JSON.parse(JSON.stringify(entity_obj.options.entity_name)) : "Unnamed Entity";
+    var old_entity_name;
+      if (entity_obj)
+        if (entity_obj.options)
+          if (entity_obj.options.entity_name)
+            old_entity_name = JSON.parse(JSON.stringify(entity_obj.options.entity_name));
+      if (!old_entity_name) old_entity_name = "Unnamed Entity";
 
     if (entity_obj) {
       createHistoryFrame(entity_obj, date, { entity_name: entity_name });

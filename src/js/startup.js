@@ -184,7 +184,7 @@ if (!global.config) global.config = {};
 setTimeout(function(){
   var hierarchies_obj = main.hierarchies;
   var hierarchy_el = getUISelector("hierarchy");
-  loadSave(`${main.saves_folder}\\atlas.js`);
+  loadSave(`${main.saves_folder}\\project_atlas.js`);
 
   //Sync entities
   main.equate_entities_interval = equateObject(hierarchies_obj.hierarchy, "entities", global.main, "entities");

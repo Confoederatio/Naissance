@@ -279,6 +279,9 @@
         if (current_history.variables[variable_id] == variable_value) return;
     
     if (old_history_entry.id == current_timestamp) {
+      if (!current_history.options) current_history.options = {};
+      if (!current_history.options.variables) current_history.options.variables = {};
+      
       var variables_obj = dumbMergeObjects(current_history.options.variables, { [variable_id]: variable_value });
       createHistoryFrame(entity_id, options.date, { variables: variables_obj });
     } else {

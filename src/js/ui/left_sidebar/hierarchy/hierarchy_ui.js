@@ -140,15 +140,6 @@
     if (!options.do_not_reload)
       renderHierarchy("hierarchy", { naissance_hierarchy: true });
 
-    //Iterate over all entities
-    for (var i = 0; i < hierarchy_obj.entities.length; i++) try {
-      var local_entity_id = hierarchy_obj.entities[i].options.className;
-
-      var entity_hierarchy_el = getEntityHierarchyElement(local_entity_id);
-
-      entity_hierarchy_el.querySelector(".item-name").textContent = getEntityName(local_entity_id);
-    } catch (e) {}
-
     //Iterate over all groups in main.hierarchies.hierarchy.groups
     var all_group_keys = Object.keys(hierarchy_obj.groups);
 

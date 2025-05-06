@@ -335,7 +335,9 @@
           if (local_hierarchy_obj.groups)
             if (local_hierarchy_obj.groups[group_id])
               groups[group_id] = dumbMergeObjects(new_group, local_hierarchy_obj.groups[group_id]);
+
           //Make sure group_entities; group_subgroups are refreshed
+          groups[group_id].name = group_name;
           groups[group_id].entities = [];
           groups[group_id].subgroups = [];
 
