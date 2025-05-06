@@ -73,12 +73,13 @@
       if (target_hierarchy != dragged_hierarchy) return;
 
       //Group/entity/base-hierarchy handling
-      if (target.className == "group") {
+      console.log(target.className, dragged_type, placeholder.parentNode);
+      if (target.className.trim() == "group") {
         if (dragged_type == "group" || dragged_type == "entity") {
           dragged.parentNode.removeChild(dragged);
           target.appendChild(dragged);
         }
-      } else if (target.className == "entity" && dragged_type == "entity" && placeholder.parentNode) {
+      } else if (target.className.trim() == "entity" && dragged_type == "entity" && placeholder.parentNode) {
         //Only allow entities to be dropped before or after other entities, not inside them
         dragged.parentNode.removeChild(dragged);
         placeholder.parentNode.replaceChild(dragged, placeholder);
