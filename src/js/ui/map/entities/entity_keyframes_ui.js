@@ -47,7 +47,6 @@
     var entity_id = arg0_entity_id;
 
     //Declare local instance variables
-    var entity_keyframe_anchor_el = getEntityKeyframesAnchorElement(entity_id);
     var entity_open_orders = getEntityKeyframeOpenOrders(entity_id);
 
     //Close last keyframe context menu
@@ -116,7 +115,6 @@
     var entity_id = arg0_entity_id;
 
     //Declare local instance variables
-    var entity_el = getEntityElement(entity_id);
     var entity_keyframes_anchor_el = getEntityKeyframesAnchorElement(entity_id);
     var inputs_obj = {};
 

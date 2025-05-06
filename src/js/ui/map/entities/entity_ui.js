@@ -385,6 +385,7 @@
         <!-- 5. Context Menu Anchors -->
         <div id = "entity-actions-context-menu"></div>
         <div id = "entity-keyframe-context-menu"></div>
+        <div id = "entity-variable-context-menu"></div>
       `;
       var popup = createPopup(leaflet_centre_coords, html_content, popup_options);
       interfaces[entity_id] = popup;
@@ -514,7 +515,9 @@
 
           custom_data_fields: {
             id: "custom_data_fields",
-            name: "<b>Custom Data Fields:</b>",
+            innerHTML: `<b>Custom Data Fields:</b>
+              <div id = "custom-data-fields-container"></div>
+            `,
             type: "html"
           }
         }

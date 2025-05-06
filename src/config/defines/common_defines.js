@@ -74,6 +74,8 @@ config.defines.common = {
       entity_colour_picker: `#entity-ui-customisation-colour`,
       entity_customisation_tab_container: `#entity-ui-customisation-other #customisation-tab-container`,
       entity_customisation_options: `#entity-ui-customisation-other #customisation-options`,
+      
+      entity_variable_context_menu_anchor: `#entity-variable-context-menu`,
 
       //Entity UI - 4th Row - Actions
       entity_actions_context_menu_anchor: `#entity-actions-context-menu`
