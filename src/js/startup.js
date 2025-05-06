@@ -196,6 +196,17 @@ setTimeout(function(){
   }, 100);
   setInterval(function() {
     if (main.previous_hierarchy_html != hierarchy_el.innerHTML) {
+      var hierarchy_obj = main.hierarchies.hierarchy;
+
+      //Iterate over all entities
+      for (var i = 0; i < hierarchy_obj.entities.length; i++) try {
+        var local_entity_id = hierarchy_obj.entities[i].options.className;
+
+        var entity_hierarchy_el = getEntityHierarchyElement(local_entity_id);
+
+        entity_hierarchy_el.querySelector(".item-name").textContent = getEntityName(local_entity_id);
+      } catch (e) {}
+
       var exported_hierarchies = exportHierarchies({ naissance_hierarchy: "hierarchy" });
 
       hierarchies_obj.hierarchy.groups = exported_hierarchies.hierarchy.groups;
