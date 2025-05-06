@@ -226,6 +226,28 @@
   }
 
 /* -- 3. Entity UI Customisation -- */
+/* -- Context Menu Cell Styling -- */
+#customisation-top-parent #customisation-options .context-menu {
+  max-height: calc(14rem - 1.2rem - 2rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#customisation-top-parent .context-menu td:has(div span.button) {
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid white;
+  color: white;
+
+  transition: all 0.25s ease;
+}
+#customisation-top-parent .context-menu td:has(div span.button):hover {
+  background-color: rgba(255, 255, 255, 1);
+  border: 2px solid white;
+  color: black;
+}
+#customisation-top-parent .context-menu span.button {
+  padding: 0.25rem;
+}
+
 #customisation-top-parent {
   display: flex;
   height: 14rem;
@@ -280,6 +302,11 @@
       .tabs-container > span {
         width: calc((var(--entity-ui-width)/var(--entity-ui-customisation-tabs))*0.45);
       }
+    }
+    .unique.context-menu > table {
+      overflow-y: auto;
+      table-layout: fixed;
+      width: 100%;
     }
   }
 }
