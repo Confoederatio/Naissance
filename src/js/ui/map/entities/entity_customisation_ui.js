@@ -12,18 +12,23 @@
 
     //Iterate over all_entity_variables
     if (current_history)
-      if (current_history.variables)
+      if (current_history.options.variables)
         //Iterate over entity_variables
         for (var i = 0; i < entity_variables.length; i++) {
           var local_key = entity_variables[i];
-          var local_value = current_history.variables[entity_variables[i]];
+          var local_value = current_history.options.variables[entity_variables[i]];
 
           variable_list_obj[local_key] = {
             id: local_key,
-            name: local_key,
+            name: `${local_key}: `,
             type: "text",
+            attributes: {
+              value: local_value
+            },
+
             onclick: function (e) {
-              console.log(e.target.value);
+              setEntityVariable(entity_id, local_key, e.target.value, { date: main.date });
+              printEntityBio(entity_id);
             }
           };
         }
@@ -102,6 +107,11 @@
         },
         other: {
           name: "Other",
+          special_function: function (e) {
+            setTimeout(function(){
+              printVariableList(entity_id);
+            }, 0);
+          },
 
           maximum_zoom_level: {
             id: "maximum_zoom_level",
@@ -137,10 +147,24 @@
           },
           custom_data_fields: {
             id: "custom_data_fields",
-            innerHTML: `<b>Custom Data Fields:</b>`,
+            name: `<b>Custom Data Fields:</b>`,
             type: "html",
             x: 0,
             y: 2,
+          },
+          custom_variable_input: {
+            id: "custom_variable_input",
+            type: "text",
+            x: 1,
+            y: 2,
+
+            attributes: {
+              placeholder: "Variable key ..",
+              width: 16
+            },
+            onclick: function (e) {
+              console.log(e);
+            }
           },
 
           add_variable: {
@@ -151,7 +175,13 @@
             y: 3,
 
             onclick: function (e) {
-              console.log(e);
+              var variable_input_el = document.querySelector(`${entity_customisation_content_selector} #custom_variable_input input[type="text"]`);
+
+              if (variable_input_el.value && !entityVariableExists(entity_id, variable_input_el.value)) {
+                setEntityVariable(entity_id, variable_input_el.value, 0, { date: main.date });
+                printVariableList(entity_id);
+                printEntityBio(entity_id);
+              }
             }
           },
           delete_variable: {
@@ -162,7 +192,13 @@
             y: 3,
             
             onclick: function (e) {
-              console.log(e);
+              var variable_input_el = document.querySelector(`${entity_customisation_content_selector} #custom_variable_input input[type="text"]`);
+
+              if (variable_input_el.value) {
+                deleteEntityVariable(entity_id, variable_input_el.value);
+                printVariableList(entity_id);
+                printEntityBio(entity_id);
+              }
             }
           },
           variable_fields: {
@@ -186,23 +222,67 @@
     var common_selectors = config.defines.common.selectors;
     var entity_customisation_content_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
     var variable_list_obj = getVariableListObject(entity_id);
-    
+
     var entity_variable_list_el = createContextMenu({
       anchor: `${entity_customisation_content_selector} #variable-fields-container`,
-      class: `variable-list-container`,
+      class: `variable-list-container unique`,
       id: "variable-list",
       name: "Variable List:",
+      do_not_append: true,
 
       ...variable_list_obj
     });
   }
 
-  function setEntityVariable (arg0_entity_id, arg1_variable_id, arg2_variable_value) {
+  function deleteEntityVariable (arg0_entity_id, arg1_variable_id) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+    var variable_id = arg1_variable_id;
+    
+    //Declare local instance variables
+    var entity_obj = getEntity(entity_id);
+
+    //Iterate over all_history_frames and delete the given variable
+    if (entity_obj.options)
+      if (entity_obj.options.history) {
+        var all_history_frames = Object.keys(entity_obj.options.history);
+
+        for (var i = 0; i < all_history_frames.length; i++) {
+          var local_history_frame = entity_obj.options.history[all_history_frames[i]];
+          
+          if (local_history_frame.options)
+            if (local_history_frame.options.variables)
+              delete local_history_frame.options.variables[variable_id];
+        }
+      }
+  }
+
+  function setEntityVariable (arg0_entity_id, arg1_variable_id, arg2_variable_value, arg3_options) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
     var variable_id = arg1_variable_id;
     var variable_value = arg2_variable_value;
+    var options = (arg3_options) ? arg3_options : {};
     
     //Declare local instance variables
+    if (!options.date) options.date = main.date;
+
+    //Declare local instance variables
+    var current_history = getHistoryFrame(entity_id, options.date);
+    var current_timestamp = convertTimestampToInt(getTimestamp(options.date));
+    var entity_obj = getEntity(entity_id);
+    var old_history_entry = getAbsoluteHistoryFrame(entity_id, options.date);
+
+    //Guard clause if the variable is already set to the given value
+    if (current_history)
+      if (current_history.variables)
+        if (current_history.variables[variable_id] == variable_value) return;
+    
+    if (old_history_entry.id == current_timestamp) {
+      var variables_obj = dumbMergeObjects(current_history.options.variables, { [variable_id]: variable_value });
+      createHistoryFrame(entity_id, options.date, { variables: variables_obj });
+    } else {
+      createHistoryFrame(entity_id, options.date, { variables: { [variable_id]: variable_value } });
+    }
   }
 }

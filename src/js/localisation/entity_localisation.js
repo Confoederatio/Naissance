@@ -43,6 +43,19 @@
         if (new_options.opacity != old_options.opacity)
           history_string.push(` Stroke opacity changed to ${printPercentage(new_options.opacity)}.`);
 
+      //Variables
+      if (new_options.variables) {
+        var all_variables = Object.keys(new_options.variables);
+
+        //Iterate over all_variables
+        for (var i = 0; i < all_variables.length; i++) {
+          var local_variable = all_variables[i];
+          var local_value = new_options.variables[local_variable];
+
+          history_string.push(`- ${local_variable} set to ${local_value}.`);
+        }
+      }
+
       //Zoom levels
       if (new_options.maximum_zoom_level != undefined)
         if (new_options.maximum_zoom_level != old_options.maximum_zoom_level)

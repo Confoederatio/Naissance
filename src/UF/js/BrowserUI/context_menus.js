@@ -1447,6 +1447,16 @@
                   local_input_obj.onclick(e);
                 };
               }
+          } else if (local_type == "text") {
+            if (local_input_obj.onclick)
+              if (typeof local_input_obj.onclick == "string") {
+                all_inputs[i].setAttribute("onchange", local_input_obj.onclick);
+              } else {
+                all_inputs[i].onchange = function (e) {
+                  local_input_obj.onclick(e);
+                  console.log(e);
+                };
+              }
           }
     }
   }

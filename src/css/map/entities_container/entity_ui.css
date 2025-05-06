@@ -248,6 +248,17 @@
   padding: 0.25rem;
 }
 
+#customisation-top-parent .context-menu td:has(.header) {
+  vertical-align: middle;
+}
+#customisation-top-parent .context-menu input[type="text"] {
+  width: calc(100% - 0.5rem);
+}
+#customisation-top-parent .variable-list-container.context-menu input[type="text"] {
+  margin-left: 0.1rem;
+  width: 8rem;
+}
+
 #customisation-top-parent {
   display: flex;
   height: 14rem;
@@ -307,6 +318,9 @@
       overflow-y: auto;
       table-layout: fixed;
       width: 100%;
+    }
+    .unique.context-menu td > div {
+      padding: 0.1rem;
     }
   }
 }
