@@ -161,23 +161,7 @@ if (!global.config) global.config = {};
   initialiseUI();
 
   //UI loop
-  setInterval(function(){
-    //Fix main.brush.current_selection
-    var reset_brush = false;
-    if (main.brush)
-      if (main.brush.current_selection)
-        if (main.brush.current_selection.options)
-          if (!main.brush.current_selection.options.className)
-            reset_brush = true;
-    if (reset_brush)
-      clearBrush();
-
-    //Update bottom-right sidebar UI
-    printBrush();
-  }, 100);
-  setInterval(function(){
-    window.mouse_dragged = false;
-  }, 500);
+  initialiseMapEventDrawLoops();
 }
 
 //Test scripts
@@ -191,27 +175,5 @@ setTimeout(function(){
   main.previous_hierarchy_html = hierarchy_el.innerHTML;
 
   //Sync groups
-  setInterval(function(){
-    refreshHierarchy({ do_not_reload: true });
-  }, 100);
-  setInterval(function() {
-    var hierarchy_obj = main.hierarchies.hierarchy;
-
-    //Iterate over all entities
-    for (var i = 0; i < hierarchy_obj.entities.length; i++) try {
-      var local_entity_id = hierarchy_obj.entities[i].options.className;
-
-      var entity_hierarchy_el = getEntityHierarchyElement(local_entity_id);
-
-      entity_hierarchy_el.querySelector(".item-name").textContent = getEntityName(local_entity_id);
-    } catch (e) {}
-
-    if (main.previous_hierarchy_html != hierarchy_el.innerHTML) {
-      var exported_hierarchies = exportHierarchies({ naissance_hierarchy: "hierarchy" });
-
-      hierarchies_obj.hierarchy.groups = exported_hierarchies.hierarchy.groups;
-      main.groups = hierarchies_obj.hierarchy.groups;
-      main.previous_hierarchy_html = hierarchy_el.innerHTML;
-    }
-  }, 1000);
+  initialiseHierarchyDrawLoops();
 }, 100);

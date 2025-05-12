@@ -61,7 +61,6 @@
       main.entities[i] = cleanKeyframes(local_entity, undefined, {
         do_not_display: true
       });
-      //console.log(local_entity);
       save_data.entities.push({
         coords: convertToNaissance(local_entity),
         options: local_entity.options
