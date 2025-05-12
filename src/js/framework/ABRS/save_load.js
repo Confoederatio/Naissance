@@ -7,8 +7,9 @@
     //Declare local instance variables
     var save_data = JSON.parse(fs.readFileSync(file_name, "utf8"));
 
-    //Clear map
+    //Clear map; reset undo/redo
     clearMap();
+    resetUndoRedo();
 
     //Load all entities
     main.entities = [];

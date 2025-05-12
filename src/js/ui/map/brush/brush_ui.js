@@ -155,7 +155,7 @@
       if (brush_obj.current_selection) {
         brush_obj.current_selection.setSymbol(brush_obj.entity_options);
         brush_obj.current_selection.addEventListener("mouseup", function (e) {
-          if (!window.mouse_dragged && main.events.left_mouse)
+          if (!window.mouse_dragged && e.domEvent.button == 0)
             printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: true });
         });
       }

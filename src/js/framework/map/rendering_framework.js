@@ -103,6 +103,9 @@
     return rendering_order;
   }
 
+  /**
+   * renderAllPolities() - Renders all polities in the correct order.
+   */
   function renderAllPolities () {
     //Declare local instance variables
     var render_order = getHierarchyRenderingOrder({ exclude_selection: true });

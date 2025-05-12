@@ -1,5 +1,14 @@
 //Declare Entity UI functions
 {
+  //cleanEntityContextMenus() - Cleans up any empty context menus leftover.
+  function cleanEntityContextMenus () {
+    var all_ui_els = document.querySelectorAll(`.maptalks-front .maptalks-ui > div`);
+
+    for (var i = 0; i < all_ui_els.length; i++)
+      if (all_ui_els[i].innerHTML.length == 0)
+        all_ui_els[i].remove();
+  }
+
   /*
     closeEntityContextMenu() - Closes an entity context menu and removes it from interfaces.
     arg0_entity_id: (String) - The entity ID to close the context menu for.
@@ -20,13 +29,17 @@
     cleanEntityContextMenus();
   }
 
-  //cleanEntityContextMenus() - Cleans up any empty context menus leftover.
-  function cleanEntityContextMenus () {
-    var all_ui_els = document.querySelectorAll(`.maptalks-front .maptalks-ui > div`);
+  function closeUnpinnedEntityContextMenus () {
+    //Declare local instance variables
+    var all_entity_context_menus = document.querySelectorAll(`.leaflet-popup:has(.entity-ui-container)`);
 
-    for (var i = 0; i < all_ui_els.length; i++)
-      if (all_ui_els[i].innerHTML.length == 0)
-        all_ui_els[i].remove();
+    //Iterate over all_entity_context_menus
+    for (var i = 0; i < all_entity_context_menus.length; i++) {
+      var local_entity_context_menu = all_entity_context_menus[i];
+
+      if (!local_entity_context_menu.querySelector("#entity-header:has([pinned='true'])"))
+        local_entity_context_menu.remove();
+    }
   }
 
   /*
@@ -324,6 +337,8 @@
 
     //Reload leaflet popup if reload_popup is true
     if (reload_popup) {
+      //Close unpinned entity context menus
+      closeUnpinnedEntityContextMenus();
       closeEntityContextMenu(entity_id);
 
       //Bind popup
@@ -350,10 +365,15 @@
 
       //Fetch centroid for leaflet_centre_coords if options.coords is not available
       if (!options.coords) {
-        var turf_polygon = getTurfObject(last_history_coords);
-        var turf_polygon_centre = turf.center(turf_polygon).geometry.coordinates;
-
-        leaflet_centre_coords = [turf_polygon_centre[1], turf_polygon_centre[0]]; //Convert from Turf LatLng to LngLat
+        try {
+          var turf_polygon = getTurfObject(last_history_coords);
+          var turf_polygon_centre = turf.center(turf_polygon).geometry.coordinates;
+  
+          leaflet_centre_coords = [turf_polygon_centre[1], turf_polygon_centre[0]]; //Convert from Turf LatLng to LngLat
+        } catch (e) {
+          console.error(e);
+          leaflet_centre_coords = [0, 0];
+        }
       } else {
         leaflet_centre_coords = options.coords;
       }
@@ -475,7 +495,7 @@
 
       <img src = "gfx/interface/empty_icon.png" class = "button cross-icon" id = "close-popup" onclick = "closeEntityContextMenu('${entity_id}');" draggable = "false">
       <img src = "gfx/interface/empty_icon.png" class = "button delete-icon" id = "delete-entity" onclick = "deleteEntity('${entity_id}');" draggable = "false">
-      <img src = "gfx/interface/empty_icon.png" class = "button ${(!is_pinned) ? "pin-icon" : "reverse-pin-icon"}" id = "pin-popup" onclick = "printEntityContextMenu(${entity_id}, { coords: ${coords_string}, is_being_edited: ${options.is_being_edited}, pin: ${!options.pin} });" draggable = "false">
+      <img src = "gfx/interface/empty_icon.png" class = "button ${(!is_pinned) ? "pin-icon" : "reverse-pin-icon"}" id = "pin-popup" pinned = "${(is_pinned) ? true : false}" onclick = "printEntityContextMenu(${entity_id}, { coords: ${coords_string}, is_being_edited: ${options.is_being_edited}, pin: ${!options.pin} });" draggable = "false">
 
       <div id = "polity-id">ID: ${entity_id}</div>
     </div>`;

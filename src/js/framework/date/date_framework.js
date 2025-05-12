@@ -63,8 +63,8 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
               delete local_options.do_not_display;
               main.entities[i].addTo(main.entity_layer);
               main.entities[i].addEventListener("mouseup", function (e) {
-                if (main.events.left_mouse)
-                  printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: false, pin: true });
+                if (e.domEvent.button == 0)
+                  printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: false });
               });
             } catch (e) {
               console.error(`Ran into error!`, e, JSON.stringify(local_history_frame.coords));

@@ -67,3 +67,14 @@ function initialiseUndoRedo () {
     global.timelines[current_timeline_id] = [];
   }
 }
+
+/**
+ * resetUndoRedo() - Resets the undo/redo system.
+ */
+function resetUndoRedo () {
+  delete global.actions;
+  delete global.timelines;
+
+  initialiseUndoRedo();
+  initialiseUndoRedoActions();
+}
