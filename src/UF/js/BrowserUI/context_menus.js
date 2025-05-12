@@ -1365,7 +1365,8 @@
         restoreErrorHandlers();
 
         //'onchange' handler
-        (typeof parent_el.onchange == "string") ? eval(parent_el.onchange) : parent_el.onchange([pixel[0], pixel[1], pixel[2]]);
+        (typeof parent_el.onchange == "string") ? 
+          eval(parent_el.onchange) : parent_el.onchange([pixel[0], pixel[1], pixel[2]]);
       });
       temp_parent_el.remove();
     };
@@ -1751,7 +1752,14 @@
           temp_parent_el.remove();
 
           //'onchange' handler
-          (typeof parent_el.onchange == "string") ? eval(parent_el.onchange) : parent_el.onchange(colour);
+          if (Array.isArray(colour)) {
+            colour[0] = parseInt(colour[0]);
+            colour[1] = parseInt(colour[1]);
+            colour[2] = parseInt(colour[2]);
+
+            (typeof parent_el.onchange == "string") ? 
+              eval(parent_el.onchange) : parent_el.onchange(colour);
+          }
         }
 
     //If no colour is defined, set cursor to the dead middle of the colour picker
