@@ -20,4 +20,4 @@
       window.mouse_dragged = false;
     }, 500);
   }
-} 
+}
