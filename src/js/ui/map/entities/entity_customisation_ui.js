@@ -73,7 +73,7 @@
         onclick: function (arg0_colour) {
           //Convert from parameters
           var colour = arg0_colour;
-          
+
           if (!Array.isArray(colour)) return;
 
           //Declare local instance variables
@@ -81,7 +81,6 @@
           var entity_ui_obj = global.interfaces[entity_id];
 
           if (entity_ui_obj.page == "fill") {
-            console.log(`Setting fill colour!`, colour);
             setEntityFillColour(entity_id, colour);
           } else if (entity_ui_obj.page == "stroke") {
             setEntityStrokeColour(entity_id, colour);
