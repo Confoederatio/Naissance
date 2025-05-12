@@ -102,4 +102,17 @@
     //Return statement
     return rendering_order;
   }
+
+  function renderAllPolities () {
+    //Declare local instance variables
+    var render_order = getHierarchyRenderingOrder({ exclude_selection: true });
+
+    //Renders need to happen in render_order; so iterate over that instead
+    for (var i = 0; i < render_order.length; i++) {
+      var local_entity = getEntity(render_order[i]);
+
+      if (local_entity)
+        updateEntityVisibility(local_entity);
+    }
+  }
 }

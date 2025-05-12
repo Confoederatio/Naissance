@@ -19,10 +19,10 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
 
     //Declare local instance variables
     var brush_obj = main.brush;
-    var render_order = getHierarchyRenderingOrder();
 
     //Clear map first before rendering entities
     clearMap();
+    renderAllPolities(); //Used to ensure that polities are rendered in the correct order
 
     //Iterate over all entities and render them
     for (let i = 0; i < main.entities.length; i++) {
