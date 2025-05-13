@@ -84,6 +84,22 @@
               setEntityFillColour(entity_id, e.target.value); 
               printEntityBio(entity_id);
             }
+          },
+          fill_opacity: {
+            id: "fill_opacity",
+            name: "Fill Opacity",
+            type: "range",
+
+            attributes: {
+              min: 0,
+              max: 1,
+              step: 0.01,
+              value: entity_obj._symbol.polygonOpacity
+            },
+            onclick: function (e) {
+              setEntityFillOpacity(entity_id, e.target.value);
+              printEntityBio(entity_id);
+            }
           }
         },
         stroke: {
@@ -99,6 +115,22 @@
             },
             onclick: function (e) {
               setEntityStrokeColour(entity_id, e.target.value);
+              printEntityBio(entity_id);
+            }
+          },
+          stroke_opacity: {
+            id: "stroke_opacity",
+            name: "Stroke Opacity",
+            type: "range",
+            
+            attributes: {
+              min: 0,
+              max: 1,
+              step: 0.01,
+              value: entity_obj._symbol.lineOpacity
+            },
+            onclick: function (e) {
+              setEntityStrokeOpacity(entity_id, e.target.value);
               printEntityBio(entity_id);
             }
           }

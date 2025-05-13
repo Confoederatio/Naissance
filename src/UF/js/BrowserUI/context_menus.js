@@ -1452,6 +1452,9 @@
                   local_input_obj.onclick(e);
                 };
               }
+          } else if (local_type == "range") {
+            if (local_input_obj.onclick)
+              all_inputs[i].onchange = local_input_obj.onclick;
           } else if (local_type == "text") {
             if (local_input_obj.onclick)
               if (typeof local_input_obj.onclick == "string") {

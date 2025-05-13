@@ -28,4 +28,26 @@
       entity_obj.setSymbol(current_symbol);
     }
   }
+
+  function setEntityFillOpacity (arg0_entity_id, arg1_opacity, arg2_options) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+    var opacity = returnSafeNumber(arg1_opacity);
+    var options = (arg2_options) ? arg2_options : {};
+
+    //Initialise options
+    if (!options.date) options.date = main.date;
+    
+    //Declare local instance variables
+    var current_history = getHistoryFrame(entity_id, options.date);
+    var entity_obj = getEntity(entity_id);
+
+    if (current_history.options.fillOpacity != opacity) {
+      createHistoryFrame(entity_id, options.date, { fillOpacity: opacity });
+
+      var current_symbol = entity_obj.getSymbol();
+      current_symbol.polygonOpacity = opacity;
+      entity_obj.setSymbol(current_symbol);
+    }
+  }
 }
