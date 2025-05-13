@@ -18,6 +18,7 @@
           - biuf
           - rich_text/wysiwyg
 
+          - basic_colour
           - button
           - checkbox
           - color/colour
@@ -194,6 +195,7 @@
       icon: (String) - Optional. The path to the display icon image.
       name: (String) - Optional. The HTML string of the button to display.
       onclick: (String) - Optional. The onclick/confirm attribute of the button.
+      onload: (String) - Optional. The onload attribute of the button.
       tooltip: (String) - Optional. The HTML tooltip a user can see by hovering over this input.
 
       attributes: - Optional.
@@ -1429,7 +1431,7 @@
         handleColourWheel(all_inputs[i]);
 
       //Custom interaction handling
-      if (local_input_obj)
+      if (local_input_obj) {
         if (local_input_obj.onclick)
           if (local_type == "button") {
             if (local_input_obj.onclick)
@@ -1466,6 +1468,10 @@
                 };
               }
           }
+        
+        if (local_input_obj.onload)
+          local_input_obj.onload(all_inputs[i]);
+      }
     }
   }
 

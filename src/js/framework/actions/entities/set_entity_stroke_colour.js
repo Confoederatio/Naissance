@@ -54,4 +54,23 @@
       entity_obj.setSymbol(current_symbol);
     }
   }
+
+  function setEntityStrokeWidth (arg0_entity_id, arg1_width, arg2_options) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+    var width = returnSafeNumber(arg1_width);
+    var options = (arg2_options) ? arg2_options : {};
+    
+    //Declare local instance variables
+    var current_history = getHistoryFrame(entity_id, options.date);
+    var entity_obj = getEntity(entity_id);
+
+    if (current_history.options.strokeWidth != width) {
+      createHistoryFrame(entity_id, options.date, { lineWidth: width });
+
+      var current_symbol = entity_obj.getSymbol();
+      current_symbol.lineWidth = width;
+      entity_obj.setSymbol(current_symbol);
+    }
+  }
 }

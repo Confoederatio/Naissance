@@ -85,20 +85,21 @@
               printEntityBio(entity_id);
             }
           },
-          fill_opacity: {
-            id: "fill_opacity",
-            name: "Fill Opacity",
-            type: "range",
+          fill_opacity_number: {
+            id: "fill_opacity_number",
+            name: "Fill Opacity (0-100): ",
+            type: "number",
 
             attributes: {
               min: 0,
-              max: 1,
-              step: 0.01,
-              value: entity_obj._symbol.polygonOpacity
+              max: 100
             },
             onclick: function (e) {
-              setEntityFillOpacity(entity_id, e.target.value);
+              setEntityFillOpacity(entity_id, e.target.value/100);
               printEntityBio(entity_id);
+            },
+            onload: function (e) {
+              e.querySelector("input").value = returnSafeNumber(entity_obj._symbol.polygonOpacity*100, 60);
             }
           }
         },
@@ -118,20 +119,37 @@
               printEntityBio(entity_id);
             }
           },
-          stroke_opacity: {
-            id: "stroke_opacity",
-            name: "Stroke Opacity",
-            type: "range",
+          stroke_opacity_number: {
+            id: "stroke_opacity_number",
+            name: "Stroke Opacity (0-100): ",
+            type: "number",
             
             attributes: {
               min: 0,
-              max: 1,
-              step: 0.01,
-              value: entity_obj._symbol.lineOpacity
+              max: 100
             },
             onclick: function (e) {
-              setEntityStrokeOpacity(entity_id, e.target.value);
+              setEntityStrokeOpacity(entity_id, e.target.value/100);
               printEntityBio(entity_id);
+            },
+            onload: function (e) {
+              e.querySelector("input").value = returnSafeNumber(entity_obj._symbol.lineOpacity*100, 100);
+            }
+          },
+          stroke_width_number: {
+            id: "stroke_width_number",
+            name: "Stroke Width: ",
+            type: "number",
+            
+            attributes: {
+              width: 2
+            },
+            onclick: function (e) {
+              setEntityStrokeWidth(entity_id, e.target.value);
+              printEntityBio(entity_id);
+            },
+            onload: function (e) {
+              e.querySelector("input").value = returnSafeNumber(entity_obj._symbol.lineWidth, 1);
             }
           }
         },
