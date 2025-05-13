@@ -175,6 +175,7 @@
       //Initialise preliminary context menu first
       var new_interface = JSON.parse(JSON.stringify(brush_action_obj.interface));
       new_interface.anchor = context_menu_ui.anchor;
+      new_interface.close_function = `closeBrushActionContextMenu(${brush_action_order});`;
 
       var action_context_menu_ui = createContextMenu(new_interface);
       refreshBrushActionsContextMenus();

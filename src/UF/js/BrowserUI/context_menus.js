@@ -7,6 +7,8 @@
     arg0_options: (Object)
       anchor: (String/Element) - The query selector to pin a context menu to.
       class: (String) - The class prefix to prepend.
+      close_function: (String) - The function to execute when the close button is clicked.
+      do_not_add_close_button: (Boolean) - Whether to not add a close button to the input. False by default.
       do_not_append: (Boolean) - Whether to append or not.
       id: (String) - The ID of the context menu.
       name: (String) - Optional. Title of the context menu. Undefined; will not display by default.
@@ -84,6 +86,15 @@
     if (options.id) context_menu_el.id = options.id;
     context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}context-menu`);
     if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
+
+    //Add close button
+    var do_not_add_close_button = (options.do_not_add_close_button);
+    if (options.class)
+      if (options.class.includes("unique"))
+        do_not_add_close_button = true;
+
+    if (!do_not_add_close_button)
+      html_string.push(`<img id = "close-button" src = "./UF/gfx/close_icon_dark.png" class = "uf-close-button" draggable = "false" onclick = "${(options.close_function) ? options.close_function : "this.parentElement.remove();"}">`);
 
     //Fetch table_columns; table_rows
     for (var i = 0; i < all_options.length; i++) {

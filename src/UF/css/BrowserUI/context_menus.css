@@ -47,6 +47,19 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
 }
 /* -- 2. GENERAL CONTEXT MENU STYLING -- */
+.context-menu #close-button {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+
+  float: right;
+  height: 0.75rem;
+  width: 0.75rem;
+}
+.context-menu #close-button:hover {
+  cursor: pointer;
+}
+
 .context-menu td {
   /*border: 1px solid black;*/
   vertical-align: top;
