@@ -54,40 +54,8 @@
     var entity_customisation_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_colour_picker}`;
     var entity_maximum_zoom = (current_history.options.maximum_zoom_level) ? current_history.options.maximum_zoom_level : 0;
     var entity_minimum_zoom = (current_history.options.minimum_zoom_level) ? current_history.options.minimum_zoom_level : 0;
+    var entity_obj = getEntity(entity_id);
     var variable_list_obj = getVariableListObject(entity_id);
-
-    //Define colour picker
-    var entity_customisation_fill_tab_el = createContextMenu({
-      anchor: entity_customisation_selector,
-      class: `colour-picker-container unique`,
-      id: "entity-colour-picker",
-      name: "Colour Picker:",
-
-      colour_input: {
-        id: "colour_input",
-        type: "colour",
-
-        x: 0,
-        y: 0,
-
-        onclick: function (arg0_colour) {
-          //Convert from parameters
-          var colour = arg0_colour;
-
-          if (!Array.isArray(colour)) return;
-
-          //Declare local instance variables
-          var entity_obj = getEntity(entity_id);
-          var entity_ui_obj = global.interfaces[entity_id];
-
-          if (entity_ui_obj.page == "fill") {
-            setEntityFillColour(entity_id, colour);
-          } else if (entity_ui_obj.page == "stroke") {
-            setEntityStrokeColour(entity_id, colour);
-          }
-        }
-      }
-    });
 
     //Define tab options in #entity-ui-customisation-options-container
     var entity_customisation_content_el = createPageMenu({
@@ -102,10 +70,38 @@
 
       pages: {
         fill: {
-          name: "Fill"
+          name: "Fill",
+
+          fill_colour: {
+            id: "fill_colour",
+            name: "Fill Colour",
+            type: "basic_colour",
+
+            attributes: {
+              value: entity_obj._symbol.polygonFill
+            },
+            onclick: function (e) {
+              setEntityFillColour(entity_id, e.target.value); 
+              printEntityBio(entity_id);
+            }
+          }
         },
         stroke: {
-          name: "Stroke"
+          name: "Stroke",
+
+          stroke_colour: {
+            id: "stroke_colour",
+            name: "Stroke Colour",
+            type: "basic_colour",
+
+            attributes: {
+              value: entity_obj._symbol.lineColor
+            },
+            onclick: function (e) {
+              setEntityStrokeColour(entity_id, e.target.value);
+              printEntityBio(entity_id);
+            }
+          }
         },
         other: {
           name: "Other",

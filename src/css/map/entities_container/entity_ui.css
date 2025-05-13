@@ -294,7 +294,6 @@
     font-family: "Barlow";
     font-size: 0.85rem;
     font-weight: 300;
-    margin-left: 6px;
     padding: 12px;
     width: calc(var(--entity-ui-width) - var(--context-menu-width));
 

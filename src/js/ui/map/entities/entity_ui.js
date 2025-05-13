@@ -138,15 +138,6 @@
     var entity_selector = getEntityElement(entity_id, { return_selector: true });
     var entity_ui_obj = global.interfaces[entity_id];
     var page = entity_ui_obj.page;
-
-    //Initialise setColourWheelCursor()
-    if (current_history.options)
-      if (Object.keys(current_history.options).length > 0)
-        if (page == "fill") {
-          setColourWheelCursor(`${entity_selector} #colour_input`, hexToRGB(current_history.options.fillColor));
-        } else if (page == "stroke") {
-          setColourWheelCursor(`${entity_selector} #colour_input`, hexToRGB(current_history.options.color));
-        }
   }
 
   function populateEntityTooltips (arg0_entity_id) {
@@ -392,7 +383,6 @@
         <!-- 3. Customisation -->
         ${printEntityContextMenuHeader(entity_id, { id: "entity-customisation-header", name: "Customisation"})}
         <div id = "customisation-top-parent" class = "entity-ui-container customisation-top-parent">
-          <div id = "entity-ui-customisation-colour"></div>
           <div id = "entity-ui-customisation-other">
             <div id = "customisation-tab-container"></div>
             <div id = "customisation-options"></div>

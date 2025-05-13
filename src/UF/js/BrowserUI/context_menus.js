@@ -360,6 +360,8 @@
           html_string.push(`</div>`);
         html_string.push(`</div>`);
       html_string.push(`</div>`);
+    } else if (options.type == "basic_colour") {
+      html_string.push(`${(options.name) ? options.name : ""} <input type = "color" ${objectToAttributes(options.attributes)}>`);
     } else if (options.type == "button") {
       html_string.push(`<span class = "button">`);
         if (options.icon)
@@ -1436,6 +1438,8 @@
               } else {
                 all_inputs[i].onclick = function (e) { local_input_obj.onclick(e); };
               }
+          } else if (local_type == "basic_colour") {
+            all_inputs[i].onchange = local_input_obj.onclick;
           } else if (local_type == "colour") {
             all_inputs[i].onchange = local_input_obj.onclick;
           } else if (local_type == "number") {

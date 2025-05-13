@@ -1,7 +1,29 @@
 /* -- Font imports -- */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Jersey+10&family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 
+/* -- 0. INPUT STYLING -- */
+input[type="color"] {
+  border: none;
+  outline: none;
+
+  height: 1rem;
+  padding: 0px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  outline: none;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  outline: none;
+}
+
 /* -- 1. GENERAL TABS STYLING -- */
+.tabs-container {
+  padding-bottom: 0.5rem;
+}
 .tabs-container > hr {
   position: relative;
 
