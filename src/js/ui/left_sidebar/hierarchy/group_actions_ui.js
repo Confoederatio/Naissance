@@ -16,7 +16,7 @@
     //Fetch local group action context menu and close it
     var group_actions_el = group_actions_anchor_el.querySelector(`[order="${order}"]`);
     group_actions_el.remove();
-    refreshGroupActionContextMenus();
+    refreshGroupActionsContextMenus();
   }
 
   /*
@@ -167,7 +167,7 @@
     if (group_action_obj.interface) {
       var group_el = getGroupElement(group_id);
       var group_action_anchor_el = getGroupActionsAnchorElement(group_id);
-      var group_action_order = (group_action_obj.orer != undefined) ? group_action_obj.order : 1;
+      var group_action_order = (group_action_obj.order != undefined) ? group_action_obj.order : 1;
       var group_selector = getGroupElement(group_id, { return_selector: true });
       var interaction_container_el = group_el.querySelectorAll(`.interaction-container`)[0];
       var lowest_order = config.group_actions_lowest_order;
@@ -200,6 +200,7 @@
         if (group_action_obj.interface) {
           var new_interface = JSON.parse(JSON.stringify(group_action_obj.interface));
           new_interface.anchor = context_menu_ui.anchor;
+          new_interface.close_function = `closeGroupActionsContextMenu('${group_id}', ${group_action_order}); refreshGroupActionsContextMenus('${group_id}');`;
 
           var group_action_context_menu_ui = createContextMenu(new_interface);
           refreshGroupActionsContextMenus(group_id);
@@ -342,8 +343,11 @@
     var group_id = arg0_group_id;
 
     //Declare local instance variables
-      var common_selectors = config.defines.common.selectors;
+    var common_selectors = config.defines.common.selectors;
     var group_el = getGroupElement(group_id);
+
+    if (!group_el) return; //Guard clause if group_el doesn't exist
+
     var hierarchy_el = document.querySelector(`${common_selectors.hierarchy}`);
     var left_sidebar_el = document.querySelector(`${common_selectors.left_sidebar}`);
     var interaction_container_el = group_el.querySelectorAll(`.interaction-container`)[0];

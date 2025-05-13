@@ -122,11 +122,12 @@
 
     //Declare local instance variables
     var group_obj = getGroup("hierarchy", group_id);
+      if (!group_obj) return; //Guard clause if group_obj doesn't exist
     var common_selectors = config.defines.common.selectors;
 
     //Return statement
     return (!options.return_selector) ?
-      document.querySelector(`${common_selectors.hierarchy} .group[data-id="${group_obj.id}"]`) :
-      `${common_selectors.hierarchy} .group[data-id="${group_obj.id}"]`;
+    document.querySelector(`${common_selectors.hierarchy} .group[data-id="${group_obj.id}"]`) :
+    `${common_selectors.hierarchy} .group[data-id="${group_obj.id}"]`;
   }
 }

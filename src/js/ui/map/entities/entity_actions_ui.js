@@ -201,6 +201,7 @@
           //Initialise preliminary context menu first
           var new_interface = JSON.parse(JSON.stringify(entity_action_obj.interface));
           new_interface.anchor = context_menu_ui.anchor;
+          new_interface.close_function = `closeEntityActionContextMenu('${entity_id}', ${entity_action_order}); refreshEntityActionsContextMenus('${entity_id}');`;
 
           var action_context_menu_ui = createContextMenu(new_interface);
           refreshEntityActionsContextMenus(entity_id);

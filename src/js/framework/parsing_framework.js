@@ -264,11 +264,10 @@
                 var new_options = JSON.parse(JSON.stringify(options));
                 var parsed_effect, parsed_immediate;
 
-                //console.log(options.options);
-
                 //Initialise options
                 if (!new_options.GROUP_ACTION)
                   new_options.GROUP_ACTION = local_value[x];
+                //console.log(local_value, new_options)
 
                 //Parse scope
                 if (local_group_action.effect)

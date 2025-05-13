@@ -200,6 +200,7 @@
       if (entity_keyframe_obj.interface) {
         var new_interface = JSON.parse(JSON.stringify(entity_keyframe_obj.interface));
         new_interface.anchor = context_menu_ui.anchor;
+        new_interface.close_function = `closeEntityKeyframeContextMenu('${entity_id}', ${entity_keyframe_order}); refreshEntityKeyframeContextMenus('${entity_id}');`;
 
         var keyframe_context_menu_ui = createContextMenu(new_interface);
         refreshEntityKeyframeContextMenus(entity_id);
