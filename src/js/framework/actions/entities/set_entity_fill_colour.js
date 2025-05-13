@@ -50,4 +50,25 @@
       entity_obj.setSymbol(current_symbol);
     }
   }
+
+  function setEntityFillPattern (arg0_entity_id, arg1_pattern_url, arg2_options) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+    var pattern_url = arg1_pattern_url;
+    var options = (arg2_options) ? arg2_options : {};
+    
+    //Initialise options
+    if (!options.date) options.date = main.date;
+
+    //Declare local instance variables
+    var current_history = getHistoryFrame(entity_id, options.date);
+    var entity_obj = getEntity(entity_id);
+
+    if (current_history.options.polygonPatternFile != pattern_url) {
+      createHistoryFrame(entity_id, options.date, { polygonPatternFile: pattern_url });
+
+      var current_symbol = entity_obj.getSymbol();
+      entity_obj.setSymbol(current_symbol);
+    }
+  }
 }

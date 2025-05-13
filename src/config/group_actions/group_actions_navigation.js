@@ -19,12 +19,23 @@ config.group_actions.actions_navigation = {
           create_subgroup: "FROM.current_group"
         }
       },
+      customise_group_button: {
+        id: "customise_group_button",
+        name: "Customise Group",
+        type: "button",
+        x: 0,
+        y: 1,
+
+        effect: {
+          
+        }
+      },
       delete_group_button: {
         id: "delete_group_button",
         name: "Delete Group",
         type: "button",
         x: 0,
-        y: 1,
+        y: 2,
 
         effect: {
           delete_group: "FROM.current_group"
@@ -35,7 +46,7 @@ config.group_actions.actions_navigation = {
         name: "Delete All",
         type: "button",
         x: 0,
-        y: 2,
+        y: 3,
 
         effect: {
           delete_group_recursively: "FROM.current_group"
@@ -46,7 +57,7 @@ config.group_actions.actions_navigation = {
         name: "Set Mask",
         type: "button",
         x: 0,
-        y: 3,
+        y: 4,
 
         effect: {
           open_ui: "set_mask"
