@@ -110,6 +110,8 @@
             id: "stroke_colour",
             name: "Stroke Colour",
             type: "basic_colour",
+            x: 0,
+            y: 0,
 
             attributes: {
               value: entity_obj._symbol.lineColor
@@ -119,10 +121,23 @@
               printEntityBio(entity_id);
             }
           },
+          stroke_options: {
+            id: "stroke_options",
+            name: "Set Stroke to be Same as Fill",
+            type: "checkbox",
+            x: 1,
+            y: 0,
+
+            options: {
+              "set_stroke_to_be_same_as_fill": "Set stroke to be same as fill",
+            }
+          },
           stroke_opacity_number: {
             id: "stroke_opacity_number",
             name: "Stroke Opacity (0-100): ",
             type: "number",
+            x: 1,
+            y: 1,
             
             attributes: {
               min: 0,
@@ -140,6 +155,8 @@
             id: "stroke_width_number",
             name: "Stroke Width: ",
             type: "number",
+            x: 1,
+            y: 2,
             
             attributes: {
               width: 2
@@ -151,7 +168,7 @@
             onload: function (e) {
               e.querySelector("input").value = returnSafeNumber(entity_obj._symbol.lineWidth, 1);
             }
-          }
+          },
         },
         other: {
           name: "Other",

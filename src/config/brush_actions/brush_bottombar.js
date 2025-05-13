@@ -11,5 +11,18 @@ config.brush_actions.brush_bottombar = {
     effect: {
       trigger: "brush_simplify_path"
     }
+  },
+  finish_entity_button: {
+    icon: "gfx/interface/checkmark_icon.png",
+    name: "Finish Entity",
+    order: 1,
+
+    /*limit: { [WIP] - parseBrushLimit() is not defined.
+      entity_is_being_edited: true
+    },*/
+    effect: {
+      finish_entity: true,
+      refresh_entity_actions: true
+    }
   }
 };
