@@ -29,6 +29,13 @@
     }
   }
 
+  /**
+   * setEntityStrokeOpacity() - Sets the stroke opacity of a given entity.
+   * @param {String} arg0_entity_id - The entity ID to input.
+   * @param {number} arg1_opacity - The opacity to change the entity to.
+   * @param {Object} [arg2_options] - Optional. The options to input.
+   *  @param {Object} [arg2_options.date=main.date] - Optional. The current date by default.
+   */
   function setEntityStrokeOpacity (arg0_entity_id, arg1_opacity, arg2_options) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
