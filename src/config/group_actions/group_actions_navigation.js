@@ -27,7 +27,7 @@ config.group_actions.actions_navigation = {
         y: 1,
 
         effect: {
-          
+          //[WIP] - Finish customise group options later.
         }
       },
       delete_group_button: {
