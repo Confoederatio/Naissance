@@ -20,8 +20,9 @@
           <div class = "header">Global Settings</div>
         `,
       },
-      map_tilelayers: {
-        id: `map_tilelayers`,
+      test_sortable_list: {
+        id: `test_sortable_list`,
+        name: `Test Sortable List`,
         type: "sortable_list",
 
         options: {
