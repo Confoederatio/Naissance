@@ -23,6 +23,8 @@ config.defines.common = {
       hierarchy: `#hierarchy`, //The query selector for the actual hierarchy tab or supercontainer.
       hierarchy_container: `#hierarchy-container`, //The query selector for the actual hierarchy container.
         group_actions_context_menu_anchor: `#context-menu-container`,
+    //Scripts
+    //Settings
     //Undo/Redo
       undo_redo_canvas_container: `#undo-redo-tab .undo-redo-canvas-container`,
       undo_redo_container: `#undo-redo-ui-container`, //The query selector for the actual Undo/Redo container.
@@ -46,9 +48,13 @@ config.defines.common = {
       file_button: `#topbar .file`, //The FILE button query selector.
       undo_redo_button: `#topbar .undo_redo`, //The UNDO-REDO button query selector
       map_button: `#topbar .map`, //The MAP button query selector.
+      scripts_button: `#topbar-action-buttons-container .scripts-button`, //The SCRIPTS button query selector.
+      settings_button: `#topbar-action-buttons-container .settings-button`, //The SETTINGS button query selector.
 
       file_page: `#left-sidebar #file-tab`,
       map_page: `#left-sidebar #hierarchy-tab`,
+      scripts_page: `#left-sidebar #scripts-tab`,
+      settings_page: `#left-sidebar #settings-tab`,
       undo_redo_page: `#left-sidebar #undo-redo-tab`,
 
     //Map

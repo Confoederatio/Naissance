@@ -65,6 +65,12 @@
     getUISelector("map_button").onclick = function (e) {
       switchTopbarTab("map");
     };
+    getUISelector("scripts_button").onclick = function (e) {
+      switchTopbarTab("scripts");
+    };
+    getUISelector("settings_button").onclick = function (e) {
+      switchTopbarTab("settings");
+    };
   }
 
   function initTopbarUI () {
