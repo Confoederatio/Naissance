@@ -11,12 +11,16 @@
     var topbar_tab_button_els = document.querySelectorAll(common_selectors.topbar_tab_buttons);
 
     //Iterate over all topbar_tab_button_els and remove ' active' from class list; then add ' active' to topbar_tab_button_el class
+    console.log(topbar_tab_button_els);
     for (var i = 0; i < topbar_tab_button_els.length; i++)
       topbar_tab_button_els[i].setAttribute("class",
         topbar_tab_button_els[i].getAttribute("class").replace(` active`, "")
       );
     for (var i = 0; i < topbar_tab_button_els.length; i++)
-      if (topbar_tab_button_els[i].getAttribute("class") == tab)
+      if (
+        topbar_tab_button_els[i].getAttribute("class") == tab || 
+        topbar_tab_button_els[i].getAttribute("class").includes(`${tab}-button`)
+      )
         topbar_tab_button_els[i].setAttribute("class", `${topbar_tab_button_els[i].getAttribute("class")} active`);
 
     //Iterate over all left_sidebar_page_els and hide them

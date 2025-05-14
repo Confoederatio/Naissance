@@ -15,18 +15,10 @@
 
 /* -- Hierarchy Styling -- */
 .hierarchy-body-container {
+  color: black;
+  
   margin-left: 15px;
   margin-top: 15px;
-}
-.hierarchy-container {
-  position: absolute;
-  top: calc(4.5vh + 3rem + 5px);
-  left: 5px;
-
-  height: calc(75.5vh - 32.5px);
-  width: 100%;
-
-  background-color: rgba(0, 0, 0, 0.85);
 }
 .hierarchy-elements-container {
   height: calc(65vh);

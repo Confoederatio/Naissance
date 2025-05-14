@@ -24,7 +24,9 @@ config.defines.common = {
       hierarchy_container: `#hierarchy-container`, //The query selector for the actual hierarchy container.
         group_actions_context_menu_anchor: `#context-menu-container`,
     //Scripts
+      scripts_container: `#scripts-content-container`, //The query selector for the actual scripts container.
     //Settings
+      settings_container: `#settings-content-container`, //The query selector for the actual settings container.
     //Undo/Redo
       undo_redo_canvas_container: `#undo-redo-tab .undo-redo-canvas-container`,
       undo_redo_container: `#undo-redo-ui-container`, //The query selector for the actual Undo/Redo container.
@@ -44,7 +46,7 @@ config.defines.common = {
 
     //Interface - Topbar
     left_sidebar_pages: `#left-sidebar [page="true"]`,
-    topbar_tab_buttons: `#topbar > ul li`, //The query selector for all topbar tab buttons.
+    topbar_tab_buttons: `#topbar > ul li, #topbar-action-buttons-container > span`, //The query selector for all topbar tab buttons.
       file_button: `#topbar .file`, //The FILE button query selector.
       undo_redo_button: `#topbar .undo_redo`, //The UNDO-REDO button query selector
       map_button: `#topbar .map`, //The MAP button query selector.

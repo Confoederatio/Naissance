@@ -4,6 +4,8 @@
     //Initialise left_sidebar
     initDateUI();
     initHierarchyUI();
+    initScriptsUI();
+    initSettingsUI();
 
     //Initialise topbar
     initTopbarUI();

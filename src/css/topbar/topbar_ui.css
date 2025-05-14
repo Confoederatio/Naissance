@@ -89,6 +89,9 @@
   pointer-events: all;
   transition: .3s ease-in-out;
 }
+.small-topbar-button.active {
+  background-color: rgba(240, 60, 60, 0.65);
+}
 .small-topbar-button:hover {
   background-color: rgba(240, 60, 60, 0.65);
   cursor: pointer;

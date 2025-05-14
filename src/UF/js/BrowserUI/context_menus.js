@@ -566,6 +566,25 @@
       html_string.push(`<input type = "reset" id = "reset-button" value = "Reset">`);
     } else if (options.type == "search_select") {
       //High-intensity; requires searchable list - scratch it up in Codepen
+    } else if (options.type == "sortable_list") {
+      //Requires Sortable.js
+      if (options.name)
+        html_string.push(`<div class = "header">${options.name}</div>`);
+      html_string.push(`<ul class = "sortable-list" id = "${options.id}" ${objectToAttributes(options.attributes)}>`);  
+      
+      //Iterate over all options.options
+      if (options.options) {
+        var all_suboptions = Object.keys(options.options);
+
+        for (var i = 0; i < all_suboptions.length; i++) {
+          var local_option = options.options[all_suboptions[i]];
+
+          //Push option to html_string
+          html_string.push(`<li class = "sortable-list-item" data-value = "${all_suboptions[i]}">${local_option}</li>`);
+        }
+      }
+
+      html_string.push(`</ul>`);
     } else if (options.type == "select") {
       if (options.name)
         html_string.push(`<div class = "header">${options.name}</div>`);
@@ -1441,8 +1460,19 @@
       if (local_type == "colour")
         handleColourWheel(all_inputs[i]);
 
+      //Default type population (i.e. for 'sortable_list')
+      if (local_type == "sortable_list")
+        Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
+          animation: 150,
+          onEnd: function (e) {
+            if (local_input_obj.onclick)
+              local_input_obj.onclick(e);
+          }
+        });
+
       //Custom interaction handling
       if (local_input_obj) {
+        //.onclick handling
         if (local_input_obj.onclick)
           if (local_type == "button") {
             if (local_input_obj.onclick)
