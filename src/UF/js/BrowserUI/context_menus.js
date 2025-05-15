@@ -565,7 +565,20 @@
         html_string.push(`<div class = "header">${options.name}</div>`);
       html_string.push(`<input type = "reset" id = "reset-button" value = "Reset">`);
     } else if (options.type == "search_select") {
-      //High-intensity; requires searchable list - scratch it up in Codepen
+      html_string.push(`<div class = "search-select-container" ${objectToAttributes(options.attributes)}>`);
+        html_string.push(`<input type = "text" id = "search" placeholder = "${(options.name) ? options.name : "Search..."}" onkeyup = "handleSearchSelect(this.parentElement);">`);
+
+        //Iterate over all options.options
+        if (options.options) {
+          var all_suboptions = Object.keys(options.options);
+
+          for (var i = 0; i < all_suboptions.length; i++) {
+            var local_option = options.options[all_suboptions[i]];
+
+            html_string.push(`<div class = "search-select-item" data-value = "${all_suboptions[i]}">${local_option}</div>`);
+          }
+        }
+      html_string.push(`</div>`);
     } else if (options.type == "sortable_list") {
       //Requires Sortable.js
       if (options.name)
@@ -1448,6 +1461,28 @@
     };
   }
 
+  function handleSearchSelect (arg0_parent_el) {
+    //Convert from parameters
+    var parent_el = arg0_parent_el;
+
+    //Declare local instance variables
+    var all_a_els = parent_el.querySelectorAll(`a`);
+    var input_el = parent_el.querySelector(`#search`);
+    
+    var filter = input_el.value.toLowerCase();
+
+    //Iterate over all_a_els
+    for (var i = 0; i < all_a_els.length; i++) {
+      var text_value = all_a_els[i].textContent || all_a_els[i].innerText;
+
+      if (text_value.toLowerCase().indexOf(filter) > -1) {
+        all_a_els[i].style.display = "";
+      } else {
+        all_a_els[i].style.display = "none";
+      }
+    }
+  }
+
   /*
     handleContextMenu() - Provides the interaction handler for context menus.
     arg0_context_menu_el: (HTMLElement) - The context menu HTML element.
@@ -1471,7 +1506,11 @@
         handleColourWheel(all_inputs[i]);
 
       //Default type population (i.e. for 'sortable_list')
-      if (local_type == "sortable_list") {
+      if (local_type == "search_select") {
+        all_inputs[i].querySelector(`#search`).addEventListener("click", function (e) {
+          all_inputs[i].classList.toggle("shown");
+        });
+      } if (local_type == "sortable_list") {
         Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
           animation: 150,
           onEnd: function (e) {

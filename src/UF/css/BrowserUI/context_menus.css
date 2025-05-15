@@ -124,6 +124,46 @@ input[type="color"]::-webkit-color-swatch {
 
     margin-right: 0.4rem;
   }
+  /* -- Search select formatting -- */
+  .search-select-container {
+    display: inline-block;
+    position: relative;
+  }
+
+  .search-select-container #search {
+    background-image: url("./UF/gfx/search_icon_dark.png");
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    border: none;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: 14px 20px 12px 45px;
+    border-bottom: 1px solid #ddd;
+  }
+  .search-select-container #search:focus {
+    outline: 3px solid #ddd;
+  }
+
+  .search-select-container:not(.shown) a {
+    display: none;
+  }
+  .search-select-container.shown a {
+    display: block;
+  }
+  .search-select-container a {
+    position: absolute;
+
+    background-color: #f6f6f6;
+    border: 1px solid #ddd;
+    color: black;
+    min-width: 14rem;
+    padding: 12px 16px;
+    text-decoration: none;
+    z-index: 1;
+  }
+  .search-select-container a:hover {
+    background-color: #f1f1f1;
+  }
 }
 
 .context-menu ul.sortable-list {
