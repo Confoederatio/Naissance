@@ -17,19 +17,20 @@
         type: "html",
 
         innerHTML: `
-          <div class = "header">Global Settings</div>
+          <div class = "primary-header">Global Settings</div>
         `,
       },
       test_sortable_list: {
         id: `test_sortable_list`,
-        name: `Test Sortable List`,
+        name: `<div class = "secondary-header">Map Layers:</div>`,
         type: "sortable_list",
+        has_controls: true, //Make sure to implement this into BrowserUI
 
         options: {
           "default": `Default`,
           "test": `Test`
         },
-        onclick: function (e) {
+        onchange: function (e) {
           console.log(e);
         }
       }

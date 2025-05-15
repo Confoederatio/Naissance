@@ -7,10 +7,24 @@
   padding: 0px;
 }
 
-#settings-ui .header {
+#settings-ui .primary-header {
   font-family: "Karla";
   font-weight: 900;
   font-size: 1rem;
 
   text-transform: uppercase;
+}
+#settings-ui .secondary-header {
+  font-weight: 500;
+  font-size: 0.8rem;
+
+  text-transform: uppercase;
+}
+#settings-ui .sortable-list .sortable-list-item {
+  transition: all 0.2s ease;
+}
+#settings-ui .sortable-list .sortable-list-item.selected {
+  background-color: white;
+  border: 0px solid white;  
+  color: black;
 }

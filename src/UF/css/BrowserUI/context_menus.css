@@ -125,6 +125,22 @@ input[type="color"]::-webkit-color-swatch {
     margin-right: 0.4rem;
   }
 }
+.context-menu li.sortable-list-item::marker {
+  content: "";
+}
+.context-menu li.sortable-list-item {
+  cursor: grab;
+  display: block;
+  padding: 0.1rem;
+  width: 100%;
+}
+.context-menu li.sortable-list-item.selected {
+  border: 1px solid white;
+}
+.context-menu ul.sortable-list {
+  padding-inline-start: 0.2rem;
+}
+
 .button > img {
   max-height: 2rem;
   max-width: 2rem;

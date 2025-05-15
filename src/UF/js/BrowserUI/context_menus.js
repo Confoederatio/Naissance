@@ -1467,7 +1467,9 @@
           onEnd: function (e) {
             if (local_input_obj.onclick)
               local_input_obj.onclick(e);
-          }
+          },
+          multiDrag: true,
+          selectedClass: "selected"
         });
 
       //Custom interaction handling
