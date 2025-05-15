@@ -575,7 +575,7 @@
           for (var i = 0; i < all_suboptions.length; i++) {
             var local_option = options.options[all_suboptions[i]];
 
-            html_string.push(`<div class = "search-select-item" data-value = "${all_suboptions[i]}">${local_option}</div>`);
+            html_string.push(`<a class = "search-select-item" data-value = "${all_suboptions[i]}">${local_option}</a>`);
           }
         }
       html_string.push(`</div>`);
@@ -896,7 +896,9 @@
     var output;
     var type = input_el.getAttribute("type");
 
-    if (type == "biuf") {
+    if (type == "basic_colour") {
+      output = input_el.querySelector(`input[type="color"]`).value;
+    } else if (type == "biuf") {
       output = input_el.querySelector(`#biuf-input`).innerHTML;
     } else if (["rich_text", "wysiwyg"].includes(type)) {
       output = getWysiwygFromFields(input_el);
@@ -941,9 +943,11 @@
     } else if (type == "range") {
       output = input_el.querySelector(`input[type="range"]`).value;
     } else if (type == "search_select") {
-      //[WIP] - No search select input of this kind
+      output = input_el.getAttribute("data-selected");
     } else if (type == "select") {
       output = input_el.querySelector("select").value;
+    } else if (type == "sortable_list") {
+      output = input_el.querySelectorAll(`ul.sortable-list > li > span`);
     } else if (["tel", "telephone"].includes(type)) {
       output = input_el.querySelector(`input[type="tel"]`).value;
     } else if (type == "text") {
@@ -1510,6 +1514,21 @@
         all_inputs[i].querySelector(`#search`).addEventListener("click", function (e) {
           all_inputs[i].classList.toggle("shown");
         });
+
+        //Iterate over all_a_els
+        var all_a_els = all_inputs[i].querySelectorAll(`a`);
+
+        for (let x = 0; x < all_a_els.length; x++) {
+          all_a_els[x].addEventListener("click", function (e) {
+            all_inputs[i].classList.toggle("selected");
+            all_inputs[i].setAttribute("data-selected", all_a_els[x].getAttribute("data-value"));
+
+            if (local_input_obj.onchange)
+              local_input_obj.onchange(e);
+            if (local_input_obj.onclick)
+              local_input_obj.onclick(e);
+          });
+        }
       } if (local_type == "sortable_list") {
         Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
           animation: 150,
