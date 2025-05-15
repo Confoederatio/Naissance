@@ -570,6 +570,8 @@
       //Requires Sortable.js
       if (options.name)
         html_string.push(`<div class = "header">${options.name}</div>`);
+      if (options.has_controls != false || options.disable_add == false)
+        html_string.push(`<button id = "add-button">${(options.add_button_name) ? options.add_button_name : "Add Item"}</button>`);
       html_string.push(`<ul class = "sortable-list" id = "${options.id}" ${objectToAttributes(options.attributes)}>`);  
       
       //Iterate over all options.options
@@ -579,8 +581,12 @@
         for (var i = 0; i < all_suboptions.length; i++) {
           var local_option = options.options[all_suboptions[i]];
 
+          var local_delete_button_name = (options.delete_button_name) ? options.delete_button_name : "Delete";
+          var local_delete_button_string = (options.has_controls != false || options.disable_remove == false) ? 
+            ` <button class = "delete-button">${local_delete_button_name}</button>` : "";
+
           //Push option to html_string
-          html_string.push(`<li class = "sortable-list-item" data-value = "${all_suboptions[i]}">${local_option}</li>`);
+          html_string.push(`<li class = "sortable-list-item" data-value = "${all_suboptions[i]}">${local_option}${local_delete_button_string}</li>`);
         }
       }
 
@@ -1461,7 +1467,7 @@
         handleColourWheel(all_inputs[i]);
 
       //Default type population (i.e. for 'sortable_list')
-      if (local_type == "sortable_list")
+      if (local_type == "sortable_list") {
         Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
           animation: 150,
           onEnd: function (e) {
@@ -1471,6 +1477,49 @@
           multiDrag: true,
           selectedClass: "selected"
         });
+
+        all_inputs[i].querySelector("#add-button").addEventListener("click", function (e) {
+          var local_delete_button_name = (local_input_obj.delete_button_name) ? 
+            local_input_obj.delete_button_name : "Delete";
+          var local_delete_button_string = (local_input_obj.has_controls != false || local_input_obj.disable_remove == false) ? 
+            ` <button class = "delete-button">${local_delete_button_name}</button>` : "";
+
+          //Push option to html_string
+          var new_li_el = document.createElement("li");
+            new_li_el.classList.add("sortable-list-item");
+            new_li_el.setAttribute("data-value", generateRandomID());
+            new_li_el.innerHTML = `New Item${local_delete_button_string}`;
+
+          all_inputs[i].querySelector(".sortable-list").appendChild(new_li_el);
+
+          var local_delete_button_el = new_li_el.querySelector(".delete-button");
+          if (local_delete_button_el)
+            local_delete_button_el.addEventListener("click", function (e) {
+              if (local_input_obj.onremove)
+                local_input_obj.onremove(new_li_el);
+              new_li_el.remove();
+            });
+
+          if (local_input_obj.onadd)
+            local_input_obj.onadd(new_li_el);
+        });
+
+        //Iterate over all_li_els; add .delete-button functionality
+        var all_li_els = all_inputs[i].querySelectorAll(".sortable-list-item");
+
+        for (let x = 0; x < all_li_els.length; x++) {
+          let local_li_el = all_li_els[x];
+
+          let local_delete_button_el = local_li_el.querySelector(".delete-button");
+
+          if (local_delete_button_el)
+            local_delete_button_el.addEventListener("click", function (e) {
+              if (local_input_obj.onremove)
+                local_input_obj.onremove(local_li_el);
+              local_li_el.remove();
+            });
+        }
+      }
 
       //Custom interaction handling
       if (local_input_obj) {

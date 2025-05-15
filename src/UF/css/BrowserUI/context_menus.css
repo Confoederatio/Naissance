@@ -130,9 +130,15 @@ input[type="color"]::-webkit-color-swatch {
 }
 .context-menu li.sortable-list-item {
   cursor: grab;
-  display: block;
-  padding: 0.1rem;
-  width: 100%;
+  min-width: 100%;
+
+  display: inline-flex;
+  justify-content: space-between;
+
+  .delete-button {
+    left: 0px;
+    float: right;
+  }
 }
 .context-menu li.sortable-list-item.selected {
   border: 1px solid white;

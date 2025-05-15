@@ -2,9 +2,13 @@
 /* -- Settings UI Layout -- */
 #settings-ui {
   color: white;
-}
-#settings-ui tr td > div {
-  padding: 0px;
+
+  > table {
+    width: 100%;
+  }
+  tr td > div {
+    padding: 0px;
+  }
 }
 
 #settings-ui .primary-header {

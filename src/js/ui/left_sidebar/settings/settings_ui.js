@@ -25,13 +25,21 @@
         name: `<div class = "secondary-header">Map Layers:</div>`,
         type: "sortable_list",
         has_controls: true, //Make sure to implement this into BrowserUI
+          add_button_name: "Add Layer",
+          delete_button_name: "Delete Layer",
 
         options: {
           "default": `Default`,
           "test": `Test`
         },
         onchange: function (e) {
-          console.log(e);
+          console.log(`Onchange fired:`, e);
+        },
+        onadd: function (e) {
+          console.log(`Onadd fired:`, e);
+        },
+        onremove: function (e) {
+          console.log(`Onremove fired:`, e);
         }
       }
     });
