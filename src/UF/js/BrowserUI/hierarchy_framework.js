@@ -139,7 +139,7 @@
     if (options.parent_group)
       insertEntityAtBottom(parent_el, entity_el);
 
-    setupDragAndDrop();
+    setupDragAndDrop(hierarchy_el);
 
     //Return statement
     return new_entity;
@@ -170,7 +170,7 @@
       console.log(`Attempting to add group`, options, `at`, hierarchy_id);
       console.log(e);
     }
-    setupDragAndDrop();
+    setupDragAndDrop(hierarchy_el);
 
     //Return statement
     return new_group;
@@ -761,27 +761,30 @@
     }
   }
 
-  function setupDragAndDrop () {
+  function setupDragAndDrop (arg0_hierarchy_el) {
+    //Convert from parameters
+    var hierarchy_el = arg0_hierarchy_el;
+
     //Declare local instance variables
     var dragged;
     var placeholder = document.createElement("div");
     placeholder.className = "placeholder";
 
     //DragStart handler
-    document.addEventListener("dragstart", function (e) {
+    hierarchy_el.addEventListener("dragstart", function (e) {
       dragged = e.target;
       e.target.style.opacity = 0.8;
     });
 
     //DragEnd handler
-    document.addEventListener("dragend", function (e) {
+    hierarchy_el.addEventListener("dragend", function (e) {
       e.target.style.opacity = "";
       if (placeholder.parentNode)
         placeholder.parentNode.removeChild(placeholder);
     })
 
     //DragOver handler
-    document.addEventListener("dragover", function (e) {
+    hierarchy_el.addEventListener("dragover", function (e) {
       e.preventDefault();
       var target = e.target;
 
@@ -796,7 +799,7 @@
     });
 
     //Drop handler
-    document.addEventListener("drop", function (e) {
+    hierarchy_el.addEventListener("drop", function (e) {
       e.preventDefault();
       var dragged_hierachy = getHierarchyID(target);
       var dragged_type = dragged.dataset.type;

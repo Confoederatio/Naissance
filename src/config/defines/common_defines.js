@@ -27,6 +27,7 @@ config.defines.common = {
       scripts_container: `#scripts-content-container`, //The query selector for the actual scripts container.
     //Settings
       settings_container: `#settings-content-container`, //The query selector for the actual settings container.
+        map_layers_container: `#settings-content-container #map_layers_sortable_list`,
     //Undo/Redo
       undo_redo_canvas_container: `#undo-redo-tab .undo-redo-canvas-container`,
       undo_redo_container: `#undo-redo-ui-container`, //The query selector for the actual Undo/Redo container.

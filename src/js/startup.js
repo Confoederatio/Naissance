@@ -78,6 +78,7 @@ window.path = require("path");
   };
   main.saves_folder = `${path.dirname(__dirname, "\\..")}\\saves`;
   main.selected_path = `${path.dirname(__dirname, "\\..")}\\saves`;
+  main.settings = {};
 }
 
 /*
@@ -132,11 +133,11 @@ if (!global.config) global.config = {};
       projection: 'EPSG:3857' // Ensure that both Maptalks and Leaflet use the same projection
     },
     baseLayer: new maptalks.TileLayer("base", {
-      spatialReference:{
+      spatialReference: {
         projection:'EPSG:3857'
       },
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      subdomains: ["a"],
+      subdomains: ["a", "b", "c"],
       repeatWorld: false
     })
   });

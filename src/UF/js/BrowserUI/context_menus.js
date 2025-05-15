@@ -572,6 +572,10 @@
         html_string.push(`<div class = "header">${options.name}</div>`);
       if (options.has_controls != false || options.disable_add == false)
         html_string.push(`<button id = "add-button">${(options.add_button_name) ? options.add_button_name : "Add Item"}</button>`);
+      if (options.has_controls != false)
+        if (options.other_header_buttons)
+          html_string.push(`${options.other_header_buttons}`);
+
       html_string.push(`<ul class = "sortable-list" id = "${options.id}" ${objectToAttributes(options.attributes)}>`);  
       
       //Iterate over all options.options
@@ -1555,6 +1559,9 @@
                 };
               }
           } else if (local_type == "range") {
+            if (local_input_obj.onclick)
+              all_inputs[i].onchange = local_input_obj.onclick;
+          } else if (local_type == "select") {
             if (local_input_obj.onclick)
               all_inputs[i].onchange = local_input_obj.onclick;
           } else if (local_type == "text") {
