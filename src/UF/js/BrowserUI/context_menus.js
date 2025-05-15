@@ -586,7 +586,7 @@
             ` <button class = "delete-button">${local_delete_button_name}</button>` : "";
 
           //Push option to html_string
-          html_string.push(`<li class = "sortable-list-item" data-value = "${all_suboptions[i]}">${local_option}${local_delete_button_string}</li>`);
+          html_string.push(`<li class = "sortable-list-item" data-value = "${all_suboptions[i]}"><span>${local_option}</span>${local_delete_button_string}</li>`);
         }
       }
 
@@ -1471,6 +1471,8 @@
         Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
           animation: 150,
           onEnd: function (e) {
+            if (local_input_obj.onchange)
+              local_input_obj.onchange(all_inputs[i]);
             if (local_input_obj.onclick)
               local_input_obj.onclick(e);
           },
@@ -1488,18 +1490,22 @@
           var new_li_el = document.createElement("li");
             new_li_el.classList.add("sortable-list-item");
             new_li_el.setAttribute("data-value", generateRandomID());
-            new_li_el.innerHTML = `New Item${local_delete_button_string}`;
+            new_li_el.innerHTML = `<span>New Item</span>${local_delete_button_string}`;
 
           all_inputs[i].querySelector(".sortable-list").appendChild(new_li_el);
 
           var local_delete_button_el = new_li_el.querySelector(".delete-button");
           if (local_delete_button_el)
             local_delete_button_el.addEventListener("click", function (e) {
+              if (local_input_obj.onchange)
+                local_input_obj.onchange(all_inputs[i]);
               if (local_input_obj.onremove)
                 local_input_obj.onremove(new_li_el);
               new_li_el.remove();
             });
 
+          if (local_input_obj.onchange)
+            local_input_obj.onchange(all_inputs[i]);
           if (local_input_obj.onadd)
             local_input_obj.onadd(new_li_el);
         });
@@ -1514,6 +1520,8 @@
 
           if (local_delete_button_el)
             local_delete_button_el.addEventListener("click", function (e) {
+              if (local_input_obj.onchange)
+                local_input_obj.onchange(all_inputs[i]);
               if (local_input_obj.onremove)
                 local_input_obj.onremove(local_li_el);
               local_li_el.remove();

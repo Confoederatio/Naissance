@@ -29,13 +29,13 @@
           delete_button_name: "Delete Layer",
 
         options: {
-          "default": `Default`,
-          "test": `Test`
+          "default": `<input id = "name" type = "text" value = "Default">`,
         },
         onchange: function (e) {
           console.log(`Onchange fired:`, e);
         },
         onadd: function (e) {
+          e.querySelector("span").innerHTML = `<input id = "name" type = "text" value = "New Layer">`;
           console.log(`Onadd fired:`, e);
         },
         onremove: function (e) {
