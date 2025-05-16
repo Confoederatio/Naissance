@@ -38,6 +38,10 @@
     var is_resizing = false;
     var resize_edge = null;
     var resize_threshold = 5; // pixels from edge to trigger resize
+    var initial_width = 0;
+    var initial_height = 0;
+    var initial_left = 0;
+    var initial_top = 0;
 
     //Add resize handle styles
     el.style.position = 'absolute';
@@ -80,6 +84,14 @@
           e.stopPropagation();
           is_resizing = true;
           resize_edge = edge;
+          
+          //Store initial dimensions
+          var rect = el.getBoundingClientRect();
+          initial_width = rect.width;
+          initial_height = rect.height;
+          initial_left = rect.left;
+          initial_top = rect.top;
+          
           internalMouseDownHandler(e);
         };
       }
@@ -111,43 +123,50 @@
       e.preventDefault();
       
       if (is_resizing && options.is_resizable) {
-        var rect = el.getBoundingClientRect();
-        var new_width = rect.width;
-        var new_height = rect.height;
-        var new_left = rect.left;
-        var new_top = rect.top;
+        var delta_x = e.clientX - position_three;
+        var delta_y = e.clientY - position_four;
         
         //Define resize operations
         var resize_ops = {
-          'e': function() { el.style.width = (new_width + (e.clientX - position_three)) + 'px'; },
-          'w': function() { 
-            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
-            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
+          'e': function() { 
+            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
           },
-          's': function() { el.style.height = (new_height + (e.clientY - position_four)) + 'px'; },
+          'w': function() { 
+            var new_width = Math.max(50, initial_width - delta_x);
+            el.style.width = new_width + 'px';
+            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
+          },
+          's': function() { 
+            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
+          },
           'n': function() {
-            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
-            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+            var new_height = Math.max(50, initial_height - delta_y);
+            el.style.height = new_height + 'px';
+            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
           },
           'se': function() {
-            el.style.width = (new_width + (e.clientX - position_three)) + 'px';
-            el.style.height = (new_height + (e.clientY - position_four)) + 'px';
+            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
+            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
           },
           'sw': function() {
-            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
-            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
-            el.style.height = (new_height + (e.clientY - position_four)) + 'px';
+            var new_width = Math.max(50, initial_width - delta_x);
+            el.style.width = new_width + 'px';
+            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
+            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
           },
           'ne': function() {
-            el.style.width = (new_width + (e.clientX - position_three)) + 'px';
-            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
-            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
+            var new_height = Math.max(50, initial_height - delta_y);
+            el.style.height = new_height + 'px';
+            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
           },
           'nw': function() {
-            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
-            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
-            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
-            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+            var new_width = Math.max(50, initial_width - delta_x);
+            var new_height = Math.max(50, initial_height - delta_y);
+            el.style.width = new_width + 'px';
+            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
+            el.style.height = new_height + 'px';
+            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
           }
         };
 
