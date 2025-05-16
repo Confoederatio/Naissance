@@ -7,7 +7,8 @@ window.path = require("path");
 {
   global.load_order = {
     load_directories: [
-      "config"
+      "config",
+      "./js/interface/*_config.js"
     ],
     load_files: [
       ".config_backend.js"

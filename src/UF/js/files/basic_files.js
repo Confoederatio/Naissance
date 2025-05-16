@@ -122,7 +122,20 @@ function loadConfig () {
 
     for (var i = 0; i < local_load_order.length; i++) {
       for (var x = 0; x < load_order.load_directories.length; x++) {
-        var local_dir = `${__dirname}\\${load_order.load_directories[x]}`;
+        var dir_pattern = load_order.load_directories[x];
+        
+        //Split the pattern into directory and file pattern
+        var last_slash = dir_pattern.lastIndexOf('/');
+        var base_dir = dir_pattern;
+        var file_pattern = '*.js'; // Default pattern
+        
+        //If there's a pattern in the path, use it instead
+        if (last_slash !== -1) {
+          base_dir = dir_pattern.substring(0, last_slash);
+          file_pattern = dir_pattern.substring(last_slash + 1);
+        }
+        
+        var local_dir = `${__dirname}\\${base_dir}`;
         var all_directory_files = getAllFiles(local_dir);
 
         for (var y = 0; y < all_directory_files.length; y++) if (all_directory_files[y].includes(local_load_order[i])) {
@@ -135,10 +148,39 @@ function loadConfig () {
 
     //Load each load directory separately
     for (var i = 0; i < load_order.load_directories.length; i++) {
-      var local_dir = `${__dirname}\\${load_order.load_directories[i]}`;
+      var dir_pattern = load_order.load_directories[i];
+      
+      //Split the pattern into directory and file pattern
+      var last_slash = dir_pattern.lastIndexOf('/');
+      var base_dir = dir_pattern;
+      var file_pattern = '*.js'; // Default pattern
+      
+      //If there's a pattern in the path, use it instead
+      if (last_slash !== -1) {
+        base_dir = dir_pattern.substring(0, last_slash);
+        file_pattern = dir_pattern.substring(last_slash + 1);
+      }
+      
+      var local_dir = `${__dirname}\\${base_dir}`;
       var all_directory_files = getAllFiles(local_dir);
-
-      for (var x = 0; x < all_directory_files.length; x++) if (!loaded_files.includes(all_directory_files[x])) {
+      
+      for (var x = 0; x < all_directory_files.length; x++) {
+        //Skip if file is already loaded
+        if (loaded_files.includes(all_directory_files[x])) continue;
+        
+        //Get just the filename from the full path
+        var filename = all_directory_files[x].split('\\').pop();
+        
+        //Convert glob pattern to regex
+        var pattern = file_pattern
+          .replace(/\./g, '\\.') // Escape dots
+          .replace(/\*/g, '.*')  // Convert * to .*
+          .replace(/\?/g, '.');  // Convert ? to .
+        var regex = new RegExp('^' + pattern + '$');
+        
+        //Only load if file matches pattern
+        if (!regex.test(filename)) continue;
+        
         loadFile(all_directory_files[x]);
         loaded_files.push(all_directory_files[x]);
       }
