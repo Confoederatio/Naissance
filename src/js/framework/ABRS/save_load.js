@@ -1,6 +1,6 @@
 //Declare functions
 {
-  function loadSave (arg0_file_name) {
+  function loadNaissanceSave (arg0_file_name) {
     //Convert from parameters
     var file_name = arg0_file_name;
 
@@ -14,6 +14,7 @@
     //Load all entities
     main.entities = [];
     main.groups = {};
+    main.settings = {};
 
     //Push new entities
     for (var i = 0; i < save_data.entities.length; i++) {
@@ -29,6 +30,9 @@
     //Load groups
     if (save_data.groups)
       main.groups = save_data.groups;
+    //Load settings
+    if (save_data.settings)
+      main.settings = save_data.settings;
 
     //Load data into hierarchies
     main.hierarchies.hierarchy = {
@@ -37,10 +41,11 @@
     };
 
     //Render all polities and units
+    applySettings();
     loadDate();
   }
 
-  function writeSave (arg0_file_name) {
+  function writeNaissanceSave (arg0_file_name) {
     //Convert from parameters
     var file_name = arg0_file_name;
 
@@ -67,9 +72,10 @@
       });
     }
 
-    //Save .groups
+    //Save .groups; .settings
     main.groups = exportHierarchies({ naissance_hierarchy: "hierarchy" }).hierarchy.groups;
     save_data.groups = main.groups;
+    save_data.settings = main.settings;
 
     //Write save_data to file
     fs.writeFileSync(`${main.saves_folder}\\${file_name}`, JSON.stringify(save_data), function (err, data) {

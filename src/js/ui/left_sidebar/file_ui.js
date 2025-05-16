@@ -156,7 +156,7 @@
                 var load_button_el = document.createElement("button");
                   load_button_el.innerText = "Load";
                   load_button_el.onclick = function (e) {
-                    loadSave(local_full_path);
+                    loadNaissanceSave(local_full_path);
                   };
 
                 //Append 'Load' before 'Delete'

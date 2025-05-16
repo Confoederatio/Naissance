@@ -57,7 +57,7 @@
 
       //Add event listeners
       document.querySelector(common_selectors.files_interaction_save_file_button).onclick = function (e) {
-        writeSave(document.querySelector(common_selectors.files_interaction_save_file_input).value);
+        writeNaissanceSave(document.querySelector(common_selectors.files_interaction_save_file_input).value);
 
         clearHierarchy("file-hierarchy", { hierarchy_selector: common_selectors.files_hierarchy });
         populateFolderExplorer("file-hierarchy", main.selected_path, undefined, file_hierarchy_options);
