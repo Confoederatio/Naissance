@@ -41,7 +41,7 @@
     };
 
     //Render all polities and units
-    applySettings();
+    applyDocumentSettings();
     loadDate();
   }
 

@@ -38,7 +38,7 @@ config.settings.document = {
     id: `map_layers_sortable_list`,
     name: `<div class = "secondary-header">Map Layers:</div>`,
     type: "sortable_list",
-    has_controls: true, //Make sure to implement this into BrowserUI
+    has_controls: true, //Make sure to implement this to BrowserUI
       add_button_name: "Add Layer",
       delete_button_name: "Delete Layer",
       other_header_buttons: `

@@ -11,12 +11,15 @@ config.settings.global = {
     id: "global_default_save_file",
     type: "text",
 
-    placeholder: "./autosave.js"
+    name: "Default save file on startup:",
+    attributes: {
+      value: "./autosave.js"
+    }
   },
   global_ui_layout_toggles: { //[WIP] - Functionality not yet added
     id: `global_ui_layout_toggles`,
     type: "checkbox",
-
+    
     options: {
       "anchor_entity_popups": "Anchor Entity Popups",
       "hide_entity_data_graph_by_default": "Hide Entity Data Graph by Default"

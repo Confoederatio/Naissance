@@ -38,5 +38,9 @@
         map.addLayer(local_tile_layer_obj);
       }
     }
+
+    //Set map_layers_obj in main.settings.map.tile_layers
+    if (!main.settings.map) main.settings.map = {};
+      main.settings.map.tile_layers = map_layers_obj;
   }
 }

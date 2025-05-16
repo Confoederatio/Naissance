@@ -28,4 +28,7 @@
     //Return statement
     return settings_context_menu;
   }
+
+  function populateMapTileLayersFromObject (arg0_map_tile_layers_obj) { //[WIP] - Finish function body
+  }
 }
