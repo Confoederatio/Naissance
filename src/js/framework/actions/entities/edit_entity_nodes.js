@@ -8,7 +8,7 @@
     var brush_obj = main.brush;
     var entity_obj = getEntity(entity_id);
 
-    brush_obj.disable_brush = true;
+    disableBrush();
     entity_obj.is_editing = true;
     entity_obj.startEdit();
   }
@@ -31,7 +31,7 @@
     var brush_obj = main.brush;
     var entity_obj = getEntity(entity_id);
 
-    delete brush_obj.disable_brush;
+    enableBrush();
     delete entity_obj.is_editing;
     entity_obj.endEdit();
   }

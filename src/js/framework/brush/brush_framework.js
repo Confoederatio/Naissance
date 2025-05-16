@@ -93,6 +93,24 @@
     delete brush_obj.entity_options;
   }
 
+  function disableBrush () {
+    //Declare local instance variables
+    var brush_obj = main.brush;
+
+    //Set brush_obj.disable_brush
+    brush_obj.disable_brush = true;
+    brush_obj.cursor.remove();
+  }
+
+  function enableBrush () {
+    //Declare local instance variables
+    var brush_obj = main.brush;
+    
+    //Delete brush_obj.disable_brush
+    delete brush_obj.disable_brush;
+    brush_obj.cursor.remove();
+  }
+
   function removeFromBrush (arg0_polygon, arg1_do_not_add_to_undo_redo) {
     //Convert from parameters
     var polygon = arg0_polygon;
