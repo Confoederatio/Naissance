@@ -9,10 +9,14 @@
 
     //Declare local instance variables
 
-    //1. Load Map Projection
+    //Load Date from memory
+    if (settings_object.date)
+      main.date = settings_object.date;
+
+    //Load Map Projection
     setMapProjection(getMapProjection());
 
-    //2. Load Map Tilelayers
+    //Load Map Tilelayers
     if (settings_object.map)
       if (settings_object.map.tile_layers)
         applyMapLayersObject(settings_object.map.tile_layers);

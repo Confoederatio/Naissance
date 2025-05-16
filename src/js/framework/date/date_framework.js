@@ -106,6 +106,8 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
     loadDate();
 
     //Log action
+    main.settings.date = date_obj;
+    
     if (!do_not_add_to_undo_redo)
       performAction({
         action_id: "change_date",
