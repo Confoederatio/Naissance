@@ -490,7 +490,7 @@ input[type="color"]::-webkit-color-swatch {
 
         input {
           margin: 1rem 0;
-          padding: .5rem;
+          padding: 0.5rem;
         }
         input[type="text"] {
           width: calc(100% - 1rem);

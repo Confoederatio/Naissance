@@ -1,0 +1,15 @@
+/* -- Panels/Windows Styling -- */
+.uf-window.draggable {
+  position: absolute;
+
+  background-color: rgba(235, 235, 235, 1);
+  border: 1px solid white;
+  z-index: 1;
+}
+.uf-window.header {
+  background-color: #2196f3;
+  color: white;
+  cursor: move;
+  padding: 1rem;
+  z-index: 2;
+}
