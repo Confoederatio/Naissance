@@ -1,13 +1,13 @@
 //Initialise functions
 {
-  /*
-    autoFillInputs() - Auto-fills inputs for a given element based on parseVariableString() and their context menu .placeholder object.
-    arg0_options: (Object)
-      element: (HTMLElement) - The direct element object for which to fill in an input for.
-      type: (String) - The type of input the element represents.
-      value: (Object) - The local value for the given context menu object element.
-      placeholder: (Object/String/Variable) - The variable to use as the placeholder.
-  */
+  /**
+   * autoFillInputs() - Auto-fills inputs for a given element based on parseVariableString() and their context menu .placeholder object.
+   * @param {Object} [arg0_options] - The options object
+   *  @param {HTMLElement} [arg0_options.element] - The direct element object for which to fill in an input for
+   *  @param {string} [arg0_options.type] - The type of input the element represents
+   *  @param {Object} [arg0_options.value] - The local value for the given context menu object element
+   *  @param {Object|String} [arg0_options.placeholder] - The variable to use as the placeholder
+   */
   function autoFillInputs (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
@@ -64,13 +64,13 @@
       });
     }
   }
-
-  /*
-    fillInput() - Fills in a context menu input with its corresponding type.
-    arg0_options: (Object)
-      element: (HTMLElement) - The direct element object for which to fill in an input for.
-      type: (String) - The type of input the element represents.
-      placeholder: (Variable) - The variable to use as the placeholder.
+  
+ /**
+  * fillInput() - Fills in a context menu input with its corresponding type.
+  * @param {Object} [arg0_options] - The options object
+  *  @param {HTMLElement} [arg0_options.element] - The direct element object for which to fill in an input for
+  *  @param {string} [arg0_options.type] - The type of input the element represents
+  *  @param {Object} [arg0_options.placeholder] - The variable to use as the placeholder
   */
   function fillInput (arg0_options) {
     //Convert from parameters
