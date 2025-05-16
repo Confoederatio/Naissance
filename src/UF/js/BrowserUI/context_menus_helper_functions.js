@@ -468,7 +468,7 @@
               local_input_obj.onclick(e);
           });
         }
-      } if (local_type == "sortable_list") {
+      } else if (local_type == "sortable_list") {
         Sortable.create(all_inputs[i].querySelector(".sortable-list"), {
           animation: 150,
           onEnd: function (e) {
@@ -573,8 +573,15 @@
               }
           }
         
-        if (local_input_obj.onload)
-          local_input_obj.onload(all_inputs[i]);
+        //.onload handler; returning an object will populate the input respectively
+        if (local_input_obj.onload) {
+          var return_value = local_input_obj.onload(all_inputs[i]);
+
+          if (typeof return_value == "object")
+            all_inputs[i].innerHTML = createInput(
+              dumbMergeObjects(local_input_obj, return_value)
+            );
+        }
       }
     }
   }

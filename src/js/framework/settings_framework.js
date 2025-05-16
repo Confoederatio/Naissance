@@ -13,9 +13,10 @@
     setMapProjection(getMapProjection());
 
     //2. Load Map Tilelayers
-    if (settings_object.map) {
+    if (settings_object.map)
       if (settings_object.map.tile_layers)
         applyMapLayersObject(settings_object.map.tile_layers);
-    }
+    
+    initSettingsUI();
   }
 }

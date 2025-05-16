@@ -5,6 +5,8 @@
     var common_defines = config.defines.common;
     var settings_container_selector = common_defines.selectors.settings_container;
 
+    var settings_container_el = document.querySelector(settings_container_selector);
+
     //Set new context menu
     var settings_options = {
       anchor: settings_container_selector,
@@ -23,12 +25,10 @@
     }
 
     //Initialise settings_context_menu
+    settings_container_el.innerHTML = "";
     var settings_context_menu = createContextMenu(settings_options);
 
     //Return statement
     return settings_context_menu;
-  }
-
-  function populateMapTileLayersFromObject (arg0_map_tile_layers_obj) { //[WIP] - Finish function body
   }
 }

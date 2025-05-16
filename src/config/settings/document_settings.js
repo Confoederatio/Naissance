@@ -45,17 +45,36 @@ config.settings.document = {
         <button id = "reload-map-layers" onclick = "applyMapLayersObject()">Reload Map Layers</button>
       `,
 
-    options: {
-      "default": createMapLayerElement({
-        name: "Default",
-        is_base_layer: true
-      }),
-    },
+    options: {},
     onchange: function (e) {
       applyMapLayersObject();
     },
     onadd: function (e) {
       e.querySelector("span").innerHTML = createMapLayerElement();
+    },
+
+    //Populate .options automatically upon settings load
+    onload: function (e) {
+      //Populate local_options with default map layer
+      var local_options = {
+        "Default": createMapLayerElement({
+          name: "Default",
+          is_base_layer: true
+        })
+      };
+
+      if (main.settings.map)
+        if (main.settings.map.tile_layers) {
+          var all_tile_layers = Object.keys(main.settings.map.tile_layers);
+
+          for (var i = 0; i < all_tile_layers.length; i++)
+            local_options[all_tile_layers[i]] = createMapLayerElement(main.settings.map.tile_layers[all_tile_layers[i]]);
+        }
+
+      //Return statement
+      return {
+        options: local_options
+      };
     }
   }
 };
