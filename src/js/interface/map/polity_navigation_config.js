@@ -18,7 +18,7 @@ config.entity_actions.polity_navigation = {
     }
   },
   edit_nodes: {
-    icon: "gfx/interface/pencil_filled_icon.png",
+    icon: "gfx/interface/edit_entity_nodes.png",
     name: "Edit Nodes",
     order: 1,
     x: 1,
@@ -30,7 +30,7 @@ config.entity_actions.polity_navigation = {
     }
   },
   stop_editing_nodes: {
-    icon: "gfx/interface/pencil_filled_icon.png",
+    icon: "gfx/interface/finish_editing_entity_nodes.png",
     name: "Stop Editing Nodes",
     order: 1,
     x: 1,
@@ -52,6 +52,7 @@ config.entity_actions.polity_navigation = {
     y: 0,
 
     limit: {
+      is_editing_entity_nodes: false,
       entity_is_being_edited: true
     },
     effect: {

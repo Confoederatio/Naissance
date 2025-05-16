@@ -133,12 +133,14 @@
             editEntity(entity_id);
           if (all_scope_keys[i] == "edit_entity_nodes")
             if (local_value[0]) {
+              editEntity(entity_id);
               editEntityNodes(entity_id);
             } else {
               stopEditingEntityNodes(entity_id);
+              finishEntity(entity_id);
             }
           if (all_scope_keys[i] == "finish_entity")
-            finishEntity();
+            finishEntity(entity_id);
           if (all_scope_keys[i] == "hide_entity")
             if (local_value[0]) {
               hideEntity(entity_id);

@@ -101,6 +101,7 @@
     brush_obj.disable_brush = true;
     if (brush_obj.cursor)
       brush_obj.cursor.remove();
+    try { refreshBrushActions(); } catch (e) {}
   }
 
   function enableBrush () {
@@ -111,6 +112,7 @@
     delete brush_obj.disable_brush;
     if (brush_obj.cursor)
       brush_obj.cursor.remove();
+    try { refreshBrushActions(); } catch (e) {}
   }
 
   function removeFromBrush (arg0_polygon, arg1_do_not_add_to_undo_redo) {
