@@ -52,8 +52,9 @@
 
     var entity_customisation_content_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
     var entity_customisation_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_colour_picker}`;
-    var entity_maximum_zoom = (current_history.options.maximum_zoom_level) ? current_history.options.maximum_zoom_level : 0;
-    var entity_minimum_zoom = (current_history.options.minimum_zoom_level) ? current_history.options.minimum_zoom_level : 0;
+    var entity_altitude = returnSafeNumber(current_history.options.altitude);
+    var entity_maximum_zoom = returnSafeNumber(current_history.options.maximum_zoom_level);
+    var entity_minimum_zoom = returnSafeNumber(current_history.options.minimum_zoom_level);
     var entity_obj = getEntity(entity_id);
     var variable_list_obj = getVariableListObject(entity_id);
 
@@ -177,13 +178,28 @@
               printVariableList(entity_id);
             }, 0);
           },
-
+          
+          altitude: {
+            id: "altitude",
+            name: "Altitude: ",
+            type: "number",
+            x: 0,
+            y: 1,
+            
+            attributes: {
+              min: 0,
+              value: entity_altitude
+            },
+            onclick: function (e) {
+              setEntityAltitude(entity_id, e.target.value);
+            }
+          },
           maximum_zoom_level: {
             id: "maximum_zoom_level",
             name: "Maximum Zoom Level: ",
             type: "number",
             x: 0,
-            y: 0,
+            y: 2,
 
             attributes: {
               min: 0,
@@ -198,8 +214,8 @@
             id: "minimum_zoom_level",
             name: "Minimum Zoom Level: ",
             type: "number",
-            x: 0,
-            y: 1,
+            x: 1,
+            y: 2,
 
             attributes: {
               min: 0,
@@ -215,13 +231,13 @@
             name: `<b>Custom Data Fields:</b>`,
             type: "html",
             x: 0,
-            y: 2,
+            y: 3,
           },
           custom_variable_input: {
             id: "custom_variable_input",
             type: "text",
             x: 1,
-            y: 2,
+            y: 3,
 
             attributes: {
               placeholder: "Variable key ..",
@@ -237,7 +253,7 @@
             name: "Add Variable",
             type: "button",
             x: 0,
-            y: 3,
+            y: 4,
 
             onclick: function (e) {
               var variable_input_el = document.querySelector(`${entity_customisation_content_selector} #custom_variable_input input[type="text"]`);
@@ -254,7 +270,7 @@
             name: "Delete Variable",
             type: "button",
             x: 1,
-            y: 3,
+            y: 4,
             
             onclick: function (e) {
               var variable_input_el = document.querySelector(`${entity_customisation_content_selector} #custom_variable_input input[type="text"]`);
@@ -272,7 +288,7 @@
             type: "html",
             width: 2,
             x: 0,
-            y: 4
+            y: 5
           }
         }
       }

@@ -41,6 +41,7 @@
         if (!options.do_not_display)
           main.entity_layer.addGeometry(maptalks_polygon);
         maptalks_polygon.options = dumbMergeObjects(maptalks_polygon.options, old_options);
+        maptalks_polygon.setProperties(maptalks_polygon.options);
       } else {
         maptalks_polygon = new maptalks.GeoJSON.toGeometry(new L.Polygon(flipCoordinates(coords)).toGeoJSON(), (geometry) => {
           if (!options.do_not_display)
@@ -48,6 +49,7 @@
           geometry.options = dumbMergeObjects(maptalks_polygon.options, old_options);
         });
         maptalks_polygon.setSymbol(options);
+        maptalks_polygon.setProperties(geometry.options);
       }
     } catch (e) {
       maptalks_polygon = createPolygonFallback(coords, options);
@@ -72,6 +74,7 @@
       local_geometry.addTo(main.entity_layer);
     local_geometry.setSymbol(options);
     local_geometry.options = dumbMergeObjects(local_geometry.options, old_options);
+    local_geometry.setProperties(local_geometry.options);
 
     //Return statement
     return local_geometry;
