@@ -543,6 +543,40 @@
     return object;
   }
 
+  /**
+   * sortKeysByObject() - Sorts the keys of an object by the order of another object.
+   * @param {*} arg0_object - The object to sort.
+   * @param {*} [arg1_options] - The object to sort by.
+   *  @param {String} [arg1_options.key="order"] - The key to sort by. .order by default.
+   * 
+   * @returns {Object}
+   */
+  function sortKeysByObject (arg0_object, arg1_options) {
+    //Convert from parameters
+    var object = arg0_object;
+    var options = (arg1_options) ? arg1_options : {};
+
+    //Initialise options
+    if (!options.key) options.key = "order";
+    
+    var all_object_keys = Object.keys(object);
+    var sorted_keys = all_object_keys.map(function (key) {
+      return {
+        key: key,
+        order: returnSafeNumber(object[key][options.key])
+      }
+    });
+      sorted_keys.sort(function (a, b) {
+        return a.order - b.order;
+      });
+      all_object_keys = sorted_keys.map(function (key) {
+        return key.key;
+      });
+
+    //Return statement
+    return all_object_keys;
+  }
+
   /*
     sortObject() - Sorts an object.
     arg0_object: (Object) - The object to sort.

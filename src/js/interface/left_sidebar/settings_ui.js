@@ -16,7 +16,7 @@
     };
 
     //Iterate over all_settings_categories and populate settings_options
-    var all_settings_categories = Object.keys(config.settings);
+    var all_settings_categories = sortKeysByObject(config.settings, { key: "order" });
 
     for (var i = 0; i < all_settings_categories.length; i++) {
       var local_settings_category = config.settings[all_settings_categories[i]];

@@ -1,4 +1,6 @@
 config.settings.document = {
+  order: 2,
+  
   document_settings_html: {
     id: "document_settings_headed",
     type: "html",

@@ -1,5 +1,5 @@
 config.settings.global = {
-  order: 2,
+  order: 1,
   
   global_settings_html: {
     id: `global_settings_header`,
