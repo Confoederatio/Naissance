@@ -43,4 +43,17 @@
     if (!main.settings.map) main.settings.map = {};
       main.settings.map.tile_layers = map_layers_obj;
   }
+
+  function refreshSettingsTileLayers (e) {
+    setTimeout(function(){
+      //Declare local instance variables
+      var all_list_item_els = e.querySelectorAll(".sortable-list-item");
+      console.log(`all_list_item_els:`, all_list_item_els);
+
+      //Iterate over all_list_item_els
+      for (let i = 0; i < all_list_item_els.length; i++)
+        if (all_list_item_els[i].querySelector(`#auto_assign_z_index`).checked)
+          all_list_item_els[i].querySelector("#z_index").value = i*-1;
+    }, 1);
+  }
 }

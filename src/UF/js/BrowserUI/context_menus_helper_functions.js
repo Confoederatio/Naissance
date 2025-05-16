@@ -444,6 +444,17 @@
       let local_id = all_inputs[i].getAttribute("id");
       let local_input_obj = options[local_id];
       let local_type = all_inputs[i].getAttribute("type");
+        
+      //.onload handler; returning an object will populate the input respectively
+      if (local_input_obj)
+        if (local_input_obj.onload) {
+          var return_value = local_input_obj.onload(all_inputs[i]);
+
+          if (typeof return_value == "object")
+            all_inputs[i].innerHTML = createInput(
+              dumbMergeObjects(local_input_obj, return_value)
+            );
+        }
 
       if (local_type == "colour")
         handleColourWheel(all_inputs[i]);
@@ -481,6 +492,7 @@
           selectedClass: "selected"
         });
 
+        console.log(all_inputs[i]);
         all_inputs[i].querySelector("#add-button").addEventListener("click", function (e) {
           var local_delete_button_name = (local_input_obj.delete_button_name) ? 
             local_input_obj.delete_button_name : "Delete";
@@ -572,16 +584,6 @@
                 };
               }
           }
-        
-        //.onload handler; returning an object will populate the input respectively
-        if (local_input_obj.onload) {
-          var return_value = local_input_obj.onload(all_inputs[i]);
-
-          if (typeof return_value == "object")
-            all_inputs[i].innerHTML = createInput(
-              dumbMergeObjects(local_input_obj, return_value)
-            );
-        }
       }
     }
   }

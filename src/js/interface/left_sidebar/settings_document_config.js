@@ -1,6 +1,6 @@
 config.settings.document = {
   order: 2,
-  
+
   document_settings_html: {
     id: "document_settings_headed",
     type: "html",
@@ -50,9 +50,12 @@ config.settings.document = {
     options: {},
     onchange: function (e) {
       applyMapLayersObject();
+      refreshSettingsTileLayers(e);
     },
     onadd: function (e) {
-      e.querySelector("span").innerHTML = createMapLayerElement();
+      e.querySelector("span").innerHTML = createMapLayerElement({
+        z_index: (e.parentElement.querySelectorAll(".sortable-list-item").length - 1)*-1
+      });
     },
 
     //Populate .options automatically upon settings load
@@ -67,10 +70,17 @@ config.settings.document = {
 
       if (main.settings.map)
         if (main.settings.map.tile_layers) {
+          //Iterate over all_tile_layers
           var all_tile_layers = Object.keys(main.settings.map.tile_layers);
 
-          for (var i = 0; i < all_tile_layers.length; i++)
-            local_options[all_tile_layers[i]] = createMapLayerElement(main.settings.map.tile_layers[all_tile_layers[i]]);
+          for (let i = 0; i < all_tile_layers.length; i++) {
+            let local_tile_layer = main.settings.map.tile_layers[all_tile_layers[i]];
+            console.log(`local_tile_layer:`, local_tile_layer);
+            if (local_tile_layer.auto_assign_z_index)
+              local_tile_layer.z_index = i*-1;
+            
+            local_options[all_tile_layers[i]] = createMapLayerElement(local_tile_layer);
+          }
         }
 
       //Return statement
