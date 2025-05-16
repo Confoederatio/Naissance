@@ -11,6 +11,8 @@
 
     //On mousemove event for map
     map.on("mousemove", function (e) {
+      if (brush_obj.disable_brush) return; //Internal guard clause if brush is disabled
+
       window.mouse_dragged = true;
 
       //Set cursor
@@ -68,6 +70,8 @@
 
     //Process brush onmouseup
     map.on("mouseup", function (e) {
+      if (brush_obj.disable_brush) return; //Internal guard clause if brush is disabled
+
       if (main.events.mouse_pressed) {
         if (!brush_obj.only_simplify_brush)
           brush_obj.current_path = simplify(brush_obj.current_path, brush_obj.simplify_tolerance);
@@ -84,6 +88,8 @@
 
     //Brush cursor outline
     map.getContainer().addEventListener("wheel", function (e) {
+      if (brush_obj.disable_brush) return; //Internal guard clause if brush is disabled
+      
       //Normalise the wheel delta across different browsers
       var delta_y = e.deltaY*-1;
 

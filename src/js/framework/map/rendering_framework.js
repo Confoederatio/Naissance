@@ -114,7 +114,7 @@
     for (var i = 0; i < render_order.length; i++) {
       var local_entity = getEntity(render_order[i]);
 
-      if (local_entity)
+      if (local_entity && !local_entity.is_editing)
         updateEntityVisibility(local_entity);
     }
   }

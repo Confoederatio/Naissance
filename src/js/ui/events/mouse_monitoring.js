@@ -28,7 +28,9 @@
 
     if (!(e.which == 2 || e.button == 4) && !sidebar_container_el) {
       main.events.mouse_pressed = true;
-      map.config("draggable", false);
+
+      if (!main.brush.disable_brush)
+        map.config("draggable", false);
     }
 
     if (e.button == 2)
@@ -40,6 +42,7 @@
     main.events.mouse_pressed = false;
     main.events.right_mouse = false;
 
-    map.config("draggable", true);
+    if (!main.brush.disable_brush)
+      map.config("draggable", true);
   };
 }

@@ -125,6 +125,12 @@
             cleanKeyframes(entity_id, local_value[0]);
           if (all_scope_keys[i] == "edit_entity")
             editEntity(entity_id);
+          if (all_scope_keys[i] == "edit_entity_nodes")
+            if (local_value[0]) {
+              editEntityNodes(entity_id);
+            } else {
+              stopEditingEntityNodes(entity_id);
+            }
           if (all_scope_keys[i] == "finish_entity")
             finishEntity();
           if (all_scope_keys[i] == "hide_entity")
@@ -363,6 +369,14 @@
               local_checks++;
           } else {
             if (!isEntityBeingEdited(entity_id, local_value[0]))
+              local_checks++;
+          }
+        if (all_scope_keys[i] == "is_editing_entity_nodes")
+          if (local_value[0] == true) {
+            if (isEditingEntityNodes(entity_id))
+              local_checks++;
+          } else {
+            if (!isEditingEntityNodes(entity_id))
               local_checks++;
           }
         if (all_scope_keys[i] == "entity_is_hidden")

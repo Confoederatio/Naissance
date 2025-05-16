@@ -17,6 +17,33 @@ config.entity_actions.polity_navigation = {
       edit_entity: true
     }
   },
+  edit_nodes: {
+    icon: "gfx/interface/pencil_filled_icon.png",
+    name: "Edit Nodes",
+    order: 1,
+    x: 1,
+    y: 0,
+
+    effect: {
+      edit_entity_nodes: true,
+      refresh_entity_actions: true
+    }
+  },
+  stop_editing_nodes: {
+    icon: "gfx/interface/pencil_filled_icon.png",
+    name: "Stop Editing Nodes",
+    order: 1,
+    x: 1,
+    y: 0,
+
+    limit: {
+      is_editing_entity_nodes: true
+    },
+    effect: {
+      edit_entity_nodes: false,
+      refresh_entity_actions: true
+    }
+  },
   finish_polity: {
     icon: "gfx/interface/checkmark_icon.png",
     name: "Finish Polity",
@@ -36,7 +63,7 @@ config.entity_actions.polity_navigation = {
     icon: "gfx/interface/hide_polity_icon.png",
     name: "Hide Polity",
     order: 1,
-    x: 1,
+    x: 2,
     y: 0,
 
     limit: {
@@ -52,7 +79,7 @@ config.entity_actions.polity_navigation = {
     icon: "gfx/interface/hide_polity_icon.png",
     name: "Show Polity",
     order: 1,
-    x: 1,
+    x: 2,
     y: 0,
 
     limit: {

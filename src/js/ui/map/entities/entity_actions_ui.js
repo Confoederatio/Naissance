@@ -330,10 +330,15 @@
         if (local_value.effect) {
           let button_el = context_menu_el.querySelector(`div[type="button"][id="${all_entity_actions[i]}"]`);
 
-          button_el.onclick = function (e) {
-            parseEffect(entity_id, local_value.effect, { timestamp: current_timestamp, ui_type: "entity_actions" });
-            console.log(`Parse entity effect:`, entity_id, local_value.effect, { timestamp: current_timestamp, ui_type: "entity_actions" });
-          };
+          try {
+            if (button_el)
+              button_el.onclick = function (e) {
+                parseEffect(entity_id, local_value.effect, { timestamp: current_timestamp, ui_type: "entity_actions" });
+                console.log(`Parse entity effect:`, entity_id, local_value.effect, { timestamp: current_timestamp, ui_type: "entity_actions" });
+              };
+          } catch (e) {
+            console.warn(e);
+          }
         }
     }
 
