@@ -41,6 +41,7 @@
           - reset
           - search_select
           - select
+          - sortable_list
           - submit
           - tel/telephone
           - text
@@ -50,6 +51,8 @@
         icon: (String) - Optional. The path to the display icon image.
         name: (String) - Optional. The HTML text of the button to display.
         onclick: (String) - Optional. The JS code to execute on button click.
+        options: (Object) - For 'checkbox'/'search_select'/'select'/'sortable_list'/'radio'
+          <option_key>: (String) - The datalist/select option ID to pass to the focus element.
         tooltip: (String) - Optional. The HTML tooltip a user can see by hovering over this input.
 
         height: (Number) - Optional. The row height of this element in a grid. 1 by default.
