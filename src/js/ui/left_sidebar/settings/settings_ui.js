@@ -1,6 +1,6 @@
 //Initialise functions
 {
-  function initSettingsUI () { //[WIP] - Finish function body
+  function initSettingsUI () { //[WIP] - Finish function body; reassign to populate from config.settings
     //Declare local instance variables
     var common_defines = config.defines.common;
     var settings_container_selector = common_defines.selectors.settings_container;
