@@ -1,9 +1,12 @@
+//Config files
 global.config = {};
-config.brush_actions = {};
 config.defines = {};
+config.mask_types = {};
+
+//UI config files
+config.brush_actions = {};
 config.entity_actions = {};
 config.entity_keyframes = {};
 config.group_actions = {};
-config.mask_types = {};
 config.settings = {};
 config.variables = {};
