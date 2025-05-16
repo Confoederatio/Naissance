@@ -11,6 +11,7 @@
       do_not_add_close_button: (Boolean) - Whether to not add a close button to the input. False by default.
       do_not_append: (Boolean) - Whether to append or not.
       id: (String) - The ID of the context menu.
+      is_resizable: (Boolean) - Whether to allow the context menu to be resized. True by default if is_window is true.
       is_window: (Boolean) - Whether to treat the context menu as a window. False by default.
       name: (String) - Optional. Title of the context menu. Undefined; will not display by default.
       maximum_height: (String) - Optional. The height after which a scrollbar should appear in CSS units.
@@ -181,8 +182,12 @@
 
     //Window handler
     {
-      if (options.is_window)
-        elementDragHandler(context_menu_el);
+      if (options.is_window) {
+        var is_resizable = (options.is_resizable != false) ? true : false;
+
+        //Invoke elementDragHandler()
+        elementDragHandler(context_menu_el, { is_resizable: is_resizable });
+      }
     }
 
     if (!options.return_html) {

@@ -25,19 +25,69 @@
     return parent_el.contains(child_el);
   }
 
-  function elementDragHandler (arg0_el) {
+  function elementDragHandler (arg0_el, arg1_options) {
     //Convert from parameters
-    var el = (typeof arg0_el == "string") ? document.querySelector(arg0_el) : arg0_el;
+    var el = (typeof arg0_el == 'string') ? document.querySelector(arg0_el) : arg0_el;
+    var options = (arg1_options) ? arg1_options : {};
 
     //Declare local instance variables
     var position_one = 0;
     var position_two = 0;
     var position_three = 0;
     var position_four = 0;
+    var is_resizing = false;
+    var resize_edge = null;
+    var resize_threshold = 5; // pixels from edge to trigger resize
+
+    //Add resize handle styles
+    el.style.position = 'absolute';
+    el.style.resize = 'none'; // disable default resize
+    el.style.overflow = 'hidden';
+
+    //Add resize functionality if enabled
+    if (options.is_resizable) {
+      el.classList.add('resizable');
+      
+      //Define handle positions and cursors
+      var handle_config = {
+        'n': { top: '0', left: '0', right: '0', height: resize_threshold + 'px' },
+        'e': { top: '0', right: '0', bottom: '0', width: resize_threshold + 'px' },
+        's': { bottom: '0', left: '0', right: '0', height: resize_threshold + 'px' },
+        'w': { top: '0', left: '0', bottom: '0', width: resize_threshold + 'px' },
+        'ne': { top: '0', right: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
+        'nw': { top: '0', left: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
+        'se': { bottom: '0', right: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
+        'sw': { bottom: '0', left: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' }
+      };
+
+      //Add resize handles
+      var handles = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'];
+      for (var i = 0; i < handles.length; i++) {
+        var edge = handles[i];
+        var handle = document.createElement('div');
+        handle.className = 'resize-handle resize-' + edge;
+        handle.style.position = 'absolute';
+        handle.style.zIndex = '1000';
+        
+        //Apply handle configuration
+        var config = handle_config[edge];
+        for (var prop in config) {
+          handle.style[prop] = config[prop];
+        }
+        
+        el.appendChild(handle);
+        handle.onmousedown = function(e) {
+          e.stopPropagation();
+          is_resizing = true;
+          resize_edge = edge;
+          internalMouseDownHandler(e);
+        };
+      }
+    }
 
     //Header drag handler
-    if (el.querySelector(".header")) {
-      el.querySelector(".header").onmousedown = internalMouseDownHandler;
+    if (el.querySelector('.header')) {
+      el.querySelector('.header').onmousedown = internalMouseDownHandler;
     } else {
       el.onmousedown = internalMouseDownHandler;
     }
@@ -50,6 +100,8 @@
       //Stop moving when mouse button is released
       document.onmouseup = null;
       document.onmousemove = null;
+      is_resizing = false;
+      resize_edge = null;
     }
 
     function internalElementDrag (e) {
@@ -57,14 +109,62 @@
       var e = (e || window.event);
 
       e.preventDefault();
-      position_one = position_three - e.clientX;
-      position_two = position_four - e.clientY;
-      position_three = e.clientX;
-      position_four = e.clientY;
+      
+      if (is_resizing && options.is_resizable) {
+        var rect = el.getBoundingClientRect();
+        var new_width = rect.width;
+        var new_height = rect.height;
+        var new_left = rect.left;
+        var new_top = rect.top;
+        
+        //Define resize operations
+        var resize_ops = {
+          'e': function() { el.style.width = (new_width + (e.clientX - position_three)) + 'px'; },
+          'w': function() { 
+            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
+            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
+          },
+          's': function() { el.style.height = (new_height + (e.clientY - position_four)) + 'px'; },
+          'n': function() {
+            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
+            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+          },
+          'se': function() {
+            el.style.width = (new_width + (e.clientX - position_three)) + 'px';
+            el.style.height = (new_height + (e.clientY - position_four)) + 'px';
+          },
+          'sw': function() {
+            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
+            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
+            el.style.height = (new_height + (e.clientY - position_four)) + 'px';
+          },
+          'ne': function() {
+            el.style.width = (new_width + (e.clientX - position_three)) + 'px';
+            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
+            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+          },
+          'nw': function() {
+            el.style.width = (new_width - (e.clientX - position_three)) + 'px';
+            el.style.left = (new_left + (e.clientX - position_three)) + 'px';
+            el.style.height = (new_height - (e.clientY - position_four)) + 'px';
+            el.style.top = (new_top + (e.clientY - position_four)) + 'px';
+          }
+        };
 
-      //Set element position
-      el.style.top = `${el.offsetTop - position_two}px`;
-      el.style.left = `${el.offsetLeft - position_one}px`;
+        //Execute resize operation
+        if (resize_ops[resize_edge]) {
+          resize_ops[resize_edge]();
+        }
+      } else {
+        position_one = position_three - e.clientX;
+        position_two = position_four - e.clientY;
+        position_three = e.clientX;
+        position_four = e.clientY;
+
+        //Set element position
+        el.style.top = (el.offsetTop - position_two) + 'px';
+        el.style.left = (el.offsetLeft - position_one) + 'px';
+      }
     }
 
     function internalMouseDownHandler (e) {
