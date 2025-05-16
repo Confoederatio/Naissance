@@ -36,7 +36,13 @@
       }
     }
 
-    if (options.type == "date") {
+    if (options.type == "basic_colour") {
+      if (Array.isArray(placeholder_obj)) {
+        options.element.querySelector(`input[type="color"]`).value = RGBToHex(placeholder_obj);
+      } else if (typeof placeholder_obj == "string") {
+        options.element.querySelector(`input[type="color"]`).value = placeholder_obj;
+      }
+    } else if (options.type == "date") {
       populateDateFields(options.element, convertTimestampToDate(placeholder_obj));
     } else if (options.type == "date_length") {
       //Guard clause if typeof is invalid; i.e. a custom template
@@ -161,7 +167,8 @@
       } else if (options.type == "range") {
         options.element.querySelector(`input[type="range"]`).value = options.placeholder;
       } else if (options.type == "search_select") {
-        //[WIP] - No search select input of this kind
+        options.element.setAttribute("data-selected", options.placeholder);
+        options.element.querySelector(`[data-value="${options.placeholder}"]`).classList.add("selected");
       } else if (options.type == "select") {
         options.element.querySelector(`select`).value = options.placeholder;
       } else if (["tel", "telephone"].includes(options.type)) {
