@@ -130,9 +130,9 @@ if (!global.config) global.config = {};
   var map = new maptalks.Map("map", {
     center: [51.505, -0.09],
     zoom: 5,
-    spatialReference: {
+    /*spatialReference: {
       projection: 'EPSG:3857' // Ensure that both Maptalks and Leaflet use the same projection
-    },
+    },*/
     baseLayer: new maptalks.TileLayer("base", {
       spatialReference: {
         projection:'EPSG:3857'
