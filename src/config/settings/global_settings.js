@@ -7,6 +7,12 @@ config.settings.global = {
       <div class = "primary-header">Global Settings</div>
     `,
   },
+  global_default_save_file: {
+    id: "global_default_save_file",
+    type: "text",
+
+    placeholder: "./autosave.js"
+  },
   global_ui_layout_toggles: { //[WIP] - Functionality not yet added
     id: `global_ui_layout_toggles`,
     type: "checkbox",
