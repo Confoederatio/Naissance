@@ -286,7 +286,8 @@
     var entity_minimum_zoom = (current_history.options.minimum_zoom_level) ? current_history.options.minimum_zoom_level : 0;
 
     //Guard clause; return false if current zoom requirements are not met
-    if (zoom_level < entity_minimum_zoom || zoom_level > entity_maximum_zoom) return false;
+    if (zoom_level < entity_minimum_zoom || zoom_level > entity_maximum_zoom) 
+      return false;
 
     //Return statement
     return true;
@@ -547,11 +548,10 @@
       if (!entity_obj.isVisible()) is_entity_actually_visible = false;
 
     //Update entity visibility
-    if (!is_entity_actually_visible)
-      if (is_entity_visible)
-        entity_obj.show();
-    if (is_entity_actually_visible)
-      if (!is_entity_visible)
-        entity_obj.hide();
+    if (is_entity_visible) {
+      entity_obj.show();
+    } else {
+      entity_obj.hide();
+    }
   }
 }
