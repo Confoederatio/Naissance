@@ -123,6 +123,12 @@
             cleanKeyframes(entity_id, options.ENTITY_ABSOLUTE_AGE);
           if (all_scope_keys[i] == "clean_keyframes")
             cleanKeyframes(entity_id, local_value[0]);
+          if (all_scope_keys[i] == "disable_brush")
+            if (local_value[0]) {
+              disableBrush();
+            } else {
+              enableBrush();
+            }
           if (all_scope_keys[i] == "edit_entity")
             editEntity(entity_id);
           if (all_scope_keys[i] == "edit_entity_nodes")
@@ -284,6 +290,8 @@
                   printGroupActionsContextMenu(main.brush.selected_group_id, local_group_action, new_options);
               }
             }
+          if (all_scope_keys[i] == "refresh_brush_actions")
+            refreshBrushActions();
           if (["refresh_entity_actions", "reload_entity_actions"].includes(all_scope_keys[i]))
             refreshEntityActions(entity_id);
           if (all_scope_keys[i] == "select_multiple_keyframes")
@@ -363,6 +371,16 @@
 
       //Same-scope conditions
       {
+        if (all_scope_keys[i] == "brush_is_disabled") {
+          
+          if (local_value[0] == true) {
+            if (main.brush.disable_brush)
+              local_checks++;
+          } else {
+            if (!main.brush.disable_brush)
+              local_checks++;
+          }
+        }
         if (all_scope_keys[i] == "entity_is_being_edited")
           if (local_value[0] == true) {
             if (isEntityBeingEdited(entity_id, local_value[0]))

@@ -303,7 +303,7 @@
           //.limit handler
           {
             if (local_action.limit)
-              limit_fulfilled = parseBrushLimit(local_action.limit, {
+              limit_fulfilled = parseLimit(undefined, local_action.limit, {
                 timestamp: current_timestamp,
                 ui_type: "brush_actions"
               });

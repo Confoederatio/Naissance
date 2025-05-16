@@ -99,7 +99,8 @@
 
     //Set brush_obj.disable_brush
     brush_obj.disable_brush = true;
-    brush_obj.cursor.remove();
+    if (brush_obj.cursor)
+      brush_obj.cursor.remove();
   }
 
   function enableBrush () {
@@ -108,7 +109,8 @@
     
     //Delete brush_obj.disable_brush
     delete brush_obj.disable_brush;
-    brush_obj.cursor.remove();
+    if (brush_obj.cursor)
+      brush_obj.cursor.remove();
   }
 
   function removeFromBrush (arg0_polygon, arg1_do_not_add_to_undo_redo) {

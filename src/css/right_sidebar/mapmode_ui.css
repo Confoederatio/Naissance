@@ -43,7 +43,7 @@
 }
 .brush-buttons-container {
   margin-bottom: 5px;
-  margin-left: calc(-12px + 5px);
+  margin-left: -2px;
 }
 .brush-options-container {
   margin: 12px;

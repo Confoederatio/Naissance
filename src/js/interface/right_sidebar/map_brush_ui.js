@@ -13,6 +13,17 @@
 
     printBrushActionsNavigationMenu(window.brush_buttons_container_el);
   }
+
+  function refreshBrushActions () {
+    //Declare local instance variables
+    var common_defines = config.defines.common;
+    
+    var brush_container_el = getUISelector("brush_actions_container");
+
+    //Set brush_actions_container.innerHTML to ""
+    brush_container_el.innerHTML = "";
+    printBrushActionsNavigationMenu(brush_container_el);
+  }
 }
 
 //Brush UI functions
@@ -54,52 +65,4 @@
     //Return statement
     return brush_string;
   }
-
-  /*
-    printBrushOptions() - Changes the brush options UI to the selected page
-    mode: "simplify"
-  */
-  /*function printBrushOptions (arg0_mode) {
-    //Convert from parameters
-    var mode = arg0_mode;
-
-    //Declare local instance variables
-    var brush_obj = main.brush;
-    var brush_ui = document.getElementById("brush-context-menu-container");
-
-    //Show element
-    showElement(brush_context_menu_el);
-
-    //Set brush_ui.innerHTML according to mode
-    if (mode == "simplify") {
-      brush_ui.innerHTML = `
-        <div class = "context-menu-subcontainer">
-          <b>Simplify Path:</b>
-        </div>
-        <div class = "context-menu-subcontainer">
-          <input type = "checkbox" id = "auto-simplify-when-editing" checked> <span>Auto-Simplify When Editing</span>
-        </div>
-        <div class = "context-menu-subcontainer">
-          <span>Strength: </span> <input type = "range" id = "simplify-tolerance" min = "0" max = "100" value = "10">
-        </div>
-      `;
-
-      //Populate UI options
-      var auto_simplify_when_editing_el = document.getElementById("auto-simplify-when-editing");
-      var simplify_tolerance_el = document.getElementById("simplify-tolerance");
-
-      simplify_tolerance_el.value = parseInt(brush_obj.simplify_tolerance*Math.pow(10, 3));
-
-      //Set listener events
-      auto_simplify_when_editing_el.onclick = function (e) {
-        //Set global flag
-        brush_obj.auto_simplify_when_editing = e.target.checked;
-      };
-
-      onRangeChange(simplify_tolerance_el, function (e) {
-        //Set global flag
-        brush_obj.simplify_tolerance = getSimplifyTolerance(e.target.value);
-      });
-    }
-  }*/
 }

@@ -13,6 +13,8 @@ config.defines.common = {
     right_sidebar: `#right-sidebar`, //The query selector for the right sidebar container.
     topbar: `#topbar`, //The query selector for the topbar container.
 
+    //Interface - Bottombar
+      brush_actions_container: `#brush-actions-context-menu`,
     //Interface - Left Sidebar
     //Files - Save/Load
       files_hierarchy: `.file-container .hierarchy`,
