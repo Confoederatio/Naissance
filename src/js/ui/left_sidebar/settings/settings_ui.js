@@ -25,7 +25,8 @@
         type: "checkbox",
 
         options: {
-          "anchor_entity_popups": "Anchor Entity Popups"
+          "anchor_entity_popups": "Anchor Entity Popups",
+          "hide_entity_data_graph_by_default": "Hide Entity Data Graph by Default"
         }
       },
       document_settings_html: {
