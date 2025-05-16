@@ -122,7 +122,7 @@
 		<script src = "UF/js/strings/split_strings.js" type = "text/javascript"></script>
 
 		<!-- Import config -->
-		<script src = "./js/ui/ui_config.js" type = "text/javascript"></script>
+		<script src = "./js/interface/ui_config.js" type = "text/javascript"></script>
 	</head>
 	<body>
 		<!-- Map container -->
@@ -313,49 +313,48 @@
 		<script src = "./js/framework/settings_framework.js" type = "text/javascript"></script>
 
 		<!-- Import localisation -->
-		<script src = "./js/localisation/entity_localisation.js" type = "text/javascript"></script>
+		<script src = "./js/map/entity_localisation.js" type = "text/javascript"></script>
 
 		<!-- Import UI -->
-		<script src = "./js/ui/draw/hierarchy_draw_loop.js" type = "text/javascript"></script>
-		<script src = "./js/ui/draw/map_event_draw_loop.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/date_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/file_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/undo_redo_ui.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/left_sidebar/date_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/file_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/undo_redo_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/group_actions_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/hierarchy_context_menus.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/hierarchy_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/scripts_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/settings_map_layers_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/left_sidebar/settings_ui.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/left_sidebar/hierarchy/group_actions_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/hierarchy/hierarchy_context_menus.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/hierarchy/hierarchy_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/scripts/scripts_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/settings/document_settings/settings_map_layers_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/left_sidebar/settings/settings_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/brush_ui.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/map/brush/brush_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/entity_actions_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/entity_customisation_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/entity_keyframes_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/entity_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/entity_variables_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/graph_ui.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/map/entities/entity_actions_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/map/entities/entity_customisation_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/map/entities/entity_keyframes_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/map/entities/entity_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/map/entities/entity_variables_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/map/entities/graph_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/map/map_framework.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/map/map_framework.js" type = "text/javascript"></script>
+		<script src = "./js/interface/right_sidebar/brush_actions_ui.js" type = "text/javascript"></script>
+		<script src = "./js/interface/right_sidebar/map_brush_ui.js" type = "text/javascript"></script> <!-- [WIP] - DEPRECATE -->
 
-		<script src = "./js/ui/right_sidebar/brush_actions_ui.js" type = "text/javascript"></script>
-		<script src = "./js/ui/right_sidebar/map_brush_ui.js" type = "text/javascript"></script> <!-- [WIP] - DEPRECATE -->
+		<script src = "./js/interface/topbar/topbar_ui.js" type = "text/javascript"></script>
 
-		<script src = "./js/ui/topbar/topbar_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/ui/ui_framework.js" type = "text/javascript"></script>
-		<script src = "./js/ui/ui_initialisation.js" type = "text/javascript"></script>
+		<script src = "./js/interface/ui_framework.js" type = "text/javascript"></script>
+		<script src = "./js/interface/ui_initialisation.js" type = "text/javascript"></script>
 
 		<!-- Keep at BOTTOM after all functions are declared -->
 		<!-- Declare global variables -->
 		<script src = "./js/startup.js" type = "text/javascript"></script>
 
 		<!-- Event listeners should also always be at bottom -->
-		<script src = "./js/ui/events/key_monitoring.js" type = "text/javascript"></script>
-		<script src = "./js/ui/events/map_monitoring.js" type = "text/javascript"></script>
-		<script src = "./js/ui/events/mouse_monitoring.js" type = "text/javascript"></script>
+		<script src = "./js/interface/events/draw_loop_hierarchy.js" type = "text/javascript"></script>
+		<script src = "./js/interface/events/draw_loop_map_event.js" type = "text/javascript"></script>
+		<script src = "./js/interface/events/key_monitoring.js" type = "text/javascript"></script>
+		<script src = "./js/interface/events/map_monitoring.js" type = "text/javascript"></script>
+		<script src = "./js/interface/events/mouse_monitoring.js" type = "text/javascript"></script>
 	</body>
 </html>
