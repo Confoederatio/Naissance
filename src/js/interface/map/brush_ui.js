@@ -147,6 +147,8 @@
 
     //Refresh polity
     {
+      refreshBrushActions();
+      
       if (brush_obj.current_selection) {
         brush_obj.current_selection.remove();
         delete brush_obj.current_selection; //current_selection has to actually be deleted to avoid refresh errors

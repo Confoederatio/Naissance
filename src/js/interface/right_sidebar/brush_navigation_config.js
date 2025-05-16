@@ -8,9 +8,9 @@ config.brush_actions.brush_rightbar = {
     name: "Finish Entity",
     order: 1,
 
-    /*limit: { [WIP] - parseBrushLimit() is not defined.
-      entity_is_being_edited: true
-    },*/
+    limit: {
+      is_editing_entity: true
+    },
     effect: {
       finish_entity: true,
       refresh_entity_actions: true

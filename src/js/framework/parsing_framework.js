@@ -371,8 +371,7 @@
 
       //Same-scope conditions
       {
-        if (all_scope_keys[i] == "brush_is_disabled") {
-          
+        if (all_scope_keys[i] == "brush_is_disabled")
           if (local_value[0] == true) {
             if (main.brush.disable_brush)
               local_checks++;
@@ -380,13 +379,20 @@
             if (!main.brush.disable_brush)
               local_checks++;
           }
-        }
         if (all_scope_keys[i] == "entity_is_being_edited")
           if (local_value[0] == true) {
             if (isEntityBeingEdited(entity_id, local_value[0]))
               local_checks++;
           } else {
             if (!isEntityBeingEdited(entity_id, local_value[0]))
+              local_checks++;
+          }
+        if (all_scope_keys[i] == "is_editing_entity")
+          if (local_value[0] == true) {
+            if (main.brush.current_path)
+              local_checks++;
+          } else {
+            if (!main.brush.current_path)
               local_checks++;
           }
         if (all_scope_keys[i] == "is_editing_entity_nodes")
