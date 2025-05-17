@@ -64,6 +64,8 @@
         var local_entity_el = document.querySelector(`.entity[data-id="${local_entity_id}"]`);
         var local_entity = getEntity(local_entity_id);
 
+        if (isEntityHidden(local_entity))
+          local_entity_el.classList.add("entity-hidden");
         if (local_entity.options.mask)
           if (!local_entity_el.classList.contains(local_entity.options.mask))
             local_entity_el.classList.add(local_entity.options.mask);

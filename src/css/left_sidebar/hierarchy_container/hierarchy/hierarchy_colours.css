@@ -47,6 +47,10 @@
 .entity {
   background-color: var(--entity-colour);
 }
+  .entity.entity-hidden .item-name {
+    font-style: italic;
+    opacity: 0.5;
+  }
 .group {
   background-color: var(--group-colour);
 }
