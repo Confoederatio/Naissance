@@ -47,6 +47,9 @@
 .entity {
   background-color: var(--entity-colour);
 }
+  .entity.entity-hidden {
+    background-color: rgb(200, 200, 200);
+  }
   .entity.entity-hidden .item-name {
     font-style: italic;
     opacity: 0.5;
