@@ -25,6 +25,16 @@
   display: none;
 }
 
+.entity-ui-container[id*="-header"]:not(#entity-header) {
+  display: flex;
+
+  align-items: center;
+
+  > img {
+    margin-left: auto;
+  }
+}
+
 /* -- 1. Entity UI Title -- */
 .leaflet-popup #entity-header {
   padding-bottom: 0px;

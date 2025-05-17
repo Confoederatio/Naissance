@@ -26,6 +26,7 @@
           - button
           - checkbox
           - color/colour
+          - context_menu
           - datalist
           - date
           - date_length
@@ -33,6 +34,7 @@
           - file
           - hierarchy
           - hidden
+          - html
           - image
           - number
           - password

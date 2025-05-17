@@ -1,3 +1,52 @@
+/* -- Maximise/Minimise Chevrons -- */
+@keyframes uf-expand {
+  from {
+    height: 0;
+    margin: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    pointer-events: none;
+    visibility: hidden !important;
+  }
+  to {}
+}
+@keyframes uf-minimise {
+  from {}
+  to {
+    height: 0;
+    margin: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    pointer-events: none;
+    visibility: hidden !important;
+  }
+}
+
+.uf-chevron {
+  border-radius: 50%;
+  box-sizing: content-box;
+  cursor: pointer;
+  float: right;
+  height: 1rem;
+  padding: 0.5rem;
+  width: 1rem;
+  overflow: visible;
+
+  margin-right: 0.5rem;
+  transition: all 0.5s ease;
+}
+.uf-chevron:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.uf-expanded, .uf-expanded * {
+  animation: uf-expand ease 0.5s forwards;
+}
+.uf-minimised, .uf-minimised * {
+  animation: uf-minimise ease 0.5s forwards;
+}
+
 /* -- Panels/Windows Styling -- */
 .uf-window.draggable {
   position: absolute;

@@ -181,10 +181,10 @@
     var entity_id = arg0_entity_id;
 
     //Declare local instance variable
+    var entity_selector = `[class="leaflet-popup ${entity_id}"]`;
     var entity_ui_obj = global.interfaces[entity_id];
     var page = entity_ui_obj.page;
-    var tabs = ["actions", "customisation", "timeline"];
-
+    
     //Begin populating entity UI
     printEntityBio(entity_id);
     populateEntityColour(entity_id);
@@ -193,12 +193,21 @@
     //Initialise tooltips
     setTimeout(function(){
       populateEntityTooltips(entity_id);
-    }, 100);
 
-    //Keep collapsed tabs
-    for (var i = 0; i < tabs.length; i++)
-      if (entity_ui_obj[`${tabs[i]}_collapsed`])
-        minimiseUI(`${tabs[i]}-minimise-btn-${entity_id}`, tabs[i]);
+      //Create collapsible sections after content is loaded
+      createSection({
+        selector: `${entity_selector} #entity-timeline-data-header, ${entity_selector} #entity-ui-timeline-graph-container, ${entity_selector} #entity-ui-timeline-bio-container`,
+        is_collapsed: true
+      });
+
+      createSection({
+        selector: `${entity_selector} #entity-customisation-header, ${entity_selector} #customisation-top-parent`
+      });
+
+      createSection({
+        selector: `${entity_selector} #entity-actions-header, ${entity_selector} #entity-actions-context-menu`
+      });
+    }, 100);
   }
 
   function printEntityBio (arg0_entity_id) {
