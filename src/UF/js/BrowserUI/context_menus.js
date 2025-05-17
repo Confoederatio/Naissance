@@ -763,6 +763,7 @@
 
       if (!local_value.html) {
         if (!local_value.class) local_value.class = "unique";
+        content_el.innerHTML = "";
         createContextMenu(local_value);
       } else {
         content_el.innerHTML = (Array.isArray(local_value.html)) ?
