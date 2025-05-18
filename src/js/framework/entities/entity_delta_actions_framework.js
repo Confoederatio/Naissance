@@ -104,7 +104,7 @@
 
       //Set entityUI for current selected entity
       brush_obj.current_selection.on("click", function (e) {
-        printEntityContextMenu(e.target.options.className);
+        printEntityContextMenu(e.target.options.className, { coords: e.coordinate });
       });
     }
   }

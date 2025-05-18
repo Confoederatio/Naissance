@@ -726,17 +726,17 @@
 
         if (hierarchy_options.context_menu_function)
           context_menu_button.addEventListener("click", function (e) {
-            global[hierarchy_options.context_menu_function](hierarchy_key, local_item.id);
+            global[hierarchy_options.context_menu_function](hierarchy_key, local_item.id, e);
           });
         if (hierarchy_options.group_context_menu_function)
           if (local_item.type == "group")
             context_menu_button.addEventListener("click", function (e) {
-              global[hierarchy_options.group_context_menu_function](hierarchy_key, local_item.id);
+              global[hierarchy_options.group_context_menu_function](hierarchy_key, local_item.id, e);
             });
         if (hierarchy_options.entity_context_menu_function)
           if (local_item.type == "entity")
             context_menu_button.addEventListener("click", function (e) {
-              global[hierarchy_options.entity_context_menu_function](hierarchy_key, local_item.id);
+              global[hierarchy_options.entity_context_menu_function](hierarchy_key, local_item.id, e);
             });
 
         interaction_container_el.appendChild(context_menu_button);
