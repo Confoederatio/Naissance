@@ -111,18 +111,6 @@ if (!global.config) global.config = {};
     config.mask_classes.push(` ${config.mask_types[i]}`);
 }
 
-//UI
-{
-  //Entity UI
-  window.actions_with_context_menu = ["apply-path", "hide-polity", "simplify-entity"];
-  window.entity_options = {
-    className: "current-union"
-  };
-
-  //Sidebar UI
-  window.sidebar_selected_entities = [];
-}
-
 //Initialise optimisation; map, other UI elements after everything else
 {
   initOptimisation();

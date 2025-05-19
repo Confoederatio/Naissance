@@ -115,6 +115,20 @@
     try { refreshBrushActions(); } catch (e) {}
   }
 
+  function entityIsBrush (arg0_entity_id) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+
+    //Declare local instance variables
+    var brush_obj = main.brush;
+    var entity_key = getEntity(entity_id, { return_key: true });
+
+    //Return statement
+    if (brush_obj.entity_options)
+      if (brush_obj.entity_options.className == entity_key)
+        return true;
+  }
+
   function removeFromBrush (arg0_polygon, arg1_do_not_add_to_undo_redo) {
     //Convert from parameters
     var polygon = arg0_polygon;

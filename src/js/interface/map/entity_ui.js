@@ -369,7 +369,7 @@
           var turf_polygon = getTurfObject(last_history_coords);
           var turf_polygon_centre = turf.center(turf_polygon).geometry.coordinates;
   
-          leaflet_centre_coords = [turf_polygon_centre[1], turf_polygon_centre[0]]; //Convert from Turf LatLng to LngLat
+          leaflet_centre_coords = [turf_polygon_centre[0], turf_polygon_centre[1]]; //Convert from Turf LatLng to LngLat
         } catch (e) {
           console.error(e);
           leaflet_centre_coords = [0, 0];

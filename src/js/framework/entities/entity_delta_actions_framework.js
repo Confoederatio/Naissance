@@ -259,7 +259,8 @@
     var do_not_add_to_undo_redo = arg3_do_not_add_to_undo_redo;
 
     //Declare local instance variables
-    var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
+    var entity_obj = (typeof entity_id != "object") ? 
+      getEntity(entity_id) : entity_id;
     var old_entity_name;
       if (entity_obj)
         if (entity_obj.options)

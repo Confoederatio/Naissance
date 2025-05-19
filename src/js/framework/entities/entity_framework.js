@@ -78,15 +78,16 @@
     var is_new_entity;
 
     //Guard clause
-    if (typeof entity_id == "object") return entity_id;
+    if (typeof entity_id == "object" && !options.return_key) return entity_id;
+    if (typeof entity_id == "object" && options.return_key) return entity_id.options.className;
 
     //Iterate over all main.entities for .options.className
-    for (var i = 0; i < main.entities.length; i++) {
-      var local_entity = main.entities[i];
+    for (let i = 0; i < main.entities.length; i++) {
+      let local_entity = main.entities[i];
 
       if (local_entity.options)
         if (local_entity.options.className == entity_id)
-          entity_obj = (!options.return_key) ? main.entities[i] : i;
+          entity_obj = main.entities[i];
     }
 
     //If entity_obj is undefined; check to make sure entity_id being fetched isn't just the current main.brush.current_selection
@@ -102,7 +103,10 @@
       is_new_entity = true;
 
     //Return statement
-    return (!options.return_is_new_entity) ? entity_obj : is_new_entity;
+    if (options.return_is_new_entity) return is_new_entity;
+    if (options.return_key)
+      return entity_obj.options.className;
+    return entity_obj;
   }
 
   /*
