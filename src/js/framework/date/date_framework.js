@@ -50,17 +50,15 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
               let local_options = JSON.parse(JSON.stringify(local_entity.options));
 
               //Overwrite local_options with local_history_options
-              local_history_frame.options = convertLeafletOptionsToMaptalks(local_history_frame.options);
               let all_local_history_options = Object.keys(local_history_frame.options);
 
               for (let x = 0; x < all_local_history_options.length; x++)
                 local_options[all_local_history_options[x]] = local_history_frame.options[all_local_history_options[x]];
-              console.log(local_options);
 
               //Refresh main.entities[i]; add to current main.entity_layer
               local_options.do_not_display = true;
               main.entities[i] = createPolygon(local_history_frame.coords, local_options);
-              console.log(local_options);
+              main.entities[i].updateSymbol(convertLeafletOptionsToMaptalks(local_options)); 
 
               try {
                 delete local_options.do_not_display;
