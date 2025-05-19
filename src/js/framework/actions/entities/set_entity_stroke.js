@@ -21,7 +21,7 @@
     var entity_obj = getEntity(entity_id);
 
     if (current_history.options.color != colour) {
-      createHistoryFrame(entity_id, options.date, { color: colour });
+      createHistoryFrame(entity_id, options.date, { color: colour, lineColor: colour });
 
       var current_symbol = entity_obj.getSymbol();
       current_symbol.lineColor = colour;
