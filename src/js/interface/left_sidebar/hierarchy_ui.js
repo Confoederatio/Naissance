@@ -81,7 +81,6 @@
       if (target_hierarchy != dragged_hierarchy) return;
 
       //Group/entity/base-hierarchy handling
-      console.log(target.className, dragged_type, placeholder.parentNode);
       if (target.className.trim() == "group") {
         if (dragged_type == "group" || dragged_type == "entity") {
           dragged.parentNode.removeChild(dragged);

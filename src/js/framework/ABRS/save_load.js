@@ -67,7 +67,7 @@
         do_not_display: true
       });
       save_data.entities.push({
-        coords: convertToNaissance(local_entity),
+        coords: convertToNaissance(local_entity), //This is required for some reason
         options: local_entity.options
       });
     }
