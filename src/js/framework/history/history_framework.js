@@ -59,6 +59,7 @@
       //Delete local_history.options if not needed
       if (!local_history.options)
         delete local_history.options;
+      console.log(`received call: createHistoryFrame()`, entity_id, date, options, coords);
 
       //Fix entity_obj history order
       entity_obj.options.history = sortObject(entity_obj.options.history, "numeric_ascending");
@@ -309,7 +310,7 @@
         if (local_history_frame.coords)
           history_frame.coords = local_history_frame.coords;
         if (local_history_frame.options)
-          history_frame.options = mergeObjects(history_frame.options, local_history_frame.options, "override");
+          history_frame.options = dumbMergeObjects(history_frame.options, local_history_frame.options);
       } else {
         break; //Break once past timestamp, no point in continuing on
       }

@@ -387,8 +387,12 @@
       
       var variables_obj = dumbMergeObjects(current_history.options.variables, { [variable_id]: variable_value });
       createHistoryFrame(entity_id, options.date, { variables: variables_obj });
+      console.log(variables_obj);
     } else {
       createHistoryFrame(entity_id, options.date, { variables: { [variable_id]: variable_value } });
+      console.log(variable_value);
     }
+
+    console.log(entity_obj.options.history);
   }
 }

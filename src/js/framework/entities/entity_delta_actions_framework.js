@@ -126,7 +126,7 @@
     var current_entity_history_obj = {};
     var current_entity_obj = getEntity(brush_obj.entity_options.className);
     var internal_options = JSON.parse(JSON.stringify({
-      coords: brush_obj.current_path,
+      coords: convertToNaissance(brush_obj.current_path),
       entity_options: brush_obj.entity_options || {},
       selection_options: brush_obj.current_selection.options || {},
       selected_group_id: brush_obj.selected_group_id,
