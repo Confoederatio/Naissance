@@ -422,8 +422,11 @@ input[type="color"]::-webkit-color-swatch {
             }
           }
 
-          &:hover .submenu {
+          .submenu {
+            left: 0px;
             display: block;
+            padding: 2px;
+            transform: translateY(-2px);
           }
         }
       }
@@ -524,4 +527,20 @@ input[type="color"]::-webkit-color-swatch {
 /* -- Modal content fixes -- */
 .modal-content h3 {
   margin-top: 0px;
+}
+
+/* -- Toolbar fixes -- */
+.has-submenu:not(:hover) .submenu:not(:hover) {
+  visibility: hidden;
+}
+.submenu {
+  background-color: white;
+  position: relative;
+  z-index: 100;
+}
+.submenu:hover {
+  visibility: visible;
+}
+.editor-button.icon[title="Show HTML Code"] {
+  z-index: -1;
 }
