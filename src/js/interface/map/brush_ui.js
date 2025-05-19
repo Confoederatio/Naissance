@@ -145,6 +145,7 @@
     //Declare local instance variables
     var brush_obj = main.brush;
 
+
     //Refresh polity
     {
       refreshBrushActions();
@@ -157,6 +158,9 @@
         brush_obj.current_selection = createPolygon(brush_obj.current_path, brush_obj.entity_options);
         brush_obj.current_selection.remove();
         brush_obj.current_selection.addTo(main.cursor_layer);
+        
+        //Sync history and options
+        brush_obj.current_selection.options.history = brush_obj.entity_options.history;
       }
 
       //Bind tooltip to selection

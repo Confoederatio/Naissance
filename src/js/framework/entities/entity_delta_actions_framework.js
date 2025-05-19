@@ -224,6 +224,13 @@
     if (is_new_entity) {
       var new_entity_obj = createPolygon(current_path, new_entity.options);
       main.entities.push(new_entity_obj);
+
+      var current_history = getHistoryFrame(new_entity_obj, date);
+
+      if (current_history)
+        if (current_history.options)
+          if (current_history.options.entity_name) 
+            entity_name = current_history.options.entity_name;
       renameEntity(entity_id, entity_name, date, true);
 
       if (selected_group_id) {
