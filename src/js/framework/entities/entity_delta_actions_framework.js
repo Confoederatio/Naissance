@@ -152,7 +152,7 @@
         undo_function: "undoFinishEntity",
         undo_function_parameters: [internal_options.entity_id, current_entity_history_obj]
       });
-
+    
     clearBrush();
 
     //Return statement
@@ -216,7 +216,7 @@
         type: selection_options.type || "polity"
       }
     };
-
+    
     createHistoryFrame(new_entity, date, {}, coords);
     var entity_name = selection_options.entity_name || "Unnamed Polity";
 

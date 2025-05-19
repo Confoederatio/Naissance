@@ -22,17 +22,15 @@
 
       //Fetch actual coords
       var actual_coords = coords;
-
+      if (!actual_coords && options && options.coords)
+        actual_coords = options.coords;
       if (!actual_coords)
-        actual_coords = (old_history_entry) ?
-          old_history_entry.coords :
-          convertMaptalksCoordsToTurf(entity_obj)[0];
+        actual_coords = (old_history_entry && old_history_entry.coords) ? old_history_entry.coords : convertMaptalksCoordsToTurf(entity_obj)[0];
 
       //Create new history object
       if (!entity_obj.options.history[date_string])
         entity_obj.options.history[date_string] = {
           id: convertTimestampToInt(date_string),
-
           coords: actual_coords,
           options: {}
         };
@@ -41,6 +39,7 @@
       var all_option_keys = Object.keys(options);
       var local_history = entity_obj.options.history[date_string];
 
+      // Always update coords to the most up-to-date value
       local_history.coords = actual_coords;
       if (!local_history.options) local_history.options;
 
@@ -59,7 +58,6 @@
       //Delete local_history.options if not needed
       if (!local_history.options)
         delete local_history.options;
-      console.log(`received call: createHistoryFrame()`, entity_id, date, options, coords);
 
       //Fix entity_obj history order
       entity_obj.options.history = sortObject(entity_obj.options.history, "numeric_ascending");
@@ -291,13 +289,15 @@
     };
     var current_timestamp = convertTimestampToInt(getTimestamp(date));
 
+    //Sort before generating all_history_frames
+    entity_obj.options.history = sortObjectByKey(entity_obj.options.history, { key: "id", mode: "ascending" });
     var all_history_frames = Object.keys(entity_obj.options.history);
 
     //Iterate over all_history_frames
-    for (var i = 0; i < all_history_frames.length; i++)
-      if (convertTimestampToInt(all_history_frames[i]) <= current_timestamp) {
-        var local_history_frame = entity_obj.options.history[all_history_frames[i]];
+    for (var i = 0; i < all_history_frames.length; i++) {
+      let local_history_frame = entity_obj.options.history[all_history_frames[i]];
 
+      if (local_history_frame.id <= current_timestamp) {
         //is_founding handler
         if (i == 0) {
           history_frame.is_founding = true;
@@ -314,6 +314,8 @@
       } else {
         break; //Break once past timestamp, no point in continuing on
       }
+    }
+      
 
     //Return statement
     return history_frame;
