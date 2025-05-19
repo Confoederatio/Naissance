@@ -20,7 +20,7 @@
     var current_history = getHistoryFrame(entity_id, options.date);
     var entity_obj = getEntity(entity_id);
 
-    if (current_history.options.fillColor != colour) {
+    if (current_history.options.color != colour) {
       createHistoryFrame(entity_id, options.date, { color: colour });
 
       var current_symbol = entity_obj.getSymbol();
