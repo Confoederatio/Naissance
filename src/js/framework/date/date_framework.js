@@ -33,51 +33,50 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
       //Reload object; add to map
       if (brush_obj.editing_entity != local_entity_id || !options.reload_map)
         if (local_history) {
-          //Update UIs for each open popup
-          let local_popup = document.querySelector(`.leaflet-popup[class~="${local_entity_id}"]`);
+        //Update UIs for each open popup
+        let local_popup = document.querySelector(`.leaflet-popup[class~="${local_entity_id}"]`);
 
-          if (local_popup) {
-            let name_field = local_popup.querySelector(`input#polity-name`);
+        if (local_popup) {
+          let name_field = local_popup.querySelector(`input#polity-name`);
 
-            name_field.value = getEntityName(local_entity_id);
-          }
+          name_field.value = getEntityName(local_entity_id);
+        }
 
-          //Run through each options type
-          if (local_entity.options.type == "polity") {
-            //Make sure polity is not extinct
-            if (!isEntityHidden(local_entity_id, main.date)) {
-              let local_history_frame = getHistoryFrame(local_entity, main.date);
-              let local_options = JSON.parse(JSON.stringify(local_entity.options));
+        //Run through each options type
+        if (local_entity.options.type == "polity") {
+          //Make sure polity is not extinct
+          if (!isEntityHidden(local_entity_id, main.date)) {
+            let local_history_frame = getHistoryFrame(local_entity, main.date);
+            let local_options = JSON.parse(JSON.stringify(local_entity.options));
 
-              //Overwrite local_options with local_history_options
-              let all_local_history_options = Object.keys(local_history_frame.options);
+            //Overwrite local_options with local_history_options
+            let all_local_history_options = Object.keys(local_history_frame.options);
 
-              for (let x = 0; x < all_local_history_options.length; x++)
-                local_options[all_local_history_options[x]] = local_history_frame.options[all_local_history_options[x]];
+            for (let x = 0; x < all_local_history_options.length; x++)
+              local_options[all_local_history_options[x]] = local_history_frame.options[all_local_history_options[x]];
 
-              //Refresh main.entities[i]; add to current main.entity_layer
-              local_options.do_not_display = true;
-              main.entities[i] = createPolygon(local_history_frame.coords, local_options);
-              main.entities[i].updateSymbol(convertLeafletOptionsToMaptalks(local_options)); 
+            //Refresh main.entities[i]; add to current main.entity_layer
+            local_options.do_not_display = true;
+            main.entities[i] = createPolygon(local_history_frame.coords, local_options);
 
-              try {
-                delete local_options.do_not_display;
-                main.entities[i].addTo(main.entity_layer);
-                main.entities[i].addEventListener("mouseup", function (e) {
-                  if (e.domEvent.button == 0)
-                    printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: false });
-                });
-              } catch (e) {
-                console.error(`Ran into error!`, e, JSON.stringify(local_history_frame.coords));
-              }
-
-              //If this is the current selected polity, re-add cursor
-              if (!options.reload_map)
-                if (brush_obj.editing_entity == local_entity_id)
-                  clearBrush();
+            try {
+              delete local_options.do_not_display;
+              main.entities[i].addTo(main.entity_layer);
+              main.entities[i].addEventListener("mouseup", function (e) {
+                if (e.domEvent.button == 0)
+                  printEntityContextMenu(e.target.options.className, { coords: e.coordinate, is_being_edited: false });
+              });
+            } catch (e) {
+              console.error(`Ran into error!`, e, JSON.stringify(local_history_frame.coords));
             }
+
+            //If this is the current selected polity, re-add cursor
+            if (!options.reload_map)
+              if (brush_obj.editing_entity == local_entity_id)
+                clearBrush();
           }
         }
+      }
     }
 
     //Update Left Sidebar
