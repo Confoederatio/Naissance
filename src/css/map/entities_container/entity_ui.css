@@ -346,6 +346,9 @@
 }
 
 /* -- 4. Entity UI Actions -- */
+#entity-actions-context-menu {
+  transition: all 0.5s ease;
+}
 .entity-context-menu.actions-menu {
   margin-top: 6px;
   width: var(--entity-ui-width);
@@ -367,5 +370,3 @@
 .entity-context-menu.actions-menu td span {
   width: -webkit-fill-available;
 }
-
-/* -- A. Entity UI Animations -- */

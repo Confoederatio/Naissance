@@ -20,6 +20,23 @@
     }
   }
 
+  function setEntityDescription (arg0_entity_id, arg1_description, arg2_options) {
+    //Convert from parameters
+    var entity_id = arg0_entity_id;
+    var description = arg1_description;
+    var options = (arg2_options) ? arg2_options : {};
+    
+    //Initialise options
+    if (!options.date) options.date = main.date;
+
+    //Declare local instance variables
+    var current_history = getHistoryFrame(entity_id, options.date);
+    var entity_obj = getEntity(entity_id);
+
+    if (current_history.options.description != description)
+      createHistoryFrame(entity_id, options.date, { description: description });
+  }
+
   /*
     setEntityFillColour() - Sets the fill colour of a given entity.
     arg0_entity_id: (String) - The entity ID to input.

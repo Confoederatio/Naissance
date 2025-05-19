@@ -70,6 +70,28 @@
       name: "Customisation Options:",
 
       pages: {
+        description: {
+          name: "Desc.",
+          special_function: function (e) {
+            var current_history = getHistoryFrame(entity_id, main.date);
+            var wysiwyg_selector = `${entity_customisation_content_selector} .visual-view`;
+
+            if (current_history.options)
+              if (current_history.options.description)
+                setTimeout(function(){
+                  document.querySelector(wysiwyg_selector).innerHTML = current_history.options.description;
+                }, 0);
+          },
+
+          description: {
+            id: "description",
+            type: "wysiwyg",
+
+            onchange: function (e) {
+              setEntityDescription(entity_id, e.value);
+            }
+          }
+        },
         fill: {
           name: "Fill",
 

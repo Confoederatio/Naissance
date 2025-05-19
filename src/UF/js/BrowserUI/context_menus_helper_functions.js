@@ -492,7 +492,6 @@
           selectedClass: "selected"
         });
 
-        console.log(all_inputs[i]);
         all_inputs[i].querySelector("#add-button").addEventListener("click", function (e) {
           var local_delete_button_name = (local_input_obj.delete_button_name) ? 
             local_input_obj.delete_button_name : "Delete";
@@ -539,6 +538,28 @@
                 local_input_obj.onremove(local_li_el);
               local_li_el.remove();
             });
+        }
+      } else if (local_type == "wysiwyg") {
+        //Add onchange handler if specified
+        if (local_input_obj && local_input_obj.onchange) {
+          var editor = all_inputs[i].querySelector('.wysiwyg-editor');
+          var visual_view = editor.querySelector('.visual-view');
+          var html_view = editor.querySelector('.html-view');
+
+          //Add change handlers for both views
+          visual_view.addEventListener("input", function() {
+            var event = new Event("change");
+            event.target = visual_view;
+            event.value = visual_view.innerHTML;
+            local_input_obj.onchange(event);
+          });
+
+          html_view.addEventListener("input", function() {
+            var event = new Event("change");
+            event.target = html_view;
+            event.value = html_view.value;
+            local_input_obj.onchange(event);
+          });
         }
       }
 

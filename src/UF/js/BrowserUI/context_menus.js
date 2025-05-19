@@ -377,7 +377,7 @@
         html_string.push(`<div class = "modal">`);
           html_string.push(`<div class = "modal-bg"></div>`);
           html_string.push(`<div class = "modal-wrapper">`);
-            html_string.push(`<div class = "close">✖</div>`);
+            html_string.push(`<div class = "close">x</div>`);
             html_string.push(`<div class = "modal-content" id = "modal-create-link">`);
               html_string.push(`<h3>Insert Link</h3>`);
               html_string.push(`<input type = "text" id = "link-value" placeholder = "Link (example: https://google.com/)">`);
