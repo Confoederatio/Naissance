@@ -203,7 +203,6 @@
 
     //Declare local instance variables
     var coords = options.coords;
-    var current_path = options.current_path;
     var date = options.date;
     var entity_id = options.entity_id;
     var entity_options = (options.entity_options) ? options.entity_options : {};
@@ -222,7 +221,7 @@
     var entity_name = selection_options.entity_name || "Unnamed Polity";
 
     if (is_new_entity) {
-      var new_entity_obj = createPolygon(current_path, new_entity.options);
+      var new_entity_obj = createPolygon(coords, new_entity.options);
       main.entities.push(new_entity_obj);
       renameEntity(entity_id, entity_name, date, true);
 

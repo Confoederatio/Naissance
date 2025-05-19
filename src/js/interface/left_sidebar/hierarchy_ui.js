@@ -17,6 +17,7 @@
       group_context_menu_function: "printGroupActionsNavigationMenuHandler",
       rename_function: "renameEntity"
     });
+
     initHierarchyEvents();
   }
 }
@@ -66,7 +67,14 @@
       e.preventDefault();
       var dragged_hierarchy = getHierarchyID(dragged);
       var dragged_type = dragged.dataset.type;
+      
+      // Find the closest parent element with the desired class
       var target = e.target;
+      while (
+        target && !target.classList.contains('group') && !target.classList.contains('entity') && !target.classList.contains('hierarchy')
+      )
+        target = target.parentElement;
+      
       var target_hierarchy = getHierarchyID(target);
 
       //Guard clause; prevent cross-contamination between hierarchies
