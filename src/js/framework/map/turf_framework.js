@@ -305,8 +305,7 @@
           var turf_simplified = turf.simplify(turf_obj, new_options);
 
           //Return statement
-          return (options.return_leaflet) ? 
-            convertToLeaflet(turf_simplified) : turf_simplified;
+          return (options.return_leaflet) ? convertToLeaflet(turf_simplified) : turf_simplified;
         } catch (e) {
           //Return statement; guard clause
           return format;

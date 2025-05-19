@@ -8,7 +8,6 @@
     var coords = arg3_coords;
 
     //Declare local instance variables
-    var brush_obj = main.brush;
     var date_string = getTimestamp(date);
     var entity_key = getEntity(entity_id, { return_key: true });
     var hierarchy_obj = main.hierarchies.hierarchy;
@@ -17,13 +16,8 @@
     var entity_obj = (typeof entity_id != "object") ?
       main.entities[entity_key] : entity_id;
 
-    //console.log(`entity_key:`, entity_key, brush_obj.entity_options.className);
-
     if (entity_obj) {
-      var history_obj = (!entityIsBrush(entity_id)) ?
-        entity_obj.options.history : main.brush.entity_options.history;
-
-      //Make sure history object is initialised
+      //Make sure history object is initailised
       if (!entity_obj.options.history) entity_obj.options.history = {};
 
       //Fetch actual coords
@@ -35,8 +29,8 @@
           convertMaptalksCoordsToTurf(entity_obj)[0];
 
       //Create new history object
-      if (!history_obj[date_string])
-        history_obj[date_string] = {
+      if (!entity_obj.options.history[date_string])
+        entity_obj.options.history[date_string] = {
           id: convertTimestampToInt(date_string),
 
           coords: actual_coords,
@@ -45,7 +39,7 @@
 
       //Manually transcribe options to avoid recursion
       var all_option_keys = Object.keys(options);
-      var local_history = history_obj[date_string];
+      var local_history = entity_obj.options.history[date_string];
 
       local_history.coords = actual_coords;
       if (!local_history.options) local_history.options;
@@ -60,14 +54,14 @@
           JSON.stringify(old_history_entry.coords) == JSON.stringify(local_history.coords) && JSON.stringify(old_history_entry.options) == JSON.stringify(local_history.options) &&
           old_history_entry.id != local_history.id
         )
-          delete history_obj[date_string];
+          delete entity_obj.options.history[date_string];
 
       //Delete local_history.options if not needed
       if (!local_history.options)
         delete local_history.options;
 
       //Fix entity_obj history order
-      history_obj = sortObject(history_obj, "numeric_ascending");
+      entity_obj.options.history = sortObject(entity_obj.options.history, "numeric_ascending");
     }
   }
 
@@ -289,21 +283,19 @@
     var date = (arg1_date) ? arg1_date : main.date;
 
     //Declare local instance variables
-    var current_timestamp = convertTimestampToInt(getTimestamp(date));
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
     var history_frame = {
       coords: [],
       options: {}
     };
-    var history_obj = (!entityIsBrush(entity_id)) ?
-        entity_obj.options.history : main.brush.entity_options.history;
+    var current_timestamp = convertTimestampToInt(getTimestamp(date));
 
-    var all_history_frames = Object.keys(history_obj);
+    var all_history_frames = Object.keys(entity_obj.options.history);
 
     //Iterate over all_history_frames
     for (var i = 0; i < all_history_frames.length; i++)
       if (convertTimestampToInt(all_history_frames[i]) <= current_timestamp) {
-        var local_history_frame = history_obj[all_history_frames[i]];
+        var local_history_frame = entity_obj.options.history[all_history_frames[i]];
 
         //is_founding handler
         if (i == 0) {
