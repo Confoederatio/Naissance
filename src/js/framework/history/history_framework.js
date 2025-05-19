@@ -25,7 +25,9 @@
       if (!actual_coords && options && options.coords)
         actual_coords = options.coords;
       if (!actual_coords)
-        actual_coords = (old_history_entry && old_history_entry.coords) ? old_history_entry.coords : convertMaptalksCoordsToTurf(entity_obj)[0];
+        actual_coords = (old_history_entry) ?
+          old_history_entry.coords :
+          convertMaptalksCoordsToTurf(entity_obj)[0];
 
       //Create new history object
       if (!entity_obj.options.history[date_string])
@@ -39,9 +41,8 @@
       var all_option_keys = Object.keys(options);
       var local_history = entity_obj.options.history[date_string];
 
-      // Always update coords to the most up-to-date value
       local_history.coords = actual_coords;
-      if (!local_history.options) local_history.options;
+      if (!local_history.options) local_history.options = {};
 
       for (var i = 0; i < all_option_keys.length; i++)
         if (!["history", "type"].includes(all_option_keys[i]))
