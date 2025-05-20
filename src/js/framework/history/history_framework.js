@@ -1,11 +1,20 @@
 //Initialise history frame functions
 {
-  function createHistoryFrame (arg0_entity_id, arg1_date, arg2_options, arg3_coords) {
+  /**
+   * createHistoryFrame() - Creates a new history frame for a given entity.
+   * @param {String} arg0_entity_id 
+   * @param {Object} arg1_date 
+   * @param {Object} arg2_options
+   *  @param {Array<Array<Number, Number>>} [arg2_options.coords]
+   *  @param {Object} [arg2_options."key_name"]
+   * 
+   * @returns {Object}
+   */
+  function createHistoryFrame (arg0_entity_id, arg1_date, arg2_options) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
     var date = arg1_date;
     var options = arg2_options;
-    var coords = arg3_coords;
 
     //Declare local instance variables
     var date_string = getTimestamp(date);
@@ -21,13 +30,11 @@
       if (!entity_obj.options.history) entity_obj.options.history = {};
 
       //Fetch actual coords
-      var actual_coords = coords;
-      if (!actual_coords && options && options.coords)
-        actual_coords = options.coords;
-      if (!actual_coords)
-        actual_coords = (old_history_entry) ?
-          old_history_entry.coords :
-          convertMaptalksCoordsToTurf(entity_obj)[0];
+      var actual_coords = options.coords;
+        if (!actual_coords)
+          actual_coords = (old_history_entry) ?
+            old_history_entry.coords :
+            convertMaptalksCoordsToTurf(entity_obj)[0];
 
       //Create new history object
       if (!entity_obj.options.history[date_string])
@@ -63,8 +70,18 @@
       //Fix entity_obj history order
       entity_obj.options.history = sortObject(entity_obj.options.history, "numeric_ascending");
     }
+
+    //Return statement
+    return entity_obj;
   }
 
+  /**
+   * deleteHistoryFrame() - Deletes a history frame for a given entity.
+   * @param {String} arg0_entity_id 
+   * @param {Object} arg1_date 
+   * 
+   * @returns {Object}
+   */
   function deleteHistoryFrame (arg0_entity_id, arg1_date) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
@@ -92,8 +109,16 @@
         if (Object.keys(entity_obj.options.history).length == 0)
           deleteEntity(entity_id, true);
       }
+
+    //Return statement
+    return entity_obj;
   }
 
+  /**
+   * editHistoryFrame() - Edits a history frame for a given entity.
+   * @param {String} arg0_entity_id 
+   * @param {Object} arg1_date 
+   */
   function editHistoryFrame (arg0_entity_id, arg1_date) {
     //Convert from parameters
     var entity_id = arg0_entity_id;

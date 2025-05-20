@@ -493,7 +493,9 @@
 
       if (isEntityHidden(entity_id, date) && coords != undefined)
         showEntity(entity_id);
-      createHistoryFrame(entity_id, date, {}, coords);
+      createHistoryFrame(entity_id, date, {
+        coords: coords
+      });
     } else {
       hideEntity(entity_id, date);
     }

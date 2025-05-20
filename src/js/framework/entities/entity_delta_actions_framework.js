@@ -217,7 +217,9 @@
       }
     };
     
-    createHistoryFrame(new_entity, date, {}, coords);
+    createHistoryFrame(new_entity, date, {
+      coords: coords
+    });
     var entity_name = selection_options.entity_name || "Unnamed Polity";
 
     if (is_new_entity) {
