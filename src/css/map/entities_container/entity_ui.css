@@ -338,6 +338,11 @@
     }
   }
 }
+#customisation-top-parent:has(#customisation-options[page="other"]) {
+  height: 30rem;
+  transition: all 0.5s ease;
+}
+
 /* -- Hides default context menu background -- */
 .customisation-top-parent.hidden {
   opacity: 0;
