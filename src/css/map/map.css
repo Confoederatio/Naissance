@@ -11,6 +11,6 @@
 div.leaflet-control-zoom, .maptalks-attribution {
   display: none !important;
 }
-.leaflet-popup {
+.entity-ui-pane {
   text-align: inherit !important;
 }

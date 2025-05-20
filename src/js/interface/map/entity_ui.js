@@ -31,7 +31,7 @@
 
   function closeUnpinnedEntityContextMenus () {
     //Declare local instance variables
-    var all_entity_context_menus = document.querySelectorAll(`.leaflet-popup:has(.entity-ui-container)`);
+    var all_entity_context_menus = document.querySelectorAll(`.entity-ui-pane:has(.entity-ui-container)`);
 
     //Iterate over all_entity_context_menus
     for (var i = 0; i < all_entity_context_menus.length; i++) {
@@ -62,7 +62,7 @@
     if (!options.className) options.className = "default";
 
     //Declare local instance variables
-    content = `<div class = "leaflet-popup${(options.className) ? ` ${options.className}` : ""}">${content}</div>`;
+    content = `<div class = "entity-ui-pane${(options.className) ? ` ${options.className}` : ""}">${content}</div>`;
     var popup = new maptalks.ui.UIMarker(coords, {
       draggable: true,
       single: false,
@@ -71,7 +71,7 @@
     popup.addTo(map).show();
 
     //interfaces[options.className]
-    var popup_window_el = document.querySelector(`.leaflet-popup${(options.className) ? `[class~="${options.className}"]` : ""}`);
+    var popup_window_el = document.querySelector(`.entity-ui-pane${(options.className) ? `[class~="${options.className}"]` : ""}`);
 
     if (!interfaces[options.className]) {
       interfaces[options.className] = {
@@ -181,7 +181,7 @@
     var entity_id = arg0_entity_id;
 
     //Declare local instance variable
-    var entity_selector = `[class="leaflet-popup ${entity_id}"]`;
+    var entity_selector = `[class="entity-ui-pane ${entity_id}"]`;
     var entity_ui_obj = global.interfaces[entity_id];
     var page = entity_ui_obj.page;
     

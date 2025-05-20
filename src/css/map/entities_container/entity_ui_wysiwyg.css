@@ -1,7 +1,7 @@
-.leaflet-popup:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-header {
+.entity-ui-pane:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-header {
   transform: translateY(9.5rem);
 }
-.leaflet-popup:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-context-menu {
+.entity-ui-pane:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-context-menu {
   transform: translateY(9.5rem);
 }
 #entity-ui-customisation-other {

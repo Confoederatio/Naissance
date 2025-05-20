@@ -36,7 +36,7 @@
 }
 
 /* -- 1. Entity UI Title -- */
-.leaflet-popup #entity-header {
+.entity-ui-pane #entity-header {
   padding-bottom: 0px;
 
   .button {

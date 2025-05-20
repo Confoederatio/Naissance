@@ -63,7 +63,7 @@ config.defines.common = {
       undo_redo_page: `#left-sidebar #undo-redo-tab`,
 
     //Map
-    entity_ui: `.leaflet-popup`,
+    entity_ui: `.entity-ui-pane`,
       //Entity UI - All of these are prefixed by {entity_selector}
       //Entity UI - 1st Row - Header
       entity_ui_header: `#entity-header`, //The query selector for the Entity UI header.

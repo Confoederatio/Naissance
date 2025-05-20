@@ -91,7 +91,7 @@
     var context_menu_el = document.getElementById(`entity-ui-context-menu-${entity_id}`);
     var entity_obj = getEntity(entity_id);
     var history_key = getAbsoluteHistoryFrame(entity_id, entry_date, { return_key: true });
-    var popup_el = document.querySelector(`.leaflet-popup[class~='${entity_id}']`);
+    var popup_el = document.querySelector(`.entity-ui-pane[class~='${entity_id}']`);
 
     //Delete polity history if it exists
     if (entity_obj.options.history)

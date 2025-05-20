@@ -34,7 +34,7 @@ window.date_fields = [day_field, month_field, year_field, hour_field, minute_fie
       if (brush_obj.editing_entity != local_entity_id || !options.reload_map)
         if (local_history) {
         //Update UIs for each open popup
-        let local_popup = document.querySelector(`.leaflet-popup[class~="${local_entity_id}"]`);
+        let local_popup = document.querySelector(`.entity-ui-pane[class~="${local_entity_id}"]`);
 
         if (local_popup) {
           let name_field = local_popup.querySelector(`input#polity-name`);

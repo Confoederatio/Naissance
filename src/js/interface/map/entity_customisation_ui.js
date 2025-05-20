@@ -50,8 +50,8 @@
     var current_history = getHistoryFrame(entity_id, main.date);
     var entity_el = getEntityElement(entity_id);
 
-    var entity_customisation_content_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
-    var entity_customisation_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_colour_picker}`;
+    var entity_customisation_content_selector = `div.entity-ui-pane[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
+    var entity_customisation_selector = `div.entity-ui-pane[class~="${entity_id}"] ${common_selectors.entity_colour_picker}`;
     var entity_altitude = returnSafeNumber(current_history.options.altitude);
     var entity_maximum_zoom = returnSafeNumber(current_history.options.maximum_zoom_level);
     var entity_minimum_zoom = returnSafeNumber(current_history.options.minimum_zoom_level);
@@ -323,7 +323,7 @@
     
     //Declare local instance variables
     var common_selectors = config.defines.common.selectors;
-    var entity_customisation_content_selector = `div.leaflet-popup[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
+    var entity_customisation_content_selector = `div.entity-ui-pane[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
     var variable_list_obj = getVariableListObject(entity_id);
 
     var entity_variable_list_el = createContextMenu({
