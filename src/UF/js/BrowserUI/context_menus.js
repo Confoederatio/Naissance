@@ -519,9 +519,9 @@
       //Place date_length containers on separate lines for better readability
       html_string.push(`
         <div id = "date-container">
-          <input id = "years-input" placeholder = "2000" value = "2000"></input>
-          <input id = "months-input" placeholder = "January" value = "January"></input>
-          <input id = "days-input" placeholder = "1st" value = "1st" size = "4"></input>
+          <input id = "years-input" size = "6" placeholder = "2000" value = "2000"></input>
+          <input id = "months-input" size = "6" placeholder = "January" value = "January"></input>
+          <input id = "days-input" size = "5" placeholder = "1st" value = "1st" size = "4"></input>
         </div>
         <div id = "clock-container">
           <input id = "hours-input" placeholder = "00" value = "00" size = "2"></input> :

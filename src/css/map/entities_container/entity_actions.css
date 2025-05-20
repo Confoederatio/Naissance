@@ -10,5 +10,6 @@
     position: absolute;
 
     bottom: 0px;
+    max-width: 20rem;
   }
 }

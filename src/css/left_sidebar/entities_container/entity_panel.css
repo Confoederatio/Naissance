@@ -12,6 +12,7 @@
   transition: left 1.25s ease;
 
   .entity-ui-pane {
+    width: fit-content;
     pointer-events: auto;
   }
 }
