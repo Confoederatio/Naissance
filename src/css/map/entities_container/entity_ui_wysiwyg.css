@@ -5,6 +5,7 @@
 
   #customisation-options {
     display: flex;
+    overflow: auto;
   }
 }
 

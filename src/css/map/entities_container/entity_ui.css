@@ -237,6 +237,9 @@
 
 /* -- 3. Entity UI Customisation -- */
 /* -- Context Menu Cell Styling -- */
+#customisation-top-parent #customisation-options {
+  position: sticky;
+}
 #customisation-top-parent #customisation-options .context-menu {
   overflow-x: hidden;
   overflow-y: auto;
