@@ -63,12 +63,14 @@
 
     //Declare local instance variables
     content = `<div class = "entity-ui-pane${(options.className) ? ` ${options.className}` : ""}">${content}</div>`;
-    var popup = new maptalks.ui.UIMarker(coords, {
+    document.querySelector("#entity-panel-container").innerHTML = content;
+    //This is old popup code to display the UI on the map instead
+    /*var popup = new maptalks.ui.UIMarker(coords, {
       draggable: true,
       single: false,
       content: content
     });
-    popup.addTo(map).show();
+    popup.addTo(map).show();*/
 
     //interfaces[options.className]
     var popup_window_el = document.querySelector(`.entity-ui-pane${(options.className) ? `[class~="${options.className}"]` : ""}`);
@@ -197,7 +199,7 @@
       //Create collapsible sections after content is loaded
       createSection({
         selector: `${entity_selector} #entity-timeline-data-header, ${entity_selector} #entity-ui-timeline-graph-container, ${entity_selector} #entity-ui-timeline-bio-container`,
-        is_collapsed: true
+        //is_collapsed: true
       });
 
       createSection({

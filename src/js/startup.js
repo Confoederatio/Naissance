@@ -165,6 +165,7 @@ if (!global.config) global.config = {};
 
   //UI loop
   initialiseMapEventDrawLoops();
+  initialiseUIDrawLoops();
 }
 
 //Test scripts

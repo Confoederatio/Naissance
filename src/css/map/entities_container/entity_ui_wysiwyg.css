@@ -1,20 +1,23 @@
-.entity-ui-pane:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-header {
-  transform: translateY(9.5rem);
-}
-.entity-ui-pane:has(#customisation-top-parent:not(.uf-minimised) [page="description"]) #entity-actions-context-menu {
-  transform: translateY(9.5rem);
-}
 #entity-ui-customisation-other {
-}
-#entity-ui-customisation-other:has([page="description"]) {
-  height: 22rem;
-  transition: all 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 
-  .unique.context-menu {
-    max-height: calc(20rem - 8px) !important;
+  #customisation-options {
+    display: flex;
   }
 }
 
+#customisation-top-parent:has(#customisation-options[page="description"]) {
+  height: 30rem;
+  transition: all 0.5s ease;
+}
+
+[page="description"] {
+  flex-grow: 1;
+  overflow-y: auto;
+  position: sticky;
+}
 [page="description"] #wysiwyg-editor {
   position: relative;
 

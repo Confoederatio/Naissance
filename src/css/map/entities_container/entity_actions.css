@@ -1,7 +1,14 @@
+/* -- Entity Actions Context Menu Styling -- */
 #entity-actions-context-menu {
-  position: absolute;
   overflow: visible;
-}
-#entity-actions-context-menu .context-menu {
-  overflow: visible;
+  
+  .context-menu:not([order]) {
+    position: static;
+    overflow: visible;
+  }
+  .context-menu[order] {
+    position: absolute;
+
+    bottom: 0px;
+  }
 }

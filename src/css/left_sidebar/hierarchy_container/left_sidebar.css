@@ -13,3 +13,9 @@
   font-family: "Barlow";
   font-weight: 300;
 }
+#left-sidebar {
+  transition: left 0.5s ease;
+}
+#left-sidebar.hide-left-sidebar {
+  left: calc(var(--left-sidebar-width)*-1 - 5px);
+}

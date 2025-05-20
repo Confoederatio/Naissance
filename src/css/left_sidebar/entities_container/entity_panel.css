@@ -1,0 +1,13 @@
+/* -- Entity Panel Container Styling/Positioning -- */
+.entity-panel-container.bottom-left {
+  position: fixed;
+  z-index: 1;
+
+  bottom: 10px;
+  left: 10px;
+
+  transition: left 1.25s ease;
+}
+.entity-panel-container.bottom-left:not(:has(.entity-ui-pane)) {
+  left: calc(var(--left-sidebar-width) + 5px + 8px*2);
+}
