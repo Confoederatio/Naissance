@@ -1,5 +1,6 @@
 /* -- Entity Panel Container Styling/Positioning -- */
 .entity-panel-container.bottom-left {
+  overflow-y: auto;
   position: fixed;
   z-index: 1;
 
