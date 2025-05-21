@@ -91,12 +91,12 @@
   }
 }
 #entity-ui-timeline-graph-container {
-  padding-bottom: calc(0.5vw + 8px);
+  padding-bottom: calc(0.5rem + 8px);
 
   .entity-ui-graph {
     height: var(--entity-ui-graph-height);
-    margin-left: calc(1vw + var(--entity-ui-graph-height)/4);
-    margin-top: 0.5vw;
+    margin-left: calc(1rem + var(--entity-ui-graph-height)/4);
+    margin-top: 0.5rem;
     width: calc(100% - var(--entity-ui-graph-height)/2 - var(--entity-ui-graph-margin-right));
   }
   .entity-ui-graph:hover {
@@ -104,14 +104,14 @@
   }
   .entity-ui-graph-x-axis {
     clear: both;
-    margin-left: calc(2vw);
+    margin-left: calc(2rem);
     width: calc(100% - var(--entity-ui-graph-height)/2 - var(--entity-ui-graph-margin-right));
   }
   .entity-ui-graph-y-axis {
     position: absolute;
 
-    height: calc(var(--entity-ui-graph-height) - 0.5vw*2 - 16px);
-    left: calc(0.2vw);
+    height: calc(var(--entity-ui-graph-height) - 0.5rem*2 - 16px);
+    left: calc(0.2rem);
     top: calc(3rem + 12px);
     width: 3px;
     border-left: 1px solid white;
