@@ -11,23 +11,22 @@
   padding-left: 12px;
   padding-bottom: 8px;
   width: var(--entity-ui-width);
-
   transition: all 0.5s, padding 1s;
-}
-.entity-ui-container.hidden {
-  margin: 0px;
-  max-height: 0px;
-  overflow-y: auto;
-  padding-bottom: 0px !important;
-  padding-top: 0px !important;
-}
-.entity-ui-container.hidden::-webkit-scrollbar {
-  display: none;
-}
 
+  & .hidden {
+    margin: 0px;
+    max-height: 0px;
+    overflow-y: auto;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+  
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
 .entity-ui-container[id*="-header"]:not(#entity-header) {
   display: flex;
-
   align-items: center;
 
   > img {
@@ -47,22 +46,22 @@
     height: calc(var(--entity-ui-title-button-size));
     margin-left: calc(var(--entity-ui-title-button-margin));
     margin-right: calc(var(--entity-ui-title-button-margin));
-    transition: all 1s, background-color 0.5s;
+    transition: all 1s, background-color 0.5s; /* Transition defined on base state */
     width: calc(var(--entity-ui-title-button-size));
   }
   .button:hover {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     cursor: pointer;
-    transition: all 1s, background-color 0.5s;
+    /* Removed redundant transition property */
   }
+
   #polity-id {
     line-height: 1rem;
     margin-bottom: 0.5rem;
   }
   #polity-name {
     position: relative;
-
     background: none;
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.7);
@@ -81,15 +80,15 @@
 .entity-select {
   background: none;
   border: none;
-
   color: white;
   font-family: "Barlow";
   font-size: calc(1.25rem);
   font-weight: 300;
   text-transform: uppercase;
-}
-.entity-select > option {
-  background-color: black;
+
+  > option {
+    background-color: black;
+  }
 }
 #entity-ui-timeline-graph-container {
   padding-bottom: calc(0.5vw + 8px);
@@ -110,67 +109,95 @@
   }
   .entity-ui-graph-y-axis {
     position: absolute;
+
     height: calc(var(--entity-ui-graph-height) - 0.5vw*2 - 16px);
     left: calc(0.2vw);
     top: calc(3rem + 12px);
     width: 3px;
-
     border-left: 1px solid white;
-  }
-  #entity-ui-timeline-graph-y-top-axis-label {
-    position: absolute;
-    left: calc(0.2rem);
-    top: calc(1.5rem + 16px);
-  }
-  #entity-ui-timeline-graph-y-bottom-axis-label {
-    position: absolute;
-    bottom: 0px;
-    left: calc(0.2rem);
   }
   .graph-label {
     font-size: 0.75rem;
   }
 }
+#entity-ui-timeline-graph-y-bottom-axis-label {
+  position: absolute;
+  bottom: 0px;
+  left: calc(0.2rem);
+}
+#entity-ui-timeline-graph-y-top-axis-label {
+  position: absolute;
+  left: calc(0.2rem);
+  top: calc(1.5rem + 16px);
+}
+
 #entity-ui-timeline-bio-subcontainer {
   max-height: 10rem;
   overflow-y: auto;
 
+  &.hidden {
+    margin: 0px;
+    max-height: 0px;
+  }
+
   .timeline-bio-table {
     width: 97.5%;
 
-    .bio-add-keyframe-icon {
-      border-radius: 50%;
-      left: 0px;
-      position: relative;
+    & td {
+      border: 0px;
+      display: table-cell;
+      font-size: 0.75rem;
+
+      & input[type="checkbox"] {
+        position: relative;
+        top: 0.1rem;
+        margin-right: 0.3rem;
+      }
+      & span:not(.bio-box) {
+        display: inline-block;
+        width: calc(100% - 2.7rem - 12px);
+      }
     }
-    .bio-add-keyframe-icon:hover {
+    & tr:not(.no-select):hover {
       background-color: var(--selection-colour);
-      padding: 0.5rem;
-      left: 0.5rem;
     }
-    .bio-add-keyframe-icon:hover, .bio-context-menu-icon:hover, .bio-jump-to-icon:hover {
-      cursor: pointer;
+    & tr td, tr th {
+      padding-left: 5px;
     }
-    .bio-add-keyframe-icon, .bio-context-menu-icon, .bio-jump-to-icon {
+    .bio-add-keyframe-icon,
+    .bio-context-menu-icon,
+    .bio-jump-to-icon {
       height: 0.75rem;
       width: 0.75rem;
-
       float: right;
       margin-top: 0.1rem;
       margin-right: 0.25rem;
       vertical-align: middle;
-
       transition: all 0.25s ease;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .bio-add-keyframe-icon {
+      border-radius: 50%;
+      left: 0px;
+      position: relative;
+
+      &:hover {
+        background-color: var(--selection-colour);
+        padding: 0.5rem;
+        left: 0.5rem;
+      }
+    }
+    .bio-jump-to-icon {
+      margin-right: 0.5rem;
     }
     .bio-box {
       position: relative;
       top: 0.05rem;
-
       font-size: 1.4rem;
       line-height: 0.85rem;
-    }
-    .bio-jump-to-icon {
-      margin-right: 0.5rem;
     }
     .header-padding {
       height: 0.5rem;
@@ -178,285 +205,223 @@
     .top-bio-header th:nth-child(2) {
       font-weight: 300;
       font-size: 0.9rem;
+
+      & input[type="checkbox"] {
+        position: relative;
+        top: 0.1rem;
+      }
     }
-    .top-bio-header th:nth-child(2) input[type="checkbox"] {
-      position: relative;
-      top: 0.1rem;
-    }
-  }
-  .timeline-bio-table td {
-    border: 0px;
-    display: table-cell;
-    font-size: 0.75rem;
-  }
-  .timeline-bio-table td span:not(.bio-box) {
-    display: inline-block;
-    width: calc(100% - 2.7rem - 12px);
-  }
-  .timeline-bio-table tr:not(.no-select):hover {
-    background-color: var(--selection-colour);
-  }
-  .timeline-bio-table tr td, .timeline-bio-table tr th {
-    padding-left: 5px;
-  }
-  .timeline-bio-table tr td input[type="checkbox"] {
-    position: relative;
-    top: 0.1rem;
-    margin-right: 0.3rem;
   }
 }
-#entity-ui-timeline-bio-subcontainer.hidden {
-  margin: 0px;
-  max-height: 0px;
+
+/* -- 2.1. Entity UI Graph/Bio - Context Menus -- */
+.bio-context-menu-container {
+  position: fixed;
+  left: calc(var(--entity-ui-width) + 12px);
+  width: var(--context-menu-width);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  color: black;
+  font-size: 1rem;
 }
-
-  /* -- 2.1. -- Entity UI Graph/Bio - Context Menus -- */
-  .bio-context-menu-container {
-    position: fixed;
-    left: calc(var(--entity-ui-width) + 12px);
-    width: var(--context-menu-width);
-
-    background-color: rgb(255, 255, 255);
-    border-radius: 5px;
-    color: black;
-    font-size: 1rem;
-  }
-  .bio-context-menu-container .context-menu-button {
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.5rem;
-
-    transition: all 0.25s ease;
-  }
-  .context-menu-button .icon {
-    margin-bottom: 0.15rem;
-    margin-right: 0.3rem;
-    vertical-align: middle;
-  }
+.bio-context-menu-container .context-menu-button {
+  padding: 0.5rem; /* Combined padding properties */
+  transition: all 0.25s ease;
+}
+.bio-context-menu-container .context-menu-button .icon {
+  margin-bottom: 0.15rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
 
 /* -- 3. Entity UI Customisation -- */
-/* -- Context Menu Cell Styling -- */
-#customisation-top-parent #customisation-options {
-  position: sticky;
+#customisation-top-parent {
+  align-items: stretch;
+  display: flex;
+  height: 14rem; /* Default height */
+  width: calc(var(--entity-ui-width) + var(--entity-ui-padding));
+  /* transition for height changes is defined below where height is changed */
 }
-#customisation-top-parent #customisation-options .context-menu {
+
+/* Height transition for specific pages */
+#customisation-top-parent:has(#customisation-options[page="other"]),
+#customisation-top-parent:has(#customisation-options[page="description"]) {
+  height: 30rem;
+  transition: all 0.5s ease; /* Apply transition when height changes */
+}
+
+#customisation-top-parent #entity-ui-customisation-other {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.85);
+  font-family: "Barlow";
+  font-size: 0.85rem;
+  font-weight: 300;
+  padding: 12px;
+  width: calc(var(--entity-ui-width) - var(--context-menu-width));
+  /* Merged from addendum */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+#customisation-top-parent #entity-ui-customisation-other #customisation-tab-container {
+  display: inline-block;
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  color: white;
+  font-family: "Barlow"; /* Could inherit, but explicitly set */
+  font-size: 1rem;
+  font-weight: 300; /* Could inherit, but explicitly set */
+  text-transform: uppercase;
+  padding-bottom: 0.2rem;
+}
+#customisation-top-parent #entity-ui-customisation-other #customisation-tab-container .tabs-container > span {
+  width: calc((var(--entity-ui-width)/var(--entity-ui-customisation-tabs))*0.45);
+}
+
+#customisation-top-parent #entity-ui-customisation-other #customisation-options {
+  position: sticky; /* From original #customisation-top-parent #customisation-options */
+  /* Merged from addendum */
+  display: flex;
+  overflow: auto; /* From addendum, overrides .context-menu's overflow-y if it's the same element */
+}
+/* Styles for .context-menu specifically within #customisation-options */
+#customisation-top-parent #entity-ui-customisation-other #customisation-options .context-menu {
   overflow-x: hidden;
   overflow-y: auto;
 }
+/* Unique context menu directly under #entity-ui-customisation-other */
+#customisation-top-parent #entity-ui-customisation-other .unique.context-menu > table {
+  overflow-y: auto;
+  table-layout: fixed;
+  width: 100%;
+}
+#customisation-top-parent #entity-ui-customisation-other .unique.context-menu td > div {
+  padding: 0.1rem;
+}
+
+/* -- General Context Menu Cell Styling (within #customisation-top-parent) -- */
 #customisation-top-parent .context-menu td:has(div span.button) {
   background-color: rgba(0, 0, 0, 0);
   border: 2px solid white;
   color: white;
-
   transition: all 0.25s ease;
 }
 #customisation-top-parent .context-menu td:has(div span.button):hover {
   background-color: rgba(255, 255, 255, 1);
-  border: 2px solid white;
+  border: 2px solid white; /* Explicitly keep border for hover, though `all` in transition covers it */
   color: black;
 }
 #customisation-top-parent .context-menu span.button {
   padding: 0.25rem;
 }
-
 #customisation-top-parent .context-menu td:has(.header) {
   vertical-align: middle;
 }
 #customisation-top-parent .context-menu input[type="text"] {
   width: calc(100% - 0.5rem);
 }
+/* More specific input styling for variable list context menu */
 #customisation-top-parent .variable-list-container.context-menu input[type="text"] {
   margin-left: 0.1rem;
   width: 8rem;
 }
 
-#customisation-top-parent {
-  align-items: stretch;
-  display: flex;
-  height: 14rem;
-  width: calc(var(--entity-ui-width) + var(--entity-ui-padding));
-
-  #entity-ui-customisation-colour {
-    flex: 1;
-
-    background-color: rgba(0, 0, 0, 0.85);
-    max-width: calc(var(--entity-ui-width)*0.40);
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding: 12px;
-    padding-left: 4px;
-    padding-top: 4px;
-
-    :is(.brightness-range-container, .opacity-range-container) .small-header {
-      font-size: 0.85rem;
-      line-height: 1rem;
-      margin-bottom: 0.1rem;
-      margin-left: 0.5rem;
-      margin-right: 0rem;
-      vertical-align: middle;
-    }
-    #colour-picker {
-      margin-right: calc(var(--entity-ui-width)*0.10);
-    }
-  }
-  #entity-ui-customisation-other {
-    flex: 1;
-
-    background-color: rgba(0, 0, 0, 0.85);
-    font-family: "Barlow";
-    font-size: 0.85rem;
-    font-weight: 300;
-    padding: 12px;
-    width: calc(var(--entity-ui-width) - var(--context-menu-width));
-
-    #customisation-tab-container {
-      display: inline-block;
-      position: sticky;
-      top: 0px;
-      width: 100%;
-
-      color: white;
-      font-family: "Barlow";
-      font-size: 1rem;
-      font-weight: 300;
-      text-transform: uppercase;
-
-      padding-bottom: 0.2rem;
-
-      .tabs-container > span {
-        width: calc((var(--entity-ui-width)/var(--entity-ui-customisation-tabs))*0.45);
-      }
-    }
-    .unique.context-menu > table {
-      overflow-y: auto;
-      table-layout: fixed;
-      width: 100%;
-    }
-    .unique.context-menu td > div {
-      padding: 0.1rem;
-    }
-  }
-}
-#customisation-top-parent:has(#customisation-options[page="other"]) {
-  height: 30rem;
-  transition: all 0.5s ease;
-}
-
-/* -- Post-addendum to refactor and integrate -- */
-#entity-ui-customisation-other {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-
-  #customisation-options {
-    display: flex;
-    overflow: auto;
-  }
-}
-
-#customisation-top-parent:has(#customisation-options[page="description"]) {
-  height: 30rem;
-  transition: all 0.5s ease;
-}
-
-[page="description"] {
+/* -- WYSIWYG Editor Styles -- */
+/* -- This CSS needs to be merged into context_menus.css -- */
+[page="description"] { /* This selector applies to #customisation-options when it has this attribute */
   flex-grow: 1;
   overflow-y: auto;
-  position: sticky;
 }
 [page="description"] #wysiwyg-editor {
   position: relative;
-
   border: 1px solid transparent;
   bottom: 1rem;
-
-  /* -- Toolbar -- */
-  .toolbar {
-    background-color: rgb(35, 35, 35);
-    border: 1px solid white;
-    position: sticky;
-    top: 0;
-  }
-  .toolbar .editor-button.icon {
-    transition: all 0.5s ease;
-  }
-  .toolbar .editor-button.icon img {
-    filter: invert(1);
-  }
-  .toolbar .editor-button.icon:not(:hover) img {
-    opacity: 0.83;
-  }
-  .toolbar .editor-button.icon:hover {
-    background-color: var(--selection-colour);
-    filter: brightness(2);
-    opacity: 1;
-  }
-  .submenu {
-    background-color: rgb(15, 15, 15);
-
-    .active {
-      background-color: rgb(50, 50, 50);
-    }
-  }
-  
-  .toolbar span:has(img) {
-    padding: 8px;
-  }
-
-  /* -- Content Area --*/
-  .content-area {
-    border: 1px solid transparent;
-  }
-  .content-area:not(:has(.visual-view:focus)) {
-    border-left: 1px solid white;
-  }
-  .content-area:has(.visual-view:focus) {
-    box-shadow: -4px 0 0 rgba(60, 60, 240);
-  }
-    .content-area p {
-      margin: 0px;
-    }
-
-  /* -- Modal View -- */
-  .modal-bg {
-    width: 100%;
-  }
-  .modal-content {
-    color: black;
-  }
-  .modal-wrapper {
-    border-radius: 8px;
-    min-height: 0px;
-    padding: 0.75rem;
-    transform: translate(35%, 20rem);
-
-    .close {
-      position: absolute;
-      height: 1rem;
-      top: 0px;
-      right: 0px;
-      width: 1rem;
-
-      color: black;
-      padding: 0.5rem;
-      text-align: center;
-      vertical-align: middle;
-    }
-  }
 }
-
-/* -- Hides default context menu background -- */
-.customisation-top-parent.hidden {
-  opacity: 0;
+/* Toolbar */
+[page="description"] #wysiwyg-editor .toolbar {
+  background-color: rgb(35, 35, 35);
+  border: 1px solid white;
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Ensure toolbar stays on top when scrolling content */
+}
+[page="description"] #wysiwyg-editor .toolbar .editor-button.icon {
+  transition: all 0.5s ease;
+}
+[page="description"] #wysiwyg-editor .toolbar .editor-button.icon img {
+  filter: invert(1);
+}
+[page="description"] #wysiwyg-editor .toolbar .editor-button.icon:not(:hover) img {
+  opacity: 0.83;
+}
+[page="description"] #wysiwyg-editor .toolbar .editor-button.icon:hover {
+  background-color: var(--selection-colour);
+  filter: brightness(2);
+  opacity: 1;
+}
+[page="description"] #wysiwyg-editor .toolbar span:has(img) {
+  padding: 8px;
+}
+/* Submenu */
+[page="description"] #wysiwyg-editor .submenu {
+  background-color: rgb(15, 15, 15);
+}
+[page="description"] #wysiwyg-editor .submenu .active {
+  background-color: rgb(50, 50, 50);
+}
+/* Content Area */
+[page="description"] #wysiwyg-editor .content-area {
+  border: 1px solid transparent; /* Base border */
+}
+[page="description"] #wysiwyg-editor .content-area:not(:has(.visual-view:focus)) {
+  border-left: 1px solid white;
+}
+[page="description"] #wysiwyg-editor .content-area:has(.visual-view:focus) {
+  box-shadow: -4px 0 0 rgba(60, 60, 240);
+}
+[page="description"] #wysiwyg-editor .content-area p {
   margin: 0px;
 }
+/* Modal View */
+[page="description"] #wysiwyg-editor .modal-bg {
+  width: 100%; /* Typically covers the screen for a modal */
+}
+[page="description"] #wysiwyg-editor .modal-content {
+  color: black;
+}
+[page="description"] #wysiwyg-editor .modal-wrapper {
+  border-radius: 8px;
+  min-height: 0px;
+  padding: 0.75rem;
+  transform: translate(35%, 20rem); /* This positioning is quite specific */
+}
+[page="description"] #wysiwyg-editor .modal-wrapper .close {
+  position: absolute;
+  height: 1rem;
+  top: 0px;
+  right: 0px;
+  width: 1rem;
+  color: black;
+  padding: 0.5rem;
+  text-align: center;
+  vertical-align: middle; /* Ensure icon/text inside is centered if needed */
+}
+
+/* -- Hides related to customisation parent -- */
+/* Assuming 'customisation-top-parent' can be a class for this rule as per original */
+.customisation-top-parent.hidden {
+  opacity: 0;
+  margin: 0px; /* Redundant if opacity 0 and not affecting layout, but kept from original */
+}
+/* Styles for when .entity-ui-container also has .customisation-top-parent class */
 .entity-ui-container.customisation-top-parent {
   background: none;
   padding: 0px;
-
   overflow: visible;
 }
+
 
 /* -- 4. Entity UI Actions -- */
 #entity-actions-context-menu {
@@ -465,21 +430,20 @@
 .entity-context-menu.actions-menu {
   margin-top: 6px;
   width: var(--entity-ui-width);
-
   background-color: rgba(0, 0, 0, 0.85);
   border-radius: 0px;
 }
 .entity-context-menu.actions-menu table {
-  padding-right: 8px;
+  padding-right: 8px; /* Applies to table, ensure this is intended over cells */
 }
 .entity-context-menu.actions-menu td {
-  background-color: rgba(0, 0, 0, 0) !important;
+  background-color: rgba(0, 0, 0, 0) !important; /* Kept !important as in original */
   color: white;
 }
 .entity-context-menu.actions-menu td:hover {
-  background-color: var(--selection-colour) !important;
-  border-radius: 0px;
+  background-color: var(--selection-colour) !important; /* Kept !important */
+  border-radius: 0px; /* Explicitly set, though often inherited or not needed on hover */
 }
 .entity-context-menu.actions-menu td span {
-  width: -webkit-fill-available;
+  width: -webkit-fill-available; /* Or width: 100%; for broader compatibility if possible */
 }
