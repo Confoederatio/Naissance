@@ -23,7 +23,7 @@
    *  @param {String} [arg0_options.config_key] - The main config key where action categories are stored, i.e. 'group_actions'.
    *  @param {String} [arg0_options.namespace] - The namespace in which to define global-level functions belonging to this index, i.e. 'GroupActions'.
    */
-  function createContextMenuIndex (arg0_options) { //[WIP] - Finish function body
+  function createContextMenuIndex (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
 
@@ -262,6 +262,196 @@
     config[`all_${options.config_key}`] = global[`getAll${options.namespace}s`]();
     config[`all_${options.config_key}_keys`] = global[`getAll${options.namespace}s`]({ return_keys: true });
     config[`${options.config_key}_lowest_order`] = global[`get${options.namespace}sLowestOrder`]();
+  }
+
+  /**
+   * createContextMenuInterface() - Creates a context menu interface framework. Note here that only the navigation menu is unique.
+   * @param [arg0_options]
+   *  @param {String} [arg0_options.anchor]
+   *  @param {String} [arg0_options.config_key]
+   *  @param {String} [arg0_options.interface_key=arg0_options.config_key]
+   *  @param {String} [arg0_options.left_margin] - The CSS calc attribute to prepend when calculating offset margins.
+   *  @param {String} [arg0_options.right_margin] - The CSS calc attribute to prepend when calculating offset margins.
+   *  @param {String} [arg0_options.namespace]
+   *  @param {String} [arg0_options.navigation_mode="list"] - Either 'icons'/'list'/'list_icons'. Brush actions: 'icons', Entity actions: 'list_icons', Entity keyframes: 'list', Group actions: 'list'
+   *  @param {String} [arg0_options.type="default"] - Either 'default'/'entity'/'group'
+   */
+  //NOTE: It would probably be better to use a long-context model; i.e. Gemini to merge all this boilerplate
+  function createContextMenuInterface (arg0_options) { //[WIP] - Finish function body
+    //Convert from parameters
+    var options = (arg0_options) ? arg0_options : {};
+
+    //Initialise options
+    if (!options.interface_key) options.interface_key = options.config_key;
+    if (!options.navigation_mode) options.navigation_mode = "list";
+    if (!options.type) options.type = "default";
+
+    //Declare local instance variables
+
+
+    /**
+     * close<namespace>ContextMenu() - Closes entity actions context menus for a specific order.
+     * @param {number} arg0_order
+     * @param {Object} [arg1_options]
+     */
+    global[`close${options.namespace}ContextMenu`] = function (arg0_order, arg1_options) {
+      //Convert from parameters
+      var order = returnSafeNumber(arg0_order, 1);
+      var local_options = (arg0_options) ? arg0_options : {};
+
+      //Declare local instance variables
+      var namespace_el = global[`get${options.namespace}sElement`](local_options);
+
+      //Fetch local namespace context menu and close it
+      var namespace_el = namespace_el.querySelector(`[order="${order}"]`);
+      namespace_el.remove();
+      global[`refresh${options.namespace}sContextMenus`](local_options);
+    };
+
+    global[`close${options.namespace}ContextMenus`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
+
+      //Declare local instance variables
+      var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({ ...local_options, return_selector: true });
+
+      //Fetch local namespace context menus and close all of them
+      var namespace_els = document.querySelectorAll(`${namespace_anchor_selector} > .context-menu`);
+
+      //Iterate over all namespace_els
+      for (var i = 0; i < namespace_els.length; i++)
+        namespace_els[i].remove();
+    };
+
+    global[`close${options.namespace}LastContextMenu`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
+
+      //Declare local instance variables
+      var namespace_open_orders = global[`get${options.namespace}OpenOrders`](local_options);
+
+      //Close last namespace context menu
+      global[`close${options.namespace}ContextMenu`](namespace_open_orders[namespace_open_orders.length - 1], local_options);
+    };
+
+    global[`get${options.namespace}sAnchorElement`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
+
+      //Declare local instance variables
+      var common_selectors = config.defines.common.selectors;
+
+      if (options.type == "default") {
+        var namespace_anchor_el = document.querySelector(options.anchor);
+
+        //Return statement
+        return (!local_options.return_selector) ?
+          namespace_anchor_el :
+          options.anchor;
+      } else if (options.type == "entity") {
+        var entity_el = getEntityElement(local_options.entity_id);
+
+        var entity_anchor_el = entity_el.querySelector(options.anchor);
+        var entity_selector = `${common_selectors.entity_ui}[class*=" ${local_options.entity_id}"]`;
+
+        //Return statement
+        return (!local_options.return_selector) ?
+          entity_anchor_el :
+          `${entity_selector} ${options.anchor}`;
+      } else if (options.type == "group") {
+        var group_el = getGroupElement(local_options.group_id);
+
+        var group_anchor_el = group_el.querySelector(options.anchor);
+        var group_selector = `${common_selectors.group_ui}[data-id="${group_id}"]`;
+
+        //Return statement
+        return (!local_options.return_selector) ?
+          group_anchor_el :
+          `${group_selector} ${options.anchor}`;
+      }
+    };
+
+    global[`get${options.namespace}sOpenOrders`] = function () {
+      //Declare local instance variables
+      var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({ return_selector: true });
+      var namespace_els = document.querySelectorAll(`${namespace_anchor_selector} > .context-menu`);
+      var unique_orders = [];
+
+      //Iterate over all namespace_els
+      for (var i = 0; i < namespace_els.length; i++) {
+        var local_order = namespace_els[i].getAttribute("order");
+
+        if (local_order != undefined) {
+          local_order = parseInt(local_order);
+          if (!unique_orders.includes(local_order))
+            unique_orders.push(local_order);
+        }
+      }
+
+      //Return statement
+      return unique_orders;
+    };
+
+    global[`get${options.namespace}sInputObject`] = function () {
+      //Declare local instance variables
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`]();
+      var inputs_obj = {};
+
+      //Iterate over all_context_menu_els
+      var all_context_menu_els = namespace_anchor_el.querySelectorAll(".context-menu");
+
+      for (var i = 0; i < all_context_menu_els.length; i++)
+        inputs_obj = dumbMergeObjects(inputs_obj, getInputsAsObject(all_context_menu_els[i]));
+
+      //Return statement
+      return inputs_obj;
+    };
+
+    global[`print${options.namespace}sContextMenu`] = function (arg0_namespace_obj, arg1_options) { //[WIP] -Finish function body
+      //Convert from parameters
+      var namespace_obj = arg0_namespace_obj;
+      var local_options = (arg1_options) ? arg1_options : {};
+
+      //Declare local instance variables
+      var common_selectors = config.defines.common.selectors;
+
+      if (options.type == "default") {
+        //Initialise interfaces.brush if it doesn't exist
+        if (!global.interfaces[options.interface_key]) global.interfaces[options.interface_key] = {
+          id: options.interface_key,
+          options: {}
+        };
+
+        //Refresh namespace context menus first; then append the current context menu
+        var context_menu_ui = {};
+
+        //Parse given .interface from namespace_obj if applicable
+        if (namespace_obj.interface) {
+          var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`]();
+          var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({ return_selector: true });
+          var namespace_order = (namespace_obj.order != undefined) ? namespace_obj.order : 1;
+          var lowest_order = config[`${options.config_key}_lowest_order`];
+
+          //Delete given order if already extant
+          if (namespace_anchor_el.querySelector(`[order="${namespace_order}"]`))
+            global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
+
+          //Append dummy context menu div first for context_menu_ui to append to
+          var context_menu_el = document.createElement("div");
+
+          context_menu_el.setAttribute("class", "context-menu");
+          context_menu_el.id = namespace_obj.id;
+          context_menu_el.setAttribute("order", namespace_order);
+          namespace_anchor_el.appendChild(context_menu_el);
+
+          //Initialise context_menu_ui options
+        }
+      } else if (options.type == "entity") {
+
+      } else if (options.type == "group") {
+
+      }
+    };
   }
 
   function updateSidebarHover () {
