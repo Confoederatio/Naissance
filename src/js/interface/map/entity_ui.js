@@ -277,8 +277,13 @@
 
       for (var i = 0; i < all_context_menu_btns.length; i++)
         all_context_menu_btns[i].onclick = function (e) {
-          printEntityKeyframeNavigationMenu(entity_id, this.parentElement);
-        }
+          try {
+            printEntityKeyframeNavigationMenu(entity_id, this.parentElement);
+          } catch (e) {
+            console.error(e);
+          }
+          console.log(entity_id, this.parentElement);
+        };
       for (var i = 0; i < all_jump_to_btns.length; i++)
         all_jump_to_btns[i].onclick = function (e) {
           var local_timestamp = parseInt(this.getAttribute("timestamp"));
