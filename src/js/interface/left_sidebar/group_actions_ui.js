@@ -181,7 +181,7 @@
         if (group_action_order == config.group_actions_lowest_order)
           group_action_anchor_el.setAttribute("timestamp", options.timestamp);
 
-        //Append dummy context menu ddiv first for context_menu_ui to append to
+        //Append dummy context menu div first for context_menu_ui to append to
         var context_menu_el = document.createElement("div");
 
         context_menu_el.setAttribute("class", "context-menu");

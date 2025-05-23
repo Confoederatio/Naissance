@@ -7,6 +7,15 @@
       config_key: "brush_actions",
       namespace: "BrushAction"
     });
+    createContextMenuInterface({
+      anchor: config.defines.common.selectors.brush_actions_context_menu_anchor,
+      class: "brush-action-button",
+      config_key: "brush_actions", // Used for config lookups like config.brush_actions_lowest_order
+      interface_key: "brush", // Key for global.interfaces.brush
+      namespace: "BrushAction", // Used for function names like closeBrushActionContextMenu
+      navigation_mode: "icons", // Navigation items are direct DOM elements (img, span)
+      type: "default", // Operates on a global anchor, not entity/group specific
+    });
 
     //ENTITY ACTIONS
     //Set .all_entity_actions; .all_entity_actions_keys

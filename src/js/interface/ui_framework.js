@@ -268,6 +268,7 @@
    * createContextMenuInterface() - Creates a context menu interface framework. Note here that only the navigation menu is unique.
    * @param [arg0_options]
    *  @param {String} [arg0_options.anchor]
+   *  @param {String} [arg0_options.class=""]
    *  @param {String} [arg0_options.config_key]
    *  @param {String} [arg0_options.interface_key=arg0_options.config_key]
    *  @param {String} [arg0_options.left_margin] - The CSS calc attribute to prepend when calculating offset margins.
@@ -282,12 +283,10 @@
     var options = (arg0_options) ? arg0_options : {};
 
     //Initialise options
+    if (!options.class) options.class = "";
     if (!options.interface_key) options.interface_key = options.config_key;
     if (!options.navigation_mode) options.navigation_mode = "list";
     if (!options.type) options.type = "default";
-
-    //Declare local instance variables
-
 
     /**
      * close<namespace>ContextMenu() - Closes entity actions context menus for a specific order.
@@ -414,9 +413,10 @@
 
       //Declare local instance variables
       var common_selectors = config.defines.common.selectors;
+      var context_menu_el = document.createElement("div");
 
       if (options.type == "default") {
-        //Initialise interfaces.brush if it doesn't exist
+        //Initialise interfaces[options.interface_key] if it doesn't exist
         if (!global.interfaces[options.interface_key]) global.interfaces[options.interface_key] = {
           id: options.interface_key,
           options: {}
@@ -427,30 +427,408 @@
 
         //Parse given .interface from namespace_obj if applicable
         if (namespace_obj.interface) {
+          var all_local_options = Object.keys(local_options);
           var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`]();
           var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({ return_selector: true });
           var namespace_order = (namespace_obj.order != undefined) ? namespace_obj.order : 1;
           var lowest_order = config[`${options.config_key}_lowest_order`];
+
+          //Initialise options
+          if (namespace_order == lowest_order)
+            for (let i = 0; i < all_local_options.length; i++) {
+              var local_value = local_options[all_local_options[i]];
+
+              if (local_value != undefined)
+                namespace_anchor_el.setAttribute(all_local_options[i], local_value);
+            }
 
           //Delete given order if already extant
           if (namespace_anchor_el.querySelector(`[order="${namespace_order}"]`))
             global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
 
           //Append dummy context menu div first for context_menu_ui to append to
-          var context_menu_el = document.createElement("div");
-
           context_menu_el.setAttribute("class", "context-menu");
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", namespace_order);
           namespace_anchor_el.appendChild(context_menu_el);
 
           //Initialise context_menu_ui options
+          context_menu_ui.anchor = `${namespace_anchor_selector} .context-menu#${namespace_obj.id}`;
+          if (namespace_obj.class) context_menu_ui.class = namespace_obj.class;
+          if (namespace_obj.name) context_menu_ui.name = namespace_obj.name;
+          if (namespace_obj.maximum_height) context_menu_ui.maximum_height = namespace_obj.maximum_height;
+          if (namespace_obj.maximum_width) context_menu_ui.maximum_width = namespace_obj.maximum_width;
+
+          //Initialise preliminary context menu first
+          var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
+          new_interface.anchor = context_menu_ui.anchor;
+          new_interface.close_function = `close${options.namespace}ContextMenu(${namespace_order}); refresh${options.namespace}sContextMenus();`;
+
+          var context_menu_ui = createContextMenu(new_interface);
+          global[`refresh${options.namespace}sContextMenus`](local_options);
+
+          //Iterate over all_interface_keys and parse them correctly
+          var all_interface_keys = Object.keys(namespace_obj.interface);
+
+          for (let i = 0; i < all_interface_keys.length; i++) {
+            let local_value = namespace_obj.interface[all_interface_keys[i]];
+
+            if (!Array.isArray(local_value) && typeof local_value == "object") {
+              let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+              if (!local_value.id) local_value.id = all_interface_keys[i];
+
+              //Type handlers: set placeholders where applicable
+              autoFillInputs({
+                element: local_element,
+                type: local_value.type,
+                placeholder: local_value.placeholder,
+                value: local_value
+              });
+
+              //Parse .effect to .onclick event handler
+              if (local_value.effect)
+                local_element.onclick = function (e) {
+                  parseEffect(undefined, local_value.effect, { timestamp: options.timestamp, ui_type: options.namespace });
+                };
+            }
+          }
         }
       } else if (options.type == "entity") {
+        var entity_obj = getEntity(local_options.entity_id);
 
+        //Initialise interfaces[options.interface_key] if it doesn't exist
+        if (!global.interfaces[options.interface_key]) global.interfaces[options.interface_key] = {
+          id: options.interface_key,
+          entity_obj: entity_obj,
+          options: {}
+        };
+
+        //Refresh entity context menus first; then append the current context menu
+        var context_menu_ui = {};
+
+        //Parse given .interface from namespace_obj if applicable
+        if (namespace_obj.interface) {
+          var entity_el = getEntityElement(entity_id);
+
+          //Check to make sure namespace_obj is not of the lowest order
+          if (namespace_obj.order != lowest_order)
+            if (namespace_obj.interface) {
+              var all_local_options = Object.keys(local_options);
+              var entity_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
+              var entity_el = getEntityElement(local_options.entity_id);
+              var entity_order = (namespace_obj.order != undefined) ? namespace_obj.order : 1;
+              var entity_selector = getEntityElement(local_options.entity_id, { return_selector: true });
+              var lowest_order = config[`${options.config_key}_lowest_order`];
+
+              //Initialise options
+              if (entity_order == lowest_order)
+                for (let i = 0; i < all_local_options.length; i++) {
+                  var local_value = local_options[all_local_options[i]];
+
+                  if (local_value != undefined)
+                    entity_anchor_el.setAttribute(all_local_options[i], local_value);
+                }
+
+              //Delete given order if already extant
+              if (entity_el.querySelector(`${common_selectors.entity_actions_context_menu_anchor} [order="${entity_anchor_order}"]`))
+                global[`close${options.namespace}ContextMenu`](local_options.entity_id, entity_anchor_order);
+
+              //Append dummy context menu div first for context_menu_ui to append to
+              context_menu_el.setAttribute("class", "context-menu");
+              context_menu_el.id = namespace_obj.id;
+              context_menu_el.setAttribute("order", entity_anchor_order);
+              entity_anchor_el.appendChild(context_menu_el);
+
+              //Initialise context_menu_ui options
+              context_menu_ui.anchor = `${entity_selector} ${common_selectors.entity_actions_context_menu_anchor} .context-menu#${namespace_obj.id}`;
+              if (namespace_obj.class) context_menu_ui.class = namespace_obj.class;
+              if (namespace_obj.name) context_menu_ui.name = namespace_obj.name;
+              if (namespace_obj.maximum_height) context_menu_ui.maximum_height = namespace_obj.maximum_height;
+              if (namespace_obj.maximum_width) context_menu_ui.maximum_width = namespace_obj.maximum_width;
+
+              //Initialise preliminary context menu first
+              var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
+              new_interface.anchor = context_menu_ui.anchor;
+              new_interface.close_function = `close${options.namespace}ContextMenu('${local_options.entity_id}', ${entity_anchor_order}); refresh${options.namespace}sContextMenus('${local_options.entity_id}');`;
+
+              var context_menu_ui = createContextMenu(new_interface);
+              global[`refresh${options.namespace}sContextMenus`](local_options);
+
+              //Iterate over all_interface_keys and parse them correctly
+              var all_interface_keys = Object.keys(namespace_obj.interface);
+
+              for (let i = 0; i < all_interface_keys.length; i++) {
+                let local_value = namespace_obj.interface[all_interface_keys[i]];
+
+                if (!Array.isArray(local_value) && typeof local_value == "object") {
+                  let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+                  if (!local_value.id) local_value.id = all_interface_keys[i];
+
+                  //Type handlers: set placeholders where applicable
+                  autoFillInputs({
+                    element: local_element,
+                    type: local_value.type,
+                    placeholder: local_value.placeholder,
+                    value: local_value
+                  });
+
+                  //Parse .effect to .onclick event handler
+                  if (local_value.effect)
+                    local_element.onclick = function (e) {
+                      var local_input = getInput(this, { entity_id: local_options.entity_id });
+
+                      //Fetch local_actual_value based on local_value.value_equation
+                      var local_actual_value = (local_value.value_equation) ?
+                          parseVariableString(local_value.value_equation, {VALUE: parseFloat(local_input)}) : parseFloat(local_input);
+
+                      if (local_value.value_equation)
+                        fillInput({
+                          element: this,
+                          type: local_value.type,
+                          placeholder: local_actual_value
+                        });
+                      parseEffect(local_options.entity_id, local_value.effect, {
+                        timestamp: local_options.timestamp,
+                        ui_type: options.config_key
+                      });
+
+                      //Range post-handler
+                      if (local_value.type == "range") {
+                        var range_el = this.querySelector(`input[type="range"]`);
+                        range_el.value = parseFloat(local_input);
+                      }
+                    }
+                }
+              }
+            }
+        }
       } else if (options.type == "group") {
+        var group_obj = getGroup("hierarchy", local_options.group_id);
 
+        //Initialise interfaces[local_options.group_id] if it doesn't exist
+        if (!global.interfaces[local_options.group_id]) global.interfaces[local_options.group_id] = {
+          id: local_options.group_id,
+          group_obj: group_obj,
+          options: {}
+        };
+
+        //Refresh group context menus first; then append the current context menu
+        var context_menu_ui = {};
+
+        //Parse given .interface from namespace_obj if applicable
+        if (namespace_obj.interface) {
+          var group_el = getGroupElement(local_options.group_id);
+          var group_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options.group_id);
+          var group_anchor_selector = global[`get${options.namespace}sAnchorElement`](local_options.group_id, { return_selector: true });
+          var group_order = (namespace_obj.order != undefined) ? namespace_obj.order : 1;
+          var group_selector = getGroupElement(local_options.group_id, { return_selector: true });
+          var lowest_order = config[`${options.config_key}_lowest_order`];
+
+          //Initialise options
+          if (group_order == lowest_order)
+            for (let i = 0; i < all_local_options.length; i++) {
+              var local_value = local_options[all_local_options[i]];
+
+              if (local_value != undefined)
+                group_anchor_el.setAttribute(all_local_options[i], local_value);
+            }
+
+          //Append dummy context menu div first for context_menu_ui to append to
+          context_menu_el.setAttribute("class", "context-menu");
+          context_menu_el.id = namespace_obj.id;
+          context_menu_el.setAttribute("order", group_order);
+          group_anchor_el.appendChild(context_menu_el);
+
+          //Initialise context_menu_ui options
+          context_menu_ui.anchor = `${group_anchor_selector} .context-menu#${namespace_obj.id}`;
+          if (namespace_obj.class) context_menu_ui.class = namespace_obj.class;
+          if (namespace_obj.name) context_menu_ui.name = namespace_obj.name;
+          if (namespace_obj.maximum_height) context_menu_ui.maximum_height = namespace_obj.maximum_height;
+          if (namespace_obj.maximum_width) context_menu_ui.maximum_width = namespace_obj.maximum_width;
+
+          //Initialise preliminary context menu first
+          if (namespace_obj.interface) {
+            var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
+            new_interface.anchor = context_menu_ui.anchor;
+            new_interface.close_function = `close${options.namespace}ContextMenu('${local_options.group_id}', ${group_order}); refresh${options.namespace}sContextMenus('${local_options.group_id}');`;
+
+            var context_menu_ui = createContextMenu(new_interface);
+            global[`refresh${options.namespace}sContextMenus`](local_options.group_id);
+          }
+
+          //Iterate over all_interface_keys and parse them correctly
+          for (let i = 0; i < all_interface_keys.length; i++) {
+            let local_value = namespace_obj.interface[all_interface_keys[i]];
+
+            if (!Array.isArray(local_value) && typeof local_value == "object") {
+              let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+              if (!local_value.id) local_value.id = all_interface_keys[i];
+
+              //Type handlers: set placeholders where applicable
+              autoFillInputs({
+                element: local_element,
+                type: local_value.type,
+                placeholder: local_value.placeholder,
+                value: local_value
+              });
+
+              //Special Group Handling
+              if (local_value.attributes)
+                if (local_value.attributes.global_key == "GROUP_OBJ.mask_select") {
+                  var all_mask_types_keys = Object.keys(config.mask_types);
+                  var all_option_els = [];
+                  var local_select_el = local_element.querySelector("select");
+
+                  for (var x = 0; x < all_mask_types_keys.length; x++) {
+                    var local_mask = config.mask_types[all_mask_types_keys[x]];
+                    var local_option_el = document.createElement("option");
+
+                    local_option_el.setAttribute("value", all_mask_types_keys[x]);
+                    local_option_el.innerHTML = (local_mask.name) ? local_mask.name : all_mask_types_keys[x];
+
+                    //Push local_option_el into current all_option_els
+                    all_option_els.push(local_option_el);
+                  }
+
+                  //Set local_element
+                  local_select_el.innerHTML = "";
+                  for (var x = 0; x < all_option_els.length; x++)
+                    local_select_el.appendChild(all_option_els[x]);
+
+                  //Set actual placeholder
+                  var current_group_mask = getGroupMask(group_obj.id);
+
+                  if (current_group_mask) {
+                    local_select_el.value = current_group_mask;
+                  } else {
+                    local_select_el.value = "clear";
+                  }
+                }
+            }
+
+            //Parse .effect to .onclick event handler
+            if (local_value.effect)
+              local_element.onclick = function (e) {
+                parseEffect(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
+                console.log(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
+              };
+          }
+        }
       }
+    };
+
+    global[`print${options.namespace}sNavigationMenu`] = function (arg0_parent_el, arg1_options) {
+      //Convert from parameters
+      var parent_el = arg0_parent_el;
+      var local_options = (arg1_options) ? arg1_options : {};
+
+      //Declare local instance variables
+      var current_timestamp = getTimestamp(main.date);
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
+      var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({
+        ...local_options,
+        return_selector: true
+      });
+      var namespace_navigation_obj = global[`get${options.namespace}sNavigationObject`](local_options);
+
+      if (options.navigation_mode == "icons") {
+        var all_namespace_keys = Object.keys(namespace_navigation_obj);
+
+        namespace_anchor_el.onclick = function (e) {
+          var is_button_hovered = document.querySelector(`${namespace_anchor_selector} > *:hover`);
+
+          if (!is_button_hovered)
+            global[`close${options.namespace}ContextMenus`](local_options);
+        };
+
+        //Iterate over all_namespace_keys; add them as images or abbreviations (if no icon is available)
+        for (var i = 0; i < all_namespace_keys.length; i++) {
+          let local_namespace_obj = namespace_navigation_obj[all_namespace_keys[i]];
+
+          if (!Array.isArray(local_namespace_obj) && typeof local_namespace_obj == "object")
+            if (local_namespace_obj.effect) {
+              var local_namespace_class;
+              if (local_namespace_obj.attributes)
+                if (local_namespace_obj.attributes.class)
+                  local_namespace_class = local_namespace_obj.attributes.class;
+
+              var local_class = `${options.class}${(local_namespace_class) ? " " + local_namespace_class : ""}`;
+              var local_element;
+              var local_id = all_namespace_keys[i];
+              var limit_fulfilled = true;
+              var limits_fulfilled = {};
+
+              //Add local_action to namespace_anchor_el
+              if (local_namespace_obj.icon) {
+                var local_img = document.createElement("img");
+
+                local_img.setAttribute("class", local_class);
+                local_img.setAttribute("id", local_id);
+                local_img.setAttribute("src", local_namespace_obj.icon);
+
+                //Add local_img to namespace_anchor_el
+                local_element = local_img;
+              } else {
+                var local_initials = "";
+                var local_span = document.createElement("span");
+                var local_split_string = local_namespace_obj.name.split(" ");
+
+                for (var x = 0; x < local_split_string.length; x++)
+                  local_initials += local_split_string[x][0];
+
+                local_span.setAttribute("class", local_class);
+                local_span.setAttribute("id", local_id);
+                local_span.innerHTML = local_initials;
+
+                //Add local_span to namespace_anchor_el
+                local_element = local_span;
+              }
+
+              //Set .limit, .effect functionality
+              //.limit handler
+              {
+                if (local_namespace_obj.limit)
+                  limit_fulfilled = parseLimit(undefined, local_namespace_obj.limit, {
+                    timestamp: current_timestamp,
+                    ui_type: options.config_key
+                  });
+
+                if (limit_fulfilled) {
+                  //Add element if limit_fulfilled
+                  namespace_anchor_el.appendChild(local_element);
+                  limits_fulfilled[all_namespace_keys[i]] = limit_fulfilled;
+                }
+              }
+
+              //.effect handler
+              {
+                if (limits_fulfilled[all_namespace_keys[i]])
+                  if (local_namespace_obj.effect) {
+                    let button_el = local_element;
+
+                    local_element.onclick = function (e) {
+                      parseEffect(undefined, local_namespace_obj.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
+                    };
+                  }
+              }
+
+              //Set tooltip
+              if (local_namespace_obj.name)
+                tippy(`${namespace_anchor_selector} #${local_id}`, {
+                  content: local_namespace_obj.name,
+                  arrow: false
+                });
+            }
+        }
+      }
+    };
+
+    global[`refresh${options.namespace}sContextMenus`] = function (arg0_options) {
+
+    };
+
+    global[`refresh${options.namespace}sContextMenuInputs`] = function (arg0_options) {
+
     };
   }
 
