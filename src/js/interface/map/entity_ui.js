@@ -418,8 +418,10 @@
 
       //Call createContextMenu() after the popup content is set
       setTimeout(function(){
-        var entity_actions_el = getEntityActionsAnchorElement(entity_id)
-        var entity_actions_ui = printEntityActionsNavigationMenu(entity_id, entity_actions_el);
+        var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
+        var entity_actions_ui = printEntityActionsNavigationMenu(entity_actions_el, {
+          entity_id: entity_id
+        });
 
         var entity_customisation_ui = printEntityContextMenuCustomisationSection(entity_id);
 

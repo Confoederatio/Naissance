@@ -23,6 +23,16 @@
       config_key: "entity_actions",
       namespace: "EntityAction"
     });
+    createContextMenuInterface({
+      anchor: `#entity-actions-context-menu`,
+      class: "entity-ui-container entity-context-menu actions-menu",
+      config_key: "entity_actions",
+      interface_key: "entity_actions",
+      limit_key: "entity_id",
+      namespace: "EntityAction",
+      navigation_mode: "list_icons",
+      type: "entity"
+    });
 
     //ENTITY KEYFRAMES
     //Set .all_entity_keyframes; .all_entity_keyframe_keys

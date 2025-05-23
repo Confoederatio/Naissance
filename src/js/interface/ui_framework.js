@@ -272,6 +272,7 @@
    *  @param {String} [arg0_options.config_key]
    *  @param {String} [arg0_options.interface_key=arg0_options.config_key]
    *  @param {String} [arg0_options.left_margin] - The CSS calc attribute to prepend when calculating offset margins.
+   *  @param {String} [arg0_options.limit_key="entity_id"] - Limit key if applicable, used for parseLimit(), i.e. 'entity_id'
    *  @param {String} [arg0_options.right_margin] - The CSS calc attribute to prepend when calculating offset margins.
    *  @param {String} [arg0_options.namespace]
    *  @param {String} [arg0_options.navigation_mode="list"] - Either 'icons'/'list'/'list_icons'. Brush actions: 'icons', Entity actions: 'list_icons', Entity keyframes: 'list', Group actions: 'list'
@@ -285,6 +286,7 @@
     //Initialise options
     if (!options.class) options.class = "";
     if (!options.interface_key) options.interface_key = options.config_key;
+    if (!options.limit_key) options.limit_key = "entity_id";
     if (!options.navigation_mode) options.navigation_mode = "list";
     if (!options.type) options.type = "default";
 
@@ -296,13 +298,14 @@
     global[`close${options.namespace}ContextMenu`] = function (arg0_order, arg1_options) {
       //Convert from parameters
       var order = returnSafeNumber(arg0_order, 1);
-      var local_options = (arg0_options) ? arg0_options : {};
+      var local_options = (arg1_options) ? arg1_options : {};
 
       //Declare local instance variables
-      var namespace_el = global[`get${options.namespace}sElement`](local_options);
+      console.log(`get${options.namespace}sElement`, order, local_options);
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
 
       //Fetch local namespace context menu and close it
-      var namespace_el = namespace_el.querySelector(`[order="${order}"]`);
+      var namespace_el = namespace_anchor_el.querySelector(`[order="${order}"]`);
       namespace_el.remove();
       global[`refresh${options.namespace}sContextMenus`](local_options);
     };
@@ -350,6 +353,7 @@
       } else if (options.type == "entity") {
         var entity_el = getEntityElement(local_options.entity_id);
 
+        console.log(local_options.entity_id, entity_el);
         var entity_anchor_el = entity_el.querySelector(options.anchor);
         var entity_selector = `${common_selectors.entity_ui}[class*=" ${local_options.entity_id}"]`;
 
@@ -474,7 +478,7 @@
             let local_value = namespace_obj.interface[all_interface_keys[i]];
 
             if (!Array.isArray(local_value) && typeof local_value == "object") {
-              let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+              let local_element = document.querySelector(`${options.anchor} #${local_value.id}`);
               if (!local_value.id) local_value.id = all_interface_keys[i];
 
               //Type handlers: set placeholders where applicable
@@ -488,7 +492,26 @@
               //Parse .effect to .onclick event handler
               if (local_value.effect)
                 local_element.onclick = function (e) {
+                  var local_input = getInput(this);
+
+                  //Fetch local_actual_value based on local_value.value_equation
+                  var local_actual_value = (local_value.value_equation) ?
+                    parseVariableString(local_value.value_equation, { VALUE: parseFloat(local_input) }) : parseFloat(local_input);
+
+                  if (local_value.value_equation)
+                    fillInput({
+                      element: this,
+                      type: local_value.type,
+                      placeholder: local_actual_value
+                    });
+
                   parseEffect(undefined, local_value.effect, { timestamp: options.timestamp, ui_type: options.namespace });
+
+                  //Range post-handler
+                  if (local_value.type == "range") {
+                    var range_el = this.querySelector(`input[type="range"]`);
+                    range_el.value = parseFloat(local_input);
+                  }
                 };
             }
           }
@@ -508,7 +531,7 @@
 
         //Parse given .interface from namespace_obj if applicable
         if (namespace_obj.interface) {
-          var entity_el = getEntityElement(entity_id);
+          var entity_el = getEntityElement(local_options.entity_id);
 
           //Check to make sure namespace_obj is not of the lowest order
           if (namespace_obj.order != lowest_order)
@@ -530,17 +553,17 @@
                 }
 
               //Delete given order if already extant
-              if (entity_el.querySelector(`${common_selectors.entity_actions_context_menu_anchor} [order="${entity_anchor_order}"]`))
-                global[`close${options.namespace}ContextMenu`](local_options.entity_id, entity_anchor_order);
+              if (entity_el.querySelector(`${options.anchor} [order="${entity_order}"]`))
+                global[`close${options.namespace}ContextMenu`](entity_order, { entity_id: local_options.entity_id });
 
               //Append dummy context menu div first for context_menu_ui to append to
               context_menu_el.setAttribute("class", "context-menu");
               context_menu_el.id = namespace_obj.id;
-              context_menu_el.setAttribute("order", entity_anchor_order);
+              context_menu_el.setAttribute("order", entity_order);
               entity_anchor_el.appendChild(context_menu_el);
 
               //Initialise context_menu_ui options
-              context_menu_ui.anchor = `${entity_selector} ${common_selectors.entity_actions_context_menu_anchor} .context-menu#${namespace_obj.id}`;
+              context_menu_ui.anchor = `${entity_selector} ${options.anchor} .context-menu#${namespace_obj.id}`;
               if (namespace_obj.class) context_menu_ui.class = namespace_obj.class;
               if (namespace_obj.name) context_menu_ui.name = namespace_obj.name;
               if (namespace_obj.maximum_height) context_menu_ui.maximum_height = namespace_obj.maximum_height;
@@ -549,7 +572,7 @@
               //Initialise preliminary context menu first
               var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
               new_interface.anchor = context_menu_ui.anchor;
-              new_interface.close_function = `close${options.namespace}ContextMenu('${local_options.entity_id}', ${entity_anchor_order}); refresh${options.namespace}sContextMenus('${local_options.entity_id}');`;
+              new_interface.close_function = `close${options.namespace}ContextMenu(${entity_order}, { entity_id: '${local_options.entity_id}' }); refresh${options.namespace}sContextMenus('${local_options.entity_id}');`;
 
               var context_menu_ui = createContextMenu(new_interface);
               global[`refresh${options.namespace}sContextMenus`](local_options);
@@ -561,7 +584,7 @@
                 let local_value = namespace_obj.interface[all_interface_keys[i]];
 
                 if (!Array.isArray(local_value) && typeof local_value == "object") {
-                  let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+                  let local_element = document.querySelector(`${entity_selector} ${common_selectors.entity_actions_context_menu_anchor} #${local_value.id}`);
                   if (!local_value.id) local_value.id = all_interface_keys[i];
 
                   //Type handlers: set placeholders where applicable
@@ -579,7 +602,7 @@
 
                       //Fetch local_actual_value based on local_value.value_equation
                       var local_actual_value = (local_value.value_equation) ?
-                          parseVariableString(local_value.value_equation, {VALUE: parseFloat(local_input)}) : parseFloat(local_input);
+                          parseVariableString(local_value.value_equation, { VALUE: parseFloat(local_input) }) : parseFloat(local_input);
 
                       if (local_value.value_equation)
                         fillInput({
@@ -650,7 +673,7 @@
           if (namespace_obj.interface) {
             var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
             new_interface.anchor = context_menu_ui.anchor;
-            new_interface.close_function = `close${options.namespace}ContextMenu('${local_options.group_id}', ${group_order}); refresh${options.namespace}sContextMenus('${local_options.group_id}');`;
+            new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus('${local_options.group_id}');`;
 
             var context_menu_ui = createContextMenu(new_interface);
             global[`refresh${options.namespace}sContextMenus`](local_options.group_id);
@@ -731,16 +754,10 @@
       });
       var namespace_navigation_obj = global[`get${options.namespace}sNavigationObject`](local_options);
 
+      //Iterate over all_namespace_keys
+      var all_namespace_keys = Object.keys(namespace_navigation_obj);
+
       if (options.navigation_mode == "icons") {
-        var all_namespace_keys = Object.keys(namespace_navigation_obj);
-
-        namespace_anchor_el.onclick = function (e) {
-          var is_button_hovered = document.querySelector(`${namespace_anchor_selector} > *:hover`);
-
-          if (!is_button_hovered)
-            global[`close${options.namespace}ContextMenus`](local_options);
-        };
-
         //Iterate over all_namespace_keys; add them as images or abbreviations (if no icon is available)
         for (var i = 0; i < all_namespace_keys.length; i++) {
           let local_namespace_obj = namespace_navigation_obj[all_namespace_keys[i]];
@@ -818,6 +835,95 @@
                   content: local_namespace_obj.name,
                   arrow: false
                 });
+            }
+        }
+      } else if (options.navigation_mode == "list") {
+        var parent_offset = 0;
+        var top_string = "";
+
+        if (options.scroll_selector) {
+          var scroll_selector_el = document.querySelector(local_options.scroll_selector);
+
+          parent_offset = getY(parent_el, scroll_selector_el);
+          top_string = `calc(${scroll_selector_el.offsetTop}px + ${parent_offset}px)`;
+        }
+
+        //Create local context menu
+        if (top_string)
+          namespace_anchor_el.style.top = top_string;
+
+        //Iterate over all_local_options keys
+        var all_local_options = Object.keys(local_options);
+
+        for (var i = 0; i < all_local_options.length; i++) {
+          var local_value = local_options[all_local_options[i]];
+
+          if (local_value != undefined)
+            namespace_anchor_el.setAttribute(all_local_options[i], local_value);
+        }
+
+        global[`print${options.namespace}sContextMenu`](namespace_navigation_obj, local_options);
+      } else if (options.navigation_mode == "list_icons") {
+        var formatted_navigation_obj = {
+          anchor: (local_options.anchor) ? local_options.anchor : namespace_anchor_selector,
+          class: options.class
+        };
+        var limits_fulfilled = {};
+
+        //Iterate over all_namespace_keys; add them as list icons
+        for (var i = 0; i < all_namespace_keys.length; i++) {
+          let local_namespace_obj = namespace_navigation_obj[all_namespace_keys[i]];
+
+          if (!Array.isArray(local_namespace_obj) && typeof local_namespace_obj == "object") {
+            //Check if .limit is fulfilled
+            if (local_namespace_obj.limit) {
+              limit_fulfilled = parseLimit(local_options[options.limit_key], local_namespace_obj.limit, {
+                timestamp: current_timestamp,
+                ui_type: options.config_key
+              });
+            } else {
+              limit_fulfilled = true;
+            }
+
+            if (limit_fulfilled) {
+              //Define default parameters for element
+              formatted_navigation_obj[all_namespace_keys[i]] = {
+                id: all_namespace_keys[i],
+                type: "button"
+              };
+              var local_context_obj = formatted_navigation_obj[all_namespace_keys[i]];
+
+              //Add element if limit_fulfilled
+              local_context_obj = dumbMergeObjects(local_context_obj, local_namespace_obj);
+              limits_fulfilled[all_namespace_keys[i]] = limit_fulfilled;
+            }
+          }
+        }
+
+        //formatted_navigation_obj now contains the correct createContextMenu() options; assign to namespace_selector
+        formatted_navigation_obj.do_not_append = true;
+
+        //Delete current .innerHTML
+        var context_menu_el = createContextMenu(formatted_navigation_obj);
+
+        //Iterate over all_namespace_keys
+        for (var i = 0; i < all_namespace_keys.length; i++) {
+          let local_value = namespace_navigation_obj[all_namespace_keys[i]];
+
+          //Make sure limits are fulfilled firs tbefore parsing onclick
+          if (limits_fulfilled[all_namespace_keys[i]])
+            if (local_value.effect) {
+              let button_el = context_menu_el.querySelector(`div[type="button"][id="${all_namespace_keys[i]}"]`);
+
+              try {
+                if (button_el)
+                  button_el.onclick = function (e) {
+                    parseEffect(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
+                    console.log(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
+                  }
+              } catch (e) {
+                console.warn(e);
+              }
             }
         }
       }

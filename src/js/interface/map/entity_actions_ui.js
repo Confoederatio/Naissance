@@ -51,7 +51,7 @@
     var entity_open_orders = getEntityActionsOpenOrders(entity_id);
 
     //Close last actions context menu
-    closeEntityActionContextMenu(entity_id, entity_open_orders[entity_open_orders.length - 1]);
+    closeEntityActionContextMenu(entity_open_orders[entity_open_orders.length - 1], { entity_id: entity_id });
   }
 
   /*
@@ -181,7 +181,7 @@
 
           //Delete given order if already extant
           if (entity_el.querySelector(`${common_selectors.entity_actions_context_menu_anchor} [order="${entity_action_order}"]`))
-            closeEntityActionContextMenu(entity_id, entity_action_order);
+            closeEntityActionContextMenu(entity_action_order, { entity_id: entity_id });
 
           //Append dummy context menu div first for context_menu_ui to append to
           var context_menu_el = document.createElement("div");
@@ -201,7 +201,7 @@
           //Initialise preliminary context menu first
           var new_interface = JSON.parse(JSON.stringify(entity_action_obj.interface));
           new_interface.anchor = context_menu_ui.anchor;
-          new_interface.close_function = `closeEntityActionContextMenu('${entity_id}', ${entity_action_order}); refreshEntityActionsContextMenus('${entity_id}');`;
+          new_interface.close_function = `closeEntityActionContextMenu(${entity_action_order}, { entity_id: '${entity_id}' }); refreshEntityActionsContextMenus('${entity_id}');`;
 
           var action_context_menu_ui = createContextMenu(new_interface);
           refreshEntityActionsContextMenus(entity_id);

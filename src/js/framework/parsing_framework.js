@@ -189,7 +189,7 @@
                   var local_entity_order = (local_entity_action.order != undefined) ?
                     local_entity_action.order : 1;
 
-                  closeEntityActionContextMenu(entity_id, local_entity_order);
+                  closeEntityActionContextMenu(local_entity_order, { entity_id: entity_id });
                 }
                 if (options.ui_type == "entity_keyframes") {
                   var local_entity_keyframe = getEntityKeyframe(local_value[x]);
@@ -250,7 +250,11 @@
                 if (local_entity_action.immediate)
                   parsed_immediate = parseEffect(entity_id, local_entity_action.immediate, new_options);
                 if (local_entity_action)
-                  printEntityActionsContextMenu(entity_id, local_entity_action, new_options);
+                  printEntityActionsContextMenu(local_entity_action, {
+                    entity_id: entity_id,
+                    timestamp: convertTimestampToInt(getTimestamp(main.date)),
+                    ...new_options
+                  });
               }
             } else if (options.ui_type == "entity_keyframes") {
               //Parse the entity_effect being referenced
