@@ -40,6 +40,16 @@
       config_key: "entity_keyframes",
       namespace: "EntityKeyframe"
     });
+    createContextMenuInterface({
+      anchor: config.defines.common.selectors.entity_keyframe_context_menu_anchor,
+      class: "entity-ui-container entity-context-menu keyframes-menu" ,
+      config_key: "entity_keyframes",
+      interface_key: "entity_keyframes",
+      limit_key: "entity_id",
+      namespace: "EntityKeyframe",
+      navigation_mode: "list",
+      type: "entity"
+    });
 
     //GROUP ACTIONS
     //Set .all_group_actions; .all_group_actions_keys

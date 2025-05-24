@@ -234,7 +234,7 @@
       if (context_menu_el)
         if (context_menu_el.parentElement.getAttribute("timestamp"))
           actual_timestamp = convertTimestampToInt(context_menu_el.parentElement.getAttribute("timestamp"));
-      closeEntityKeyframeContextMenus(entity_id); //Close previously open context menus
+      closeEntityKeyframeContextMenus({ entity_id: entity_id }); //Close previously open context menus
 
       //Format bio_string; populate header
       bio_string.push(`<tr class = "no-select top-bio-header">
@@ -278,11 +278,14 @@
       for (var i = 0; i < all_context_menu_btns.length; i++)
         all_context_menu_btns[i].onclick = function (e) {
           try {
-            printEntityKeyframeNavigationMenu(entity_id, this.parentElement);
+            console.log(e);
+            printEntityKeyframesNavigationMenu(this.parentElement, {
+              entity_id: entity_id,
+              y: e.y
+            });
           } catch (e) {
             console.error(e);
           }
-          console.log(entity_id, this.parentElement);
         };
       for (var i = 0; i < all_jump_to_btns.length; i++)
         all_jump_to_btns[i].onclick = function (e) {

@@ -301,7 +301,7 @@
       var local_options = (arg1_options) ? arg1_options : {};
 
       //Declare local instance variables
-      console.log(`get${options.namespace}sElement`, order, local_options);
+      console.log(`get${options.namespace}sAnchorElement`, order, local_options);
       var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
 
       //Fetch local namespace context menu and close it
@@ -353,7 +353,7 @@
       } else if (options.type == "entity") {
         var entity_el = getEntityElement(local_options.entity_id);
 
-        console.log(local_options.entity_id, entity_el);
+        console.log(`local_options:`, local_options, local_options.entity_id, options.anchor);
         var entity_anchor_el = entity_el.querySelector(options.anchor);
         var entity_selector = `${common_selectors.entity_ui}[class*=" ${local_options.entity_id}"]`;
 
@@ -584,7 +584,7 @@
                 let local_value = namespace_obj.interface[all_interface_keys[i]];
 
                 if (!Array.isArray(local_value) && typeof local_value == "object") {
-                  let local_element = document.querySelector(`${entity_selector} ${common_selectors.entity_actions_context_menu_anchor} #${local_value.id}`);
+                  let local_element = document.querySelector(`${entity_selector} ${options.anchor} #${local_value.id}`);
                   if (!local_value.id) local_value.id = all_interface_keys[i];
 
                   //Type handlers: set placeholders where applicable
@@ -841,14 +841,18 @@
         var parent_offset = 0;
         var top_string = "";
 
-        if (options.scroll_selector) {
-          var scroll_selector_el = document.querySelector(local_options.scroll_selector);
+        if (local_options.scroll_selector) {
+          var scroll_selector_el = (typeof local_options.scroll_selector == "string") ?
+            document.querySelector(local_options.scroll_selector) : local_options.scroll_selector;
 
           parent_offset = getY(parent_el, scroll_selector_el);
           top_string = `calc(${scroll_selector_el.offsetTop}px + ${parent_offset}px)`;
         }
+        if (local_options.y)
+          top_string = `calc(${local_options.y}px)`;
 
         //Create local context menu
+        console.log(`top string:`, top_string);
         if (top_string)
           namespace_anchor_el.style.top = top_string;
 
