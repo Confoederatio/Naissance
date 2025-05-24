@@ -507,7 +507,7 @@
                       placeholder: local_actual_value
                     });
 
-                  parseEffect(undefined, local_value.effect, { timestamp: options.timestamp, ui_type: options.namespace });
+                  parseEffect(undefined, local_value.effect, { timestamp: local_options.timestamp, ui_type: options.namespace });
 
                   //Range post-handler
                   if (local_value.type == "range") {
@@ -574,7 +574,7 @@
               //Initialise preliminary context menu first
               var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
               new_interface.anchor = context_menu_ui.anchor;
-              new_interface.close_function = `close${options.namespace}ContextMenu(${entity_order}, { entity_id: '${local_options.entity_id}' }); refresh${options.namespace}sContextMenus('${local_options.entity_id}');`;
+              new_interface.close_function = `close${options.namespace}ContextMenu(${entity_order}, { entity_id: '${local_options.entity_id}' }); refresh${options.namespace}sContextMenus({ entity_id: '${local_options.entity_id}' });`;
 
               var context_menu_ui = createContextMenu(new_interface);
               global[`refresh${options.namespace}sContextMenus`](local_options);
@@ -596,6 +596,23 @@
                     placeholder: local_value.placeholder,
                     value: local_value
                   });
+
+                  if (local_value.placeholder) { //[WIP] - Finish section body
+                    var placeholder_dictionary = {};
+
+                    //Merge local_options.options and entity_anchor_el attributes into placeholder_dictionary
+                    var entity_anchor_attributes = entity_anchor_el.attributes;
+
+                    for (let x = 0; x < entity_anchor_attributes.length; x++)
+                      placeholder_dictionary[entity_anchor_attributes[x].name] = entity_anchor_attributes[x].value;
+                    placeholder_dictionary = dumbMergeObjects(placeholder_dictionary, local_options.options);
+
+                    fillInput({
+                      element: local_element,
+                      type: local_value.type,
+                      placeholder: placeholder_dictionary[local_value.placeholder]
+                    });
+                  }
 
                   //Parse .effect to .onclick event handler
                   if (local_value.effect)

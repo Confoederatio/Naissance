@@ -281,6 +281,7 @@
             console.log(e);
             printEntityKeyframesNavigationMenu(this.parentElement, {
               entity_id: entity_id,
+              timestamp: parseInt(this.getAttribute("timestamp")),
               y: e.y
             });
           } catch (e) {

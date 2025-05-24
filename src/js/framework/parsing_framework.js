@@ -95,6 +95,7 @@
       }
     }
     var suboptions = options.options;
+    console.log(`Suboptions:`, options.options);
 
     //.limit parser
     if (scope.limit) {
@@ -197,7 +198,7 @@
                   var local_entity_order = (local_entity_keyframe.order != undefined) ?
                     local_entity_keyframe.order : 1;
 
-                  closeEntityKeyframeContextMenu(entity_id, local_entity_order);
+                  closeEntityKeyframeContextMenu(local_entity_order, { entity_id: entity_id });
                 }
               } else {
                 var local_brush_action = getBrushAction(local_value[x]);
@@ -208,7 +209,7 @@
               }
             }
           if (all_scope_keys[i] == "close_menus")
-            if (local_value[0]) closeEntityKeyframeContextMenus(entity_id);
+            if (local_value[0]) closeEntityKeyframeContextMenus({ entity_id: entity_id });
           if (all_scope_keys[i] == "close_select_multiple_keyframes")
             selectMultipleKeyframes(entity_id, { close_selection: true });
           if (all_scope_keys[i] == "interface")
@@ -300,7 +301,7 @@
           if (all_scope_keys[i] == "refresh_brush_actions")
             refreshBrushActions();
           if (["refresh_entity_actions", "reload_entity_actions"].includes(all_scope_keys[i]))
-            refreshEntityActions(entity_id);
+            refreshEntityActions({ entity_id: entity_id });
           if (all_scope_keys[i] == "select_multiple_keyframes")
             selectMultipleKeyframes(entity_id, { assign_key: local_value[0] });
         }
