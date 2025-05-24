@@ -302,7 +302,6 @@
       var local_options = (arg1_options) ? arg1_options : {};
 
       //Declare local instance variables
-      console.log(`get${options.namespace}sAnchorElement`, order, local_options);
       var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
 
       //Fetch local namespace context menu and close it
@@ -679,8 +678,6 @@
             new_interface.anchor = context_menu_ui.anchor;
             new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus({ group_id: '${local_options.group_id}' });`;
 
-            console.log(`group_anchor_selector:`, group_anchor_selector);
-            console.log(`new_interface:`, new_interface);
             var context_menu_ui = createContextMenu(new_interface);
             global[`refresh${options.namespace}sContextMenus`](local_options);
           }
@@ -739,11 +736,9 @@
               //Parse .effect to .onclick event handler
               if (local_value.effect)
                 local_element.onclick = function (e) {
-                  console.log(local_options);
                   var local_input_obj = global[`get${options.namespace}sInputObject`](local_options);
 
                   parseEffect(local_options.group_id, local_value.effect, { ...local_input_obj, ui_type: options.config_key });
-                  console.log(local_options.group_id, local_value.effect, { ...local_input_obj, ui_type: options.config_key });
                 };
             }
           }
@@ -863,7 +858,6 @@
           top_string = `calc(${local_options.y}px)`;
 
         //Create local context menu
-        console.log(`top string:`, top_string);
         if (top_string)
           namespace_anchor_el.style.top = top_string;
 
@@ -934,7 +928,6 @@
                 if (button_el)
                   button_el.onclick = function (e) {
                     parseEffect(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
-                    console.log(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
                   };
               } catch (e) {
                 console.warn(e);
