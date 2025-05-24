@@ -288,6 +288,7 @@
     if (!options.interface_key) options.interface_key = options.config_key;
     if (!options.limit_key) options.limit_key = "entity_id";
     if (!options.navigation_mode) options.navigation_mode = "list";
+    if (!options.right_margin) options.left_margin = "";
     if (!options.type) options.type = "default";
 
     /**
@@ -353,7 +354,6 @@
       } else if (options.type == "entity") {
         var entity_el = getEntityElement(local_options.entity_id);
 
-        console.log(`local_options:`, local_options, local_options.entity_id, options.anchor);
         var entity_anchor_el = entity_el.querySelector(options.anchor);
         var entity_selector = `${common_selectors.entity_ui}[class*=" ${local_options.entity_id}"]`;
 
@@ -364,8 +364,9 @@
       } else if (options.type == "group") {
         var group_el = getGroupElement(local_options.group_id);
 
+        console.log(local_options.group_id);
         var group_anchor_el = group_el.querySelector(options.anchor);
-        var group_selector = `${common_selectors.group_ui}[data-id="${group_id}"]`;
+        var group_selector = `${common_selectors.group_ui}[data-id="${local_options.group_id}"]`;
 
         //Return statement
         return (!local_options.return_selector) ?
@@ -640,9 +641,10 @@
 
         //Parse given .interface from namespace_obj if applicable
         if (namespace_obj.interface) {
+          var all_local_options = Object.keys(local_options);
           var group_el = getGroupElement(local_options.group_id);
-          var group_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options.group_id);
-          var group_anchor_selector = global[`get${options.namespace}sAnchorElement`](local_options.group_id, { return_selector: true });
+          var group_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
+          var group_anchor_selector = global[`get${options.namespace}sAnchorElement`]({ return_selector: true, ...local_options });
           var group_order = (namespace_obj.order != undefined) ? namespace_obj.order : 1;
           var group_selector = getGroupElement(local_options.group_id, { return_selector: true });
           var lowest_order = config[`${options.config_key}_lowest_order`];
@@ -673,18 +675,22 @@
           if (namespace_obj.interface) {
             var new_interface = JSON.parse(JSON.stringify(namespace_obj.interface));
             new_interface.anchor = context_menu_ui.anchor;
-            new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus('${local_options.group_id}');`;
+            new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus({ group_id: '${local_options.group_id}' });`;
 
+            console.log(`group_anchor_selector:`, group_anchor_selector);
+            console.log(`new_interface:`, new_interface);
             var context_menu_ui = createContextMenu(new_interface);
-            global[`refresh${options.namespace}sContextMenus`](local_options.group_id);
+            global[`refresh${options.namespace}sContextMenus`](local_options);
           }
 
           //Iterate over all_interface_keys and parse them correctly
+          var all_interface_keys = Object.keys(namespace_obj.interface);
+
           for (let i = 0; i < all_interface_keys.length; i++) {
             let local_value = namespace_obj.interface[all_interface_keys[i]];
 
             if (!Array.isArray(local_value) && typeof local_value == "object") {
-              let local_element = document.querySelector(`${context_menu_ui.anchor} #${local_value.id}`);
+              let local_element = document.querySelector(`${group_anchor_selector} #${local_value.id}`);
               if (!local_value.id) local_value.id = all_interface_keys[i];
 
               //Type handlers: set placeholders where applicable
@@ -727,14 +733,14 @@
                     local_select_el.value = "clear";
                   }
                 }
-            }
 
-            //Parse .effect to .onclick event handler
-            if (local_value.effect)
-              local_element.onclick = function (e) {
-                parseEffect(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
-                console.log(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
-              };
+              //Parse .effect to .onclick event handler
+              if (local_value.effect)
+                local_element.onclick = function (e) {
+                  parseEffect(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
+                  console.log(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
+                };
+            }
           }
         }
       }
@@ -924,7 +930,7 @@
                   button_el.onclick = function (e) {
                     parseEffect(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
                     console.log(local_options[options.limit_key], local_value.effect, { ...local_options, timestamp: current_timestamp, ui_type: options.config_key });
-                  }
+                  };
               } catch (e) {
                 console.warn(e);
               }
@@ -934,11 +940,79 @@
     };
 
     global[`refresh${options.namespace}sContextMenus`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
 
+      //Declare local instance variables
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
+      var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({
+        ...local_options,
+        return_selector: true
+      });
+      var namespace_context_menus = namespace_anchor_el.querySelectorAll(`${namespace_anchor_selector} > .context-menu`);
+      var namespace_context_width = 0; //Measured in px
+
+      //Iterate over namespace_context_menus; fetch current namespace context menu width. Set current width
+      namespace_context_menus = sortElements(namespace_context_menus, { attribute: "order" });
+
+      for (var i = 0; i < namespace_context_menus.length; i++) {
+        //Set current position; track namespace_context_width
+        namespace_context_menus[i].style.left = `${namespace_context_width}px`;
+        namespace_context_width += namespace_context_menus[i].offsetWidth + 8;
+
+        if (!namespace_context_menus[i].getAttribute("order") == 1)
+          if (options.right_margin) {
+            namespace_context_menus[i].style.right = `calc(${options.right_margin} + ${namespace_context_width}px)`;
+          } else {
+            namespace_context_menus[i].style.left = `calc(${options.left_margin} + ${namespace_context_width}px)`;
+          }
+      }
+
+      //Update context menu inputs
+      global[`refresh${options.namespace}sContextMenuInputs`](local_options);
+
+      //Return statement
+      return namespace_context_width;
     };
 
     global[`refresh${options.namespace}sContextMenuInputs`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
 
+      //Declare local instance variables
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
+      var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({
+        ...local_options,
+        return_selector: true
+      });
+      var namespace_context_menus = namespace_anchor_el.querySelectorAll(`${namespace_anchor_selector} > .context-menu`);
+
+      //Placeholder handlers
+      //Iterate over all namespace_context_menus; fetch their IDs and update their inputs based on placeholders
+      for (var i = 0; i < namespace_context_menus.length; i++) {
+        var namespace_obj = config[`flattened_${options.config_key}`][namespace_context_menus[i].id];
+        var input_obj = getInputsAsObject(namespace_context_menus[i], local_options);
+
+        if (namespace_obj)
+          if (namespace_obj.interface) {
+            var all_interface_keys = Object.keys(namespace_obj.interface);
+
+            //Iterate over all_interface_keys to fill out inputs if placeholder exists
+            for (var x = 0; x < all_interface_keys.length; x++) {
+              var local_value = namespace_obj.interface[all_interface_keys[x]];
+
+              //Make sure local_value.placeholder is a valid field before filling it in
+              var local_input_el = namespace_context_menus[i].querySelector(`#${local_value.id}`);
+              if (local_value.placeholder)
+                fillInput({
+                  element: local_input_el,
+                  type: local_input_el.getAttribute("type"),
+                  placeholder: (input_obj[local_value.placeholder]) ?
+                    input_obj[local_value.placeholder] : local_value.placeholder
+                });
+            }
+          }
+      }
     };
   }
 

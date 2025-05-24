@@ -14,6 +14,7 @@
       interface_key: "brush", // Key for global.interfaces.brush
       namespace: "BrushAction", // Used for function names like closeBrushActionContextMenu
       navigation_mode: "icons", // Navigation items are direct DOM elements (img, span)
+      right_margin: "0px", //Custom right margin
       type: "default", // Operates on a global anchor, not entity/group specific
     });
 
@@ -56,6 +57,16 @@
     createContextMenuIndex({
       config_key: "group_actions",
       namespace: "GroupAction"
+    });
+    createContextMenuInterface({
+      anchor: config.defines.common.selectors.group_actions_context_menu_anchor,
+      class: "group-action-button",
+      config_key: "group_actions",
+      interface_key: "group_actions",
+      limit_key: "group_id",
+      namespace: "GroupAction",
+      navigation_mode: "list",
+      type: "group"
     });
 
     //VARIABLES

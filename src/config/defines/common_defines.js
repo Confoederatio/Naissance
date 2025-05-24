@@ -25,6 +25,7 @@ config.defines.common = {
       hierarchy: `#hierarchy`, //The query selector for the actual hierarchy tab or supercontainer.
       hierarchy_container: `#hierarchy-container`, //The query selector for the actual hierarchy container.
         group_actions_context_menu_anchor: `#context-menu-container`,
+        group_ui: `.group`,
     //Scripts
       scripts_container: `#scripts-content-container`, //The query selector for the actual scripts container.
     //Settings

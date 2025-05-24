@@ -53,7 +53,7 @@
 
         options.options = dumbMergeObjects(actions_input_obj, keyframe_input_obj);
       } else if (options.ui_type == "group_actions") {
-        group_actions_el = getGroupActionsAnchorElement(main.brush.selected_group_id);
+        group_actions_el = getGroupActionsAnchorElement({ group_id: main.brush.selected_group_id });
         group_actions_input_obj = getInputsAsObject(group_actions_el);
 
         options.options = group_actions_input_obj;
@@ -211,7 +211,7 @@
           if (all_scope_keys[i] == "close_select_multiple_keyframes")
             selectMultipleKeyframes(entity_id, { close_selection: true });
           if (all_scope_keys[i] == "interface")
-            printEntityKeyframeContextMenu(entity_id, scope);
+            printEntityKeyframesContextMenu(scope, { entity_id: entity_id });
           if (["open_ui", "trigger"].includes(all_scope_keys[i]))
             if (options.ui_type == "brush_actions") {
               //Parse the brush_effect being referenced

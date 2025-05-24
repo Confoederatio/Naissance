@@ -312,9 +312,9 @@
         is_being_edited: isEntityBeingEdited(entity_id)
       });
     setTimeout(function(){
-      var entity_actions_el = getEntityActionsAnchorElement(entity_id);
+      var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
       entity_actions_el.innerHTML = "";
-      var entity_actions_ui = printEntityActionsNavigationMenu(entity_id, entity_actions_el);
+      var entity_actions_ui = printEntityActionsNavigationMenu(entity_actions_el, { entity_id: entity_id });
     }, 1);
   }
 
