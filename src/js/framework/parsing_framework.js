@@ -273,7 +273,7 @@
                 if (local_entity_keyframe.immediate)
                   parsed_immediate = parseEffect(entity_id, local_entity_keyframe.immediate, new_options);
                 if (local_entity_keyframe)
-                  printEntityKeyframeContextMenu(entity_id, local_entity_keyframe, new_options);
+                  printEntityKeyframesContextMenu(local_entity_keyframe, { entity_id: entity_id, ...new_options });
               }
             } else if (options.ui_type == "group_actions") {
               //Parse the group_effect being referenced

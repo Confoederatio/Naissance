@@ -1,5 +1,6 @@
 #entity-keyframe-context-menu {
-  position: absolute;
+  position: fixed;
+  left: calc(var(--entity-ui-width) + 12px + 1rem);
   overflow: visible;
 }
 #entity-keyframe-context-menu .context-menu {
