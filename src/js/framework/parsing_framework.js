@@ -167,6 +167,7 @@
             if (typeof local_value[0] == "object") {
               setGroupMask(local_value[0].group_id, local_value[0].value);
             } else {
+              console.log(`Local value:`, local_value)
               setGroupMask(main.brush.selected_group_id, local_value[0]);
             }
 
@@ -293,7 +294,7 @@
                 if (local_group_action.immediate)
                   parsed_immediate = parseEffect(undefined, local_group_action.immediate, new_options);
                 if (local_group_action)
-                  printGroupActionsContextMenu(main.brush.selected_group_id, local_group_action, new_options);
+                  printGroupActionsContextMenu(local_group_action, { group_id: main.brush.selected_group_id, ...new_options });
               }
             }
           if (all_scope_keys[i] == "refresh_brush_actions")

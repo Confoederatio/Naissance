@@ -18,6 +18,7 @@
       .querySelector(common_selectors.group_actions_context_menu_anchor);
 
     //Invoke printGroupActionsNavigationMenu()
+    main.brush.selected_group_id = group_id;
     printGroupActionsNavigationMenu(parent_el, { group_id: group_id });
   }
 }

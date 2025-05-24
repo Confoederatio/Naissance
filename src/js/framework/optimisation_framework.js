@@ -63,6 +63,7 @@
       class: "group-action-button",
       config_key: "group_actions",
       interface_key: "group_actions",
+      left_margin: `calc(var(--left-sidebar-width) + 12px)`,
       limit_key: "group_id",
       namespace: "GroupAction",
       navigation_mode: "list",

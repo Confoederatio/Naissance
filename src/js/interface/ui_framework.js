@@ -364,7 +364,6 @@
       } else if (options.type == "group") {
         var group_el = getGroupElement(local_options.group_id);
 
-        console.log(local_options.group_id);
         var group_anchor_el = group_el.querySelector(options.anchor);
         var group_selector = `${common_selectors.group_ui}[data-id="${local_options.group_id}"]`;
 
@@ -396,9 +395,12 @@
       return unique_orders;
     };
 
-    global[`get${options.namespace}sInputObject`] = function () {
+    global[`get${options.namespace}sInputObject`] = function (arg0_options) {
+      //Convert from parameters
+      var local_options = (arg0_options) ? arg0_options : {};
+
       //Declare local instance variables
-      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`]();
+      var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
       var inputs_obj = {};
 
       //Iterate over all_context_menu_els
@@ -737,8 +739,11 @@
               //Parse .effect to .onclick event handler
               if (local_value.effect)
                 local_element.onclick = function (e) {
-                  parseEffect(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
-                  console.log(local_options.group_id, local_value.effect, { ...local_options, ui_type: options.config_key });
+                  console.log(local_options);
+                  var local_input_obj = global[`get${options.namespace}sInputObject`](local_options);
+
+                  parseEffect(local_options.group_id, local_value.effect, { ...local_input_obj, ui_type: options.config_key });
+                  console.log(local_options.group_id, local_value.effect, { ...local_input_obj, ui_type: options.config_key });
                 };
             }
           }
