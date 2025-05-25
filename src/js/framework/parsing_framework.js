@@ -21,6 +21,9 @@
     //Initialise options
     if (options.depth == undefined) options.depth = 0;
       options.depth++;
+    if (options.timestamp)
+      if (typeof options.timestamp == "string" && isNaN(options.timestamp))
+        options.timestamp = convertTimestampToInt(options.timestamp);
     if (!options.ui_type) options.ui_type = "entity_keyframes";
 
     //Declare local instance variables

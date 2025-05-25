@@ -306,11 +306,15 @@
     var entity_el = getEntityElement(entity_id);
 
     //Check if entity_el exists
-    if (!entity_el)
+    if (!entity_el) {
+      var coords;
+      try { coords = entity_obj.getCenter(); } catch (e) {}
+
       printEntityContextMenu(entity_id, {
-        coords: entity_obj.getCenter(),
+        coords: (coords) ? coords : undefined,
         is_being_edited: isEntityBeingEdited(entity_id)
       });
+    }
     setTimeout(function(){
       var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
       entity_actions_el.innerHTML = "";

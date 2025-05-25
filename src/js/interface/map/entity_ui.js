@@ -361,8 +361,9 @@
 
       //Create entity options to serve as flags
       if (entity_obj)
-      if (!entity_obj.options.selected_keyframes)
-        entity_obj.options.selected_keyframes = [];
+        if (entity_obj.options)
+          if (!entity_obj.options.selected_keyframes)
+            entity_obj.options.selected_keyframes = [];
       if (!is_pinned) popup_options.is_pinned = is_pinned;
       if (is_pinned) {
         popup_options.autoClose = false;
