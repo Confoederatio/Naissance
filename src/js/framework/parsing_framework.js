@@ -7,6 +7,7 @@
     arg2_options: (Object)
       options: (Object) - The actual options of various inputs and the data given, treated as global variables.
 
+      entity_id: (String)
       depth: (Number) - The current recursive depth. Starts at 1.
       scope_type: (Array<String>) - Optional. What the current scope_type currently refers to (e.g. 'polities', 'markers'). All if undefined. Undefined by default.
       timestamp: (String) - Optional. The current timestamp of the keyframe being referenced, if any.
@@ -32,6 +33,18 @@
     var entity_obj = getEntity(entity_id);
     var limit_fulfilled = true;
     scope = JSON.parse(JSON.stringify(scope)); //Deep-copy scope
+
+    //Populate entity_id if undefined
+    if (entity_id == undefined) {
+      if (main.brush.entity_options)
+        if (main.brush.entity_options.className) {
+          entity_id = main.brush.entity_options.className;
+          options.entity_id = entity_id;
+        }
+
+      if (options.entity_id)
+        entity_id = options.entity_id;
+    }
 
     //.interface parser; load inputs into .options
     if (options.depth == 1) {
@@ -144,7 +157,7 @@
               finishEntity(entity_id);
             }
           if (all_scope_keys[i] == "finish_entity")
-            finishEntity(entity_id);
+            finishEntity({ entity_id: entity_id });
           if (all_scope_keys[i] == "hide_entity")
             if (local_value[0]) {
               hideEntity(entity_id);
@@ -304,7 +317,7 @@
           if (all_scope_keys[i] == "refresh_brush_actions")
             refreshBrushActions();
           if (["refresh_entity_actions", "reload_entity_actions"].includes(all_scope_keys[i]))
-            refreshEntityActions({ entity_id: entity_id });
+            refreshEntityActions(entity_id);
           if (all_scope_keys[i] == "select_multiple_keyframes")
             selectMultipleKeyframes(entity_id, { assign_key: local_value[0] });
         }

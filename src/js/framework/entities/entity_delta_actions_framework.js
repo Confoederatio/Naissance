@@ -125,6 +125,7 @@
     var brush_obj = main.brush;
     var current_entity_history_obj = {};
     var current_entity_obj = getEntity(brush_obj.entity_options.className);
+    console.log(options.entity_id || (brush_obj.entity_options ? brush_obj.entity_options.className : undefined))
     var internal_options = JSON.parse(JSON.stringify({
       coords: convertToNaissance(brush_obj.current_path),
       entity_options: brush_obj.entity_options || {},
@@ -135,6 +136,7 @@
       current_path: brush_obj.current_path,
       date: main.date
     }));
+    console.log(`internal_options:`, internal_options)
 
     if (current_entity_obj)
       if (current_entity_obj.options)

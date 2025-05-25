@@ -186,24 +186,28 @@
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
 
     //Check if this is an actual entity object or a new selection
-    if (entity_obj) {
-      var first_history_frame = getFirstHistoryFrame(entity_obj);
-      var history_frame = getHistoryFrame(entity_obj, date);
+    if (entity_obj && entity_obj.options)
+      if (entity_obj.options.history) {
+        var first_history_frame = getFirstHistoryFrame(entity_obj);
+        var history_frame = getHistoryFrame(entity_obj, date);
 
-      if (history_frame.options)
-        if (history_frame.options.entity_name)
-          entity_name = history_frame.options.entity_name;
-      if (!entity_name)
-        if (first_history_frame.options)
-          if (first_history_frame.options.entity_name)
-            entity_name = first_history_frame.options.entity_name;
+        if (history_frame.options)
+          if (history_frame.options.entity_name)
+            entity_name = history_frame.options.entity_name;
+        if (!entity_name)
+          if (first_history_frame.options)
+            if (first_history_frame.options.entity_name)
+              entity_name = first_history_frame.options.entity_name;
 
 
-      if (!entity_name)
-        if (brush_obj.current_path)
-          if (entity_obj.options.className == entity_id)
-            entity_name = entity_obj.options.entity_name;
-    }
+        if (!entity_name)
+          if (brush_obj.current_path)
+            if (entity_obj.options.className == entity_id)
+              entity_name = entity_obj.options.entity_name;
+      } else {
+        if (entity_obj.options.entity_name)
+          entity_name = entity_obj.options.entity_name;
+      }
 
     //Return statement
     return (entity_name) ? entity_name : "Unnamed Polity";
@@ -315,11 +319,10 @@
         is_being_edited: isEntityBeingEdited(entity_id)
       });
     }
-    setTimeout(function(){
-      var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
-      entity_actions_el.innerHTML = "";
-      var entity_actions_ui = printEntityActionsNavigationMenu(entity_actions_el, { entity_id: entity_id });
-    }, 1);
+
+    var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
+    entity_actions_el.innerHTML = "";
+    var entity_actions_ui = printEntityActionsNavigationMenu(entity_actions_el, { entity_id: entity_id });
   }
 
   function reloadEntitiesArray () {

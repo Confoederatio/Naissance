@@ -13,6 +13,7 @@ config.brush_actions.brush_rightbar = {
     },
     effect: {
       finish_entity: true,
+      refresh_brush_actions: true,
       refresh_entity_actions: true
     }
   },

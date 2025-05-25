@@ -376,7 +376,7 @@
       var leaflet_centre_coords;
 
       //Fetch centroid for leaflet_centre_coords if options.coords is not available
-      if (!options.coords) {
+      if (!options.coords && last_history_coords) {
         try {
           var turf_polygon = getTurfObject(last_history_coords);
           var turf_polygon_centre = turf.center(turf_polygon).geometry.coordinates;
@@ -423,6 +423,7 @@
 
       //Call createContextMenu() after the popup content is set
       setTimeout(function(){
+        console.log(`entity_id:`, entity_id);
         var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });
         var entity_actions_ui = printEntityActionsNavigationMenu(entity_actions_el, {
           entity_id: entity_id
