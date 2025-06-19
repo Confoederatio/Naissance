@@ -115,9 +115,10 @@
 
     Returns: (Variable)
   */
-  function getInput (arg0_input_el) { //[WIP] - Complete function body
+  function getInput (arg0_input_el, arg1_options) {
     //Convert from parameters
     var input_el = arg0_input_el;
+    var options = (arg1_options) ? arg1_options : {};
 
     //Declare local instance variables
     var id = input_el.getAttribute("id");

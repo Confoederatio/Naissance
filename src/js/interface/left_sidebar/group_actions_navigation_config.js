@@ -66,3 +66,4 @@ config.group_actions.actions_navigation = {
     }
   }
 };
+
