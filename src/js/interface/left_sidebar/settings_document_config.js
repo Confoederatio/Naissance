@@ -36,6 +36,15 @@ config.settings.document = {
       setMapProjection(e.target.value);
     },
   },
+  hide_all_map_layers: {
+    id: "hide_all_map_layers",
+    name: "Hide All Map Layers",
+    type: "button",
+
+    onclick: function (e) {
+      console.log(e);
+    }
+  },
   map_layers_sortable_list: {
     id: `map_layers_sortable_list`,
     name: `<div class = "secondary-header">Map Layers:</div>`,
