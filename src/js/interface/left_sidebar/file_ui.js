@@ -35,19 +35,19 @@
       });
 
       //Populate initial base saves folder upon load
-      populateFolderExplorer(options.id, file_path, undefined, options);
+      populateFileExplorer(options.id, file_path, undefined, options);
     }
   }
 
   /*
-    populateFolderExplorer() - Populates the current folder explorer's DOM with the file path stated.
+    populateFileExplorer() - Populates the current folder explorer's DOM with the file path stated.
     arg0_hierarchy_id: (String)
     arg1_file_path: (String)
     arg2_parent_group_id: (String) - Optional. Used for nesting displays.
     arg3_options: (Object)
       saves_explorer: (Boolean) - Whether this is the saves explorer and file renames/deletes should be limited to the saves folder only.
   */
-  function populateFolderExplorer (arg0_hierarchy_id, arg1_file_path, arg2_parent_group_id, arg3_options) {
+  function populateFileExplorer (arg0_hierarchy_id, arg1_file_path, arg2_parent_group_id, arg3_options) {
     //Convert from parameters
     var hierarchy_id = arg0_hierarchy_id;
     var file_path = arg1_file_path;
@@ -186,7 +186,7 @@
                 options.variable_key = local_file_path;
 
                 clearHierarchy(hierarchy_id, { hierarchy_selector: container_selector });
-                populateFolderExplorer(hierarchy_id, local_file_path, undefined, options);
+                populateFileExplorer(hierarchy_id, local_file_path, undefined, options);
               } else {
                 //Go up a folder
                 var split_local_file_path = options.variable_key.split("\\");
@@ -194,7 +194,7 @@
                 options.variable_key = split_local_file_path.join("\\");
 
                 clearHierarchy(hierarchy_id, { hierarchy_selector: container_selector });
-                populateFolderExplorer(hierarchy_id, local_file_path, undefined, options);
+                populateFileExplorer(hierarchy_id, local_file_path, undefined, options);
               }
             } else if (local_type.includes("entity")) {
               console.log("Clicked:", local_file_name_el.innerText);
@@ -204,7 +204,7 @@
             options.variable_key = `${local_file_name_el.innerText}`;
 
             clearHierarchy(hierarchy_id, { hierarchy_selector: container_selector });
-            populateFolderExplorer(hierarchy_id, options.variable_key + "\\", undefined, options);
+            populateFileExplorer(hierarchy_id, options.variable_key + "\\", undefined, options);
           }
         };
       }

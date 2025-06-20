@@ -423,10 +423,7 @@
         }
     };
 
-    global[`get${options.namespace}sLowestOrder`] = function (arg0_options) {
-      //Convert from parameters
-      var local_options = (arg0_options) ? arg0_options : {};
-
+    global[`get${options.namespace}sLowestOrder`] = function () {
       //Declare local instance variables
       var flattened_namespace = config[`flattened_${options.config_key}`];
       var min_order = Infinity;
@@ -680,7 +677,7 @@
               if (!local_value.id) local_value.id = all_interface_keys[i];
 
               //Type handlers: set placeholders where applicable
-              autoFillInputs({
+              autoFillInput({
                 element: local_element,
                 type: local_value.type,
                 placeholder: local_value.placeholder,
@@ -786,7 +783,7 @@
                   if (!local_value.id) local_value.id = all_interface_keys[i];
 
                   //Type handlers: set placeholders where applicable
-                  autoFillInputs({
+                  autoFillInput({
                     element: local_element,
                     type: local_value.type,
                     placeholder: local_value.placeholder,
@@ -906,7 +903,7 @@
               if (!local_value.id) local_value.id = all_interface_keys[i];
 
               //Type handlers: set placeholders where applicable
-              autoFillInputs({
+              autoFillInput({
                 element: local_element,
                 type: local_value.type,
                 placeholder: local_value.placeholder,

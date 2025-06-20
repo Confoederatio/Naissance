@@ -8,7 +8,7 @@
       return_key: (Boolean)
   */
   function getHierarchyFromID (arg0_hierarchy_id, arg1_options) {
-    //Convert from parmaeters
+    //Convert from parameters
     var hierarchy_id  = arg0_hierarchy_id;
     var options = (arg1_options) ? arg1_options : {};
 
@@ -287,7 +287,7 @@
     arg0_options: (Object)
       naissance_hierarchy: (String) - Whether to export the string as a Naissance hierarchy.
   */
-  function exportHierarchies (arg0_options) { //[WIP] - Work on element.querySelector('div') and replace it with a more specific selector
+  function exportHierarchies (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
 

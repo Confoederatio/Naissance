@@ -59,7 +59,7 @@
         writeNaissanceSave(document.querySelector(common_selectors.files_interaction_save_file_input).value);
 
         clearHierarchy("file-hierarchy", { hierarchy_selector: common_selectors.files_hierarchy });
-        populateFolderExplorer("file-hierarchy", main.selected_path, undefined, file_hierarchy_options);
+        populateFileExplorer("file-hierarchy", main.selected_path, undefined, file_hierarchy_options);
       };
     };
     getUISelector("undo_redo_button").onclick = function (e) {
