@@ -2,7 +2,7 @@
 //Initialise functions
 {
   /*
-    createTimeline() - Creates a new timeline from a parent (or an unassociataed one if no parent is defined). The parent may be cloned into the new timeline if necessary.
+    createTimeline() - Creates a new timeline from a parent (or an unassociated one if no parent is defined). The parent may be cloned into the new timeline if necessary.
     arg0_parent_timeline: (String) - Optional. The ID of the parent timeline to split off from. global.actions.initial_timeline by default
     arg1_options: (Object)
       timeline_index: (Number) - Optional. The index off of which the timeline should split. The last index of the timeline by default

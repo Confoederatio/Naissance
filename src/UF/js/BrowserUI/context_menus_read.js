@@ -157,7 +157,7 @@
     } else if (type == "image") {
       //[WIP] - No current file input of this kind
     } else if (type == "number") {
-      output = input_el.querySelector(`input[type="number"]`).value;
+      output = parseFloat(input_el.querySelector(`input[type="number"]`).value);
     } else if (type == "password") {
       output = input_el.querySelector(`input[type="password"]`).value;
     } else if (type == "radio") {
