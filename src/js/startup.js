@@ -191,7 +191,7 @@ setTimeout(function(){
   initialiseMapHandler();
   initialiseMouseHandler();
   initBrush();
-}, 500);
+}, 200);
 
 //Test scripts
 setTimeout(function(){
@@ -205,4 +205,4 @@ setTimeout(function(){
   //Sync groups
   initialiseHierarchyDrawLoops();
   loadNaissanceSave(`./saves/project_atlas.js`)
-}, 1000);
+}, 300);
