@@ -8,15 +8,34 @@ window.path = require("path");
   global.load_order = {
     load_directories: [
       "config",
-      "./js/interface/*_config.js",
-      "UF"
+      "UF",
+      "js/framework",
+      "js/interface"
     ],
     load_files: [
-      ".config_backend.js"
+      ".config_backend.js",
+      "./js/interface/*_config.js"
     ]
   };
-  loadConfig();
+
+  loadAllScripts();
 }
+
+//[WIP] - FPS profiler. Remove at a later date
+(function(){
+  var script= document.createElement('script');
+  script.onload=function(){
+    var stats=new Stats();
+    document.body.appendChild(stats.dom);
+    requestAnimationFrame(function loop(){
+      stats.update();
+      requestAnimationFrame(loop)
+    });
+  };
+  script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';
+
+  document.head.appendChild(script);}
+)()
 
 //Init global
 {
@@ -125,15 +144,13 @@ if (!global.config) global.config = {};
 }
 
 //Initialise optimisation; map, other UI elements after everything else
-{
-  initOptimisation();
-  
-  var map = new maptalks.Map("map", {
+setTimeout(function(){
+  global.map = new maptalks.Map("map", {
     center: [51.505, -0.09],
     zoom: 5,
     /*spatialReference: {
-      projection: 'EPSG:3857' // Ensure that both Maptalks and Leaflet use the same projection
-    },*/
+			projection: 'EPSG:3857' // Ensure that both Maptalks and Leaflet use the same projection
+		},*/
     baseLayer: new maptalks.TileLayer("base", {
       spatialReference: {
         projection:'EPSG:3857'
@@ -143,7 +160,12 @@ if (!global.config) global.config = {};
       repeatWorld: false
     })
   });
+  if (!global.main) global.main = {};
   main.entity_layer = new maptalks.VectorLayer("entity_layer").addTo(map);
+}, 100);
+
+setTimeout(function(){
+  initOptimisation();
 
   //Initialise Basic Frameworks
   {
@@ -152,7 +174,6 @@ if (!global.config) global.config = {};
   }
 
   //Initialise Brush UI
-  initBrush();
   initBrushUI();
 
   //KEEP AT BOTTOM!
@@ -166,13 +187,16 @@ if (!global.config) global.config = {};
   //UI loop
   initialiseMapEventDrawLoops();
   initialiseUIDrawLoops();
-}
+
+  initialiseMapHandler();
+  initialiseMouseHandler();
+  initBrush();
+}, 500);
 
 //Test scripts
 setTimeout(function(){
   var hierarchies_obj = main.hierarchies;
   var hierarchy_el = getUISelector("hierarchy");
-  loadNaissanceSave(`${main.saves_folder}\\project_atlas.js`);
 
   //Sync entities
   main.equate_entities_interval = equateObject(hierarchies_obj.hierarchy, "entities", global.main, "entities");
@@ -180,4 +204,5 @@ setTimeout(function(){
 
   //Sync groups
   initialiseHierarchyDrawLoops();
-}, 100);
+  loadNaissanceSave(`./saves/project_atlas.js`)
+}, 1000);

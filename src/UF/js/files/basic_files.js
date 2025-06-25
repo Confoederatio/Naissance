@@ -1,37 +1,5 @@
 //Basic files - Requires path and fs to function.
 
-/*
-  getAllFiles() - Fetches an array of all files in a given folder.
-  arg0_folder: (String) - The folder path.
-
-  Returns: (Array<String, ...>)
-*/
-function getAllFiles (arg0_folder) {
-  //Convert from parameters
-  var folder = arg0_folder;
-
-  //Declare local instance variables
-  var file_array = [];
-
-    try {
-      var files = fs.readdirSync(folder);
-
-      for (var i = 0; i < files.length; i++) {
-        //Self-reference to fetch files in sub-directories
-        local_dir_array = (fs.statSync(folder + "\\" + files[i]).isDirectory()) ? getAllFiles(folder + "\\" + files[i]) : file_array.push(path.join(folder, "\\", files[i]));
-
-        //Add files from local_dir_array to file_array
-        for (var x = 0; x < local_dir_array.length; x++)
-          file_array.push(local_dir_array[x]);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    //Return statement
-    return file_array;
-}
-
 function getAllDrives () {
   //Declare local instance variables
   var current_os = process.platform;

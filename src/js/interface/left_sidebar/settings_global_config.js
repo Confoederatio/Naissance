@@ -24,7 +24,8 @@ config.settings.global = {
 
     options: {
       "anchor_entity_popups": "Anchor Entity Popups",
-      "hide_entity_data_graph_by_default": "Hide Entity Data Graph by Default"
+      "hide_entity_data_graph_by_default": "Hide Entity Data Graph by Default",
+      "select_entity_on_right_click": "Select Entity on Right Click"
     }
   },
   document_settings_html: {

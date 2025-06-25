@@ -49,7 +49,7 @@
 			<script type="text/javascript" src="./libraries/maptalks.three.js"></script>
 			<script type="text/javascript" src="./libraries/stats.min.js"></script>
 		<script type = "text/javascript" src = "./libraries/leaflet.min.js"></script>
-    <script type = "text/javascript" src = "./libraries/vector_grid/Leaflet.VectorGrid.bundled.min.js"></script>
+    	<script type = "text/javascript" src = "./libraries/vector_grid/Leaflet.VectorGrid.bundled.min.js"></script>
 
 		<script src = "./libraries/html2canvas.min.js"></script>
 		<script src = './libraries/leaflet-geodesy.js'></script>
@@ -67,72 +67,14 @@
 		<link rel = "stylesheet" href = "./libraries/ol.css" type="text/css">
 		
 		<!-- UF, CSS Imports -->
-    <link rel = "stylesheet" href = "UF/css/BrowserUI/context_menus.css">
-    <link rel = "stylesheet" href = "UF/css/BrowserUI/windows.css">
-
-    <!-- UF, JS Imports -->
-    <script src = "UF/js/ABRS/framework_ABRS.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/actions/caching_actions.js" type = "text/javascript"></script>
-		<script src = "UF/js/actions/timelines_actions.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/arrays/basic_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/conversion_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/dataframes_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/maths_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/search_sort_arrays.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/ai/basic_ai.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/arrays/basic_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/conversion_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/dataframes_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/maths_arrays.js" type = "text/javascript"></script>
-		<script src = "UF/js/arrays/search_sort_arrays.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/BrowserUI/basic_html.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/context_menus_helper_functions.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/context_menus.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/context_menus_read.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/context_menus_write.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/groups_framework.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/hierarchy_framework.js" type = "text/javascript"></script>
-		<script src = "UF/js/BrowserUI/ui_framework.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/colours/basic_colour.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/curl/basic_curl.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/date/basic_date.js" type = "text/javascript"></script>
-		<script src = "UF/js/date/conversion_date.js" type = "text/javascript"></script>
-		<script src = "UF/js/date/format_date.js" type = "text/javascript"></script>
-		<script src = "UF/js/date/history_date.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/files/basic_files.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/localisation/basic_localisation.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/log/basic_log.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/numbers/basic_numbers.js" type = "text/javascript"></script>
-		<script src = "UF/js/numbers/ranges_numbers.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/objects/basic_objects.js" type = "text/javascript"></script>
-		<script src = "UF/js/objects/maths_objects.js" type = "text/javascript"></script>
-		<script src = "UF/js/objects/smart_search_objects.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/pathfinding/a_star_pathfinding.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/statistics/basic_demographics.js" type = "text/javascript"></script>
-
-		<script src = "UF/js/strings/basic_strings.js" type = "text/javascript"></script>
-		<script src = "UF/js/strings/cleaning_strings.js" type = "text/javascript"></script>
-		<script src = "UF/js/strings/split_strings.js" type = "text/javascript"></script>
-
-		<!-- Import config -->
-		<script src = "./js/interface/ui_config.js" type = "text/javascript"></script>
+		<link rel = "stylesheet" href = "UF/css/vercengen/context_menus.css">
+		<link rel = "stylesheet" href = "UF/css/vercengen/windows.css">
 	</head>
 	<body>
+		<!-- Import Naissance JS -->
+		<script src = "UF/js/files/file_manager.js" type = "text/javascript"></script>
+		<script src = "./js/startup.js" type = "text/javascript"></script>
+
 		<!-- Map container -->
 		<div id = "map" class = "map-container"></div>
 
@@ -280,83 +222,5 @@
 		<!-- Popup Containers -->
 		<div id = "entity-panel-container" class = "entity-panel-container bottom-left">
 		</div>
-
-		<!-- Import ABRS and Undo/Redo -->
-		<script src = "./js/framework/ABRS/save_load.js" type = "text/javascript"></script>
-
-		<script src = "./js/framework/actions/undo_redo_framework.js" type = "text/javascript"></script>
-			<!-- Entity Actions -->
-			<script src = "./js/framework/actions/entities/apply_path_to_keyframes.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/clean_keyframes.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/edit_entity_nodes.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/set_entity_fill.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/set_entity_stroke.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/set_entity_zoom_level.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/simplify_all_entity_keyframes.js" type = "text/javascript"></script>
-			<script src = "./js/framework/actions/entities/simplify_entity.js" type = "text/javascript"></script>
-
-		<!-- Import framework -->
-		<script src = "./js/framework/brush/brush_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/coords/coords_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/date/date_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/entities/entity_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/entities/entity_delta_actions_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/entities/entity_keyframes_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/groups/group_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/history/history_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/map/polity_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/map/projection_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/map/tile_layers_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/map/turf_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/map/rendering_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/masks/mask_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/variables/variable_framework.js" type = "text/javascript"></script>
-
-		<script src = "./js/framework/optimisation_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/parsing_framework.js" type = "text/javascript"></script>
-		<script src = "./js/framework/settings_framework.js" type = "text/javascript"></script>
-
-		<!-- Import localisation -->
-		<script src = "./js/interface/map/entity_localisation.js" type = "text/javascript"></script>
-
-		<!-- Import UI -->
-		<script src = "./js/interface/left_sidebar/date_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/file_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/undo_redo_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/left_sidebar/group_actions_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/hierarchy_context_menus.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/hierarchy_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/scripts_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/settings_map_layers_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/left_sidebar/settings_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/map/brush_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/map/entity_customisation_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/map/entity_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/map/entity_variables_ui.js" type = "text/javascript"></script>
-		<script src = "./js/interface/map/graph_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/map/map_framework.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/right_sidebar/map_brush_ui.js" type = "text/javascript"></script> <!-- [WIP] - DEPRECATE -->
-
-		<script src = "./js/interface/topbar/topbar_ui.js" type = "text/javascript"></script>
-
-		<script src = "./js/interface/ui_framework.js" type = "text/javascript"></script>
-		<script src = "./js/interface/ui_initialisation.js" type = "text/javascript"></script>
-
-		<!-- Keep at BOTTOM after all functions are declared -->
-		<!-- Declare global variables -->
-		<script src = "./js/interface/events/draw_loop_hierarchy.js" type = "text/javascript"></script>
-		<script src = "./js/interface/events/draw_loop_map_event.js" type = "text/javascript"></script>
-		<script src = "./js/interface/events/draw_loop_ui.js" type = "text/javascript"></script>
-		<script src = "./js/startup.js" type = "text/javascript"></script>
-
-		<!-- Event listeners should also always be at bottom -->
-		<script src = "./js/interface/events/key_monitoring.js" type = "text/javascript"></script>
-		<script src = "./js/interface/events/map_monitoring.js" type = "text/javascript"></script>
-		<script src = "./js/interface/events/mouse_monitoring.js" type = "text/javascript"></script>
 	</body>
 </html>
