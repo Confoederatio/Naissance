@@ -172,32 +172,39 @@ window.onload = function () {
   initDateFramework();
   initBrushUI();
 
-  //UI Event handlers
-  initialiseMapHandler();
-  initialiseMouseHandler();
-  initBrush();
+  //2.1. Undo/Redo
+  initialiseUndoRedo();
+  initialiseUndoRedoActions();
+  initialiseUndoRedoUI();
 
-  //UI loops
+  //2.2. UI loops
   initialiseUI();
   initialiseMapEventDrawLoops();
   initialiseUIDrawLoops();
 
-  //Undo/Redo
-  initialiseUndoRedo();
-  initialiseUndoRedoActions();
-  initialiseUndoRedoUI();
+  //2.3. UI Event handlers
+  initialiseMapHandler();
+  initialiseMouseHandler();
+  initBrush();
 };
 
 //Test scripts
-setTimeout(function(){
-  var hierarchies_obj = main.hierarchies;
-  var hierarchy_el = getUISelector("hierarchy");
+global.load_scripts = setInterval(function(){
+  try {
+    var hierarchies_obj = main.hierarchies;
+    var hierarchy_el = getUISelector("hierarchy");
 
-  //Sync entities
-  main.equate_entities_interval = equateObject(hierarchies_obj.hierarchy, "entities", global.main, "entities");
-  main.previous_hierarchy_html = hierarchy_el.innerHTML;
+    //Sync entities
+    main.equate_entities_interval = equateObject(hierarchies_obj.hierarchy, "entities", global.main, "entities");
+    main.previous_hierarchy_html = hierarchy_el.innerHTML;
 
-  //Sync groups
-  initialiseHierarchyDrawLoops();
-  loadNaissanceSave(`./saves/project_atlas.js`)
+    //Sync groups
+    initialiseHierarchyDrawLoops();
+    loadNaissanceSave(`./saves/project_atlas.js`);
+
+    //KEEP AT BOTTOM! Clear interval once successfully loaded
+    clearInterval(global.load_scripts);
+  } catch (e) {
+    console.error(e);
+  }
 }, 100);
