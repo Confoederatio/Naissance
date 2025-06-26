@@ -1,7 +1,7 @@
 //Import modules
-window.child_process = require("child_process");
-window.fs = require("fs");
-window.path = require("path");
+global.child_process = require("child_process");
+global.fs = require("fs");
+global.path = require("path");
 
 //Load config
 {
@@ -38,7 +38,7 @@ window.path = require("path");
 )()
 
 //Init global
-{
+function initGlobal () {
   //Declare local initialisation constants
   var current_date = new Date();
 
@@ -100,51 +100,53 @@ window.path = require("path");
   main.saves_folder = `${path.dirname(__dirname, "\\..")}\\saves`;
   main.selected_path = `${path.dirname(__dirname, "\\..")}\\saves`;
   main.settings = {};
-}
 
-/*
-  Hierarchy group data structure:
-  <group_name>: {
-    name: "France",
-    layer: true, //Either true/false
+  /*
+		Hierarchy group data structure:
+		<group_name>: {
+			name: "France",
+			layer: true, //Either true/false
 
-    subgroups: ["departments"],
-    entities: ["1", ..]
-  },
-  <group_name>_departments: {
-    name: "Departments",
-    parent_group: "France", //Immediate parent
+			subgroups: ["departments"],
+			entities: ["1", ..]
+		},
+		<group_name>_departments: {
+			name: "Departments",
+			parent_group: "France", //Immediate parent
 
-    entities: ["38179137582", "38179137583"] //Entity ID's
-  }
-*/
+			entities: ["38179137582", "38179137583"] //Entity ID's
+		}
+	*/
 
-//Optimisation
-if (!global.config) global.config = {};
+  //Optimisation
+  if (!global.config) global.config = {};
   if (!config.mask_classes) config.mask_classes = [];
   if (!config.mask_types) config.mask_types = ["add", "intersect_add", "intersect_overlay", "subtract"];
 
-//Process optimisation
-{
-  //Masks
-  for (var i = 0; i < config.mask_types.length; i++)
-    config.mask_classes.push(` ${config.mask_types[i]}`);
+  //Process optimisation
+  {
+    //Masks
+    for (var i = 0; i < config.mask_types.length; i++)
+      config.mask_classes.push(` ${config.mask_types[i]}`);
+  }
+
+  //UI
+  {
+    //Entity UI
+    window.actions_with_context_menu = ["apply-path", "hide-polity", "simplify-entity"];
+    window.entity_options = {
+      className: "current-union"
+    };
+
+    //Sidebar UI
+    window.sidebar_selected_entities = [];
+  }
 }
 
-//UI
-{
-  //Entity UI
-  window.actions_with_context_menu = ["apply-path", "hide-polity", "simplify-entity"];
-  window.entity_options = {
-    className: "current-union"
-  };
+//Begin load process only once all elements in the DOM are loaded
+window.onload = function () {
+  initGlobal();
 
-  //Sidebar UI
-  window.sidebar_selected_entities = [];
-}
-
-//Initialise optimisation; map, other UI elements after everything else
-setTimeout(function(){
   global.map = new maptalks.Map("map", {
     center: [51.505, -0.09],
     zoom: 5,
@@ -161,37 +163,10 @@ setTimeout(function(){
     })
   });
   if (!global.main) global.main = {};
-  main.entity_layer = new maptalks.VectorLayer("entity_layer").addTo(map);
-}, 100);
+  main.entity_layer = new maptalks.VectorLayer("entity_layer").addTo(map)
 
-setTimeout(function(){
   initOptimisation();
-
-  //Initialise Basic Frameworks
-  {
-    //Initialise Date
-    initDateFramework();
-  }
-
-  //Initialise Brush UI
-  initBrushUI();
-
-  //KEEP AT BOTTOM!
-  //Initialise Undo/Redo
-  initialiseUndoRedo();
-  initialiseUndoRedoActions();
-
-  initialiseUndoRedoUI();
-  initialiseUI();
-
-  //UI loop
-  initialiseMapEventDrawLoops();
-  initialiseUIDrawLoops();
-
-  initialiseMapHandler();
-  initialiseMouseHandler();
-  initBrush();
-}, 200);
+};
 
 //Test scripts
 setTimeout(function(){
@@ -205,4 +180,4 @@ setTimeout(function(){
   //Sync groups
   initialiseHierarchyDrawLoops();
   loadNaissanceSave(`./saves/project_atlas.js`)
-}, 300);
+}, 100);

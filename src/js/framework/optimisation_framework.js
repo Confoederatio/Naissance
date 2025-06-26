@@ -75,5 +75,24 @@
       config_key: "variables",
       namespace: "VariableActions"
     });
+
+    //2. Scripts
+    initDateFramework();
+    initBrushUI();
+
+    //UI Event handlers
+    initialiseMapHandler();
+    initialiseMouseHandler();
+    initBrush();
+
+    //UI loops
+    initialiseUI();
+    initialiseMapEventDrawLoops();
+    initialiseUIDrawLoops();
+
+    //Undo/Redo
+    initialiseUndoRedo();
+    initialiseUndoRedoActions();
+    initialiseUndoRedoUI();
   }
 }

@@ -30,7 +30,11 @@
 		return file_array;
 	}
 
-	function loadFileToDOM (arg0_file_path) {
+	/**
+	 * loadFileInDOM() - Loads a file at the end of the <body> tag in DOM.
+	 * @param {String} arg0_file_path
+	 */
+	function loadFileInDOM (arg0_file_path) {
 		//Convert from parameters
 		var file_path = arg0_file_path;
 
@@ -47,54 +51,52 @@
 		}
 	}
 
+	//loadAllScripts() - Loads all scripts as defined in global.load_order.
 	function loadAllScripts () {
 		//Declare local instance variables
 		var all_potential_files = [];
 
-		// --- Step 1: Gather all files from directories ---
-		global.load_order.load_directories.forEach(function (dir) {
+		//1. Get all files in directories.
+		load_order.load_directories.forEach(function (dir) {
 			var full_path = path.join(__dirname, dir);
 			var files_in_dir = getAllFiles(full_path);
 
 			all_potential_files = all_potential_files.concat(files_in_dir);
 		});
 
-		// --- Step 2: Gather all files from specific/wildcard list ---
-		global.load_order.load_files.forEach(function (file_pattern) {
+		//2. Match wildcard files and import them.
+		load_order.load_files.forEach(function (file_pattern) {
 			if (file_pattern.includes("*")) {
 				// Handle wildcard
 				var directory = path.dirname(file_pattern);
+				var files_in_dir = getAllFiles(path.join(__dirname, directory));
 				var pattern = new RegExp(
 					"^" +
-					path
-					.basename(file_pattern)
-					.replace(".", "\\.")
-					.replace("*", ".*") +
-					"$"
+					path.basename(file_pattern).replace(".", "\\.")
+						.replace("*", ".*") + "$"
 				);
-				var files_in_dir = getAllFiles(path.join(__dirname, directory));
 
+				//Iterate over all files_in_dir
 				files_in_dir.forEach(function (file) {
 					if (pattern.test(path.basename(file))) {
 						all_potential_files.push(file);
 					}
 				});
 			} else {
-				// Handle specific file
-				// This is tricky because we don't know which directory it's in.
-				// We search all of them.
-				global.load_order.load_directories.forEach(function (dir) {
+				//Iterate over all directories
+
+				load_order.load_directories.forEach(function (dir) {
 					var potential_path = path.join(__dirname, dir, file_pattern);
-					if (fs.existsSync(potential_path)) {
+					if (fs.existsSync(potential_path))
 						all_potential_files.push(potential_path);
-					}
 				});
 			}
 		});
 
-		// --- Step 3: De-duplicate the list ---
-		var unique_files_to_load = [];
+		//3. Remove duplicates from the list
 		var seen_files = {};
+		var unique_files_to_load = [];
+
 		all_potential_files.forEach(function (file) {
 			if (!seen_files[file]) {
 				unique_files_to_load.push(file);
@@ -102,14 +104,10 @@
 			}
 		});
 
-		// --- Step 4: Load all unique scripts ---
-		console.log(
-			"Attempting to load " + unique_files_to_load.length + " unique scripts..."
-		);
+		//4. Iterate over all unique_files_to_load; load all unique scripts
+		console.log(`Attempting to load ${unique_files_to_load.length} script tags in ${load_order.load_directories.length} directories ..`);
 		unique_files_to_load.forEach(function (file) {
-			console.log("Loading:", file.replace(__dirname, ""));
-			loadFileToDOM(file);
+			loadFileInDOM(file);
 		});
-		console.log("Script loading process complete.");
 	}
 }
