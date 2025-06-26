@@ -2,7 +2,8 @@
 {
 	/**
 	 * getAllFiles() - Fetches all files within a folder and returns them.
-	 * @param folder
+	 * @param {String} arg0_folder
+	 *
 	 * @returns {Array<String>}
 	 */
 	function getAllFiles (arg0_folder) {
