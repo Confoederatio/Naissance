@@ -35,10 +35,10 @@ global.path = require("path");
   script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';
 
   document.head.appendChild(script);}
-)()
+)();
 
 //Init global
-function initGlobal () {
+function initialiseGlobal () {
   //Declare local initialisation constants
   var current_date = new Date();
 
@@ -145,7 +145,8 @@ function initGlobal () {
 
 //Begin load process only once all elements in the DOM are loaded
 window.onload = function () {
-  initGlobal();
+  //1. Init global, maps, and optimisation
+  initialiseGlobal();
 
   global.map = new maptalks.Map("map", {
     center: [51.505, -0.09],
@@ -166,6 +167,25 @@ window.onload = function () {
   main.entity_layer = new maptalks.VectorLayer("entity_layer").addTo(map)
 
   initOptimisation();
+
+  //2. Scripts
+  initDateFramework();
+  initBrushUI();
+
+  //UI Event handlers
+  initialiseMapHandler();
+  initialiseMouseHandler();
+  initBrush();
+
+  //UI loops
+  initialiseUI();
+  initialiseMapEventDrawLoops();
+  initialiseUIDrawLoops();
+
+  //Undo/Redo
+  initialiseUndoRedo();
+  initialiseUndoRedoActions();
+  initialiseUndoRedoUI();
 };
 
 //Test scripts
