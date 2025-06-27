@@ -25,6 +25,14 @@
     return parent_el.contains(child_el);
   }
 
+  /**
+   * elementDragHandler() - Provides a Window interface without CSS styling for an element. .header refers to the draggable header at the top.
+   * @param {HTMLElement} arg0_el
+   * @param {Object} [arg1_options]
+   *  @param {boolean} [arg1_options.is_resizable=false]
+   *
+   * @returns {HTMLElement}
+   */
   function elementDragHandler (arg0_el, arg1_options) {
     //Convert from parameters
     var el = (typeof arg0_el == 'string') ? document.querySelector(arg0_el) : arg0_el;
@@ -197,6 +205,9 @@
       document.onmouseup = internalCloseDragElement;
       document.onmousemove = internalElementDrag;
     }
+
+    //Return statement
+    return el;
   }
 
   function execCodeAction (arg0_button_el, arg1_editor_el, arg2_visual_view_el, arg3_html_view_el) {

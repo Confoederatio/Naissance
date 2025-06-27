@@ -6,12 +6,21 @@ global.ve = {
 
   //1. State functions
   initialise: function () {
-
+    //Declare Windows overlay element
+    ve.window_overlay_el = document.createElement("div");
+      ve.window_overlay_el.id = "ve-overlay";
+      ve.window_overlay_el.setAttribute("class", "ve-overlay");
+    document.body.appendChild(ve.window_overlay_el);
   },
 
   //2. Window class
   Window: class {
+    constructor (arg0_options) {
+      //Convert from parameters
+      var options = (arg0_options) ? arg0_options : {};
 
+      //Declare local instance variables
+    }
   },
 
   //3. Pane class
@@ -21,6 +30,16 @@ global.ve = {
 
   //4. Interface class
   Interface: class {
+    constructor (arg0_options) {
+      //Convert from parameters
+      var options = (arg0_options) ? arg0_options : {};
+
+      //Declare local instance variables
+    }
+  },
+
+  //5. Component class
+  Component: class {
 
   },
 

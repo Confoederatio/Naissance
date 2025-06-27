@@ -1,0 +1,14 @@
+/* -- Set up pointer and overlay behaviour for Windows -- */
+.ve-overlay {
+    position: fixed;
+
+    height: 100dvh;
+    left: 0px;
+    top: 0px;
+    width: 100dvw;
+
+    pointer-events: none;
+}
+.ve-overlay .ve-window {
+    pointer-events: auto;
+}

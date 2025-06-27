@@ -45,6 +45,7 @@ window.onload = function () {
   main.entity_layer = new maptalks.VectorLayer("entity_layer").addTo(map)
 
   initOptimisation();
+  ve.initialise(); //Initialise Vercengen
 
   //2. Scripts
   initDateFramework();
