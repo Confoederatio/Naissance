@@ -42,39 +42,6 @@ var win;
       injectFPSCounter(win);
     });
   }
-
-  function injectFPSCounter (arg0_browser_window) {
-    //Convert from parameters
-    var browser_window = arg0_browser_window;
-
-    //Declare local instance variables
-    var fps_counter_script = `
-    var { ipcRenderer } = require('electron');
-
-    var frame_count = 0;
-    var last_time = performance.now();
-
-    function trackFPS() {
-      frame_count++;
-      const now = performance.now();
-
-      //Report back to the main process once per second
-      if (now - last_time >= 1000) {
-        ipcRenderer.send('update-fps', frame_count);
-        frame_count = 0;
-        last_time = now;
-      }
-      
-      //Keep the loop going
-      requestAnimationFrame(trackFPS);
-    }
-
-    //Start the counter
-    trackFPS();
-  `;
-
-    browser_window.webContents.executeJavaScript(fps_counter_script);
-  }
 }
 
 //Instantiate app

@@ -21,22 +21,6 @@ global.path = require("path");
   loadAllScripts();
 }
 
-//[WIP] - FPS profiler. Remove at a later date
-(function(){
-  var script= document.createElement('script');
-  script.onload=function(){
-    var stats=new Stats();
-    document.body.appendChild(stats.dom);
-    requestAnimationFrame(function loop(){
-      stats.update();
-      requestAnimationFrame(loop)
-    });
-  };
-  script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';
-
-  document.head.appendChild(script);}
-)();
-
 //Begin load process only once all elements in the DOM are loaded
 window.onload = function () {
   //1. Init global, maps, and optimisation
