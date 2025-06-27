@@ -91,7 +91,7 @@
 
     //Format html_string
     if (options.id) context_menu_el.id = options.id;
-    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}context-menu`);
+    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}ve context-menu`);
     if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
 
     //Add close button
@@ -646,7 +646,7 @@
             global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", "context-menu");
+          context_menu_el.setAttribute("class", "ve context-menu");
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", namespace_order);
           namespace_anchor_el.appendChild(context_menu_el);
@@ -752,7 +752,7 @@
                 global[`close${options.namespace}ContextMenu`](entity_order, { entity_id: local_options.entity_id });
 
               //Append dummy context menu div first for context_menu_ui to append to
-              context_menu_el.setAttribute("class", "context-menu");
+              context_menu_el.setAttribute("class", "ve context-menu");
               context_menu_el.id = namespace_obj.id;
               context_menu_el.setAttribute("order", entity_order);
               entity_anchor_el.appendChild(context_menu_el);
@@ -870,7 +870,7 @@
             }
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", "context-menu");
+          context_menu_el.setAttribute("class", "ve context-menu");
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", group_order);
           group_anchor_el.appendChild(context_menu_el);
@@ -969,6 +969,9 @@
         return_selector: true
       });
       var namespace_navigation_obj = global[`get${options.namespace}sNavigationObject`](local_options);
+
+      //Initialise options
+      if (!options.class) options.class = "ve";
 
       //Iterate over all_namespace_keys
       var all_namespace_keys = Object.keys(namespace_navigation_obj);
@@ -1165,6 +1168,7 @@
 
       for (var i = 0; i < namespace_context_menus.length; i++) {
         //Set current position; track namespace_context_width
+        namespace_context_menus[i].style.position = "absolute";
         namespace_context_menus[i].style.left = `${namespace_context_width}px`;
         namespace_context_width += namespace_context_menus[i].offsetWidth + 8;
 
@@ -1772,7 +1776,7 @@
       global.interfaces[options.id].page = page;
 
       if (!local_value.html) {
-        if (!local_value.class) local_value.class = "unique";
+        if (!local_value.class) local_value.class = "ve";
         content_el.innerHTML = "";
         createContextMenu(local_value);
       } else {

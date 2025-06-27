@@ -10,7 +10,6 @@
     //Set new context menu
     var settings_options = {
       anchor: settings_container_selector,
-      class: `settings-ui unique`,
       id: `settings-ui`,
       name: `Settings:`,
     };

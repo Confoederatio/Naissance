@@ -301,33 +301,6 @@
   padding: 0.1rem;
 }
 
-/* -- General Context Menu Cell Styling (within #customisation-top-parent) -- */
-#customisation-top-parent .context-menu td:has(div span.button) {
-  background-color: rgba(0, 0, 0, 0);
-  border: 2px solid white;
-  color: white;
-  transition: all 0.25s ease;
-}
-#customisation-top-parent .context-menu td:has(div span.button):hover {
-  background-color: rgba(255, 255, 255, 1);
-  border: 2px solid white; /* Explicitly keep border for hover, though `all` in transition covers it */
-  color: black;
-}
-#customisation-top-parent .context-menu span.button {
-  padding: 0.25rem;
-}
-#customisation-top-parent .context-menu td:has(.header) {
-  vertical-align: middle;
-}
-#customisation-top-parent .context-menu input[type="text"] {
-  width: calc(100% - 0.5rem);
-}
-/* More specific input styling for variable list context menu */
-#customisation-top-parent .variable-list-container.context-menu input[type="text"] {
-  margin-left: 0.1rem;
-  width: 8rem;
-}
-
 /* -- WYSIWYG Editor Styles -- */
 /* -- This CSS needs to be merged into context_menus.css -- */
 [page="description"] { /* This selector applies to #customisation-options when it has this attribute */

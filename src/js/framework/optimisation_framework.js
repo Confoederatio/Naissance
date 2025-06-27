@@ -28,7 +28,6 @@
       });
       createContextMenuInterface({
         anchor: `#entity-actions-context-menu`,
-        class: "entity-ui-container entity-context-menu actions-menu",
         config_key: "entity_actions",
         interface_key: "entity_actions",
         limit_key: "entity_id",
@@ -45,7 +44,6 @@
       });
       createContextMenuInterface({
         anchor: config.defines.common.selectors.entity_keyframe_context_menu_anchor,
-        class: "entity-ui-container entity-context-menu keyframes-menu" ,
         config_key: "entity_keyframes",
         interface_key: "entity_keyframes",
         limit_key: "entity_id",
@@ -62,7 +60,6 @@
       });
       createContextMenuInterface({
         anchor: config.defines.common.selectors.group_actions_context_menu_anchor,
-        class: "group-action-button",
         config_key: "group_actions",
         interface_key: "group_actions",
         left_margin: `calc(var(--left-sidebar-width) + 12px)`,

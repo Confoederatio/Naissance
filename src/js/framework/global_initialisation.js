@@ -64,23 +64,6 @@
 		main.selected_path = `${path.dirname(__dirname, "\\..")}\\saves`;
 		main.settings = {};
 
-		/*
-			Hierarchy group data structure:
-			<group_name>: {
-				name: "France",
-				layer: true, //Either true/false
-
-				subgroups: ["departments"],
-				entities: ["1", ..]
-			},
-			<group_name>_departments: {
-				name: "Departments",
-				parent_group: "France", //Immediate parent
-
-				entities: ["38179137582", "38179137583"] //Entity ID's
-			}
-		*/
-
 		//Optimisation
 		if (!global.config) global.config = {};
 		if (!config.mask_classes) config.mask_classes = [];

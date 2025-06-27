@@ -38,9 +38,6 @@ var win;
 
       win.setTitle(title_string);
     }, 1000);
-    win.webContents.once("dom-ready", () => {
-      injectFPSCounter(win);
-    });
   }
 }
 
