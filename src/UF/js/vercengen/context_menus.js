@@ -1,3 +1,8 @@
+//Initialise config
+{
+  global.default_ve_class = `ve context-menu`;
+}
+
 //Initialise functions
 {
   //Requires: html2canvas
@@ -91,7 +96,7 @@
 
     //Format html_string
     if (options.id) context_menu_el.id = options.id;
-    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}ve context-menu`);
+    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.default_ve_class}`);
     if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
 
     //Add close button
@@ -646,7 +651,7 @@
             global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", "ve context-menu");
+          context_menu_el.setAttribute("class", global.default_ve_class);
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", namespace_order);
           namespace_anchor_el.appendChild(context_menu_el);
@@ -752,7 +757,7 @@
                 global[`close${options.namespace}ContextMenu`](entity_order, { entity_id: local_options.entity_id });
 
               //Append dummy context menu div first for context_menu_ui to append to
-              context_menu_el.setAttribute("class", "ve context-menu");
+              context_menu_el.setAttribute("class", global.default_ve_class);
               context_menu_el.id = namespace_obj.id;
               context_menu_el.setAttribute("order", entity_order);
               entity_anchor_el.appendChild(context_menu_el);
@@ -870,7 +875,7 @@
             }
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", "ve context-menu");
+          context_menu_el.setAttribute("class", global.default_ve_class);
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", group_order);
           group_anchor_el.appendChild(context_menu_el);

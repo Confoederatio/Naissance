@@ -156,7 +156,7 @@
       //Append dummy context menu div first for context_menu_ui to append to
       var context_menu_el = document.createElement("div");
 
-      context_menu_el.setAttribute("class", "ve context-menu");
+      context_menu_el.setAttribute("class", global.default_ve_class);
       context_menu_el.id = entity_variable_obj.id;
       context_menu_el.setAttribute("order", entity_variable_order);
       entity_variable_anchor_el.appendChild(context_menu_el);
