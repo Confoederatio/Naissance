@@ -123,7 +123,6 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
 }
 .context-menu td {
-  /*border: 1px solid black;*/
   vertical-align: top;
 }
 .context-menu td > div {
@@ -135,10 +134,10 @@ input[type="color"]::-webkit-color-swatch {
 
 .context-menu-cell {
   /* -- Default styling -- */
-  font-family: "Karla";
+  font-family: var(--primary-font);
 
   input {
-    font-family: "Barlow";
+    font-family: var(--secondary-font);
 
     border: 0px solid rgba(0, 0, 0, 0);
     border-bottom: 1px solid black;
@@ -152,7 +151,7 @@ input[type="color"]::-webkit-color-swatch {
 
   /* -- Main element formatting -- */
   .header {
-    font-family: "Barlow";
+    font-family: var(--primary-font);
     font-size: 1.15rem;
     font-weight: 700;
   }
