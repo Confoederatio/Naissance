@@ -226,7 +226,7 @@
 
   function initDateUI () {
     //Declare local instance variables
-    var bottom_left_date_ui = ve.createInterface({
+    var bottom_left_date_ui = new ve.Interface({
       anchor: `#date-container`,
       class: `date-ui unique`,
       id: "date-ui",

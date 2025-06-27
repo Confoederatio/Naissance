@@ -421,7 +421,7 @@
       var popup = createPopup(leaflet_centre_coords, html_content, popup_options);
       interfaces[entity_id] = popup;
 
-      //Call ve.createInterface() after the popup content is set
+      //Call new ve.Interface() after the popup content is set
       setTimeout(function(){
         console.log(`entity_id:`, entity_id);
         var entity_actions_el = getEntityActionsAnchorElement({ entity_id: entity_id });

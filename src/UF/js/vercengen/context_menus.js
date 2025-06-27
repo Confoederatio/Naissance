@@ -29,23 +29,8 @@ global.ve = {
   },
 
   //4. Interface class
-  Interface: class {
-    constructor (arg0_options) {
-      //Convert from parameters
-      var options = (arg0_options) ? arg0_options : {};
-
-      //Declare local instance variables
-    }
-  },
-
-  //5. Component class
-  Component: class {
-
-  },
-
   /*
-    ve.createInterface() - Creates a context menu within the DOM.
-
+    new Interface()
     arg0_options: (Object)
       anchor: (String/Element) - The query selector to pin a context menu to.
       class: (String) - The class prefix to prepend.
@@ -108,154 +93,160 @@ global.ve = {
         return_html: (Boolean) - Optional. Whether to return the html_string instead of modifying the anchor element. False by default.
 
     Returns: (HTMLElement)
-  */
-  //[WIP] - Add optioning for making ve.createInterface() recursive, and to also support createSection()
-  createInterface: function (arg0_options) {
-    //Convert from parameters
-    var options = (arg0_options) ? arg0_options : {};
+   */
+  Interface: class {
+    constructor (arg0_options) {
+      //Convert from parameters
+      var options = (arg0_options) ? arg0_options : {};
 
-    //Initialise options
-    if (!options.class) options.class = "";
+      //Initialise options
+      if (!options.class) options.class = "";
 
-    //Declare local instance variables
-    var all_options = Object.keys(options);
-    var context_menu_el = document.createElement("div");
-    var default_keys = ["anchor", "class", "id", "maximum_height", "maximum_width"];
-    var html_string = [];
-    var query_selector_el;
-    var table_columns = 0;
-    var table_rows = 0;
+      //Declare local instance variables
+      var all_options = Object.keys(options);
+      var context_menu_el = document.createElement("div");
+      var default_keys = ["anchor", "class", "id", "maximum_height", "maximum_width"];
+      var html_string = [];
+      var query_selector_el;
+      var table_columns = 0;
+      var table_rows = 0;
 
-    //Format CSS strings
-    var height_string = (options.maximum_height) ? `height: ${options.maximum_height}; overflow-y: auto;` : "";
-    var width_string = (options.maximum_width) ? `width: ${options.maximum_width}; overflow-x: hidden;` : "";
+      //Format CSS strings
+      var height_string = (options.maximum_height) ? `height: ${options.maximum_height}; overflow-y: auto;` : "";
+      var width_string = (options.maximum_width) ? `width: ${options.maximum_width}; overflow-x: hidden;` : "";
 
-    var parent_style = `${height_string}${width_string}`;
+      var parent_style = `${height_string}${width_string}`;
 
-    //Format html_string
-    if (options.id) context_menu_el.id = options.id;
-    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.ve.default_class}`);
-    if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
+      //Format html_string
+      if (options.id) context_menu_el.id = options.id;
+      context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.ve.default_class}`);
+      if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
 
-    //Add close button
-    var do_not_add_close_button = (options.do_not_add_close_button);
-    if (options.class)
-      if (options.class.includes("unique"))
-        do_not_add_close_button = true;
+      //Add close button
+      var do_not_add_close_button = (options.do_not_add_close_button);
+      if (options.class)
+        if (options.class.includes("unique"))
+          do_not_add_close_button = true;
 
-    if (!do_not_add_close_button)
-      html_string.push(`<img id = "close-button" src = "./UF/gfx/close_icon_dark.png" class = "uf-close-button" draggable = "false" onclick = "${(options.close_function) ? options.close_function : "this.parentElement.remove();"}">`);
+      if (!do_not_add_close_button)
+        html_string.push(`<img id = "close-button" src = "./UF/gfx/close_icon_dark.png" class = "uf-close-button" draggable = "false" onclick = "${(options.close_function) ? options.close_function : "this.parentElement.remove();"}">`);
 
-    //Fetch table_columns; table_rows
-    for (var i = 0; i < all_options.length; i++) {
-      var local_option = options[all_options[i]];
+      //Fetch table_columns; table_rows
+      for (var i = 0; i < all_options.length; i++) {
+        var local_option = options[all_options[i]];
 
-      //This is an input field; process .x, .y
-      if (typeof local_option == "object") {
-        if (local_option.x)
-          table_columns = Math.max(table_columns, local_option.x);
-        if (local_option.y) {
-          table_rows = Math.max(table_rows, local_option.y);
-        } else {
-          table_rows++;
-        }
-      }
-    }
-
-    //Iterate over all_options; format them
-    html_string.push(`<table>`);
-
-    var current_row = 0;
-    var table_rows = [];
-
-    //1. Initialise table_rows
-    for (var i = 0; i < all_options.length; i++) {
-      var local_option = options[all_options[i]];
-
-      if (typeof local_option == "object") {
-        if (local_option.y != undefined) {
-          current_row = local_option.y;
-        } else {
-          current_row++;
-          local_option.y = current_row;
-        }
-
-        //Initialise table_rows[current_row]:
-        table_rows[current_row] = [];
-      }
-    }
-
-    //2. Populate table_rows
-    for (var i = 0; i < all_options.length; i++) {
-      var local_option = options[all_options[i]];
-
-      if (typeof local_option == "object") {
-        var local_el_html = [];
-        var local_input_html = createInput(local_option);
-        var local_row = table_rows[local_option.y];
-        var local_x;
-
-        if (local_input_html) {
-          local_el_html.push(`<td${(local_option.width) ? ` colspan = "${local_option.width}"` : ""}${(local_option.height) ? ` rowspan = "${local_option.height}"` : ""}>`);
-          local_el_html.push(local_input_html);
-          local_el_html.push(`</td>`);
-
-          if (local_option.x != undefined) {
-            local_x = local_option.x;
+        //This is an input field; process .x, .y
+        if (typeof local_option == "object") {
+          if (local_option.x)
+            table_columns = Math.max(table_columns, local_option.x);
+          if (local_option.y) {
+            table_rows = Math.max(table_rows, local_option.y);
           } else {
-            local_x = local_row.length;
+            table_rows++;
+          }
+        }
+      }
+
+      //Iterate over all_options; format them
+      html_string.push(`<table>`);
+
+      var current_row = 0;
+      var table_rows = [];
+
+      //1. Initialise table_rows
+      for (var i = 0; i < all_options.length; i++) {
+        var local_option = options[all_options[i]];
+
+        if (typeof local_option == "object") {
+          if (local_option.y != undefined) {
+            current_row = local_option.y;
+          } else {
+            current_row++;
+            local_option.y = current_row;
           }
 
-          //Set local_row[local_x]
-          local_row[local_x] = local_el_html.join("");
-        } else {
-          console.error(`Error when attempting to add UI element with options:`, local_option);
+          //Initialise table_rows[current_row]:
+          table_rows[current_row] = [];
         }
       }
-    }
 
-    //3. Push table_rows to html_string
-    for (var i = 0; i < table_rows.length; i++)
-      if (table_rows[i]) {
-        html_string.push(`<tr>${table_rows[i].join("")}</tr>`);
+      //2. Populate table_rows
+      for (var i = 0; i < all_options.length; i++) {
+        var local_option = options[all_options[i]];
+
+        if (typeof local_option == "object") {
+          var local_el_html = [];
+          var local_input_html = createInput(local_option);
+          var local_row = table_rows[local_option.y];
+          var local_x;
+
+          if (local_input_html) {
+            local_el_html.push(`<td${(local_option.width) ? ` colspan = "${local_option.width}"` : ""}${(local_option.height) ? ` rowspan = "${local_option.height}"` : ""}>`);
+            local_el_html.push(local_input_html);
+            local_el_html.push(`</td>`);
+
+            if (local_option.x != undefined) {
+              local_x = local_option.x;
+            } else {
+              local_x = local_row.length;
+            }
+
+            //Set local_row[local_x]
+            local_row[local_x] = local_el_html.join("");
+          } else {
+            console.error(`Error when attempting to add UI element with options:`, local_option);
+          }
+        }
+      }
+
+      //3. Push table_rows to html_string
+      for (var i = 0; i < table_rows.length; i++)
+        if (table_rows[i]) {
+          html_string.push(`<tr>${table_rows[i].join("")}</tr>`);
+        } else {
+          //Add a blank row if specified
+          html_string.push(`<tr></tr>`);
+        }
+
+      //Close html_string
+      html_string.push(`</table>`);
+      context_menu_el.innerHTML = html_string.join("");
+      handleContextMenu(context_menu_el, options);
+
+      //Window handler
+      {
+        if (options.is_window) {
+          var is_resizable = (options.is_resizable != false) ? true : false;
+
+          //Invoke elementDragHandler()
+          elementDragHandler(context_menu_el, { is_resizable: is_resizable });
+        }
+      }
+
+      if (!options.return_html) {
+        if (options.anchor) {
+          query_selector_el = (isElement(options.anchor)) ? options.anchor : document.querySelector(options.anchor);
+
+          if (!options.do_not_append) {
+            query_selector_el.appendChild(context_menu_el);
+          } else {
+            query_selector_el.replaceChildren(context_menu_el);
+          }
+        }
+
+        //Return statement
+        return context_menu_el;
       } else {
-        //Add a blank row if specified
-        html_string.push(`<tr></tr>`);
-      }
-
-    //Close html_string
-    html_string.push(`</table>`);
-    context_menu_el.innerHTML = html_string.join("");
-    handleContextMenu(context_menu_el, options);
-
-    //Window handler
-    {
-      if (options.is_window) {
-        var is_resizable = (options.is_resizable != false) ? true : false;
-
-        //Invoke elementDragHandler()
-        elementDragHandler(context_menu_el, { is_resizable: is_resizable });
+        //Return statement
+        return context_menu_el.innerHTML;
       }
     }
+  },
 
-    if (!options.return_html) {
-      if (options.anchor) {
-        query_selector_el = (isElement(options.anchor)) ? options.anchor : document.querySelector(options.anchor);
+  //5. Component class
+  Component: class {
 
-        if (!options.do_not_append) {
-          query_selector_el.appendChild(context_menu_el);
-        } else {
-          query_selector_el.replaceChildren(context_menu_el);
-        }
-      }
-
-      //Return statement
-      return context_menu_el;
-    } else {
-      //Return statement
-      return context_menu_el.innerHTML;
-    }
-  }
+  },
 };
 
 //Initialise functions
@@ -713,7 +704,7 @@ global.ve = {
           new_interface.anchor = context_menu_ui.anchor;
           new_interface.close_function = `close${options.namespace}ContextMenu(${namespace_order}); refresh${options.namespace}sContextMenus();`;
 
-          var context_menu_ui = ve.createInterface(new_interface);
+          var context_menu_ui = new ve.Interface(new_interface);
           global[`refresh${options.namespace}sContextMenus`](local_options);
 
           //Iterate over all_interface_keys and parse them correctly
@@ -819,7 +810,7 @@ global.ve = {
               new_interface.anchor = context_menu_ui.anchor;
               new_interface.close_function = `close${options.namespace}ContextMenu(${entity_order}, { entity_id: '${local_options.entity_id}' }); refresh${options.namespace}sContextMenus({ entity_id: '${local_options.entity_id}' });`;
 
-              var context_menu_ui = ve.createInterface(new_interface);
+              var context_menu_ui = new ve.Interface(new_interface);
               global[`refresh${options.namespace}sContextMenus`](local_options);
 
               //Iterate over all_interface_keys and parse them correctly
@@ -938,7 +929,7 @@ global.ve = {
             new_interface.anchor = context_menu_ui.anchor;
             new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus({ group_id: '${local_options.group_id}' });`;
 
-            var context_menu_ui = ve.createInterface(new_interface);
+            var context_menu_ui = new ve.Interface(new_interface);
             global[`refresh${options.namespace}sContextMenus`](local_options);
           }
 
@@ -1169,11 +1160,11 @@ global.ve = {
           }
         }
 
-        //formatted_navigation_obj now contains the correct ve.createInterface() options; assign to namespace_selector
+        //formatted_navigation_obj now contains the correct new ve.Interface() options; assign to namespace_selector
         formatted_navigation_obj.do_not_append = true;
 
         //Delete current .innerHTML
-        var context_menu_el = ve.createInterface(formatted_navigation_obj);
+        var context_menu_el = new ve.Interface(formatted_navigation_obj);
 
         //Iterate over all_namespace_keys
         for (var i = 0; i < all_namespace_keys.length; i++) {
@@ -1741,7 +1732,7 @@ global.ve = {
 
       default: (String) - Optional. The default context menu to apply to content and active tabs. The first key by default.
       pages: (Object)
-        <page_key>: (Object) - ve.createInterface() options is placed here.
+        <page_key>: (Object) - new ve.Interface() options is placed here.
           name: (String)
           html: (Array<String>/String) - Optional. Any custom HTML to load into the page instead of context menu options.
           <key>: (Variable) - Optional. The same as most context menus. Does not apply if local .html is true.
@@ -1827,7 +1818,7 @@ global.ve = {
       if (!local_value.html) {
         if (!local_value.class) local_value.class = "ve-transparent";
         content_el.innerHTML = "";
-        ve.createInterface(local_value);
+        new ve.Interface(local_value);
       } else {
         content_el.innerHTML = (Array.isArray(local_value.html)) ?
           local_value.html.join("") : local_value.html;

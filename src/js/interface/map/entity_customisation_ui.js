@@ -326,7 +326,7 @@
     var entity_customisation_content_selector = `div.entity-ui-pane[class~="${entity_id}"] ${common_selectors.entity_customisation_options}`;
     var variable_list_obj = getVariableListObject(entity_id);
 
-    var entity_variable_list_el = ve.createInterface({
+    var entity_variable_list_el = new ve.Interface({
       anchor: `${entity_customisation_content_selector} #variable-fields-container`,
       class: `variable-list-container unique`,
       id: "variable-list",

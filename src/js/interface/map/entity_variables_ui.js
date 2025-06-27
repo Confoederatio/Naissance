@@ -174,7 +174,7 @@
         new_interface.anchor = context_menu_ui.anchor;
         new_interface.close_function = `closeEntityVariableContextMenu('${entity_id}', ${entity_variable_order}); refreshEntityVariableContextMenus('${entity_id}');`;
         
-        var variable_context_menu_ui = ve.createInterface(new_interface);
+        var variable_context_menu_ui = new ve.Interface(new_interface);
         refreshEntityVariableContextMenus(entity_id);
       }
 
