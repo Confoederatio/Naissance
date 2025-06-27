@@ -34,7 +34,7 @@ var win;
 
       var heap_used_mb = (memory_usage.heapUsed/1024/1024).toFixed(2);
       var rss_mb = (memory_usage.rss/1024/1024).toFixed(2);
-      var title_string = `Naissance ${naissance_version} - FPS: ${latest_fps} | Memory: RSS ${rss_mb} MB, Heap ${heap_used_mb} MB`;
+      var title_string = `Naissance ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
 
       win.setTitle(title_string);
     }, 1000);

@@ -1779,6 +1779,8 @@
       content_el.setAttribute("page", page);
       global.interfaces[options.id].page = page;
 
+      if (local_value.do_not_add_close_button == undefined)
+        local_value.do_not_add_close_button = true;
       if (!local_value.html) {
         if (!local_value.class) local_value.class = "ve-transparent";
         content_el.innerHTML = "";

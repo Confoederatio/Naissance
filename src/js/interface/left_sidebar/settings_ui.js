@@ -12,6 +12,8 @@
       anchor: settings_container_selector,
       id: `settings-ui`,
       name: `Settings:`,
+      class: "ve-transparent",
+      do_not_add_close_button: true
     };
 
     //Iterate over all_settings_categories and populate settings_options
