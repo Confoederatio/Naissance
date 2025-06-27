@@ -561,7 +561,9 @@
       } else if (options.type == "group") {
         var group_el = getGroupElement(local_options.group_id);
 
-        var group_anchor_el = group_el.querySelector(options.anchor);
+        var group_anchor_el;
+          try { group_anchor_el = group_el.querySelector(options.anchor); }
+          catch { group_anchor_el = document.querySelector(options.anchor); }
         var group_selector = `${common_selectors.group_ui}[data-id="${local_options.group_id}"]`;
 
         //Return statement

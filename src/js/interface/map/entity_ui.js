@@ -432,6 +432,7 @@
         var entity_customisation_ui = printEntityContextMenuCustomisationSection(entity_id);
 
         //Populate entity UI
+        closeHierarchyContextMenus("hierarchy");
         populateEntityUI(entity_id);
       }, 1);
     }

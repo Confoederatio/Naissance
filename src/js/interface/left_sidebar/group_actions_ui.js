@@ -19,6 +19,7 @@
 
     //Invoke printGroupActionsNavigationMenu()
     main.brush.selected_group_id = group_id;
+    closeGroupActionContextMenus({ group_id: group_id });
     printGroupActionsNavigationMenu(parent_el, { group_id: group_id });
   }
 }

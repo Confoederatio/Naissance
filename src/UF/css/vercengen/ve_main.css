@@ -19,6 +19,9 @@
     width: 100%;
   }
 }
+.ve.context-menu > .ve.context-menu { /* -- Fixes double dipping -- */
+  background-color: transparent;
+}
 
 /* -- 0. INPUT STYLING -- */
 .context-menu:not([class*="unique"]) .context-menu-cell input {
