@@ -156,7 +156,7 @@
       //Append dummy context menu div first for context_menu_ui to append to
       var context_menu_el = document.createElement("div");
 
-      context_menu_el.setAttribute("class", global.default_ve_class);
+      context_menu_el.setAttribute("class", global.ve.default_class);
       context_menu_el.id = entity_variable_obj.id;
       context_menu_el.setAttribute("order", entity_variable_order);
       entity_variable_anchor_el.appendChild(context_menu_el);
@@ -174,7 +174,7 @@
         new_interface.anchor = context_menu_ui.anchor;
         new_interface.close_function = `closeEntityVariableContextMenu('${entity_id}', ${entity_variable_order}); refreshEntityVariableContextMenus('${entity_id}');`;
         
-        var variable_context_menu_ui = createContextMenu(new_interface);
+        var variable_context_menu_ui = ve.createInterface(new_interface);
         refreshEntityVariableContextMenus(entity_id);
       }
 

@@ -1,13 +1,31 @@
-//Initialise config
-{
-  global.default_ve_class = `ve context-menu`;
-}
-
 //Initialise functions
-{
-  //Requires: html2canvas
+global.ve = {
+  //Set defines
+  default_class: `ve context-menu`,
+  windows: {}, //Stores all Windows in state
+
+  //1. State functions
+  initialise: function () {
+
+  },
+
+  //2. Window class
+  Window: class {
+
+  },
+
+  //3. Pane class
+  Pane: class {
+    
+  },
+
+  //4. Interface class
+  Interface: class {
+
+  },
+
   /*
-    createContextMenu() - Creates a context menu within the DOM.
+    ve.createInterface() - Creates a context menu within the DOM.
 
     arg0_options: (Object)
       anchor: (String/Element) - The query selector to pin a context menu to.
@@ -72,7 +90,8 @@
 
     Returns: (HTMLElement)
   */
-  function createContextMenu (arg0_options) { //[WIP] - Add optioning for making createContextMenu() recursive, and to also support createSection()
+  //[WIP] - Add optioning for making ve.createInterface() recursive, and to also support createSection()
+  createInterface: function (arg0_options) {
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
 
@@ -96,7 +115,7 @@
 
     //Format html_string
     if (options.id) context_menu_el.id = options.id;
-    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.default_ve_class}`);
+    context_menu_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.ve.default_class}`);
     if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
 
     //Add close button
@@ -159,7 +178,7 @@
 
         if (local_input_html) {
           local_el_html.push(`<td${(local_option.width) ? ` colspan = "${local_option.width}"` : ""}${(local_option.height) ? ` rowspan = "${local_option.height}"` : ""}>`);
-            local_el_html.push(local_input_html);
+          local_el_html.push(local_input_html);
           local_el_html.push(`</td>`);
 
           if (local_option.x != undefined) {
@@ -218,6 +237,11 @@
       return context_menu_el.innerHTML;
     }
   }
+};
+
+//Initialise functions
+{
+  //Requires: html2canvas
 
   /**
    * createContextMenuIndex() - Creates a context menu indexing framework.
@@ -653,7 +677,7 @@
             global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", global.default_ve_class);
+          context_menu_el.setAttribute("class", global.ve.default_class);
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", namespace_order);
           namespace_anchor_el.appendChild(context_menu_el);
@@ -670,7 +694,7 @@
           new_interface.anchor = context_menu_ui.anchor;
           new_interface.close_function = `close${options.namespace}ContextMenu(${namespace_order}); refresh${options.namespace}sContextMenus();`;
 
-          var context_menu_ui = createContextMenu(new_interface);
+          var context_menu_ui = ve.createInterface(new_interface);
           global[`refresh${options.namespace}sContextMenus`](local_options);
 
           //Iterate over all_interface_keys and parse them correctly
@@ -759,7 +783,7 @@
                 global[`close${options.namespace}ContextMenu`](entity_order, { entity_id: local_options.entity_id });
 
               //Append dummy context menu div first for context_menu_ui to append to
-              context_menu_el.setAttribute("class", global.default_ve_class);
+              context_menu_el.setAttribute("class", global.ve.default_class);
               context_menu_el.id = namespace_obj.id;
               context_menu_el.setAttribute("order", entity_order);
               entity_anchor_el.appendChild(context_menu_el);
@@ -776,7 +800,7 @@
               new_interface.anchor = context_menu_ui.anchor;
               new_interface.close_function = `close${options.namespace}ContextMenu(${entity_order}, { entity_id: '${local_options.entity_id}' }); refresh${options.namespace}sContextMenus({ entity_id: '${local_options.entity_id}' });`;
 
-              var context_menu_ui = createContextMenu(new_interface);
+              var context_menu_ui = ve.createInterface(new_interface);
               global[`refresh${options.namespace}sContextMenus`](local_options);
 
               //Iterate over all_interface_keys and parse them correctly
@@ -877,7 +901,7 @@
             }
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", global.default_ve_class);
+          context_menu_el.setAttribute("class", global.ve.default_class);
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", group_order);
           group_anchor_el.appendChild(context_menu_el);
@@ -895,7 +919,7 @@
             new_interface.anchor = context_menu_ui.anchor;
             new_interface.close_function = `close${options.namespace}ContextMenu(${group_order}, { group_id: '${local_options.group_id}' }); refresh${options.namespace}sContextMenus({ group_id: '${local_options.group_id}' });`;
 
-            var context_menu_ui = createContextMenu(new_interface);
+            var context_menu_ui = ve.createInterface(new_interface);
             global[`refresh${options.namespace}sContextMenus`](local_options);
           }
 
@@ -1126,11 +1150,11 @@
           }
         }
 
-        //formatted_navigation_obj now contains the correct createContextMenu() options; assign to namespace_selector
+        //formatted_navigation_obj now contains the correct ve.createInterface() options; assign to namespace_selector
         formatted_navigation_obj.do_not_append = true;
 
         //Delete current .innerHTML
-        var context_menu_el = createContextMenu(formatted_navigation_obj);
+        var context_menu_el = ve.createInterface(formatted_navigation_obj);
 
         //Iterate over all_namespace_keys
         for (var i = 0; i < all_namespace_keys.length; i++) {
@@ -1698,7 +1722,7 @@
 
       default: (String) - Optional. The default context menu to apply to content and active tabs. The first key by default.
       pages: (Object)
-        <page_key>: (Object) - createContextMenu() options is placed here.
+        <page_key>: (Object) - ve.createInterface() options is placed here.
           name: (String)
           html: (Array<String>/String) - Optional. Any custom HTML to load into the page instead of context menu options.
           <key>: (Variable) - Optional. The same as most context menus. Does not apply if local .html is true.
@@ -1784,7 +1808,7 @@
       if (!local_value.html) {
         if (!local_value.class) local_value.class = "ve-transparent";
         content_el.innerHTML = "";
-        createContextMenu(local_value);
+        ve.createInterface(local_value);
       } else {
         content_el.innerHTML = (Array.isArray(local_value.html)) ?
           local_value.html.join("") : local_value.html;

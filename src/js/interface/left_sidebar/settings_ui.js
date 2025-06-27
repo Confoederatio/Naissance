@@ -27,7 +27,7 @@
 
     //Initialise settings_context_menu
     settings_container_el.innerHTML = "";
-    var settings_context_menu = createContextMenu(settings_options);
+    var settings_context_menu = ve.createInterface(settings_options);
 
     //Return statement
     return settings_context_menu;
