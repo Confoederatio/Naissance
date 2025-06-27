@@ -977,9 +977,6 @@
       });
       var namespace_navigation_obj = global[`get${options.namespace}sNavigationObject`](local_options);
 
-      //Initialise options
-      if (!options.class) options.class = "ve";
-
       //Iterate over all_namespace_keys
       var all_namespace_keys = Object.keys(namespace_navigation_obj);
 
@@ -1783,7 +1780,7 @@
       global.interfaces[options.id].page = page;
 
       if (!local_value.html) {
-        if (!local_value.class) local_value.class = "ve";
+        if (!local_value.class) local_value.class = "ve-transparent";
         content_el.innerHTML = "";
         createContextMenu(local_value);
       } else {
