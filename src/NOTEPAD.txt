@@ -147,3 +147,154 @@ Interface: class {
       }
     }
 }
+
+//Gemini 2.5 Pro auto-generated code below. Review before accepting.
+Interface: class { //[WIP] - Refactor to make sure that this.interface_el is used throughout instead of .innerHTML at any point
+  constructor (arg0_options) {
+    //Convert from parameters
+    var options = (arg0_options) ? arg0_options : {};
+
+    //Initialise options
+    if (!options.class) options.class = "";
+
+    //Declare local instance variables
+    var all_options = Object.keys(options);
+    var default_keys = ["anchor", "class", "id", "maximum_height", "maximum_width"];
+    this.interface_el = document.createElement("div");
+    var query_selector_el;
+    var table_columns = 0;
+    this.table_rows = 0;
+
+    //Format CSS strings
+    var height_string = (options.maximum_height) ? `height: ${options.maximum_height}; overflow-y: auto;` : "";
+    var width_string = (options.maximum_width) ? `width: ${options.maximum_width}; overflow-x: hidden;` : "";
+
+    var parent_style = `${height_string}${width_string}`;
+
+    //Format interface_el
+    if (options.id) this.interface_el.id = options.id;
+    this.interface_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.ve.default_class}`);
+    if (parent_style.length > 0) this.interface_el.setAttribute("style", `${parent_style}`);
+
+    //Add close button
+    var do_not_add_close_button = (options.do_not_add_close_button);
+    if (options.class)
+      if (options.class.includes("unique"))
+        do_not_add_close_button = true;
+
+    if (!do_not_add_close_button) {
+      var close_button_el = document.createElement("img");
+
+      close_button_el.id = "close-button";
+      close_button_el.src = "./UF/gfx/close_icon_dark.png";
+      close_button_el.className = "uf-close-button";
+      close_button_el.draggable = false;
+      close_button_el.setAttribute("onclick", (options.close_function) ? options.close_function : "this.parentElement.remove();");
+
+      this.interface_el.appendChild(close_button_el);
+    }
+
+    //Fetch table_columns; table_rows
+    for (var i = 0; i < all_options.length; i++) {
+      var local_option = options[all_options[i]];
+
+      //This is an input field; process .x, .y
+      if (typeof local_option == "object") {
+        if (local_option.x)
+          table_columns = Math.max(table_columns, local_option.x);
+        if (local_option.y) {
+          this.table_rows = Math.max(this.table_rows, local_option.y);
+        } else {
+          this.table_rows++;
+        }
+      }
+    }
+
+    //Iterate over all_options; format them
+    var table_el = document.createElement("table");
+
+    var current_row = 0;
+    this.table_rows = [];
+
+    //1. Initialise table_rows
+    for (var i = 0; i < all_options.length; i++) {
+      var local_option = options[all_options[i]];
+
+      if (typeof local_option == "object") {
+        if (local_option.y != undefined) {
+          current_row = local_option.y;
+        } else {
+          current_row++;
+          local_option.y = current_row;
+        }
+
+        //Initialise table_rows[current_row]:
+        this.table_rows[current_row] = [];
+      }
+    }
+
+    //2. Populate table_rows
+    for (var i = 0; i < all_options.length; i++) {
+      var local_option = options[all_options[i]];
+
+      if (typeof local_option == "object") {
+        var local_el_html = [];
+        var local_row = this.table_rows[local_option.y];
+        var local_x = (local_option.x != undefined) ?
+          local_option.x : local_row.length;
+
+        local_option.x = local_x;
+        var local_component = new ve.Component(this, local_option);
+        local_el_html = local_component.processed_html;
+
+        //Set local_row[local_x]
+        local_row[local_x] = local_el_html.join("");
+      }
+    }
+
+    //3. Render and append table rows to table_el
+    for (var i = 0; i < this.table_rows.length; i++) {
+      var row_el = document.createElement("tr");
+
+      if (this.table_rows[i]) {
+        row_el.innerHTML = this.table_rows[i].join("");
+      } else {
+        //Add a blank row if specified (an empty <tr>)
+      }
+
+      table_el.appendChild(row_el);
+    }
+
+    //Append table to interface
+    this.interface_el.appendChild(table_el);
+    handleContextMenu(this.interface_el, options);
+
+    //Window handler
+    {
+      if (options.is_window) {
+        var is_resizable = (options.is_resizable != false) ? true : false;
+
+        //Invoke elementDragHandler()
+        elementDragHandler(this.interface_el, { is_resizable: is_resizable });
+      }
+    }
+
+    if (!options.return_html) {
+      if (options.anchor) {
+        query_selector_el = (isElement(options.anchor)) ? options.anchor : document.querySelector(options.anchor);
+
+        if (!options.do_not_append) {
+          query_selector_el.appendChild(this.interface_el);
+        } else {
+          query_selector_el.replaceChildren(this.interface_el);
+        }
+      }
+
+      //Return statement
+      return this.interface_el;
+    } else {
+      //Return statement
+      return this.interface_el.innerHTML;
+    }
+  }
+}

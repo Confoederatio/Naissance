@@ -94,7 +94,7 @@ global.ve = {
 
 		Returns: (HTMLElement)
 	 */
-	Interface: class { //[WIP] - Refactor to make sure that this.interface_el is used throughout instead of .innerHTML at any point
+	Interface: class {
 		constructor (arg0_options) {
 			//Convert from parameters
 			var options = (arg0_options) ? arg0_options : {};
@@ -105,7 +105,6 @@ global.ve = {
 			//Declare local instance variables
 			var all_options = Object.keys(options);
 			var default_keys = ["anchor", "class", "id", "maximum_height", "maximum_width"];
-			var html_string = [];
 			this.interface_el = document.createElement("div");
 			var query_selector_el;
 			var table_columns = 0;
@@ -117,7 +116,7 @@ global.ve = {
 
 			var parent_style = `${height_string}${width_string}`;
 
-			//Format html_string
+			//Format interface_el
 			if (options.id) this.interface_el.id = options.id;
 			this.interface_el.setAttribute("class", `${(options.class) ? options.class + " " : ""}${global.ve.default_class}`);
 			if (parent_style.length > 0) this.interface_el.setAttribute("style", `${parent_style}`);
@@ -128,8 +127,17 @@ global.ve = {
 				if (options.class.includes("unique"))
 					do_not_add_close_button = true;
 
-			if (!do_not_add_close_button)
-				html_string.push(`<img id = "close-button" src = "./UF/gfx/close_icon_dark.png" class = "uf-close-button" draggable = "false" onclick = "${(options.close_function) ? options.close_function : "this.parentElement.remove();"}">`);
+			if (!do_not_add_close_button) {
+				var close_button_el = document.createElement("img");
+
+				close_button_el.id = "close-button";
+				close_button_el.src = "./UF/gfx/close_icon_dark.png";
+				close_button_el.className = "uf-close-button";
+				close_button_el.draggable = false;
+				close_button_el.setAttribute("onclick", (options.close_function) ? options.close_function : "this.parentElement.remove();");
+
+				this.interface_el.appendChild(close_button_el);
+			}
 
 			//Fetch table_columns; table_rows
 			for (var i = 0; i < all_options.length; i++) {
@@ -148,7 +156,7 @@ global.ve = {
 			}
 
 			//Iterate over all_options; format them
-			html_string.push(`<table>`);
+			var table_el = document.createElement("table");
 
 			var current_row = 0;
 			this.table_rows = [];
@@ -189,18 +197,17 @@ global.ve = {
 				}
 			}
 
-			//3. Push table_rows to html_string
-			for (var i = 0; i < this.table_rows.length; i++)
-				if (this.table_rows[i]) {
-					html_string.push(`<tr>${this.table_rows[i].join("")}</tr>`);
-				} else {
-					//Add a blank row if specified
-					html_string.push(`<tr></tr>`);
-				}
+			//3. Render and append table rows to table_el
+			for (var i = 0; i < this.table_rows.length; i++) {
+				var row_el = document.createElement("tr");
 
-			//Close html_string
-			html_string.push(`</table>`);
-			this.interface_el.innerHTML = html_string.join("");
+				if (this.table_rows[i])
+					row_el.innerHTML = this.table_rows[i].join("");
+				table_el.appendChild(row_el);
+			}
+
+			//Append table to interface
+			this.interface_el.appendChild(table_el);
 			handleContextMenu(this.interface_el, options);
 
 			//Window handler

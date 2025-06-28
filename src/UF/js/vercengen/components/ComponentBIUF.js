@@ -29,13 +29,31 @@ ve.ComponentBIUF = class {
 
 		//Push to this.element
 		this.element.innerHTML = this.raw_html.join("");
+		this.draw();
+		this.handlerOnLoad();
+
+		this.element.querySelector(`#biuf-input`).onchange = function (e) {
+			this.draw();
+		};
+		this.element.querySelector(`#biuf-input`).onclick = function (e) {
+			this.handlerOnClick();
+			this.draw();
+		};
+		this.element.onmouseover = function (e) {
+			this.handlerOnHover();
+		};
 	}
 
 	draw () {
 		//Set .variable (i.e. .placeholder)
-		if (this.options.variable == undefined && this.options.placeholder != undefined)
-			this.options.variable = this.options.placeholder;
-		this.element.querySelector(`#biuf-input`).innerHTML = options.variable.toString();
+		if (document.activeElement != this.element) {
+			if (this.options.variable == undefined && this.options.placeholder != undefined)
+				this.options.variable = this.options.placeholder;
+			this.element.querySelector(`#biuf-input`).innerHTML = options.variable.toString();
+		}
+
+		//Update binding
+		this.options.variable = this.getInput();
 	}
 
 	getHTML () {
@@ -46,6 +64,21 @@ ve.ComponentBIUF = class {
 	getInput () {
 		//Return statement
 		return this.element.querySelector(`#biuf-input`).innerHTML;
+	}
+
+	handlerOnClick () {
+		if (this.options.onclick)
+			this.options.onclick(this.element, this);
+	}
+
+	handlerOnHover () {
+		if (this.options.onhover)
+			this.options.onhover(this.element, this);
+	}
+
+	handlerOnLoad () {
+		if (this.options.onload)
+			this.options.onload(this.element, this);
 	}
 
 	setInput (arg0_string) {
