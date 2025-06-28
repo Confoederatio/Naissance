@@ -11,7 +11,8 @@ ve.ComponentBIUF = class {
 		this.options = options;
 		this.raw_html = [];
 
-		if (options.name) this.raw_html.push(`<div class = "header">${options.name}</div>`);
+		var name_string = `<div class = "header">${options.name}</div>`;
+		if (options.name && !options.right) this.raw_html.push(name_string);
 
 		//Create a contenteditable div with onchange handlers to strip formatting
 		this.raw_html.push(`<div id = "biuf-toolbar" class = "biuf-toolbar">`);
@@ -25,8 +26,16 @@ ve.ComponentBIUF = class {
 			this.raw_html.push((options.placeholder) ? options.placeholder : "Name");
 		this.raw_html.push(`</div>`);
 
+		if (options.name && options.right) this.raw_html.push(name_string);
+
 		//Push to this.element
 		this.element.innerHTML = this.raw_html.join("");
+			if (options.disable_bold)
+				this.element.querySelector(`#bold-button`).style.display = "none";
+			if (options.disable_italics)
+				this.element.querySelector(`#italic-button`).style.display = "none";
+			if (options.disable_underline)
+				this.element.querySelector(`#underline-button`).style.display = "none";
 		this.draw();
 		this.initBIUFToolbar();
 
@@ -47,15 +56,22 @@ ve.ComponentBIUF = class {
 	}
 
 	draw () {
+		//Declare local instance variables
+		var biuf_input_el = this.element.querySelector(`#biuf-input`);
+
 		//Set .variable (i.e. .placeholder)
 		if (document.activeElement != this.element) {
 			if (this.options.variable == undefined && this.options.placeholder != undefined)
 				this.options.variable = this.options.placeholder;
-			this.element.querySelector(`#biuf-input`).innerHTML = this.options.variable.toString();
+			biuf_input_el.innerHTML = this.options.variable.toString();
 		}
+		if (this.options.max != undefined)
+			if (this.getInput().length > this.options.max)
+				this.setInput(truncateString(this.getInput(), this.options.max, true));
 
 		//Update binding
-		this.options.variable = this.getInput();
+		if (this.getInput().length >= returnSafeNumber(this.options.min))
+			this.options.variable = this.getInput();
 	}
 
 	getHTML () {
@@ -133,7 +149,7 @@ ve.ComponentBIUF = class {
 		var underline_button = toolbar_el.querySelector("#underline-button");
 
 		//Show toolbar when text is selected
-		document.addEventListener("mouseup", function () {
+		document.addEventListener("mouseup", (e) => {
 			var selection = window.getSelection();
 
 			if (selection.toString() != "" && this.element.querySelector(`#biuf-input:focus`)) {
