@@ -2,6 +2,7 @@
 global.ve = {
 	//Set defines
 	default_class: `ve context-menu`,
+	interfaces: {}, //Stores all Interfaces and their Components in state
 	windows: {}, //Stores all Windows in state
 
 	//1. State functions

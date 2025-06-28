@@ -1,118 +1,45 @@
 ve.ComponentBIUF = class {
 	constructor (arg0_parent, arg1_options) { //From BrowserUI createInput()
 		//Convert from parameters
-		var parent = arg0_parent; //Class: Component
-		var options = (arg1_options) ? arg1_options : {};
+		this.parent = arg0_parent; //Class: Component
+		this.options = (arg1_options) ? arg1_options : {};
 
-		//Declare local variables
-		this.element = document.createElement("td");
-			this.element.setAttribute("colspan", (options.width) ? options.width : "");
-			this.element.setAttribute("rowspan", (options.height) ? options.height : "");
-		this.options = options;
-		this.raw_html = [];
+		//Declare local instance variables
+		this.element = document.createElement("span");
+		var html_string = [];
 
-		var name_string = `<div class = "header">${options.name}</div>`;
-		if (options.name && !options.right) this.raw_html.push(name_string);
+		if (options.name)
+			html_string.push(`<div class = "header">${options.name}</div>`);
 
 		//Create a contenteditable div with onchange handlers to strip formatting
-		this.raw_html.push(`<div id = "biuf-toolbar" class = "biuf-toolbar">`);
-			this.raw_html.push(`<button id = "bold-button" class = "bold-icon">B</button>`);
-			this.raw_html.push(`<button id = "italic-button" class = "italic-icon">I</button>`);
-			this.raw_html.push(`<button id = "underline-button" class = "underline-icon">U</button>`);
-			this.raw_html.push(`<button id = "clear-button" class = "clear-icon">X</button>`);
-		this.raw_html.push(`</div>`);
+		html_string.push(`<div id = "biuf-toolbar" class = "biuf-toolbar">`);
+			html_string.push(`<button id = "bold-button" class = "bold-icon">B</button>`);
+			html_string.push(`<button id = "italic-button" class = "italic-icon">I</button>`);
+			html_string.push(`<button id = "underline-button" class = "underline-icon">U</button>`);
+			html_string.push(`<button id = "clear-button" class = "clear-icon">T</button>`);
+		html_string.push(`</div>`);
 
-		this.raw_html.push(`<div id = "biuf-input" class = "biuf-input" contenteditable = "true" ${objectToAttributes(options.options)}>`);
-			this.raw_html.push((options.placeholder) ? options.placeholder : "Name");
-		this.raw_html.push(`</div>`);
+		html_string.push(`<div id = "biuf-input" class = "biuf-input" contenteditable = "true" ${objectToAttributes(options.options)}>`);
+			html_string.push((options.placeholder) ? options.placeholder : "Name");
+		html_string.push(`</div>`);
 
-		if (options.name && options.right) this.raw_html.push(name_string);
-
-		//Push to this.element
-		this.element.innerHTML = this.raw_html.join("");
-			if (options.disable_bold)
-				this.element.querySelector(`#bold-button`).style.display = "none";
-			if (options.disable_italics)
-				this.element.querySelector(`#italic-button`).style.display = "none";
-			if (options.disable_underline)
-				this.element.querySelector(`#underline-button`).style.display = "none";
-		this.draw();
+		//Populate element and initialise handlers
+		this.element.innerHTML = html_string.join("");
+		this.element.querySelector(`#biuf-input`).addEventListener("input", (e) => {
+			this.handleBIUF(e.target);
+		});
 		this.initBIUFToolbar();
 
-		this.handlerOnLoad();
-
-		var biuf_input_el = this.element.querySelector(`#biuf-input`);
-		biuf_input_el.onclick = (e) => { //Arrow function prevents this context switching
-			this.handlerOnClick();
-			this.draw();
-		};
-		biuf_input_el.oninput = (e) => { //Arrow function prevents this context switching
-			this.handleBIUF(biuf_input_el);
-			this.draw();
-		};
-		this.element.onmouseover = (e) => { //Arrow function prevents this context switching
-			this.handlerOnHover();
-		};
-	}
-
-	draw () {
-		//Declare local instance variables
-		var biuf_input_el = this.element.querySelector(`#biuf-input`);
-
-		//Set .variable (i.e. .placeholder)
-		if (document.activeElement != this.element) {
-			if (this.options.variable == undefined && this.options.placeholder != undefined)
-				this.options.variable = this.options.placeholder;
-			biuf_input_el.innerHTML = this.options.variable.toString();
-		}
-		if (this.options.max != undefined)
-			if (this.getInput().length > this.options.max)
-				this.setInput(truncateString(this.getInput(), this.options.max, true));
-
-		//Update binding
-		if (this.getInput().length >= returnSafeNumber(this.options.min))
-			this.options.variable = this.getInput();
-	}
-
-	getHTML () {
 		//Return statement
-		return this.element.innerHTML;
+		return this.element;
 	}
 
 	getInput () {
-		//Return statement
-		return this.element.querySelector(`#biuf-input`).innerHTML;
+
 	}
 
-	handlerOnClick () {
-		if (this.options.onclick)
-			this.options.onclick(this.element, this);
-	}
-
-	handlerOnHover () {
-		if (this.options.onhover)
-			this.options.onhover(this.element, this);
-	}
-
-	handlerOnLoad () {
-		if (this.options.onload)
-			this.options.onload(this.element, this);
-	}
-
-	setInput (arg0_string) {
-		//Convert from parameters
-		var string = (arg0_string) ? arg0_string : "";
-
-		//Set input
-		this.element.querySelector(`#biuf-input`).innerHTML = string;
-	}
-
-	setPlaceholder (arg0_string) {
-		//Convert from parameters
-		var string = (arg0_string) ? arg0_string : "";
-
-		//Set .placeholder
-		this.element.querySelector(`#biuf-input`).setAttribute("placeholder", string);
+	setInput () {
+		
 	}
 
 	//Internal helper functions
