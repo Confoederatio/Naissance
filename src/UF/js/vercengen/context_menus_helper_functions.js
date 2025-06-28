@@ -298,28 +298,6 @@
     });
   }
 
-  function handleBIUF (arg0_e) {
-    //Convert from parameters
-    var biuf_el = arg0_e;
-
-    //Declare local instance variables
-    var child = biuf_el.firstChild;
-
-    //Declare while loop, break when next sibling element can no longer be found.
-    while (child) {
-      var remove_node = null;
-
-      //Check if child is not of <b><i><u> tags.
-      if (child.tagName && (!["b", "i", "u"].includes(child.tagName.toLowerCase())))
-        remove_node = child;
-      child = child.nextSibling;
-
-      //Remove node if flag is true
-      if (remove_node)
-        remove_node.parentNode.removeChild(remove_node);
-    }
-  }
-
   function handleColourWheel (arg0_parent_selector) {
     //Convert from parameters
     var parent_selector = arg0_parent_selector;
@@ -618,51 +596,6 @@
           }
       }
     }
-  }
-
-  function initBIUFToolbar (arg0_parent_el_id) {
-    //Convert from parameters
-    var biuf_element_id = arg0_parent_el_id;
-
-    //Declare local instance variables
-    var biuf_el = document.querySelector(`div#${biuf_element_id} #biuf-input`);
-    var toolbar_el = document.querySelector(`div#${biuf_element_id} #biuf-toolbar`);
-
-    //Declare element references
-    var bold_button = toolbar_el.querySelector("#bold-button");
-    var clear_button = toolbar_el.querySelector("#clear-button");
-    var italic_button = toolbar_el.querySelector("#italic-button");
-    var underline_button = toolbar_el.querySelector("#underline-button");
-
-    //Show toolbar when text is selected
-    document.addEventListener("mouseup", function () {
-      var selection = window.getSelection();
-
-      if (selection.toString() != "" && document.querySelector(`div#${biuf_element_id} #biuf-input:focus`)) {
-        var range = selection.getRangeAt(0);
-        var rect = range.getBoundingClientRect();
-
-        toolbar_el.style.display = "block";
-        toolbar_el.style.top = rect.top - toolbar_el.offsetHeight + "px";
-        toolbar_el.style.left = rect.left + "px";
-      } else {
-        toolbar_el.style.display = "none";
-      }
-    });
-
-    //Apply formatting when various toolbar buttons are clicked
-    bold_button.addEventListener("click", function () {
-      document.execCommand("bold");
-    });
-    clear_button.addEventListener("click", function () {
-      document.execCommand("removeFormat");
-    });
-    italic_button.addEventListener("click", function () {
-      document.execCommand("italic");
-    });
-    underline_button.addEventListener("click", function () {
-      document.execCommand("underline");
-    });
   }
 
   function initWYSIWYG (arg0_parent_el_id) {
