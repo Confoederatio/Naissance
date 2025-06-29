@@ -59,50 +59,51 @@
     //Add resize functionality if enabled
     if (options.is_resizable) {
       el.classList.add('resizable');
-      
+
       //Define handle positions and cursors
       var handle_config = {
-        'n': { top: '0', left: '0', right: '0', height: resize_threshold + 'px' },
-        'e': { top: '0', right: '0', bottom: '0', width: resize_threshold + 'px' },
-        's': { bottom: '0', left: '0', right: '0', height: resize_threshold + 'px' },
-        'w': { top: '0', left: '0', bottom: '0', width: resize_threshold + 'px' },
-        'ne': { top: '0', right: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
-        'nw': { top: '0', left: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
-        'se': { bottom: '0', right: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' },
-        'sw': { bottom: '0', left: '0', width: resize_threshold + 'px', height: resize_threshold + 'px' }
+        'n': { top: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 'n-resize' },
+        'e': { top: '0', right: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'e-resize' },
+        's': { bottom: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 's-resize' },
+        'w': { top: '0', left: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'w-resize' },
+        'ne': { top: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'ne-resize' },
+        'nw': { top: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'nw-resize' },
+        'se': { bottom: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'se-resize' },
+        'sw': { bottom: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'sw-resize' }
       };
 
       //Add resize handles
       var handles = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'];
-      for (var i = 0; i < handles.length; i++) {
-        var edge = handles[i];
-        var handle = document.createElement('div');
-        handle.className = 'resize-handle resize-' + edge;
-        handle.style.position = 'absolute';
-        handle.style.zIndex = '1000';
-        
-        //Apply handle configuration
-        var config = handle_config[edge];
-        for (var prop in config) {
-          handle.style[prop] = config[prop];
-        }
-        
-        el.appendChild(handle);
-        handle.onmousedown = function(e) {
-          e.stopPropagation();
-          is_resizing = true;
-          resize_edge = edge;
-          
-          //Store initial dimensions
-          var rect = el.getBoundingClientRect();
-          initial_width = rect.width;
-          initial_height = rect.height;
-          initial_left = rect.left;
-          initial_top = rect.top;
-          
-          internalMouseDownHandler(e);
-        };
-      }
+
+      for (var i = 0; i < handles.length; i++)
+        (function (edge) {
+          var handle = document.createElement('div');
+          handle.className = 'resize-handle resize-' + edge;
+          handle.style.position = 'absolute';
+          handle.style.zIndex = '1000';
+
+          //Apply handle configuration
+          var config = handle_config[edge];
+          for (var prop in config) {
+            handle.style[prop] = config[prop];
+          }
+
+          el.appendChild(handle);
+          handle.onmousedown = function(e) {
+            e.stopPropagation();
+            is_resizing = true;
+            resize_edge = edge; // This 'edge' is correctly scoped thanks to the IIFE.
+
+            //Store initial dimensions
+            var rect = el.getBoundingClientRect();
+            initial_width = rect.width;
+            initial_height = rect.height;
+            initial_left = rect.left;
+            initial_top = rect.top;
+
+            internalMouseDownHandler(e);
+          };
+        })(handles[i]);
     }
 
     //Header drag handler
@@ -129,22 +130,22 @@
       var e = (e || window.event);
 
       e.preventDefault();
-      
+
       if (is_resizing && options.is_resizable) {
         var delta_x = e.clientX - position_three;
         var delta_y = e.clientY - position_four;
-        
+
         //Define resize operations
         var resize_ops = {
-          'e': function() { 
+          'e': function() {
             el.style.width = Math.max(50, initial_width + delta_x) + 'px';
           },
-          'w': function() { 
+          'w': function() {
             var new_width = Math.max(50, initial_width - delta_x);
             el.style.width = new_width + 'px';
             el.style.left = (initial_left + (initial_width - new_width)) + 'px';
           },
-          's': function() { 
+          's': function() {
             el.style.height = Math.max(50, initial_height + delta_y) + 'px';
           },
           'n': function() {
@@ -197,7 +198,7 @@
     function internalMouseDownHandler (e) {
       //Declare local instance variables
       var e = (e || window.event);
-      
+
       e.preventDefault();
       position_three = e.clientX;
       position_four = e.clientY;

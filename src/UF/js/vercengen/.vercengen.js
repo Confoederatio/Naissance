@@ -20,7 +20,28 @@ global.ve = {
 			//Convert from parameters
 			var options = (arg0_options) ? arg0_options : {};
 
+			//Initialise options
+			if (options.draggable != false) options.draggable = true;
+			if (options.resizeable != false) options.resizeable = true;
+
 			//Declare local instance variables
+			this.element = document.createElement("div");
+			this.name = (options.name) ? options.name : "New Window";
+			this.window_id = generateRandomID(ve.windows);
+
+			//Instantiate window element in ve.window_overlay_el
+			this.element.setAttribute("class", "ve-window ve-dark");
+			this.element.innerHTML = `
+				<div data-window-id = "${this.window_id}" class = "window-header header" id = "window-header">${this.name}</div>
+				<div id = "window-body"></div>
+			`;
+
+			//Set Instance to sync with global.ve.windows
+			ve.windows[this.window_id] = this;
+			ve.window_overlay_el.appendChild(this.element);
+
+			if (options.draggable)
+				elementDragHandler(this.element, { is_resizable: (options.resizeable) });
 		}
 	},
 

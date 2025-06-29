@@ -1,7 +1,8 @@
 /* -- 1. Parent Styling -- */
-.ve.context-menu {
+.ve.context-menu, .ve-dark {
     /* -- Colours -- */
     --main-bg-colour: rgba(0, 0, 0, 0.85);
+    --main-header-colour: rgba(0, 0, 0, 1);
     --main-solid-colour: rgb(35, 35, 35);
     --primary-hover-colour: rgba(255, 255, 255, 0.4);
     --secondary-hover-colour: #e1e1e1;

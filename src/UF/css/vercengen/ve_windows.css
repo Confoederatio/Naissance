@@ -48,3 +48,22 @@
 }
 
 /* -- Panels/Windows Styling -- */
+.ve-window {
+  background-color: var(--main-bg-colour);
+  color: var(--text-colour);
+  font-family: var(--primary-font);
+
+  .resize-handle:hover {
+    background-color: var(--primary-hover-colour);
+  }
+  #window-body {
+    min-height: 1rem;
+  }
+  .window-header {
+    background-color: var(--main-header-colour);
+    font-family: var(--primary-font);
+    font-weight: 700;
+    min-width: var(--context-menu-width);
+    padding: 10px;
+  }
+}

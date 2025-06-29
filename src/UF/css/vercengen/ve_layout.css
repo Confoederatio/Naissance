@@ -8,6 +8,7 @@
     width: 100dvw;
 
     pointer-events: none;
+    z-index: 999;
 }
 .ve-overlay .ve-window {
     pointer-events: auto;
