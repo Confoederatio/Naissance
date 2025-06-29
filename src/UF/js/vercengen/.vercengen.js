@@ -21,18 +21,22 @@ global.ve = {
 			var options = (arg0_options) ? arg0_options : {};
 
 			//Initialise options
+			if (options.can_close != false) options.can_close = true;
 			if (options.draggable != false) options.draggable = true;
 			if (options.resizeable != false) options.resizeable = true;
 
 			//Declare local instance variables
 			this.element = document.createElement("div");
-			this.name = (options.name) ? options.name : "New Window";
+			this.name = (options.name) ? options.name : "New Vercengen Window";
 			this.window_id = generateRandomID(ve.windows);
 
 			//Instantiate window element in ve.window_overlay_el
 			this.element.setAttribute("class", "ve-window ve-dark");
+			this.element.setAttribute("data-window-id", this.window_id);
 			this.element.innerHTML = `
-				<div data-window-id = "${this.window_id}" class = "window-header header" id = "window-header">${this.name}</div>
+				<div class = "window-header header" id = "window-header">
+					<span>${this.name}</span>
+				</div>
 				<div id = "window-body"></div>
 			`;
 
@@ -42,6 +46,25 @@ global.ve = {
 
 			if (options.draggable)
 				elementDragHandler(this.element, { is_resizable: (options.resizeable) });
+			if (options.can_close) {
+				var close_button = document.createElement("img");
+				close_button.id = "close-button";
+				close_button.src = `./UF/gfx/close_icon_dark.png`;
+
+				this.element.querySelector(`#window-header`).appendChild(close_button);
+				close_button.onclick = (e) => {
+					this.close();
+				};
+			}
+			createSection({
+				selector: `[data-window-id="${this.window_id}"] #window-header, [data-window-id="${this.window_id}"] #window-body`
+			});
+		}
+
+		close () {
+			//Delete ve.windows[this.window_id], then remove element
+			delete ve.windows[this.window_id];
+			this.element.remove();
 		}
 	},
 
