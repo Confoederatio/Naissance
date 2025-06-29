@@ -35,7 +35,7 @@ global.ve = {
 			this.element.setAttribute("data-window-id", this.window_id);
 			this.element.innerHTML = `
 				<div class = "window-header header" id = "window-header">
-					<span>${this.name}</span>
+					<span id = "window-name" contenteditable = "plaintext-only">${this.name}</span>
 				</div>
 				<div id = "window-body"></div>
 			`;
@@ -59,12 +59,26 @@ global.ve = {
 			createSection({
 				selector: `[data-window-id="${this.window_id}"] #window-header, [data-window-id="${this.window_id}"] #window-body`
 			});
+
+			//Append interface if possible
+			if (options.interface)
+				this.setInterface(options.interface);
 		}
 
 		close () {
 			//Delete ve.windows[this.window_id], then remove element
 			delete ve.windows[this.window_id];
 			this.element.remove();
+		}
+
+		setInterface (arg0_options) {
+			//Convert from parameters
+			var options = (arg0_options) ? arg0_options : {};
+
+			//Declare local instance variables
+			options.anchor = this.element.querySelector(`#window-body`);
+
+			this.interface = new ve.Interface(options);
 		}
 	},
 

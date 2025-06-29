@@ -89,6 +89,34 @@
       padding: 8px;
       position: relative;
     }
+    #window-name {
+      background: transparent;
+      border: 0px solid transparent;
+      font-family: var(--primary-font);
+      font-weight: 700;
+      min-width: 5rem;
+      opacity: 0.5;
+
+      transition: all 0.5s ease;
+    }
+    #window-name:before {
+      content: "\200b"; /* Zero width space */
+    }
+    #window-name:empty:before {
+      color: var(--text-colour);
+      content: "Window Name";
+      display: inline-flex;
+      opacity: 0.3;
+      min-width: 5rem;
+    }
+    #window-name:focus {
+      border-bottom: 1px solid var(--text-colour);
+      opacity: 1;
+      outline: none;
+    }
+    #window-name:hover {
+      cursor: text;
+    }
   }
   .window-header:hover {
     cursor: grab;

@@ -199,7 +199,6 @@
       //Declare local instance variables
       var e = (e || window.event);
 
-      e.preventDefault();
       position_three = e.clientX;
       position_four = e.clientY;
 
