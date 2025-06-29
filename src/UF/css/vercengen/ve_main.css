@@ -19,7 +19,7 @@
     width: 100%;
   }
 }
-.ve.context-menu > .ve.context-menu { /* -- Fixes double dipping -- */
+.ve.context-menu > .ve.context-menu, #window-body > .ve.context-menu { /* -- Fixes double dipping -- */
   background-color: transparent;
 }
 

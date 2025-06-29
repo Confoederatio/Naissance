@@ -77,6 +77,7 @@ global.ve = {
 
 			//Declare local instance variables
 			options.anchor = this.element.querySelector(`#window-body`);
+			options.do_not_add_close_button = true;
 
 			this.interface = new ve.Interface(options);
 		}
@@ -247,6 +248,7 @@ global.ve = {
 					var local_x = (local_option.x != undefined) ?
 						local_option.x : local_row.length;
 
+					if (!local_option.id) local_option.id = all_options[i];
 					local_option.x = local_x;
 					var local_component = new ve.Component(this, local_option);
 					local_el_html = local_component.processed_html;
