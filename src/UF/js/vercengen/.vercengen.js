@@ -73,6 +73,17 @@ global.ve = {
 			this.element.remove();
 		}
 
+		getName () {
+			//Declare local instance variables
+			var name_el = this.element.querySelector(`#window-name`);
+
+			//Update instance state
+			this.name = name_el.innerHTML;
+
+			//Return statement
+			return this.name;
+		}
+
 		setInterface (arg0_options) {
 			//Convert from parameters
 			var options = (arg0_options) ? arg0_options : {};
@@ -82,6 +93,15 @@ global.ve = {
 			options.do_not_add_close_button = true;
 
 			this.interface = new ve.Interface(options);
+		}
+
+		setName (arg0_name) {
+			//Convert from parameters
+			var name = (arg0_name) ? arg0_name : "";
+
+			//Set this.name; update DOM
+			this.name = name;
+			this.element.querySelector(`#window-name`).innerHTML = name;
 		}
 
 		setPageMenu (arg0_options) {
