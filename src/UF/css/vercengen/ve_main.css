@@ -385,6 +385,7 @@ input[type="color"]::-webkit-color-swatch {
 /* -- WYSIWYG Editor -- */
 .context-menu-cell[type="wysiwyg"] {
   flex-grow: 1;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 .wysiwyg-editor {
@@ -498,15 +499,16 @@ input[type="color"]::-webkit-color-swatch {
   }
 
   .content-area {
+    display: grid;
     line-height: 1.5;
-    padding: 15px 12px;
+    max-height: 12rem;
+    min-height: 12rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     .visual-view {
       outline: none;
-      overflow-x: hidden;
-      overflow-y: auto;
-      max-height: 12rem;
-      min-height: 12rem;
+      padding: 15px 12px;
     }
     .visual-view p {
       margin: 0px;

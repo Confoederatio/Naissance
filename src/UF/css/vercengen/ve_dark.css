@@ -20,6 +20,7 @@
     --margin: 0px;
     --max-button-width: 14rem;
 
+    --window-dark-button-filter: brightness(100);
     --monochrome-dark-button-filter: invert(1);
     --monochrome-light-button-filter: brightness(0);
 }

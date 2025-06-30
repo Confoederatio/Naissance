@@ -301,85 +301,12 @@
   padding: 0.1rem;
 }
 
-/* -- WYSIWYG Editor Styles -- */
-/* -- This CSS needs to be merged into context_menus.css -- */
-[page="description"] { /* This selector applies to #customisation-options when it has this attribute */
-  flex-grow: 1;
-  overflow-y: auto;
+/* -- Page: Description styling -- */
+[page="description"] .ve.context-menu {
+  overflow-y: hidden !important;
 }
-[page="description"] #wysiwyg-editor {
-  position: relative;
-  border: 1px solid transparent;
-  bottom: 1rem;
-}
-/* Toolbar */
-[page="description"] #wysiwyg-editor .toolbar {
-  background-color: rgb(35, 35, 35);
-  border: 1px solid white;
-  position: sticky;
-  top: 0;
-  z-index: 1; /* Ensure toolbar stays on top when scrolling content */
-}
-[page="description"] #wysiwyg-editor .toolbar .editor-button.icon {
-  transition: all 0.5s ease;
-}
-[page="description"] #wysiwyg-editor .toolbar .editor-button.icon img {
-  filter: invert(1);
-}
-[page="description"] #wysiwyg-editor .toolbar .editor-button.icon:not(:hover) img {
-  opacity: 0.83;
-}
-[page="description"] #wysiwyg-editor .toolbar .editor-button.icon:hover {
-  background-color: var(--selection-colour);
-  filter: brightness(2);
-  opacity: 1;
-}
-[page="description"] #wysiwyg-editor .toolbar span:has(img) {
-  padding: 8px;
-}
-/* Submenu */
-[page="description"] #wysiwyg-editor .submenu {
-  background-color: rgb(15, 15, 15);
-}
-[page="description"] #wysiwyg-editor .submenu .active {
-  background-color: rgb(50, 50, 50);
-}
-/* Content Area */
-[page="description"] #wysiwyg-editor .content-area {
-  border: 1px solid transparent; /* Base border */
-}
-[page="description"] #wysiwyg-editor .content-area:not(:has(.visual-view:focus)) {
-  border-left: 1px solid white;
-}
-[page="description"] #wysiwyg-editor .content-area:has(.visual-view:focus) {
-  box-shadow: -4px 0 0 rgba(60, 60, 240);
-}
-[page="description"] #wysiwyg-editor .content-area p {
-  margin: 0px;
-}
-/* Modal View */
-[page="description"] #wysiwyg-editor .modal-bg {
-  width: 100%; /* Typically covers the screen for a modal */
-}
-[page="description"] #wysiwyg-editor .modal-content {
-  color: black;
-}
-[page="description"] #wysiwyg-editor .modal-wrapper {
-  border-radius: 8px;
-  min-height: 0px;
-  padding: 0.75rem;
-  transform: translate(35%, 20rem); /* This positioning is quite specific */
-}
-[page="description"] #wysiwyg-editor .modal-wrapper .close {
-  position: absolute;
-  height: 1rem;
-  top: 0px;
-  right: 0px;
-  width: 1rem;
-  color: black;
-  padding: 0.5rem;
-  text-align: center;
-  vertical-align: middle; /* Ensure icon/text inside is centered if needed */
+[page="description"] .content-area {
+  min-height: 20rem !important;
 }
 
 /* -- Hides related to customisation parent -- */

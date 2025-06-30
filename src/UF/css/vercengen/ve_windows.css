@@ -69,7 +69,7 @@
     #close-button {
       border-radius: 50%;
       bottom: 6px;
-      filter: var(--monochrome-dark-button-filter);
+      filter: var(--window-dark-button-filter);
       float: right;
       height: 1rem;
       margin-right: -6px;

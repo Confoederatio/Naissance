@@ -59,7 +59,7 @@
     var variable_list_obj = getVariableListObject(entity_id);
 
     //Define tab options in #entity-ui-customisation-options-container
-    var entity_customisation_content_el = createPageMenu({
+    var entity_customisation_content_el = new ve.PageMenu({
       id: entity_id,
 
       anchor: entity_customisation_content_selector,
