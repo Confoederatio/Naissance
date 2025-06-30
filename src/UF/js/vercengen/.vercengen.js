@@ -90,9 +90,9 @@ global.ve = {
 
 			//Declare local instance variables
 			var page_container_el = document.createElement("div");
-				page_container_el.setAttribute("class", "page-container");
+				page_container_el.setAttribute("class", "window-page-container");
 			var tabs_container_el = document.createElement("div");
-				tabs_container_el.setAttribute("class", "main-tabs-container");
+				tabs_container_el.setAttribute("class", "window-tab-container");
 
 			//Append page_container_el; tabs_container_el
 			var window_body_el = this.element.querySelector(`#window-body`);
@@ -103,13 +103,12 @@ global.ve = {
 			options.anchor = page_container_el;
 			options.tab_anchor = tabs_container_el;
 
-			console.log(`setPageMenu()`, options);
+			options.left_offset = 0.5; //In rem for bottom hr in .tabs-container
 			this.interface = new ve.PageMenu(options);
-			console.log(this.interface)
 		}
 	},
 
-	//3. PageMenu class - Contains tabs/interfaces
+	//3. PageMenu class - Contains tabs/interfaces - [WIP] - Needs to store state per page; use ve.interfaces for this
 	/*
     PageMenu - Creates a page menu for a set of HTML elements.
     arg0_options: (Object)
@@ -118,7 +117,8 @@ global.ve = {
       anchor: (HTMLElement/String) - The query selector anchor in which the page menu is created. If options.tab_anchor is specified, this is just where page content is displayed instead.
       tab_anchor: (HTMLElement/String) - Optional. Defaults to creating two elements in anchor if not available.
 
-      default: (String) - Optional. The default context menu to apply to content and active tabs. The first key by default.
+      default: (String) - Optional. The default context menu to apply tocontent and active tabs. The first key by default.
+      left_offset: (Number) - Optional. 0.125 by default.
       pages: (Object)
         <page_key>: (Object) - new ve.Interface() options is placed here.
           name: (String)
@@ -180,7 +180,7 @@ global.ve = {
 
 				//Declare local instance variables
 				var hr_el = tabs_el.querySelector("hr");
-				var left_offset = 0.125; //In rem
+				var left_offset = returnSafeNumber(options.left_offset, 0.125); //In rem
 				var local_tab_button_el = tabs_el.querySelector(`span[id="${page}"]`);
 				var local_value = options.pages[page];
 

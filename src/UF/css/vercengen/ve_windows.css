@@ -130,3 +130,7 @@
   overflow: initial !important;
   transition: height 0.25s ease;
 }
+
+.ve-window .window-tab-container {
+  padding-top: 0.5rem;
+}
