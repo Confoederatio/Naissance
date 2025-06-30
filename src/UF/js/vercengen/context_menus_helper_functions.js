@@ -98,8 +98,8 @@
             var rect = el.getBoundingClientRect();
             initial_width = rect.width;
             initial_height = rect.height;
-            initial_left = rect.left;
-            initial_top = rect.top;
+            initial_left = el.offsetLeft;
+            initial_top = el.offsetTop;
 
             internalMouseDownHandler(e);
           };
@@ -128,6 +128,10 @@
     function internalElementDrag (e) {
       //Declare local instance variables
       var e = (e || window.event);
+      var min_height = 50;
+      var min_width = 50;
+      var viewport_height = window.innerHeight;
+      var viewport_width = window.innerWidth;
 
       e.preventDefault();
 
@@ -138,44 +142,48 @@
         //Define resize operations
         var resize_ops = {
           'e': function() {
-            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
+            let new_width = initial_width + delta_x;
+            // Constrain width to not exceed viewport boundary
+            new_width = Math.min(new_width, viewport_width - initial_left);
+            el.style.width = Math.max(min_width, new_width) + 'px';
           },
           'w': function() {
-            var new_width = Math.max(50, initial_width - delta_x);
+            let new_width = initial_width - delta_x;
+            // Constrain width so the left edge doesn't go past 0
+            new_width = Math.min(new_width, initial_left + initial_width);
+            new_width = Math.max(min_width, new_width);
             el.style.width = new_width + 'px';
-            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
+            el.style.left = (initial_left + initial_width - new_width) + 'px';
           },
           's': function() {
-            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
+            let new_height = initial_height + delta_y;
+            // Constrain height to not exceed viewport boundary
+            new_height = Math.min(new_height, viewport_height - initial_top);
+            el.style.height = Math.max(min_height, new_height) + 'px';
           },
           'n': function() {
-            var new_height = Math.max(50, initial_height - delta_y);
+            let new_height = initial_height - delta_y;
+            // Constrain height so the top edge doesn't go past 0
+            new_height = Math.min(new_height, initial_top + initial_height);
+            new_height = Math.max(min_height, new_height);
             el.style.height = new_height + 'px';
-            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
+            el.style.top = (initial_top + initial_height - new_height) + 'px';
           },
           'se': function() {
-            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
-            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
+            resize_ops.s();
+            resize_ops.e();
           },
           'sw': function() {
-            var new_width = Math.max(50, initial_width - delta_x);
-            el.style.width = new_width + 'px';
-            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
-            el.style.height = Math.max(50, initial_height + delta_y) + 'px';
+            resize_ops.s();
+            resize_ops.w();
           },
           'ne': function() {
-            el.style.width = Math.max(50, initial_width + delta_x) + 'px';
-            var new_height = Math.max(50, initial_height - delta_y);
-            el.style.height = new_height + 'px';
-            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
+            resize_ops.n();
+            resize_ops.e();
           },
           'nw': function() {
-            var new_width = Math.max(50, initial_width - delta_x);
-            var new_height = Math.max(50, initial_height - delta_y);
-            el.style.width = new_width + 'px';
-            el.style.left = (initial_left + (initial_width - new_width)) + 'px';
-            el.style.height = new_height + 'px';
-            el.style.top = (initial_top + (initial_height - new_height)) + 'px';
+            resize_ops.n();
+            resize_ops.w();
           }
         };
 
@@ -189,9 +197,17 @@
         position_three = e.clientX;
         position_four = e.clientY;
 
+        var el_height = el.offsetHeight;
+        var el_width = el.offsetWidth;
+        var new_left = el.offsetLeft - position_one;
+        var new_top = el.offsetTop - position_two;
+
+        new_top = Math.max(0, Math.min(new_top, viewport_height - el_height));
+        new_left = Math.max(0, Math.min(new_left, viewport_width - el_width));
+
         //Set element position
-        el.style.top = (el.offsetTop - position_two) + 'px';
-        el.style.left = (el.offsetLeft - position_one) + 'px';
+        el.style.top = `${new_top}px`;
+        el.style.left = `${new_left}px`;
       }
     }
 
@@ -739,11 +755,13 @@
       local_button.classList.remove("active");
     }
 
-    if (!childOf(window.getSelection().anchorNode.parentNode, editor))
-      //Return statement; guard clause
-      return false;
+    try {
+      if (!childOf(window.getSelection().anchorNode.parentNode, editor))
+        //Return statement; guard clause
+        return false;
 
-    parentTagActive(window.getSelection().anchorNode.parentNode);
+      parentTagActive(window.getSelection().anchorNode.parentNode);
+    } catch {}
   }
 
   function setColourWheelCursor (arg0_parent_selector, arg1_colour, arg2_do_not_change) {

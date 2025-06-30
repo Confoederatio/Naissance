@@ -1,6 +1,7 @@
 /* -- 1. Parent Styling -- */
 .ve.context-menu, .ve-dark {
     /* -- Colours -- */
+    --link-colour: rgb(130, 240, 240);
     --main-bg-colour: rgba(0, 0, 0, 0.85);
     --main-header-colour: rgba(0, 0, 0, 1);
     --main-solid-colour: rgb(35, 35, 35);
@@ -19,6 +20,6 @@
     --margin: 0px;
     --max-button-width: 14rem;
 
-    --monochrome-dark-button-filter: brightness(100);
+    --monochrome-dark-button-filter: invert(1);
     --monochrome-light-button-filter: brightness(0);
 }
