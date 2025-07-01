@@ -13,6 +13,9 @@ global.ve = {
 		ve.window_overlay_el.setAttribute("class", "ve-overlay");
 		document.body.appendChild(ve.window_overlay_el);
 	},
+	updateVercengenState: function () { //[WIP] - Finish function body
+		//Iterate over ve.windows; ve.interfaces; and remove those without a valid .element
+	},
 
 	//2. Window class
 	Window: class {
@@ -22,12 +25,13 @@ global.ve = {
 
 			//Initialise options
 			if (options.can_close != false) options.can_close = true;
+			if (options.can_rename != false) options.can_rename = true;
 			if (options.draggable != false) options.draggable = true;
 			if (options.resizeable != false) options.resizeable = true;
 
 			//Declare local instance variables
 			this.element = document.createElement("div");
-			this.name = (options.name) ? options.name : "New Vercengen Window";
+			this.name = (options.name) ? options.name : "New Window";
 			this.window_id = generateRandomID(ve.windows);
 
 			//Instantiate window element in ve.window_overlay_el
@@ -35,7 +39,7 @@ global.ve = {
 			this.element.setAttribute("data-window-id", this.window_id);
 			this.element.innerHTML = `
 				<div class = "window-header header" id = "window-header">
-					<span id = "window-name" contenteditable = "plaintext-only">${this.name}</span>
+					<span id = "window-name"${(options.can_rename) ? ` contenteditable = "plaintext-only"` : ""}>${this.name}</span>
 				</div>
 				<div id = "window-body"></div>
 			`;
@@ -347,6 +351,10 @@ global.ve = {
 			var table_columns = 0;
 			this.table_rows = 0;
 
+			//Set interface object in ve.interfaces
+			this.interface_id = (options.id) ? options.id : generateRandomID(ve.interfaces);
+			ve.interfaces[this.interface_id] = this;
+
 			//Format CSS strings
 			var height_string = (options.maximum_height) ? `height: ${options.maximum_height}; overflow-y: auto;` : "";
 			var width_string = (options.maximum_width) ? `width: ${options.maximum_width}; overflow-x: hidden;` : "";
@@ -371,7 +379,9 @@ global.ve = {
 				close_button_el.src = "./UF/gfx/close_icon_dark.png";
 				close_button_el.className = "uf-close-button";
 				close_button_el.draggable = false;
-				close_button_el.setAttribute("onclick", (options.close_function) ? options.close_function : "this.parentElement.remove();");
+				close_button_el.onclick = (e) => {
+					this.close();
+				};
 
 				this.interface_el.appendChild(close_button_el);
 			}
@@ -480,6 +490,11 @@ global.ve = {
 				//Return statement
 				return this.interface_el.innerHTML;
 			}
+		}
+
+		close () {
+			delete ve.interfaces[this.interface_id];
+			this.interface_el.parentElement.remove();
 		}
 	},
 
