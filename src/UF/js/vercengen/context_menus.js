@@ -1344,6 +1344,11 @@
         html_string.push(options.innerHTML);
     } else if (options.type == "image") {
       //High-intensity; image input [WIP]
+    } else if (options.type == "interface") {
+      html_string.push(`<details id = "interface-folder-${options.id}">`);
+        html_string.push(`<summary>${(options.name) ? options.name : options.id}</summary>`);
+        html_string.push(`<div id = "interface-body"></div>`);
+      html_string.push(`</details>`);
     } else if (options.type == "number") {
       if (options.name)
         html_string.push(options.name);

@@ -28,12 +28,12 @@ Interface: class {
       if (parent_style.length > 0) context_menu_el.setAttribute("style", `${parent_style}`);
 
       //Add close button
-      var do_not_add_close_button = (options.do_not_add_close_button);
+      var can_close = (options.can_close);
       if (options.class)
         if (options.class.includes("unique"))
-          do_not_add_close_button = true;
+          can_close = true;
 
-      if (!do_not_add_close_button)
+      if (!can_close)
         html_string.push(`<img id = "close-button" src = "./UF/gfx/close_icon_dark.png" class = "uf-close-button" draggable = "false" onclick = "${(options.close_function) ? options.close_function : "this.parentElement.remove();"}">`);
 
       //Fetch table_columns; table_rows
@@ -177,12 +177,12 @@ Interface: class { //[WIP] - Refactor to make sure that this.interface_el is use
     if (parent_style.length > 0) this.interface_el.setAttribute("style", `${parent_style}`);
 
     //Add close button
-    var do_not_add_close_button = (options.do_not_add_close_button);
+    var can_close = (options.can_close);
     if (options.class)
       if (options.class.includes("unique"))
-        do_not_add_close_button = true;
+        can_close = true;
 
-    if (!do_not_add_close_button) {
+    if (!can_close) {
       var close_button_el = document.createElement("img");
 
       close_button_el.id = "close-button";

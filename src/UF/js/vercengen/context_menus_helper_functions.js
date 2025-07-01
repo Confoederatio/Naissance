@@ -434,7 +434,8 @@
   /*
     handleContextMenu() - Provides the interaction handler for context menus.
     arg0_context_menu_el: (HTMLElement) - The context menu HTML element.
-    arg1_options: (Object) - Optional. Same as the originaal context menu options.
+    arg1_options: (Object) - Optional. Same as the original context menu options.
+      parent: (Interface) - The ve.Interface parent.
   */
   function handleContextMenu (arg0_context_menu_el, arg1_options) {
     //Convert from parameters
@@ -461,11 +462,19 @@
             );
         }
 
-      if (local_type == "colour")
-        handleColourWheel(all_inputs[i]);
-
       //Default type population (i.e. for 'sortable_list')
-      if (local_type == "search_select") {
+      if (local_type == "colour") {
+        handleColourWheel(all_inputs[i]);
+      } else if (local_type == "interface") {
+        var interface_body_selector = `[id="interface-folder-${local_input_obj.id}"] #interface-body`;
+
+        local_input_obj.anchor = context_menu_el.querySelector(interface_body_selector);
+        local_input_obj.can_close = true;
+        var local_interface = new ve.Interface(local_input_obj);
+
+        if (options.parent)
+          options.parent.components[(local_input_obj.id) ? local_input_obj.id : all_inputs[i]] = local_interface;
+      } else if (local_type == "search_select") {
         all_inputs[i].querySelector(`#search`).addEventListener("click", function (e) {
           all_inputs[i].classList.toggle("shown");
         });

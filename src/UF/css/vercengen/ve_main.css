@@ -19,7 +19,7 @@
     width: 100%;
   }
 }
-.ve.context-menu > .ve.context-menu, #window-body > .ve.context-menu { /* -- Fixes double dipping -- */
+.ve.context-menu .ve.context-menu, #window-body > .ve.context-menu { /* -- Fixes double dipping -- */
   background-color: transparent;
 }
 .ve.context-menu a {
@@ -59,7 +59,7 @@
 
 /* -- Colour -- */
 input[type="color"] {
-  border: none !important;
+  border: 1px solid var(--text-colour) !important;
   outline: none;
 
   height: 1rem !important;

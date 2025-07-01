@@ -84,13 +84,18 @@ global.ve = {
 			return this.name;
 		}
 
+		getState () {
+			//Return statement
+			return getInputsAsObject(this.element);
+		}
+
 		setInterface (arg0_options) {
 			//Convert from parameters
 			var options = (arg0_options) ? arg0_options : {};
 
 			//Declare local instance variables
 			options.anchor = this.element.querySelector(`#window-body`);
-			options.do_not_add_close_button = true;
+			options.can_close = true;
 
 			this.interface = new ve.Interface(options);
 		}
@@ -156,6 +161,7 @@ global.ve = {
 
 			//Initialise options
 			if (!options.pages) options.pages = {};
+			this.interfaces = {};
 			this.options = options;
 
 			//Declare local instance variables
@@ -193,7 +199,7 @@ global.ve = {
 			tabs_el.innerHTML = tabs_html.join("");
 
 			//Declare local helper function for switching pages
-			function localSwitchPage (arg0_page, arg1_event) {
+			var localSwitchPage = (arg0_page, arg1_event) => {
 				//Convert from parameters
 				var page = arg0_page;
 				var e = (arg1_event) ? arg1_event : {};
@@ -220,12 +226,12 @@ global.ve = {
 				//Set "page" attribute for content_el; replace content
 				content_el.setAttribute("page", page);
 
-				if (local_value.do_not_add_close_button == undefined)
-					local_value.do_not_add_close_button = true;
+				if (local_value.can_close == undefined)
+					local_value.can_close = true;
 				if (!local_value.html) {
 					if (!local_value.class) local_value.class = "ve-transparent";
 					content_el.innerHTML = "";
-					new ve.Interface(local_value);
+					this.interfaces[(local_value.id) ? local_value.id : generateRandomID(this.interfaces)] = new ve.Interface(local_value);
 				} else {
 					content_el.innerHTML = (Array.isArray(local_value.html)) ?
 						local_value.html.join("") : local_value.html;
@@ -251,6 +257,11 @@ global.ve = {
 			//Return statement
 			return [tabs_el, content_el];
 		}
+
+		getState () {
+			//Return statement
+			return getInputsAsObject(this.content_el);
+		}
 	},
 
 	//4. Interface class
@@ -260,7 +271,7 @@ global.ve = {
 			anchor: (String/Element) - The query selector to pin a context menu to.
 			class: (String) - The class prefix to prepend.
 			close_function: (String) - The function to execute when the close button is clicked.
-			do_not_add_close_button: (Boolean) - Whether to not add a close button to the input. False by default.
+			can_close: (Boolean) - Whether to not add a close button to the input. False by default.
 			do_not_append: (Boolean) - Whether to append or not.
 			id: (String) - The ID of the context menu.
 			is_resizable: (Boolean) - Whether to allow the context menu to be resized. True by default if is_window is true.
@@ -327,9 +338,10 @@ global.ve = {
 			//Initialise options
 			if (!options.class) options.class = "";
 
-			//Declare local instance variables
+			//Declare local instance variable	s
 			var all_options = Object.keys(options);
 			var default_keys = ["anchor", "class", "id", "maximum_height", "maximum_width"];
+			this.components = {};
 			this.interface_el = document.createElement("div");
 			var query_selector_el;
 			var table_columns = 0;
@@ -347,12 +359,12 @@ global.ve = {
 			if (parent_style.length > 0) this.interface_el.setAttribute("style", `${parent_style}`);
 
 			//Add close button
-			var do_not_add_close_button = (options.do_not_add_close_button);
+			var can_close = (options.can_close);
 			if (options.class)
 				if (options.class.includes("unique"))
-					do_not_add_close_button = true;
+					can_close = true;
 
-			if (!do_not_add_close_button) {
+			if (!can_close) {
 				var close_button_el = document.createElement("img");
 
 				close_button_el.id = "close-button";
@@ -407,15 +419,17 @@ global.ve = {
 			for (var i = 0; i < all_options.length; i++) {
 				var local_option = options[all_options[i]];
 
-				if (typeof local_option == "object") {
+				if (typeof local_option == "object" && local_option.type) {
 					var local_el_html = [];
 					var local_row = this.table_rows[local_option.y];
 					var local_x = (local_option.x != undefined) ?
 						local_option.x : local_row.length;
 
 					if (!local_option.id) local_option.id = all_options[i];
-					local_option.x = local_x;
+						local_option.x = local_x;
 					var local_component = new ve.Component(this, local_option);
+						this.components[(local_option.id) ? local_option.id : all_options[i]] = local_component;
+
 					local_el_html = local_component.processed_html;
 
 					//Set local_row[local_x]
@@ -429,11 +443,13 @@ global.ve = {
 
 				if (this.table_rows[i])
 					row_el.innerHTML = this.table_rows[i].join("");
+				if (row_el.innerHTML.length == 0) continue; //Internal guard clause if row is empty
 				table_el.appendChild(row_el);
 			}
 
 			//Append table to interface
 			this.interface_el.appendChild(table_el);
+				options.parent = this;
 			handleContextMenu(this.interface_el, options);
 
 			//Window handler
@@ -448,7 +464,8 @@ global.ve = {
 
 			if (!options.return_html) {
 				if (options.anchor) {
-					query_selector_el = (isElement(options.anchor)) ? options.anchor : document.querySelector(options.anchor);
+					query_selector_el = (isElement(options.anchor)) ?
+						options.anchor : document.querySelector(options.anchor);
 
 					if (!options.do_not_append) {
 						query_selector_el.appendChild(this.interface_el);
@@ -497,7 +514,7 @@ global.ve = {
 
 			if (this.raw_html) {
 				this.processed_html.push(`<td${(options.width) ? ` colspan = "${options.width}"` : ""}${(options.height) ? ` rowspan = "${options.height}"` : ""}>`);
-				this.processed_html.push(this.raw_html);
+					this.processed_html.push(this.raw_html);
 				this.processed_html.push(`</td>`);
 
 				component_x = (options.x != undefined) ? options.x : component_row.length;

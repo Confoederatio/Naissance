@@ -24,6 +24,7 @@
 
     //Declare local instance variables
     var all_collapsible_els = document.querySelectorAll(options.selector);
+    console.log(`createSection()`, all_collapsible_els, options);
 
     //Set chevron image on first collapsible el
     var chevron_btn = document.createElement("img");

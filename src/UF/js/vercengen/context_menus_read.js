@@ -156,6 +156,8 @@
         output = options.custom_html_function(input_el);
     } else if (type == "image") {
       //[WIP] - No current file input of this kind
+    } else if (type == "interface") {
+      output = getInputsAsObject(input_el, options);
     } else if (type == "number") {
       output = parseFloat(input_el.querySelector(`input[type="number"]`).value);
     } else if (type == "password") {
