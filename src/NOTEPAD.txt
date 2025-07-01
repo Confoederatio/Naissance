@@ -298,3 +298,51 @@ Interface: class { //[WIP] - Refactor to make sure that this.interface_el is use
     }
   }
 }
+
+Case 1: Works.
+
+.visual-view {
+  min-height: 12rem;
+  outline: none;
+  padding: 15px 12px;
+}
+.visual-view:not(:active) { /* loaded after DOM initialisation /
+  min-height: 12rem;
+  display: table;
+  outline: none;
+  width: 100%;
+  padding: 15px 12px;
+  table-layout: fixed;
+}
+.visual-view:active { / prevents :active from ever firing */
+  pointer-events: none;
+}
+
+This works. You know what doesn't work?
+
+Case 2: The identical code that doesn't work.
+
+.visual-view {
+  min-height: 12rem;
+  outline: none;
+  padding: 15px 12px;
+}
+.visual-view:not(:active) { /* loaded after DOM initialisation /
+  min-height: 12rem;
+  display: table;
+  outline: none;
+  width: 100%;
+  padding: 15px 12px;
+  table-layout: fixed;
+}
+.visual-view:active {
+  pointer-events: none;
+}
+.visual-view:active:hover { / loaded at DOM initialisation?? how? it's :active:hover */
+  min-height: 12rem;
+  display: table;
+  outline: none;
+  width: 100%;
+  padding: 15px 12px;
+  table-layout: fixed;
+}

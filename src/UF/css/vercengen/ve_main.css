@@ -499,16 +499,27 @@ input[type="color"]::-webkit-color-swatch {
   }
 
   .content-area {
-    display: grid;
+    height: 12rem;
     line-height: 1.5;
-    max-height: 12rem;
     min-height: 12rem;
     overflow-x: hidden;
     overflow-y: auto;
+    resize: both;
+    table-layout: fixed;
+    width: 100%;
 
     .visual-view {
+      min-height: 12rem;
       outline: none;
       padding: 15px 12px;
+    }
+    .visual-view:not(:empty) {
+      min-height: 12rem;
+      display: table;
+      outline: none;
+      width: calc(100% - 24px);
+      padding: 15px 12px;
+      table-layout: fixed;
     }
     .visual-view p {
       margin: 0px;

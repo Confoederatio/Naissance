@@ -52,6 +52,7 @@
   background-color: var(--main-bg-colour);
   color: var(--text-colour);
   font-family: var(--primary-font);
+  width: calc(var(--context-menu-width)*2);
 
   .resize-handle:hover {
     background-color: var(--primary-hover-colour);
