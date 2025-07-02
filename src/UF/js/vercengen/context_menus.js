@@ -267,9 +267,10 @@
     //Initialise options
     if (!options.class) options.class = "";
     if (!options.interface_key) options.interface_key = options.config_key;
+    if (!options.left_margin) options.left_margin = "";
     if (!options.limit_key) options.limit_key = "entity_id";
     if (!options.navigation_mode) options.navigation_mode = "list";
-    if (!options.right_margin) options.left_margin = "";
+    if (!options.right_margin) options.right_margin = "";
     if (!options.type) options.type = "default";
 
     /**
@@ -942,6 +943,7 @@
       var local_options = (arg0_options) ? arg0_options : {};
 
       //Declare local instance variables
+      var lowest_order = global[`get${options.namespace}sLowestOrder`]();
       var namespace_anchor_el = global[`get${options.namespace}sAnchorElement`](local_options);
       var namespace_anchor_selector = global[`get${options.namespace}sAnchorElement`]({
         ...local_options,
@@ -954,17 +956,22 @@
       namespace_context_menus = sortElements(namespace_context_menus, { attribute: "order" });
 
       for (var i = 0; i < namespace_context_menus.length; i++) {
+        let local_order = namespace_context_menus[i].getAttribute("order");
+
+        if (local_order == undefined) continue;
+
         //Set current position; track namespace_context_width
         namespace_context_menus[i].style.position = "absolute";
         namespace_context_menus[i].style.left = `${namespace_context_width}px`;
-        namespace_context_width += namespace_context_menus[i].offsetWidth + 8;
 
-        if (!namespace_context_menus[i].getAttribute("order") == 1)
+        if (namespace_context_menus[i].getAttribute("order") != lowest_order)
           if (options.right_margin) {
             namespace_context_menus[i].style.right = `calc(${options.right_margin} + ${namespace_context_width}px)`;
           } else {
             namespace_context_menus[i].style.left = `calc(${options.left_margin} + ${namespace_context_width}px)`;
           }
+
+        namespace_context_width += namespace_context_menus[i].offsetWidth + 8;
       }
 
       //Update context menu inputs

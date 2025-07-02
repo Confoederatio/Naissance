@@ -111,7 +111,6 @@
       }
     }
     var suboptions = options.options;
-    console.log(`Suboptions:`, options.options);
 
     //.limit parser
     if (scope.limit) {

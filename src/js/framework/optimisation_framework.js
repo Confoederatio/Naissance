@@ -30,6 +30,7 @@
         anchor: `#entity-actions-context-menu`,
         config_key: "entity_actions",
         interface_key: "entity_actions",
+        left_margin: "var(--entity-ui-width) + 12px + 4px",
         limit_key: "entity_id",
         namespace: "EntityAction",
         navigation_mode: "list_icons",

@@ -90,12 +90,13 @@
         var all_checkbox_els = options.element.querySelectorAll(`[type="checkbox"]`);
 
         //Iterate over all_checkbox_els
-        for (var i = 0; i < all_checkbox_els.length; i++)
+        for (let i = 0; i < all_checkbox_els.length; i++) try {
           if (options.placeholder[all_checkbox_els[i].id]) {
             all_checkbox_els[i].checked = options.placeholder[all_checkbox_els[i].id];
           } else {
             all_checkbox_els[i].checked = false;
           }
+        } catch {}
       } else if (["color", "colour"].includes(options.type)) {
         var b_el = options.element.querySelector(`input#b`);
         var g_el = options.element.querySelector(`input#g`);

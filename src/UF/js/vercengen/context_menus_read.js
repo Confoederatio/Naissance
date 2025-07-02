@@ -133,12 +133,11 @@
       output = getWysiwygFromFields(input_el);
     } else if (type == "checkbox") {
       var all_checkboxes = input_el.querySelectorAll(`[type="checkbox"]`);
-      output = [];
+      output = {};
 
       //Iterate over all_checkboxes
       for (var i = 0; i < all_checkboxes.length; i++)
-        if (all_checkboxes[i].checked)
-          output.push(all_checkboxes[i].id);
+        output[all_checkboxes[i].id] = (all_checkboxes[i].checked);
     } else if (["color", "colour"].includes(type)) {
       output = getColourFromFields(input_el);
     } else if (type == "datalist") {
@@ -232,11 +231,14 @@
       if (local_output != null && local_output != undefined) has_output = true;
 
       //Set return_obj[local_id]
-      if (has_output)
+      if (has_output) {
+        if (!Array.isArray(local_output) && typeof local_output == "object")
+          return_obj = mergeObjects(return_obj, local_output);
         return_obj[local_id] = local_output;
+      }
     }
 
-    //2. Speciaised input handling
+    //2. Specialised input handling
     if (options.entity_id) {
       var common_selectors = config.defines.common.selectors;
       var entity_el = getEntityElement(options.entity_id);

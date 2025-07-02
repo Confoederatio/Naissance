@@ -27,7 +27,7 @@
 }
 
 /* -- 0. INPUT STYLING -- */
-.context-menu:not([class*="unique"]) .context-menu-cell input {
+.context-menu:not([class*="unique"]) .context-menu-cell input:not([type="range"]) {
   background-color: transparent;
   border: 0px;
   border-bottom: 1px solid var(--text-colour);
