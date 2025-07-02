@@ -7,7 +7,7 @@
    * @param {Object} [arg2_options]
    *  @param {number} [arg2_options.tolerance=main.brush.simplify_tolerance] - The tolerance to simplify this entity to.
    *
-   * @returns {*}
+   * @returns {Object}
    */
   function simplifyAllEntityKeyframes (arg0_entity_id, arg1_simplify_all_entity_keyframes, arg2_options) {
     //Convert from parameters
