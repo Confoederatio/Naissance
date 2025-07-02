@@ -16,8 +16,7 @@
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id
 
     if (entity_obj) {
-      var simplified_coords = simplify(entity_obj._latlngs, tolerance);
-      entity_obj._latlngs = simplified_coords;
+      var simplified_coords = simplify(convertMaptalksCoordsToTurf(entity_obj), tolerance);
 
       //Set history entry to reflect actual_coords
       if (entity_obj.options.history) {
@@ -27,8 +26,7 @@
       }
 
       //Refresh entity_obj
-      entity_obj.remove();
-      entity_obj.addTo(map);
+      entity_obj.setCoordinates(convertToMaptalks(simplified_coords));
     }
 
     //Return statement

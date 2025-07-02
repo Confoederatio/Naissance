@@ -7,13 +7,20 @@
 
     Returns: (Number)
   */
-  function simplifyAllEntityKeyframes (arg0_entity_id, arg1_tolerance) {
+  function simplifyAllEntityKeyframes (arg0_entity_id, arg1_simplify_all_entity_keyframes, arg2_options) {
     //Convert from parameters
     var entity_id = arg0_entity_id;
-    var tolerance = arg1_tolerance;
+    var simplify_all_entity_keyframes = arg1_simplify_all_entity_keyframes;
+    var options = (arg2_options) ? arg2_options : {};
+
+    //Guard clause
+    if (simplify_all_entity_keyframes != true) return;
+    console.log(`Attempting to simplify all entity keyframes`);
 
     //Declare local instance variables
     var entity_obj = (typeof entity_id != "object") ? getEntity(entity_id) : entity_id;
+    var tolerance = (options.tolerance) ?
+      options.tolerance : main.brush.simplify_tolerance;
 
     if (entity_obj) {
       if (entity_obj.options.history) {

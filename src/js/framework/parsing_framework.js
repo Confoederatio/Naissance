@@ -81,6 +81,8 @@
         options.options = brush_actions_input_obj;
       }
 
+      console.log(`actions_input_obj`, actions_input_obj);
+
       //Set options.timestamp to be passed down
       if (!options.options) options.options = {};
       options.options.timestamp = options.timestamp;
@@ -170,7 +172,7 @@
           if (all_scope_keys[i] == "set_only_simplify_brush")
             setBrushOnlySimplifyBrush(local_value[0]);
           if (all_scope_keys[i] == "simplify_all_keyframes")
-            simplifyAllEntityKeyframes(entity_id, returnSafeNumber(local_value[0]));
+            simplifyAllEntityKeyframes(entity_id, local_value[0]);
 
           //Group actions
           if (all_scope_keys[i] == "create_subgroup")
@@ -183,7 +185,7 @@
             if (typeof local_value[0] == "object") {
               setGroupMask(local_value[0].group_id, local_value[0].value);
             } else {
-              console.log(`Local value:`, local_value)
+              console.log(`Local value:`, local_value);
               setGroupMask(main.brush.selected_group_id, local_value[0]);
             }
 
