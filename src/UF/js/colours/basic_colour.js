@@ -1,18 +1,31 @@
-//Initialise functions
+//Colours framework
 {
-  //Colours framework
   /*
     componentToHex() - Fetches the hex of a single component.
     c: (Number) - The individual r/g/b component to pass to the function.
 
     Returns: (String)
   */
-  function componentToHex (c) {
+  global.componentToHex = function (c) {
     var hex = c.toString(16);
 
     //Return statement
     return hex.length == 1 ? "0" + hex : hex;
   }
+
+  global.decodeRGBAAsNumber = function (arg0_rgba) {
+    //Convert from parameters
+    var rgba = arg0_rgba;
+
+    //Declare local instance variables
+    var r = rgba[0];
+    var g = rgba[1];
+    var b = rgba[2];
+    var a = rgba[3];
+
+    //Return statement (rebuild 32-bit integer)
+    return ((r << 24) | (g << 16) | (b << 8) | a) >>> 0;
+  };
 
   /*
     deltaE() - Calculates the deltaE between two RGB values
@@ -42,6 +55,20 @@
     //Return statement
     return i < 0 ? 0 : Math.sqrt(i);
   }
+
+  function encodeNumberAsRGBA (arg0_number) {
+    //Convert from parameters
+    var number = returnSafeNumber(Math.round(arg0_number));
+
+    //Declare local instance variables
+    var r = (number >> 24) & 0xFF; //Extract highest 8 bits
+    var g = (number >> 16) & 0xFF; //Extract next 8 bits
+    var b = (number >> 8) & 0xFF;  //Extract next 8 bits
+    var a = number & 0xFF;         //Extract lowest 8 bits
+
+    //Return statement
+    return [r, g, b, a];
+  };
 
   /*
     generateRandomColour() - Generates a random RGB colour.
