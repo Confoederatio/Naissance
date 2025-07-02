@@ -43,11 +43,13 @@ global.ve = {
 				</div>
 				<div id = "window-body"></div>
 			`;
+			this.element.style.zIndex = Object.keys(ve.windows).length.toString();
 
 			//Set Instance to sync with global.ve.windows
 			ve.windows[this.window_id] = this;
 			ve.window_overlay_el.appendChild(this.element);
 
+			//Instantiate element handlers
 			if (options.draggable)
 				elementDragHandler(this.element, { is_resizable: (options.resizeable) });
 			if (options.can_close) {
@@ -63,6 +65,11 @@ global.ve = {
 			createSection({
 				selector: `[data-window-id="${this.window_id}"] #window-header, [data-window-id="${this.window_id}"] #window-body`
 			});
+			//Z-index handler
+			this.element.onmousedown = (e) => {
+				console.log(e);
+				this.select();
+			};
 
 			//Append interface if possible
 			if (options.interface)
@@ -75,6 +82,27 @@ global.ve = {
 			//Delete ve.windows[this.window_id], then remove element
 			delete ve.windows[this.window_id];
 			this.element.remove();
+		}
+
+		static getHighestZIndex (arg0_options) {
+			//Convert from parameters
+			var options = (arg0_options) ? arg0_options : {};
+
+			//Declare local instance variables
+			var highest_z_index = [-Infinity, undefined];
+
+			//Iterate over all ve.windows
+			var all_ve_windows = Object.keys(ve.windows);
+
+			for (let i = 0; i < all_ve_windows.length; i++) {
+				let local_window = ve.windows[all_ve_windows[i]];
+
+				highest_z_index[0] = Math.max(highest_z_index[0], local_window.getZIndex());
+				highest_z_index[1] = local_window;
+			}
+
+			//Return statement
+			return (!options.return_object) ? highest_z_index[0] : highest_z_index[1];
 		}
 
 		getName () {
@@ -91,6 +119,41 @@ global.ve = {
 		getState () {
 			//Return statement
 			return getInputsAsObject(this.element);
+		}
+
+		getZIndex () {
+			//Return statement
+			return parseInt(getComputedStyle(this.element)["z-index"]);
+		}
+
+		static normaliseZIndexes () {
+			//Declare local instance variables
+			var overlay_el = ve.window_overlay_el;
+
+			//Get all elements with [data-window-id] and their z-index values
+			var all_windows = Array.from(overlay_el.querySelectorAll('[data-window-id]'));
+
+			// Extract z-index values and sort them numerically
+			var z_indexes = all_windows
+				.map((window) => ({
+					element: window,
+					z_index: parseInt(window.style.zIndex || 0, 10),
+				}))
+				.sort((a, b) => a.z_index - b.z_index);
+
+			// Assign normalized z-index values (1, 2, 3, ...)
+			z_indexes.forEach((item, index) => {
+				item.element.style.zIndex = (index + 1).toString();
+			});
+		}
+
+		select () {
+			//Declare local instance variables
+			var current_highest_z_index = JSON.parse(JSON.stringify(ve.Window.getHighestZIndex())) + 1;
+
+			//Swap z-indices
+			this.element.style.zIndex = current_highest_z_index.toString();
+			ve.Window.normaliseZIndexes();
 		}
 
 		setInterface (arg0_options) {
