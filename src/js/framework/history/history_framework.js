@@ -373,7 +373,7 @@
     arg0_entity_id: (String) - The entity ID for which to fetch the coordinates for.
     arg1_date: (Object, Date) - Optional. The date relative to which to fetch current .coords.
     arg2_options: (Object)
-      is_non_inclusive: (Boolean) - Optional. Whether to include the end timestamp when searching for entity coords or not. False by default.
+      is_non_inclusive: (Boolean) - Optional. Whether to exclude the end timestamp when searching for entity coords or not. False by default.
 
     Returns: (Array<Array<Number, Number>>)
   */

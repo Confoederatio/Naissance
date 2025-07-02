@@ -1,4 +1,8 @@
 //GEOSPATIALE I. Now deprecated.
+{
+
+}
+
 //Coordinate conversion functions
 {
 	/*
