@@ -6,14 +6,14 @@
 
     Returns: (String)
   */
-  global.componentToHex = function (c) {
+  function componentToHex (c) {
     var hex = c.toString(16);
 
     //Return statement
     return hex.length == 1 ? "0" + hex : hex;
   }
 
-  global.decodeRGBAAsNumber = function (arg0_rgba) {
+  function decodeRGBAAsNumber (arg0_rgba) {
     //Convert from parameters
     var rgba = arg0_rgba;
 
@@ -159,6 +159,6 @@
     z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
 
     //Return statement
-    return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
+    return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)];
   }
 }

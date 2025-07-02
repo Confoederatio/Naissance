@@ -78,13 +78,13 @@
 
         //Write content correctly
         for (var i = 0; i < nrows; i++) {
-            var row_start = i * ncols;
-            var row_values = grid_data.slice(row_start, row_start + ncols);
+          var row_start = i * ncols;
+          var row_values = grid_data.slice(row_start, row_start + ncols);
 
-            var clean_row = row_values.join(" "); // nsure single-space formatting
-              clean_row = clean_row.replace(/-9(\s|$)/g, "-9999 "); //Replace -9 with -9999
-              clean_row = clean_row.replace(/\s+/g, " ").trim(); //Ensure only single spaces
-            write_stream.write(clean_row + "\n");
+          var clean_row = row_values.join(" "); // nsure single-space formatting
+            clean_row = clean_row.replace(/-9(\s|$)/g, "-9999 "); //Replace -9 with -9999
+            clean_row = clean_row.replace(/\s+/g, " ").trim(); //Ensure only single spaces
+          write_stream.write(clean_row + "\n");
         }
 
         write_stream.end(() => {
