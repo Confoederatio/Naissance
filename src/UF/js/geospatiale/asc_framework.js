@@ -89,7 +89,7 @@
     };
   }
 
-  async function processHYDEASCToPNG (arg0_input_folder, arg1_output_folder, arg2_options) {
+  async function processHYDEASCsToPNG (arg0_input_folder, arg1_output_folder, arg2_options) {
     //Convert from parameters
     var input_folder = arg0_input_folder;
     var output_folder = arg1_output_folder;

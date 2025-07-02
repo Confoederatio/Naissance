@@ -102,7 +102,8 @@ config.entity_actions.polity_actions = {
 
         effect: {
           set_brush_auto_simplify: "simplify_auto_simplify_when_editing",
-          simplify_all_keyframes: "simplify_apply_to_all_keyframes"
+          simplify_all_keyframes: "simplify_apply_to_all_keyframes",
+          simplify_entity: "BRUSH_OBJ.simplify_tolerance"
         }
       }
     }

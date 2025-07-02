@@ -283,7 +283,7 @@
 	}
 }
 
-//Internals functions - Should not actually be used by end dev
+//Internal functions - Should not actually be used by end dev
 {
 	function convertEntityCoordsToMaptalks (arg0_entity_id) {
 		//Convert from parameters

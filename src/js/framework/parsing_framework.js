@@ -171,6 +171,8 @@
             setBrushSimplifyTolerance(parseFloat(local_value[0]));
           if (all_scope_keys[i] == "set_only_simplify_brush")
             setBrushOnlySimplifyBrush(local_value[0]);
+          if (all_scope_keys[i] == "simplify_entity")
+            simplifyEntity(entity_id, local_value[0]);
           if (all_scope_keys[i] == "simplify_all_keyframes")
             simplifyAllEntityKeyframes(entity_id, local_value[0]);
 

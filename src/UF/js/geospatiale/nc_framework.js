@@ -116,6 +116,9 @@
 
     for (var i = 0; i < reader.variables.length; i++)
       console.log(reader.variables[i]);
+
+    //Return statement
+    return reader.variables;
   };
 
   async function processSEDAC (arg0_input_file_path, arg1_output_folder, arg2_variable_key) {
