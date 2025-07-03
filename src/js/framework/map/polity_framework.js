@@ -25,8 +25,8 @@
     if (!options.polygonFill) options.polygonFill = "#1bbc9b";
     if (!options.polygonOpacity) options.polygonOpacity = 0.6;
 
-    if (!validateCoordinates(coords))
-      coords = flipCoordinates(convertCoordsToGeoJSON(coords));
+    if (!isGeoJSONStrictCoords(coords))
+      coords = flipCoordinates(convertLeafletCoordsToGeoJSONCoords(coords));
     coords = flipCoordinates(coords);
 
     //Declare local instance variables
@@ -102,7 +102,7 @@
   
         if (last_coords)
           try {
-            var local_coordinates = getTurfObject(last_coords);
+            var local_coordinates = convertToTurfGeometry(last_coords);
   
             entity_area = (!is_extinct) ? turf.area(local_coordinates) : 0;
           } catch (e) {

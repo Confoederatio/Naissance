@@ -34,7 +34,7 @@
         if (!actual_coords)
           actual_coords = (old_history_entry) ?
             old_history_entry.coords :
-            convertMaptalksCoordsToTurf(entity_obj)[0];
+            convertMaptalksGeometryToTurfGeometry(entity_obj)[0];
 
       //Create new history object
       if (!entity_obj.options.history[date_string])

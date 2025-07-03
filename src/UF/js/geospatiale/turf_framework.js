@@ -1,25 +1,5 @@
 //Internals functions - Should not actually be used by end dev
 {
-  function getTurfObject (arg0_format) {
-    //Convert from parameters
-    var format = arg0_format;
-
-    //Declare local instance variables
-    var format_type = getCoordsType(format);
-
-    //Guard clauses for existing Turf formats
-    if (format_type == "turf")
-      return turf[format[1]](format[0]);
-    if (format_type == "turf_object") {
-      return format;
-    }
-
-    var turf_coords = convertToTurf(format);
-
-    //Return statement
-    return turf[turf_coords[1]](turf_coords[0]);
-  }
-
   function isValidTurfOperation (arg0_format, arg1_format) {
     //Convert from parameters
     var format = arg0_format;
@@ -53,16 +33,16 @@
 
     //Declare local instance variables
     try {
-      var ot_turf_obj = getTurfObject(ot_format);
-      var turf_obj = getTurfObject(format);
+      var ot_turf_obj = convertToTurfGeometry(ot_format);
+      var turf_obj = convertToTurfGeometry(format);
       var turf_operation = turf[options.operation_type](turf_obj, ot_turf_obj);
 
       //Return statement
       if (turf_operation)
-        return (options.return_leaflet) ? convertToLeaflet(turf_operation) : turf_operation;
+        return (options.return_leaflet) ? convertToLeafletCoords(turf_operation) : turf_operation;
     } catch (e) {
       //Return statement
-      return (options.return_leaflet) ? convertToLeaflet(turf_operation) : turf_operation;
+      return (options.return_leaflet) ? convertToLeafletCoords(turf_operation) : turf_operation;
     }
   }
 }
@@ -93,12 +73,12 @@
     var options = (arg1_options) ? arg1_options : {};
 
     //Declare local instance variables
-    var original_poly = getTurfObject(format_list[0]);
+    var original_poly = convertToTurfGeometry(format_list[0]);
 
     //Iterate over format_list above i = 1
     if (format_list.length > 1)
       for (var i = 1; i < format_list.length; i++) {
-        var local_turf_obj = getTurfObject(format_list[i]);
+        var local_turf_obj = convertToTurfGeometry(format_list[i]);
 
         original_poly = difference(original_poly, local_turf_obj, {
           return_leaflet: false
@@ -106,7 +86,7 @@
       }
 
     //Return statement
-    return (!options.return_leaflet) ? convertToLeaflet(original_poly) : original_poly;
+    return (!options.return_leaflet) ? convertToLeafletCoords(original_poly) : original_poly;
   }
 
   //intersectionAll() - Same options as intersection(). The intersection of all elements is returned
@@ -116,12 +96,12 @@
     var options = (arg1_options) ? arg1_options : {};
 
     //Declare local instance variables
-    var original_poly = getTurfObject(format_list[0]);
+    var original_poly = convertToTurfGeometry(format_list[0]);
 
     //Iterate over format_list above i = 1
     if (format_list.length > 1)
       for (var i = 1; i < format_list.length; i++) {
-        var local_turf_obj = getTurfObject(format_list[i]);
+        var local_turf_obj = convertToTurfGeometry(format_list[i]);
 
         original_poly = intersection(original_poly, local_turf_obj, {
           return_leaflet: false
@@ -130,7 +110,7 @@
 
 
     //Return statement
-    return (!options.return_leaflet) ? convertToLeaflet(original_poly) : original_poly;
+    return (!options.return_leaflet) ? convertToLeafletCoords(original_poly) : original_poly;
   }
 
   //unionAll() - Same options as union().
@@ -142,12 +122,12 @@
     if (options.return_leaflet != false) options.return_leaflet = true;
 
     //Declare local instance variables
-    var original_poly = getTurfObject(format_list[0]);
+    var original_poly = convertToTurfGeometry(format_list[0]);
 
     //Iterate over format_list above i = 1
     if (format_list.length > 1)
       for (var i = 1; i < format_list.length; i++) {
-        var local_turf_obj = getTurfObject(format_list[i]);
+        var local_turf_obj = convertToTurfGeometry(format_list[i]);
 
         original_poly = union(original_poly, local_turf_obj, {
           return_leaflet: false
@@ -156,7 +136,7 @@
 
 
     //Return statement
-    return (!options.return_leaflet) ? convertToLeaflet(original_poly) : original_poly;
+    return (!options.return_leaflet) ? convertToLeafletCoords(original_poly) : original_poly;
   }
 
   //simplifyAll() - Same options as simplify().
@@ -197,12 +177,12 @@
     if (options.return_leaflet != false) options.return_leaflet = true;
 
     //Declare local instance variables
-    var turf_obj = getTurfObject(format);
+    var turf_obj = convertToTurfGeometry(format);
 
     var turf_buffered = turf.buffer(turf_obj, options.radius, options);
 
     //Return statement
-    return (options.return_leaflet) ? convertToLeaflet(turf_buffered) : turf_buffered;
+    return (options.return_leaflet) ? convertToLeafletCoords(turf_buffered) : turf_buffered;
   }
 
   /*
@@ -301,11 +281,11 @@
 
       if (typeof new_options.tolerance == "number") {
         try {
-          var turf_obj = getTurfObject(format);
+          var turf_obj = convertToTurfGeometry(format);
           var turf_simplified = turf.simplify(turf_obj, new_options);
 
           //Return statement
-          return (options.return_leaflet) ? convertToLeaflet(turf_simplified) : turf_simplified;
+          return (options.return_leaflet) ? convertToLeafletCoords(turf_simplified) : turf_simplified;
         } catch (e) {
           //Return statement; guard clause
           return format;

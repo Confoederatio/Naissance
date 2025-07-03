@@ -40,7 +40,7 @@
 
               //Convert to Naissance format if applicable
               if (local_history_entry.coords)
-                local_history_entry.coords = convertToNaissance(local_history_entry.coords);
+                local_history_entry.coords = convertToNaissanceCoords(local_history_entry.coords);
             }
 
             //Remove frame if same .coords and options is empty

@@ -25,18 +25,18 @@
 
     //Simplify entity keyframe
     if (entity_obj) {
-      var simplified_coords = simplify(convertToTurf(entity_coords), tolerance);
+      var simplified_coords = simplify(convertToTurfCoords(entity_coords), tolerance);
 
       //Set history entry to reflect actual_coords
       if (entity_obj.options.history) {
         createHistoryFrame(entity_id, options.date, { coords:
-          convertToNaissance(simplified_coords)
+          convertToNaissanceCoords(simplified_coords)
         });
       }
 
       //Refresh entity_obj
       if (getTimestamp(options.date) == getTimestamp(main.date))
-        entity_obj.setCoordinates(convertToMaptalks(simplified_coords));
+        entity_obj.setCoordinates(convertToMaptalksCoords(simplified_coords));
     }
 
     //Return statement

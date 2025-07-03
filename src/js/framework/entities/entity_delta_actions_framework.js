@@ -99,7 +99,7 @@
       brush_obj.entity_options = entity_obj.options;
 
       //Set brush to this
-      brush_obj.current_path = convertEntityCoordsToMaptalks(entity_obj);
+      brush_obj.current_path = convertNaissanceGeometryToMaptalksCoords(entity_obj);
       brush_obj.current_selection = entity_obj;
 
       //Set entityUI for current selected entity
@@ -127,7 +127,7 @@
     var current_entity_obj = getEntity(brush_obj.entity_options.className);
     console.log(options.entity_id || (brush_obj.entity_options ? brush_obj.entity_options.className : undefined))
     var internal_options = JSON.parse(JSON.stringify({
-      coords: convertToNaissance(brush_obj.current_path),
+      coords: convertToNaissanceCoords(brush_obj.current_path),
       entity_options: brush_obj.entity_options || {},
       selection_options: brush_obj.current_selection.options || {},
       selected_group_id: brush_obj.selected_group_id,
