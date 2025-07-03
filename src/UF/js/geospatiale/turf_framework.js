@@ -8,11 +8,10 @@
     //Return statement
     if (format && ot_format)
       if (
-        getCoordsType(format) == "turf_object" &&
-        getCoordsType(ot_format) == "turf_object"
-      ) {
-          return true;
-      }
+        getCoordsType(format) == "turf_geometry" &&
+        getCoordsType(ot_format) == "turf_geometry"
+      )
+        return true;
   }
 
   /*
@@ -113,6 +112,23 @@
     return (!options.return_leaflet) ? convertToLeafletCoords(original_poly) : original_poly;
   }
 
+  //simplifyAll() - Same options as simplify().
+  function simplifyAll (arg0_format_list, arg1_options) {
+    //Convert from parameters
+    var format_list = getList(arg0_format_list);
+    var options = (arg1_options) ? arg1_options : {};
+
+    //Declare local instance variables
+    var all_simplifications = [];
+
+    //Iterate over format_list and buffer everything
+    for (var i = 0; i < format_list.length; i++)
+      all_simplifications.push(simplify(format_list[i], options));
+
+    //Return statement
+    return all_simplifications;
+  }
+
   //unionAll() - Same options as union().
   function unionAll (arg0_format_list, arg1_options) {
     //Convert from parameters
@@ -137,23 +153,6 @@
 
     //Return statement
     return (!options.return_leaflet) ? convertToLeafletCoords(original_poly) : original_poly;
-  }
-
-  //simplifyAll() - Same options as simplify().
-  function simplifyAll (arg0_format_list, arg1_options) {
-    //Convert from parameters
-    var format_list = getList(arg0_format_list);
-    var options = (arg1_options) ? arg1_options : {};
-
-    //Declare local instance variables
-    var all_simplifications = [];
-
-    //Iterate over format_list and buffer everything
-    for (var i = 0; i < format_list.length; i++)
-      all_simplifications.push(simplify(format_list[i], options));
-
-    //Return statement
-    return all_simplifications;
   }
 }
 
@@ -236,31 +235,6 @@
   }
 
   /*
-    union() - Adds arg1_format to arg0_format.
-    options: {
-      return_leaflet: false/true - Optional. Whether to return a Leaflet object. True by default
-    }
-  */
-  function union (arg0_format, arg1_format, arg2_options) {
-    //Convert from parameters
-    var format = arg0_format;
-    var ot_format = arg1_format;
-    var options = (arg2_options) ? arg2_options : {};
-
-    //Initialise options
-    if (!options.return_leaflet != false) options.return_leaflet = true;
-
-    //Declare local instance variables
-    var turf_union = performTurfOperation(format, ot_format, {
-      operation_type: "union",
-      return_leaflet: options.return_leaflet
-    });
-
-    //Return statement
-    return turf_union;
-  }
-
-  /*
     simplify() - Simplifies a polygon of any accepted format.
     options: {
       <key>: <value>, - Any other value used in turf.simplify()
@@ -296,5 +270,30 @@
     } else {
       console.error(`No options.tolerance specified.`);
     }
+  }
+
+  /*
+    union() - Adds arg1_format to arg0_format.
+    options: {
+      return_leaflet: false/true - Optional. Whether to return a Leaflet object. True by default
+    }
+  */
+  function union (arg0_format, arg1_format, arg2_options) {
+    //Convert from parameters
+    var format = arg0_format;
+    var ot_format = arg1_format;
+    var options = (arg2_options) ? arg2_options : {};
+
+    //Initialise options
+    if (!options.return_leaflet != false) options.return_leaflet = true;
+
+    //Declare local instance variables
+    var turf_union = performTurfOperation(format, ot_format, {
+      operation_type: "union",
+      return_leaflet: options.return_leaflet
+    });
+
+    //Return statement
+    return turf_union;
   }
 }

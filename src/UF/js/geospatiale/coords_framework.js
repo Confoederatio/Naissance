@@ -6,9 +6,9 @@
 		 * getCoordsType() - Returns the coords/geometry format the variable represents.
 		 * @param {*} arg0_format - The coords/geometry format to input.
 		 *
-		 * @returns {String} - Either 'geojson_coords'/'geojson_geometry'/'leaflet_coords'/'leaflet_geometry'/'maptalks_coords'/'maptalks_geometry'/'naissance_coords'/'naissance_geometry'/'turf_coords'/'turf_object'.
+		 * @returns {String} - Either 'geojson_coords'/'geojson_geometry'/'leaflet_coords'/'leaflet_geometry'/'maptalks_coords'/'maptalks_geometry'/'naissance_coords'/'naissance_geometry'/'turf_coords'/'turf_geometry'.
 		 */
-		function getCoordsType (arg0_format) {
+			function getCoordsType (arg0_format) {
 			//Convert from parameters
 			var format = arg0_format;
 
@@ -354,7 +354,7 @@
 		/**
 		 * convertLeafletCoordsToTurfGeometry() - Converts Leaflet geometry to Turf geometry.
 		 * @param {Object} arg0_geojson
-		 * @returns {Array<Array<Array<number, number>>, String>} - [0] contains turf_coords; [1] represents either 'Polygon'/'MultiPolygon';
+		 * @returns {Array<Array<Array<number, number>>>, String>} - [0] contains turf_coords; [1] represents either 'Polygon'/'MultiPolygon';
 		 */
 		function convertLeafletCoordsToTurfGeometry (arg0_geojson) {
 			//Convert from parameters
