@@ -22,6 +22,9 @@
       )
         topbar_tab_button_els[i].setAttribute("class", `${topbar_tab_button_els[i].getAttribute("class")} active`);
 
+    //Close current entity context menu
+    closeEntityContextMenu();
+
     //Iterate over all left_sidebar_page_els and hide them
     for (var i = 0; i < left_sidebar_page_els.length; i++)
       hideElement(left_sidebar_page_els[i]);

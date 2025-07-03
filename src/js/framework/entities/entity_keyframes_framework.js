@@ -18,7 +18,7 @@
     var timestamp = arg1_timestamp;
 
     //Close entity UI, call editEntity()
-    closeEntityContextMenu();
+    closeEntityContextMenu(entity_id);
     setDate(timestamp);
     editEntity(entity_id);
 

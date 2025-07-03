@@ -15,7 +15,7 @@
   */
   function closeEntityContextMenu (arg0_entity_id) {
     //Convert from parameters
-    var entity_id = arg0_entity_id;
+    var entity_id = (arg0_entity_id) ? arg0_entity_id : main.brush.selected_entity_id;
 
     //Declare local instance variables
     var entity_el = getEntityElement(entity_id);
@@ -25,6 +25,7 @@
         //Close entity_el
         entity_el.remove();
         delete interfaces[entity_id];
+        delete main.brush.selected_entity_id;
       }
     cleanEntityContextMenus();
   }
@@ -327,6 +328,9 @@
     var is_pinned = (options.pin);
     var reload_popup = false;
     var to_pin = (!is_pinned);
+
+    //Record brush_obj.selected_entity_id
+    brush_obj.selected_entity_id = entity_id;
 
     //Fetch is_being_edited; pin status, coords_string
     if (brush_obj.editing_entity == entity_id) is_being_edited = true;
