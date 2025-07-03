@@ -244,21 +244,24 @@
       var entity_el = getEntityElement(options.entity_id);
       var entity_obj = getEntity(options.entity_id);
 
-      //Metadata handling
-      //Metadata - Reserved variables
-      if (!return_obj.ENTITY_ABSOLUTE_AGE) return_obj.ENTITY_ABSOLUTE_AGE = getEntityAbsoluteAge(options.entity_id);
-      if (!return_obj.ENTITY_RELATIVE_AGE) return_obj.ENTITY_RELATIVE_AGE = getEntityRelativeAge(options.entity_id);
+      //Make sure entity_obj exists
+      if (entity_obj) {
+        //Metadata handling
+        //Metadata - Reserved variables
+        if (!return_obj.ENTITY_ABSOLUTE_AGE) return_obj.ENTITY_ABSOLUTE_AGE = getEntityAbsoluteAge(options.entity_id);
+        if (!return_obj.ENTITY_RELATIVE_AGE) return_obj.ENTITY_RELATIVE_AGE = getEntityRelativeAge(options.entity_id);
 
-      //Multiple keyframes handling
-      if (entity_obj.options.selected_keyframes_key)
-        return_obj[entity_obj.options.selected_keyframes_key] = entity_obj.options.selected_keyframes;
-      //Timestamp handling
-      if (entity_el) {
-        var entity_keyframe_anchor_el = entity_el.querySelector(`${common_selectors.entity_keyframe_context_menu_anchor}`);
-        var entity_timestamp = entity_keyframe_anchor_el.getAttribute("timestamp");
+        //Multiple keyframes handling
+        if (entity_obj.options.selected_keyframes_key)
+          return_obj[entity_obj.options.selected_keyframes_key] = entity_obj.options.selected_keyframes;
+        //Timestamp handling
+        if (entity_el) {
+          var entity_keyframe_anchor_el = entity_el.querySelector(`${common_selectors.entity_keyframe_context_menu_anchor}`);
+          var entity_timestamp = entity_keyframe_anchor_el.getAttribute("timestamp");
 
-        if (entity_timestamp)
-          return_obj.timestamp = entity_timestamp;
+          if (entity_timestamp)
+            return_obj.timestamp = entity_timestamp;
+        }
       }
     }
 

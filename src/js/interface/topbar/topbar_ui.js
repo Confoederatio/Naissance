@@ -1,5 +1,9 @@
-//Declare functions
+//Initialise functions
 {
+  /**
+   * switchTopbarTab() - Switches the present topbar tab to `${tab}-button`.
+   * @param {String} arg0_tab
+   */
   function switchTopbarTab (arg0_tab) {
     //Convert from parameters
     var tab = arg0_tab.toLowerCase();
@@ -34,10 +38,8 @@
 
     showElement(current_page_el);
   }
-}
 
-//Initialise Topbar UI functions
-{
+  //initTopbar() - Initialises topbar UI elements and their handlers.
   function initTopbar () {
     //Declare listener events
     getUISelector("file_button").onclick = function (e) {
@@ -79,6 +81,7 @@
     };
   }
 
+  //initTopbarUI() - Initialises all Topbar-related content and events upon call.
   function initTopbarUI () {
     //Initialise topbar only after Topbar UI has first been loaded
     initTopbar();

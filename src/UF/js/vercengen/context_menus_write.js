@@ -8,7 +8,7 @@
    *  @param {string} [arg0_options.type] - The type of input the element represents
    *  @param {Object} [arg0_options.value] - The local value for the given context menu object element
    */
-  function autoFillInput (arg0_options) {
+  function autoFillInput (arg0_options) { //[WIP] - Rework autoFillInput() to use parseVariableString() for all inputs
     //Convert from parameters
     var options = (arg0_options) ? arg0_options : {};
 
@@ -29,11 +29,14 @@
         var local_placeholder = placeholder_obj[all_placeholder_keys[i]];
         var local_placeholder_string = JSON.parse(JSON.stringify(local_placeholder));
 
-        if (local_placeholder)
+        if (local_placeholder != undefined)
           placeholder_obj[all_placeholder_keys[i]] = (options.value.value_equation) ?
             parseVariableString(options.value.value_equation, { VALUE: parseVariableString(local_placeholder) }) :
             parseVariableString(local_placeholder);
       }
+
+      if (all_placeholder_keys.length == 1 && placeholder_obj.VALUE != undefined)
+        placeholder_obj = placeholder_obj.VALUE;
     }
 
     if (options.type == "basic_colour") {

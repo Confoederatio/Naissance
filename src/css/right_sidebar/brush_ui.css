@@ -21,8 +21,6 @@
   position: fixed;
   bottom: 0.5rem;
   right: calc(20% + 12px + 10px);
-
-  color: black;
 }
 
 /* -- Brush UI container -- */

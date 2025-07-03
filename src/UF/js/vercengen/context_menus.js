@@ -396,7 +396,7 @@
       return inputs_obj;
     };
 
-    global[`print${options.namespace}sContextMenu`] = function (arg0_namespace_obj, arg1_options) { //[WIP] -Finish function body
+    global[`print${options.namespace}sContextMenu`] = function (arg0_namespace_obj, arg1_options) { //[WIP] - Finish function body
       //Convert from parameters
       var namespace_obj = arg0_namespace_obj;
       var local_options = (arg1_options) ? arg1_options : {};
@@ -437,7 +437,7 @@
             global[`close${options.namespace}ContextMenu`](namespace_order, local_options);
 
           //Append dummy context menu div first for context_menu_ui to append to
-          context_menu_el.setAttribute("class", global.ve.default_class);
+          context_menu_el.setAttribute("class", global.ve.default_class + ` scaffold`);
           context_menu_el.id = namespace_obj.id;
           context_menu_el.setAttribute("order", namespace_order);
           namespace_anchor_el.appendChild(context_menu_el);
@@ -455,6 +455,7 @@
           new_interface.close_function = `close${options.namespace}ContextMenu(${namespace_order}); refresh${options.namespace}sContextMenus();`;
 
           var context_menu_ui = new ve.Interface(new_interface);
+          console.log(`createContextMenuInterface()`, context_menu_ui);
           global[`refresh${options.namespace}sContextMenus`](local_options);
 
           //Iterate over all_interface_keys and parse them correctly
@@ -474,9 +475,10 @@
                 placeholder: local_value.placeholder,
                 value: local_value
               });
+              console.log(local_value.placeholder);
 
               //Parse .effect to .onclick event handler
-              if (local_value.effect)
+              if (local_value.effect || local_value.value_equation)
                 local_element.onclick = function (e) {
                   var local_input = getInput(this);
 

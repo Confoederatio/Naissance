@@ -1,6 +1,5 @@
-//GEOSPATIALE I. Now deprecated.
+//GEOSPATIALE II
 {
-
 }
 
 //Coordinate conversion functions
@@ -22,10 +21,10 @@
 		//Guard clauses if format_type is already GeoJSON
 		if (format_type == "geojson") return format;
 
-		if (format_type == "leaflet") {
+		if (format_type == "leaflet_coords") {
 			var leaflet_geojson = new L.Polygon(format).toGeoJSON();
 			geojson_coords = leaflet_geojson.geometry;
-		} else if (format_type == "leaflet_non_poly") {
+		} else if (format_type == "leaflet_geometry") {
 			var leaflet_geojson = new L.Polygon(format._latlngs).toGeoJSON();
 			geojson_coords = leaflet_geojson.geometry;
 		} else if (format_type == "maptalks") {
@@ -58,9 +57,9 @@
 		var leaflet_coords;
 
 		//Guard clauses if already of Leaflet type
-		if (format_type == "leaflet")
+		if (format_type == "leaflet_coords")
 			return JSON.parse(JSON.stringify(format));
-		if (format_type == "leaflet_non_poly")
+		if (format_type == "leaflet_geometry")
 			return JSON.parse(JSON.stringify(format._latlngs));
 
 		//If a valid format type, convert it to Leaflet somehow
@@ -78,7 +77,7 @@
 				var temp_polygon = L.polygon(format);
 
 				leaflet_coords = temp_polygon._latlngs;
-			} else if (format_type == "naissance_history") {
+			} else if (format_type == "naissance_geometry") {
 				var temp_polygon = L.polygon(format.coords)
 
 				leaflet_coords = temp_polygon._latlngs;
@@ -117,9 +116,9 @@
 		if (format_type === "geojson") {
 			var geojson_geometry = (format.geometry || format); //Support both Feature and Geometry
 			maptalks_coords = maptalks.GeoJSON.toGeometry(geojson_geometry).getCoordinates();
-		} else if (format_type === "leaflet") {
+		} else if (format_type === "leaflet_coords") {
 			maptalks_coords = convertLeafletCoordsToMaptalks(format);
-		} else if (format_type === "leaflet_non_poly") {
+		} else if (format_type === "leaflet_geometry") {
 			maptalks_coords = convertLeafletCoordsToMaptalks(format._latlngs);
 		} else if (format_type === "naissance") {
 			var geojson_coords = convertCoordsToGeoJSON(format);
@@ -132,7 +131,7 @@
 			maptalks_coords = maptalks.GeoJSON.toGeometry(geojson_obj.geometry).getCoordinates();
 		} else if (format_type === "turf_object") {
 			maptalks_coords = maptalks.GeoJSON.toGeometry(format.geometry).getCoordinates();
-		} else if (format_type === "naissance_history") {
+		} else if (format_type === "naissance_geometry") {
 			var geojson_coords = convertCoordsToGeoJSON(format.coords);
 			maptalks_coords = maptalks.GeoJSON.toGeometry({
 				type: "Polygon",
@@ -196,13 +195,13 @@
 				var geojson_coords = getGeoJSONCoords(format);
 
 				turf_coords = convertLeafletCoordsToTurf(geojson_coords);
-			} else if (["leaflet", "naissance"].includes(format_type)) {
+			} else if (["leaflet_coords", "naissance"].includes(format_type)) {
 				turf_coords = convertLeafletCoordsToTurf(format);
-			} else if (format_type == "leaflet_non_poly") {
+			} else if (format_type == "leaflet_geometry") {
 				turf_coords = convertLeafletCoordsToTurf(format._latlngs);
 			} else if (format_type == "maptalks") {
 				turf_coords = convertMaptalksCoordsToTurf(format);
-			} else if (format_type == "naissance_history") {
+			} else if (format_type == "naissance_geometry") {
 				var no_coords = false;
 
 				//Guard clause if no coords
@@ -231,7 +230,7 @@
 		getCoordsType() - Returns the coords format the variable represents.
 		arg0_format: (Variable) - The coords format to input.
 
-		Returns: (String) - Either 'geojson', 'leaflet', 'leaflet_non_poly', 'maptalks', 'naissance', 'naissance_history', 'turf', or 'turf_object'
+		Returns: (String) - Either 'geojson', 'leaflet', 'leaflet_geometry', 'maptalks', 'naissance', 'naissance_geometry', 'turf', or 'turf_object'
 	*/
 	function getCoordsType (arg0_format) {
 		//Convert from parameters
@@ -247,14 +246,14 @@
 
 		//Check if type is Leaflet
 		if (format._latlngs)
-			return "leaflet_non_poly";
+			return "leaflet_geometry";
 		if (Array.isArray(format)) {
 			var flattened_array = format.flat(Infinity);
 
 			if (typeof flattened_array[0] == "object") {
 				try {
 					if (flattened_array[0].lat && flattened_array[1].lng)
-						return "leaflet";
+						return "leaflet_coords";
 				} catch {}
 			}
 		}
@@ -263,10 +262,10 @@
 		if (format._symbolUpdated || format._geometries)
 			return "maptalks";
 
-		//Check if type is naissance_history
+		//Check if type is naissance_geometry
 		if (typeof format == "object")
 			if (format.id && format.coords)
-				return "naissance_history";
+				return "naissance_geometry";
 
 		//Check if type is turf
 		if (Array.isArray(format))
