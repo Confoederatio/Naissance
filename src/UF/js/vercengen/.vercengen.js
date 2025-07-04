@@ -230,27 +230,28 @@ global.ve = {
 			if (!options.pages) options.pages = {};
 			this.interfaces = {};
 			this.options = options;
+			this.page_states = {};
 
 			//Declare local instance variables
 			var all_pages = Object.keys(options.pages);
-			var content_el;
-			var tabs_el;
+			this.content_el = undefined;
+			this.tabs_el = undefined;
 
-			//Define content_el; tabs_el
+			//Define this.content_el; tabs_el
 			if (options.anchor && options.tab_anchor) {
 				try {
-					content_el = document.querySelector(options.anchor);
-					tabs_el = document.querySelector(options.tab_anchor);
+					this.content_el = document.querySelector(options.anchor);
+					this.tabs_el = document.querySelector(options.tab_anchor);
 				} catch {
-					content_el = options.anchor;
-					tabs_el = options.tab_anchor;
+					this.content_el = options.anchor;
+					this.tabs_el = options.tab_anchor;
 				}
 			} else {
-				content_el = document.createElement("div");
-				tabs_el = document.createElement("div");
+				this.content_el = document.createElement("div");
+				this.tabs_el = document.createElement("div");
 			}
 
-			//Set tabs_el.innerHTML according to page_key
+			//Set this.tabs_el.innerHTML according to page_key
 			var tabs_html = [];
 
 			//Set tabs_html to tabs_el.innerHTML
@@ -263,7 +264,7 @@ global.ve = {
 				}
 			tabs_html.push(`<hr>`);
 			tabs_html.push(`</div>`);
-			tabs_el.innerHTML = tabs_html.join("");
+			this.tabs_el.innerHTML = tabs_html.join("");
 
 			//Declare local helper function for switching pages
 			var localSwitchPage = (arg0_page, arg1_event) => {
@@ -272,44 +273,59 @@ global.ve = {
 				var e = (arg1_event) ? arg1_event : {};
 
 				//Declare local instance variables
-				var hr_el = tabs_el.querySelector("hr");
+				var hr_el = this.tabs_el.querySelector("hr");
 				var left_offset = returnSafeNumber(options.left_offset, 0.125); //In rem
-				var local_tab_button_el = tabs_el.querySelector(`span[id="${page}"]`);
+				var local_tab_button_el = this.tabs_el.querySelector(`span[id="${page}"]`);
 				var local_value = options.pages[page];
 
 				//Initialise local_value options
-				if (!local_value.anchor) local_value.anchor = content_el;
+				if (!local_value.anchor) local_value.anchor = this.content_el;
 
 				//Parse .onclick handler
 				if (options.special_function) options.special_function(e);
 				if (local_value.special_function) local_value.special_function(e);
 
+				//Save state before resetting it
+				try {
+					if (!this.current_page) this.current_page = page;
+					this.page_states[this.current_page] = this.getState();
+				} catch (e) {
+					console.error(e);
+				}
+				this.content_el.innerHTML = "";
+
 				//Remove 'active' class from all pages; and set the current tab to active in terms of highlighting
 				for (var x = 0; x < all_pages.length; x++)
-					removeClass(tabs_el.querySelector(`span[id="${all_pages[x]}"]`), "active");
+					removeClass(this.tabs_el.querySelector(`span[id="${all_pages[x]}"]`), "active");
 				addClass(local_tab_button_el, "active");
 				hr_el.style.left = `calc(${local_tab_button_el.offsetLeft - local_tab_button_el.parentElement.offsetLeft}px + ${left_offset}rem)`;
 
-				//Set "page" attribute for content_el; replace content
-				content_el.setAttribute("page", page);
+				//Set "page" attribute for this.content_el; replace content
+				this.content_el.setAttribute("page", page);
 
 				if (local_value.can_close == undefined)
 					local_value.can_close = true;
 				if (!local_value.html) {
 					if (!local_value.class) local_value.class = "ve-transparent";
-					content_el.innerHTML = "";
+					this.content_el.innerHTML = "";
 					this.interfaces[(local_value.id) ? local_value.id : generateRandomID(this.interfaces)] = new ve.Interface(local_value);
 				} else {
-					content_el.innerHTML = (Array.isArray(local_value.html)) ?
+					this.content_el.innerHTML = (Array.isArray(local_value.html)) ?
 						local_value.html.join("") : local_value.html;
 				}
+
+				//Load any previous state
+				if (this.page_states[page])
+					this.loadState(this.page_states[page]);
+				//Set this.current_page
+				this.current_page = page;
 			}
 
 			//Add .onclick events for all_pages
 			for (let i = 0; i < all_pages.length; i++) {
-				let local_tab_button_el = tabs_el.querySelector(`span[id="${all_pages[i]}"]`);
-				local_tab_button_el.onclick = function (e) {
-					content_el.innerHTML = "";
+				let local_tab_button_el = this.tabs_el.querySelector(`span[id="${all_pages[i]}"]`);
+
+				local_tab_button_el.onclick = (e) => {
 					localSwitchPage(all_pages[i], e);
 				};
 			}
@@ -318,16 +334,34 @@ global.ve = {
 			(options.default) ?
 				localSwitchPage(options.default) : localSwitchPage(all_pages[0]);
 
-			this.content_el = content_el;
-			this.tabs_el = tabs_el;
-
 			//Return statement
-			return [tabs_el, content_el];
+			return [this.tabs_el, this.content_el];
 		}
 
 		getState () {
 			//Return statement
 			return getInputsAsObject(this.content_el);
+		}
+
+		loadState (arg0_options) {
+			//Convert from parameters
+			var options = (arg0_options) ? arg0_options : {};
+
+			//Iterate over all_options and call autoFillInput()
+			var all_options = Object.keys(options);
+
+			for (var i = 0; i < all_options.length; i++) {
+				var local_option_el = this.content_el.querySelector(`[id="${all_options[i]}"]`);
+				var local_value = options[all_options[i]];
+
+				if (local_option_el)
+					autoFillInput({
+						element: local_option_el,
+						placeholder: local_value,
+						type: local_option_el.getAttribute("type"),
+						value: local_value
+					});
+			}
 		}
 	},
 

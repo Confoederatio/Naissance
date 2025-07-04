@@ -32,7 +32,7 @@
         if (local_placeholder != undefined)
           placeholder_obj[all_placeholder_keys[i]] = (options.value.value_equation) ?
             parseVariableString(options.value.value_equation, { VALUE: parseVariableString(local_placeholder) }) :
-            parseVariableString(local_placeholder);
+            parseVariableString(local_placeholder, { ignore_errors: true });
       }
 
       if (all_placeholder_keys.length == 1 && placeholder_obj.VALUE != undefined)

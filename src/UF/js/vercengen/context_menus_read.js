@@ -265,6 +265,8 @@
       }
     }
 
+    console.log(`Return object:`, return_obj);
+
     //Return statement
     return return_obj;
   }
