@@ -67,7 +67,6 @@ global.ve = {
 			});
 			//Z-index handler
 			this.element.onmousedown = (e) => {
-				console.log(e);
 				this.select();
 			};
 
