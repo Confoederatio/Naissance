@@ -21,7 +21,7 @@
 			editing_entity: undefined, //The entity ID currently being edited
 			entity_options: {}, //Used to store the options of the entity selected.
 
-			simplify_tolerance: 0.005, //The current simplify tolerance for brushes.
+			simplify_tolerance: 0.05, //The current simplify tolerance for brushes.
 
 			//Brush settings
 			auto_simplify_when_editing: true,

@@ -37,7 +37,9 @@ config.brush_actions.brush_options = {
           max: 100,
           step: 0.001, //This controls the resolution of control
         },
-        placeholder: 0.05,
+        placeholder: {
+          VALUE: "BRUSH_OBJ.simplify_tolerance*Math.pow(10, 3)"
+        },
         value_equation: `VALUE/Math.pow(10, 3)`, //1 represents 0,001; 100 represents 0,1
 
         effect: {

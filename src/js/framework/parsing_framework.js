@@ -81,8 +81,6 @@
         options.options = brush_actions_input_obj;
       }
 
-      console.log(`actions_input_obj`, actions_input_obj);
-
       //Set options.timestamp to be passed down
       if (!options.options) options.options = {};
       options.options.timestamp = options.timestamp;

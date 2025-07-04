@@ -39,6 +39,16 @@
         placeholder_obj = placeholder_obj.VALUE;
     }
 
+    //Modify name_label_el
+    var name_data_el = options.element.querySelector(`data#name-label`);
+    var name_label_el = options.element.querySelector(`span#name-label`);
+
+    if (name_data_el && name_label_el)
+      name_label_el.innerHTML = parseLocalisation(name_data_el.innerHTML, {
+        is_html: true,
+        scopes: { VALUE: placeholder_obj }
+      });
+
     if (options.type == "basic_colour") {
       if (Array.isArray(placeholder_obj)) {
         options.element.querySelector(`input[type="color"]`).value = RGBToHex(placeholder_obj);

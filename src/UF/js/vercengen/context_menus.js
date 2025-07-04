@@ -455,7 +455,6 @@
           new_interface.close_function = `close${options.namespace}ContextMenu(${namespace_order}); refresh${options.namespace}sContextMenus();`;
 
           var context_menu_ui = new ve.Interface(new_interface);
-          console.log(`createContextMenuInterface()`, context_menu_ui);
           global[`refresh${options.namespace}sContextMenus`](local_options);
 
           //Iterate over all_interface_keys and parse them correctly
@@ -475,7 +474,6 @@
                 placeholder: local_value.placeholder,
                 value: local_value
               });
-              console.log(local_value.placeholder);
 
               //Parse .effect to .onclick event handler
               if (local_value.effect || local_value.value_equation)
@@ -1065,7 +1063,7 @@
           options.options.VALUE = options.placeholder;
       }
     if (options.name)
-      options.name = `<span id = "name-label">${parseLocalisation(options.name, { is_html: true, scopes: options.options })}</span>`;
+      options.name = `<span id = "name-label">${options.name}</span><data id = "name-label" class = "display-none">${options.name}</data>`;
 
     //Declare local instance variables
     var html_string = [];
@@ -1388,10 +1386,9 @@
         }
       }
     } else if (options.type == "range") {
-      var actual_number_in_range = calculateNumberInRange([options.attributes.min, options.attributes.max], options.options.VALUE, options.value_equation);
       var name_string = (options.name) ? `${options.name} ` : "";
 
-      html_string.push(`${name_string}<input type = "range" id = "range-input"${objectToAttributes(options.attributes)} value = "${actual_number_in_range}">`);
+      html_string.push(`${name_string}<input type = "range" id = "range-input"${objectToAttributes(options.attributes)} value = "${returnSafeNumber(options.placeholder)}">`);
     } else if (options.type == "reset") {
       if (options.name)
         html_string.push(`<div class = "header">${options.name}</div>`);
