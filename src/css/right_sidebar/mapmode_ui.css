@@ -75,7 +75,6 @@
 
 /* -- Mapmode search container -- */
 .mapmode-search {
-  margin-left: calc(10% + 10px);
   margin-top: calc(0.65vh - 5px);
   width: calc(90% - 40px);
 
@@ -91,6 +90,15 @@
 .mapmode-search:focus {
   border-bottom: 1px solid white;
   outline: none;
+}
+.mapmode-search-icon {
+  display: inline;
+  height: 2rem;
+  width: 2rem;
+
+  float: left;
+  padding: 5px;
+  padding-left: 8px;
 }
 
 /* -- Mapmode settings container -- */
