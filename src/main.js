@@ -1,5 +1,6 @@
 //Declare app variables
 var { app, BrowserWindow, ipcMain } = require("electron");
+var path = require("path");
 var { performance } = require("perf_hooks");
 
 var latest_fps = 0;
@@ -18,10 +19,13 @@ var win;
         nodeIntegration: true,
         contextIsolation: false
       },
+
+      icon: `./naissance_alt_icon.png`
     });
 
     win.loadFile("./src/index.html");
     win.webContents.openDevTools();
+    win.setMenuBarVisibility(false);
 
     //Listen for FPS updates from the renderer process
     ipcMain.on("update-fps", (event, fps) => {
