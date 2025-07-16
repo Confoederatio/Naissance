@@ -7,6 +7,10 @@ global.ve = {
 
 	//1. State functions
 	initialise: function () {
+		//Declare window.main.<variables> as necessary
+		if (!window.main) window.main = {};
+		if (!window.main.hierarchies) window.main.hierarchies = {};
+
 		//Declare Windows overlay element
 		ve.window_overlay_el = document.createElement("div");
 		ve.window_overlay_el.id = "ve-overlay";
@@ -32,11 +36,19 @@ global.ve = {
 			//Declare local instance variables
 			this.element = document.createElement("div");
 			this.name = (options.name) ? options.name : "New Window";
-			this.window_id = generateRandomID(ve.windows);
+			this.window_id = (options.id) ? options.id : generateRandomID(ve.windows);
+			this.x = returnSafeNumber(options.x);
+			this.y = returnSafeNumber(options.y);
+
+			if (this.x != 0 || this.y != 0) setTimeout((e) => {
+				this.element.style.left = `${this.x}px`;
+				this.element.style.top = `${this.y}px`;
+			}, 0);
 
 			//Instantiate window element in ve.window_overlay_el
 			this.element.setAttribute("class", "ve-window ve-dark");
 			this.element.setAttribute("data-window-id", this.window_id);
+			this.element.id = this.window_id;
 			this.element.innerHTML = `
 				<div class = "window-header header" id = "window-header">
 					<span id = "window-name"${(options.can_rename) ? ` contenteditable = "plaintext-only"` : ""}>${this.name}</span>
@@ -51,7 +63,9 @@ global.ve = {
 
 			//Instantiate element handlers
 			if (options.draggable)
-				elementDragHandler(this.element, { is_resizable: (options.resizeable) });
+				elementDragHandler(this.element, {
+					is_resizable: (options.resizeable)
+				});
 			if (options.can_close) {
 				var close_button = document.createElement("img");
 				close_button.id = "close-button";
@@ -175,6 +189,13 @@ global.ve = {
 			this.element.querySelector(`#window-name`).innerHTML = name;
 		}
 
+		setPage (arg0_page) {
+			//Convert from parameters
+			var page = arg0_page;
+
+			this.interface.setPage(page);
+		}
+
 		setPageMenu (arg0_options) {
 			//Convert from parameters
 			var options = (arg0_options) ? arg0_options : {};
@@ -265,73 +286,18 @@ global.ve = {
 			tabs_html.push(`</div>`);
 			this.tabs_el.innerHTML = tabs_html.join("");
 
-			//Declare local helper function for switching pages
-			var localSwitchPage = (arg0_page, arg1_event) => {
-				//Convert from parameters
-				var page = arg0_page;
-				var e = (arg1_event) ? arg1_event : {};
-
-				//Declare local instance variables
-				var hr_el = this.tabs_el.querySelector("hr");
-				var left_offset = returnSafeNumber(options.left_offset, 0.125); //In rem
-				var local_tab_button_el = this.tabs_el.querySelector(`span[id="${page}"]`);
-				var local_value = options.pages[page];
-
-				//Initialise local_value options
-				if (!local_value.anchor) local_value.anchor = this.content_el;
-
-				//Parse .onclick handler
-				if (options.special_function) options.special_function(e);
-				if (local_value.special_function) local_value.special_function(e);
-
-				//Save state before resetting it
-				try {
-					if (!this.current_page) this.current_page = page;
-					this.page_states[this.current_page] = this.getState();
-				} catch (e) {
-					console.error(e);
-				}
-				this.content_el.innerHTML = "";
-
-				//Remove 'active' class from all pages; and set the current tab to active in terms of highlighting
-				for (var x = 0; x < all_pages.length; x++)
-					removeClass(this.tabs_el.querySelector(`span[id="${all_pages[x]}"]`), "active");
-				addClass(local_tab_button_el, "active");
-				hr_el.style.left = `calc(${local_tab_button_el.offsetLeft - local_tab_button_el.parentElement.offsetLeft}px + ${left_offset}rem)`;
-
-				//Set "page" attribute for this.content_el; replace content
-				this.content_el.setAttribute("page", page);
-
-				if (local_value.can_close == undefined)
-					local_value.can_close = true;
-				if (!local_value.html) {
-					if (!local_value.class) local_value.class = "ve-transparent";
-					this.content_el.innerHTML = "";
-					this.interfaces[(local_value.id) ? local_value.id : generateRandomID(this.interfaces)] = new ve.Interface(local_value);
-				} else {
-					this.content_el.innerHTML = (Array.isArray(local_value.html)) ?
-						local_value.html.join("") : local_value.html;
-				}
-
-				//Load any previous state
-				if (this.page_states[page])
-					this.loadState(this.page_states[page]);
-				//Set this.current_page
-				this.current_page = page;
-			}
-
 			//Add .onclick events for all_pages
 			for (let i = 0; i < all_pages.length; i++) {
 				let local_tab_button_el = this.tabs_el.querySelector(`span[id="${all_pages[i]}"]`);
 
 				local_tab_button_el.onclick = (e) => {
-					localSwitchPage(all_pages[i], e);
+					this.setPage(all_pages[i], e);
 				};
 			}
 
 			//Parse options.default
 			(options.default) ?
-				localSwitchPage(options.default) : localSwitchPage(all_pages[0]);
+				this.setPage(options.default) : this.setPage(all_pages[0]);
 
 			//Return statement
 			return [this.tabs_el, this.content_el];
@@ -361,6 +327,62 @@ global.ve = {
 						value: local_value
 					});
 			}
+		}
+
+		setPage (arg0_page, arg1_event) {
+			//Convert from parameters
+			var page = arg0_page;
+			var event = arg1_event;
+
+			//Declare local instance variables
+			var all_pages = Object.keys(this.options.pages);
+			var hr_el = this.tabs_el.querySelector("hr");
+			var left_offset = returnSafeNumber(this.options.left_offset, 0.125); //In rem
+			var local_tab_button_el = this.tabs_el.querySelector(`span[id="${page}"]`);
+			var local_value = this.options.pages[page];
+
+			//Initialise local_value options
+			if (!local_value.anchor) local_value.anchor = this.content_el;
+
+			//Parse .onclick handler
+			if (this.options.special_function) this.options.special_function(e);
+			if (local_value.special_function) local_value.special_function(e);
+
+			//Save state before resetting it
+			try {
+				if (!this.current_page) this.current_page = page;
+				this.page_states[this.current_page] = this.getState();
+			} catch (e) {
+				console.error(e);
+			}
+			this.content_el.innerHTML = "";
+
+			//Remove 'active' class from all pages; and set the current tab to active in terms of highlighting
+			for (var x = 0; x < all_pages.length; x++)
+				removeClass(this.tabs_el.querySelector(`span[id="${all_pages[x]}"]`), "active");
+			addClass(local_tab_button_el, "active");
+			hr_el.style.left = `calc(${local_tab_button_el.offsetLeft - local_tab_button_el.parentElement.offsetLeft}px + ${left_offset}rem)`;
+
+			//Set "page" attribute for this.content_el; replace content
+			this.content_el.setAttribute("page", page);
+
+			if (local_value.can_close == undefined)
+				local_value.can_close = true;
+			if (!local_value.html) {
+				if (!local_value.class) local_value.class = "ve-transparent";
+				this.content_el.innerHTML = "";
+				this.interfaces[(local_value.id) ? local_value.id : generateRandomID(this.interfaces)] = new ve.Interface(local_value);
+			} else {
+				this.content_el.innerHTML = (Array.isArray(local_value.html)) ?
+					local_value.html.join("") : local_value.html;
+			}
+
+			//Load any previous state
+			if (this.page_states[page])
+				this.loadState(this.page_states[page]);
+
+			//Set this.current_page
+			this.current_page = page;
 		}
 	},
 

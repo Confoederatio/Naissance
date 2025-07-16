@@ -94,7 +94,16 @@
 
     //Make sure element is declared; look over options.type and fill in the input with variable
     if (options.element)
-      if (options.type == "biuf") {
+      if (options.type == "basic_file") {
+        var file_input_el = options.element.querySelector(`input[type="file"]`);
+        var save_file_el = options.element.querySelector(`button[id="save-file"]`);
+
+        if (file_input_el) {
+          file_input_el.setAttribute("value", options.placeholder);
+        } else if (save_file_el) {
+          save_file_el.setAttribute("value", options.placeholder);
+        }
+      } else if (options.type == "biuf") {
         options.element.querySelector(`#biuf-input`).innerHTML = options.placeholder;
       } else if (["rich_text", "wysiwyg"].includes(options.type)) {
         options.element.querySelector(`.html-view`).value = options.placeholder;

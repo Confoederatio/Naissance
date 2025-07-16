@@ -1200,6 +1200,17 @@
       html_string.push(`</div>`);
     } else if (options.type == "basic_colour") {
       html_string.push(`${(options.name) ? options.name : ""} <input type = "color" ${objectToAttributes(options.attributes)}>`);
+    } else if (options.type == "basic_file") {
+      var folder_string = (options.is_folder) ? `webkitdirectory directory ` : "";
+      var multifile_string = (options.is_multifile) ? `multiple ` : "";
+
+      if (!options.is_save) {
+        //Read files
+        html_string.push(`${(options.name) ? `<span>${options.name}</span> ` : ""} <input type = "file" ${objectToAttributes(options.attributes)} ${folder_string}${multifile_string}>`);
+      } else {
+        //Write files
+        html_string.push(`${(options.name) ? `<span>${options.name}</span> ` : ""} <button id = "save-file">${(options.label) ? options.label : "Save File"}</button>`);
+      }
     } else if (options.type == "button") {
       html_string.push(`<span class = "button">`);
         if (options.icon)

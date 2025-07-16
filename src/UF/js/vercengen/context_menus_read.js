@@ -127,6 +127,14 @@
 
     if (type == "basic_colour") {
       output = input_el.querySelector(`input[type="color"]`).value;
+    } else if (type == "basic_file") {
+      var file_el = input_el.querySelector(`input[type="file"]`);
+
+      if (file_el) {
+        output = input_el.querySelector(`input[type="file"]`).value;
+      } else {
+        output = input_el.querySelector(`button[id="save-file"]`).value;
+      }
     } else if (type == "biuf") {
       output = input_el.querySelector(`#biuf-input`).innerHTML;
     } else if (["rich_text", "wysiwyg"].includes(type)) {

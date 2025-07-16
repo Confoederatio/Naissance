@@ -463,7 +463,26 @@
         }
 
       //Default type population (i.e. for 'sortable_list')
-      if (local_type == "colour") {
+      if (local_type == "basic_file") {
+        var local_file_input = all_inputs[i].querySelector(`input[type="file"]`);
+        var local_save_input = all_inputs[i].querySelector(`button[id="save-file"]`);
+
+        if (local_file_input) {
+          if (local_input_obj.onchange)
+            local_file_input.onchange = local_input_obj.onchange;
+          if (local_input_obj.onclick)
+            local_file_input.onchange = local_input_obj.onclick;
+        } else {
+          local_save_input.onclick = function (e) {
+            showSaveFilePicker().then((e) => {
+              if (local_input_obj.onchange)
+                local_input_obj.onchange(e);
+              if (local_input_obj.onclick)
+                local_input_obj.onclick(e);
+            });
+          };
+        }
+      } else if (local_type == "colour") {
         handleColourWheel(all_inputs[i]);
       } else if (local_type == "interface") {
         var interface_body_selector = `[id="interface-folder-${local_input_obj.id}"] #interface-body`;

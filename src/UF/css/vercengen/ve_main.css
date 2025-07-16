@@ -155,8 +155,8 @@ input[type="color"]::-webkit-color-swatch {
   /* -- Main element formatting -- */
   .header {
     font-family: var(--primary-font);
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 400;
   }
 
   /* -- BIUF formatting -- */

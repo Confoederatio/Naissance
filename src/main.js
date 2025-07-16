@@ -16,8 +16,9 @@ var win;
       width: 1920,
       height: 1080,
       webPreferences: {
+        contextIsolation: false,
         nodeIntegration: true,
-        contextIsolation: false
+        webviewTag: true
       },
 
       icon: `./naissance_alt_icon.png`
