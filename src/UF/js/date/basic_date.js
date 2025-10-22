@@ -85,7 +85,7 @@
       date = parseInt(date);
     }
     if (!isNaN(parseInt(date))) return date;
-
+	
     //Declare local instance variables
     var is_leap_year = isLeapYear(date.year);
     var leap_years = leapYearsBefore(date.year);
@@ -230,7 +230,7 @@
     //Take care of the year field first
     time_elapsed.year = Math.floor(years_elapsed);
     years_elapsed -= Math.floor(years_elapsed);
-
+	
     //How many days has it been?
     time_elapsed.day = Math.floor(
       years_elapsed*((!is_leap_year) ? 365 : 366)

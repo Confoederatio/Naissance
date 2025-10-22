@@ -8,7 +8,7 @@
 		 *
 		 * @returns {String} - Either 'geojson_coords'/'geojson_geometry'/'leaflet_coords'/'leaflet_geometry'/'maptalks_coords'/'maptalks_geometry'/'naissance_coords'/'naissance_geometry'/'turf_coords'/'turf_geometry'.
 		 */
-			function getCoordsType (arg0_format) {
+		function getCoordsType (arg0_format) {
 			//Convert from parameters
 			var format = arg0_format;
 

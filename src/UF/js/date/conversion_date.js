@@ -13,7 +13,7 @@ function convertTimestampToDate (arg0_timestamp) {
     return timestamp;
   if (typeof timestamp == "string") {
     timestamp = timestamp.toString().replace("t_", "").replace("tz_", "");
-    timestamp = parseInt(numeriseAlphabet(timestamp));
+		timestamp = parseInt(numeriseAlphabet(timestamp));
   }
 
   //Declare local instance variables
