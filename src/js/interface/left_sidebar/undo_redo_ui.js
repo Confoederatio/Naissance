@@ -25,11 +25,6 @@
     //Store node positions for event handling
     var node_positions = {};
     var row_tracker = {};
-    var saved_image;
-
-    //Determine canvas size based on graph
-    var timeline_height = 1 + getTimelineMaxY(timeline_graph);
-    var timeline_width = getTimelineMaxX(timeline_graph);
 
     //Clear previous render
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous render
@@ -166,11 +161,6 @@
           }
       }
     }
-
-    //Iterate over all node_positions and fetch maximum x and y to set canvas.height; canvas.width
-    var all_node_positions_keys = Object.keys(node_positions);
-    var canvas_height = 0;
-    var canvas_width = 0;
 
     //Add click event listener to detect node clicks
     canvas.onclick = function (e) {

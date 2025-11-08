@@ -157,7 +157,6 @@
     var all_timelines = Object.keys(global.timelines);
     var current_y_offset = returnSafeNumber(options.y_offset);
     var timeline_array = global.timelines[timeline_id];
-    var timeline_coordinates = {};
     var timeline_graph = {}; //Object list of UI elements: { x: (Number), y: (Number), name: (String), connections: (Array<Array<x, y>>) };
     var x_offset = returnSafeNumber(options.x_offset);
     var y_offset = returnSafeNumber(options.y_offset);
@@ -174,8 +173,6 @@
           if (local_second_timeline[0])
             if (local_second_timeline[0].parent_timeline_id == all_timelines[i]) {
               var local_parent_timeline_id = local_second_timeline[0].parent_timeline_id;
-
-              var local_parent_timeline = global.timelines[local_parent_timeline_id];
 
               if (!local_child_timelines.includes(all_timelines[x]) && all_timelines[x] != all_timelines[i])
                 local_child_timelines.push(all_timelines[x]);
@@ -200,7 +197,6 @@
 
           //Calculate x_offset; y_offset
           var local_x_offset = returnSafeNumber(local_child_timeline[0].parent_timeline_index);
-          var local_y_offset = child_timeline_width;
 
           //Iterate recursively - This causes a max. stack call size error for some reason
           var new_timeline_graph = generateTimelineGraph(local_child_timeline_id, {
