@@ -1,32 +1,121 @@
-# Naissance
+# Naissance HGIS
 
-![](https://github.com/Australis-0/Naissance/blob/master/naissance_preview.png)
-#### <div align = "center">Interactive Mapmaking and Historical Data Visualisation for the 21st Century, Made Simple.</div>
+<table>
+  <tr>
+    <td width = "50%">
+      <img src = "https://i.postimg.cc/QdxPdCDc/naissance-01-preview.png">
+    </td>
+    <td>
+      <img src = "https://i.postimg.cc/s34GFX1Y/constele-red-04-preview.png">
+    </td>
+  </tr>
+  <tr>
+    <td width = "50%">
+      <img src = "https://i.postimg.cc/q7gvypsd/constele-red-03-preview.png">
+    </td>
+    <td>
+      <img src = "https://i.postimg.cc/63NfTbZV/naissance-02-preview.png">
+    </td>
+  </tr>
+</table>
 
-<div align = "center">-</div>
-<br>
-<img src = "https://i.postimg.cc/8CKkNXk2/crd-light-logo.png" height = "64">
+<img src = "https://i.postimg.cc/8CKkNXk2/crd-light-logo.png" height = "64"> &nbsp; <img src = "https://i.postimg.cc/rm9dpTq1/vercengen-logo.png" height = "64">
 
 [![Join our community!](https://img.shields.io/discord/548994743925997570?label=Discord&style=for-the-badge)](https://discord.gg/89kQY2KFQz) ![](https://img.shields.io/github/languages/code-size/Australis-0/Naissance?style=for-the-badge) ![](https://img.shields.io/github/downloads/Australis-0/Naissance/total?style=for-the-badge)
 
-- E-mail: [vf.confoederatio@gmail.com](mailto:vf.confoederatio@gmail.com)
+- E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
 
-**Abstract.**
+### Abstract.
 
-Naissance is an open-source historical 3D GIS built for proxy modelling, raster input and wrangling, simulation, and statistical analysis with undo/redo trees and version control with user-first UI design. We aim to eventually enable modernised data visualisation and mapmaking to create interactive atlases, different mapmodes, and 3D/video export options. Naissance is currently in **beta**, with features such as gridmap editing planned for future integration over from UF.
+**Naissance HGIS** is a 3D map editor for geospatial data over the long run with a focus on ease-of-use and capability. History is managed via keyframes, and a ground up Undo/Redo Tree system allows for branching timelines and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
 
-All generated files by Naissance are currently stored in JSON, with GeoJSON being supported for import. Saved Naissance files may be found in `./saves/`. A default initialisation file, `./saves/autosave.js`, is loaded for compatibility testing in non-release versions.
+This project is still in **beta**, and may need to be combined with our other projects (such as [Constele Red](https://github.com/Confoederatio/Constele-Red)) for intensive geoprocessing/scripting tasks, such as those requiring distributed compute. In its current state, Naissance HGIS is mainly intended for historical geometry data, whilst Constele Red is intended for heavy-duty data processing.
 
-## Roadmap.
+We intend on their eventual integration into Naissance HGIS over time.
+
+<details>
+  <summary><h3>TODO.</h3></summary>
+
+Note that stages may not necessarily be worked on a linear order.
+
+**S1. (Polish)**
+- Implement lookback for selected feature nesting
+- Guarantee Hierarchy consistency
+- Add manual commit mode for ve.UndoRedo
+- Guarantee deterministic render order
+- Guarantee symbol feature parity for naissance.Polygon, naissance.Line, naissance.Point (Geometry inspector)
+- Finish Geometry inspector for labels, zoom behaviours, and better property data editors
+- Modularise delete button at the naissance.Feature, naissance.Geometry layer
+- Modularise Geometry inspector and split it into its corresponding subtypes
+- naissance.Feature should only be selectable if .entities is defined
+- Implement documentation and user-facing wiki in-app
+- Integrate .onrename event into .onchange for window
+- Add rename naissance.Geometry feature from window
+- Keyframe UI and localisation
+
 <br>
 
-| Planned Version | Features | Status |
-| :--- | :--- | :---: |
-| Pre-Alpha | <ul><li>Adding/editing/deleting polities</li><li>Changing the colour/stroke of polities</li><li>Data visualisation framework</li><li>Drawing on the map using a brush tool</li><li>Entity UIs can be pinned/collapsed</li><li>File saving/loading</li><li>Keyframes can be moved and deleted</li><li>Managing groups and subgroups</li><li>Polities can be set to disappear/appear at different zoom levels</li><li>Polities can be simplified, hidden, and unhidden</li><li>Polity names, coordinates, ands ettings can change over time</li><li>Tooling to remove duplicate keyframes and retroactively apply current paths</li></ul> | **DONE** |
-| Alpha | <ul><li>Ability to copy/paste polities</li><li>Different mapmodes</li><li>Make sure all dependencies are supported locally</li><li>Multi-select and drag for polities</li><li>Overhauled UI</li><li>Toggle confirmation/feedback prompt for certain actions</li><li>Toggleable masks</li><li>Union masks for groups, allowing for polity fill</li><li>Viewing Mode</li><li>WYSIWYG Description Editor for Polities</li></ul> | **WIP** |
-| Beta | <ul><li>Ability to create animations for polities at certain levels</li><li>Add framework for marker entities and paths</li><li>Automatic bend-text or straight text for polity labeling with info popups and an option to adjust bend text curve.</li><li>Automatic color scheme dependent on main color and variance for groups, or list of colours.</li><li>Automatic labeling</li><li>Change map projections</li><li>Custom tiles</li><li>Default startup file</li><li>Detailed default historical and demographic atlas</li><li>Fill pattern options</li><li>Further UI improvements</li><li>Gradient fill</li><li>Icon patterns for paths</li><li>Layers in hierarchy, layer customisation</li><li>Mode to export to raster map, video, web visualisations</li><li>Undo and redo options</li><li>Union files</li></ul> | PROPOSED |
-| Release | <ul><li>3D Map Editor</li><li>International Date Line handling</li><li>QOL Tools</li><li>TBD</li></ul> | PROPOSED |
+- naissance.Feature should only be selectable if .entities is defined
 
-\-
+**S2. (Capability, Backend)**
+- Group Masks (from old Naissance), applies to both naissance.Group/naissance.Layers
+  - Active masks should display in a scrollable folder under the brush window
+- Fluid Node editor tied to Brush:
+  - If node editing is true, geometries come directly from DrawTool when created
+  - If node editing is true, selected geometry has node editing automatically turned on
+  - If node editing is false, rename brush editing (finish DrawTool if active, re-enable painting for selected geometries)
+- Upgrade Vercengen to 1.0:
+  - ve.CodeMirror
+    - Multitab option
+    - Optional file explorer for save/loading
+  - ve.Graph with ggplot parity
+  - ve.Hierarchy
+    - Add optional filter/searchbar to ve.Hierarchy using .name, even those that are nested under minimised groups/layers
+    - Custom filters via an include function
+    - .oncollapse event should be moved to .onchange object
+  - ve.MultiTag
+    - Delimit tags with enter keys and selection logic via autocomplete/suggestions. New keys show up in green, old ones in grey, with round brackets for the total number of objects per key
+  - ve.Number (should take in array type)
+  - ve.Scriptly
+    - Migrate out of React towards Vercengen, modernise codebase
+    - Migrate to Monaco code editor (instead of CodeMirror)
+    - Integrate node-based workflow and distributed compute processor similar to Constele Red, utilising GoJS instead of Baklava. Node editors would beused to determine the load order of individual files/tasks in a Script.
+  - ve.Table for editing dataframes
+  - ve.Text (should take in array type)
+  - ve.UndoRedo/DALS should allow for manual suspension of logging actions
+    - Import Timeline from File
+    - Manual commits option
+   
+**S3. (Capability, Frontend)**
+- Add ImageOverlay Feature with dynamic mesh distortion
+- Default mapmodes for viewing keyframes, both on by default (Default, Default [Keyframes])
+- Load last saved date for save files, load files
+- Import CSV with column/row/rortate selector
+- Import GeoJSON as group at selected date (auto-minimises group upon finishing)
+  - Import GeoJSON with parsing (opens script editor)
+- Merge Geometry
+- Settings for keybinds, base layer options
+- Snap to cusp nodes (layer simplification):
+  - Random hole assignment based on random neighbour, holes that are smaller than the smallest polygon in the layer are filled automatically
+- Difference Geometry, Intersect Geometry, Union Geometry, XOR Geometry buttons
 
-These features are subject to change with additional releases. Take a look at our [wishlist](https://docs.google.com/document/d/19thlJ2VnYoFYODNtoYuwE4L0spx301AVnWkBPG8W3WU/edit?usp=sharing)!
+<br>
+
+- Custom mapmodes with schema and ve.Scriptly editor with multiple toggleable mapmodes
+- General-purpose Script editor (code/block/node-based transpilation) via ve.Scriptly
+- Group actions for optimisation
+- Fill tool for Brush used to set the coordinates of geometries
+  - Provinces mask that can be used as pre-made shapes for Fill Tool
+- Livemap scripting
+- Preview Mode for map
+  - Custom UIs/Entities via Vercengen Editor and Scriptly for running ABMs or simulations
+- Remove Enclaves button for Geometry inspector
+
+<br>
+
+- Data portal support
+- Eoscala/Velkscala/Sehistoir/Stadestér/Atlas default databases
+  
+</details>
+
+Naissance HGIS uses [Vercengen](https://confoederatio.org/Vercengen), in which UI is a subset of state.
