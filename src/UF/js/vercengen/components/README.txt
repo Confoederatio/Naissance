@@ -1,3 +1,0 @@
-VERKENGEN. 0.1a.
-
-VERKENGEN Components are currently undergoing refactoring from their previous state in BrowserUI. Because feature parity has been the primary focus thus far, BrowserUI is being developed in parallel to VERKENGEN. This also means that future BrowserUI features have taken on the data structure for VERKENGEN required. Since Components are by and large modular, they are to be completed after the maturation of Naissance GIS.

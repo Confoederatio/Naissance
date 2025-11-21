@@ -1,0 +1,30 @@
+/* fallback */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../../UF/gfx/fonts/MaterialIconsSharp-Regular.otf) format('opentype');
+}
+
+icon, .ve-icon {
+    font-family: 'Material Icons', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -moz-font-feature-settings: 'liga';
+    -moz-osx-font-smoothing: grayscale;
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    width: 24px;
+    
+    user-select: none;
+}

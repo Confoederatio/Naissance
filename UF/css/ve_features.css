@@ -1,0 +1,301 @@
+/* -- ve.ContextMenu -- */
+.ve.window {
+    scrollbar-width: none;
+    
+    .context-menu-close-button {
+        border-radius: 50%;
+        position: absolute;
+        right: 0;
+        transition: all 0.5s ease;
+    }
+    .context-menu-close-button:hover {
+        background-color: var(--hover-colour);
+        cursor: pointer;
+    }
+}
+
+/* -- ve.Modal -- */
+.ve.overlay.modal-disabled {
+    background-color: var(--bg-primary-colour);
+    pointer-events: none;
+    
+    .ve.window:not(.modal) {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    .ve.window.modal {
+        pointer-events: auto;
+    }
+}
+
+/* -- ve.Navbar -- */
+.ve.navbar {
+    box-sizing: border-box;
+    color: var(--body-colour);
+    font-family: var(--body-font-family);
+    font-size: var(--header-font-size);
+    font-weight: var(--body-font-weight);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    z-index: 99;
+    
+    ul {
+        list-style: none;
+        margin: 0;
+
+        li {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            
+            &:has(ul)::after {
+                content: "";
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 5px solid var(--body-colour);
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+        li:has(ul) {
+            padding-right: 1.5rem;
+        }
+        li, li a {
+            opacity: .8;
+            color: var(--body-colour);
+            cursor: pointer;
+            transition: all 0.5s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            
+            &:hover {
+                opacity: 1;
+            }
+            a {
+                align-items: center;
+                display: flex;
+                height: 100%;
+                width: 100%;
+                
+                kbd::before {
+                    content: "\00a0\00a0";
+                }
+                kbd {
+                    font-size: calc(var(--body-font-size)*1);
+                    margin-left: auto;
+                    order: 99;
+                }
+            }
+        }
+        .link {
+            &::before {
+                padding-right: 0;
+                display: none;
+            }
+        }
+    }
+    > ul {
+        align-items: center;
+        background-color: var(--bg-secondary-colour);
+        display: flex;
+        height: var(--navbar-height);
+        padding-inline-start: calc(var(--padding)*2);
+        
+        > div {
+            padding-right: calc(var(--padding)*2);
+        }
+        li {
+            margin: 0 4px;
+            position: relative;
+            
+            ul {
+                border: 3px solid var(--bg-secondary-colour);
+                border-radius: 4px;
+                visibility: hidden;
+                opacity: 0;
+                padding: 0;
+                min-width: 160px;
+                background-color: var(--bg-secondary-colour);
+                position: absolute;
+                top: calc(var(--navbar-height) - 8px);
+                left: calc(100%);
+                transform: translateX(calc(-50% + 20px));
+                transition: 200ms;
+                transition-delay: 200ms;
+            
+                li {
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    height: 30px;
+                    
+                    &::before {
+                        width: 0;
+                        height: 0;
+                        border-top: 5px solid transparent;
+                        border-bottom: 5px solid transparent;
+                        border-left: 5px solid var(--body-colour);
+                    }
+                    ul {
+                        top: -2%;
+                        left: 100%;
+                        transform: translate(0)
+                    }
+                    &:hover {
+                        background-color: var(--accent-primary-colour);
+                    }
+                }
+            }
+            &:hover {
+                > ul {
+                    border: 1px solid var(--hover-colour);
+                    opacity: 1;
+                    visibility: visible;
+                    transition-delay: 0ms;
+                }
+            }
+        }
+    }
+}
+
+/* -- ve.Scene -- */
+.ve.scene {
+    z-index: 0;
+    
+    .ve-feature-scene {
+        > [component] {
+            height: 100%;
+            width: 100%;
+
+            padding: 0;
+        }
+    }
+}
+
+/* -- ve.Toast -- */
+@keyframes toast-fade-up {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+}
+.ve.toast {
+    background-color: var(--bg-primary-colour);
+    color: var(--body-colour);
+    font-family: var(--body-font-family);
+    font-size: var(--body-font-size);
+    padding: var(--padding);
+    position: fixed;
+    z-index: 99;
+}
+
+/* -- ve.Tooltip -- */
+.tippy-arrow {
+    display: none;
+}
+.tippy-content {
+    font-family: var(--body-font-family);
+    padding: var(--cell-padding);
+    padding-left: calc(var(--cell-padding)*2);
+    padding-right: calc(var(--cell-padding)*2);
+}
+
+/* -- ve.Window -- */
+.ve.overlay {
+    z-index: 2;
+}
+.ve.window {
+    background-color: var(--bg-primary-colour);
+    color: var(--header-colour);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--header-font-family);
+    font-size: var(--header-font-size);
+    font-weight: var(--header-font-weight);
+    max-height: 100dvh;
+    max-width: 100dvw;
+    overflow-x: hidden;
+    width: var(--default-width);
+
+    /* -- Feature styling -- */
+    #close-button {
+        position: absolute;
+
+        border-radius: 50%;
+        filter: var(--image-filter);
+        float: right;
+        height: 1rem;
+        padding: 0.5rem;
+        right: 0px;
+        top: 0px;
+        width: 1rem;
+
+        transition: all 0.5s ease;
+    }
+    #close-button:hover {
+        background-color: var(--hover-colour);
+        cursor: pointer;
+    }
+    .feature-header {
+        padding: var(--padding);
+        padding-bottom: calc(var(--padding)*0.5);
+    }
+    .resize-handle:hover {
+        background-color: var(--hover-colour);
+    }
+    #window-name {
+        background: transparent;
+        border: 0px solid transparent;
+        font-size: var(--body-font-family);
+        min-width: 5rem;
+        opacity: 0.5;
+
+        transition: all 0.5s ease;
+    }
+    #window-name:before {
+        content: "\200b"; /* Zero width space */
+    }
+    #window-name:empty:before {
+        color: var(--header-colour);
+        content: "Window Name";
+        display: inline-flex;
+        opacity: 0.3;
+        min-width: 5rem;
+    }
+    #window-name:focus {
+        border-bottom: 1px solid var(--header-colour);
+        opacity: 1;
+        outline: none;
+    }
+    #window-name:hover {
+        cursor: text;
+    }
+
+    /* -- Feature body for ve.window and subfeatures -- */
+    .feature-body {
+        color: var(--body-colour);
+        font-family: var(--body-font-family);
+        font-size: var(--body-font-size);
+        font-weight: var(--body-font-weight);
+        height: 100%;
+        padding: var(--padding);
+        padding-top: calc(var(--padding)*0.5);
+
+        overflow: auto;
+        scrollbar-color: white transparent;
+        scrollbar-width: thin;
+    }
+}

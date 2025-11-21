@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Project 1706 - Naissance Electron.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/file_txt.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorun.bat" beforeDir="false" afterPath="$PROJECT_DIR$/autorun.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/naissance_alt_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/naissance_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/naissance_preview.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/naissance_preview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/atlas.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/autosave.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/blank_map.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/project_atlas.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/satellite_test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NOTEPAD.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/css/vercengen/ve_dark.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/css/vercengen/ve_layout.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/css/vercengen/ve_main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/css/vercengen/ve_transparent.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/css/vercengen/ve_windows.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/chevron_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/chevron_icon_dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/close_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/close_icon_dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/colour_wheel.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/gfx/search_icon_dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/ABRS/framework_ABRS.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/actions/caching_actions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/actions/timelines_actions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/ai/basic_ai.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/arrays/basic_arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/arrays/conversion_arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/arrays/dataframes_arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/arrays/maths_arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/arrays/search_sort_arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/colours/basic_colour.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/curl/basic_curl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/date/basic_date.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/date/conversion_date.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/date/format_date.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/date/history_date.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/files/basic_files.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/files/file_manager.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/asc_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/coords_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/csv_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/nc_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/png_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/raster_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/tiff_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/geospatiale/turf_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/localisation/basic_localisation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/log/basic_log.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/numbers/basic_numbers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/numbers/ranges_numbers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/objects/basic_objects.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/objects/maths_objects.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/objects/smart_search_objects.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/pathfinding/a_star_pathfinding.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/statistics/basic_demographics.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/strings/basic_strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/strings/cleaning_strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/strings/split_strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/.vercengen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/basic_html.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/components/ComponentBIUF.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/components/ComponentBasicColour.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/components/ComponentWYSIWYG.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/components/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/context_menus.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/context_menus_helper_functions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/context_menus_read.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/context_menus_write.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/groups_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/hierarchy_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UF/js/vercengen/ui_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/.config_backend.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/defines/common_defines.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/defines/map_defines.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/masks/mask_types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/.global/global.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/.global/global_animations.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/.global/global_classes.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/icons.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/date_container/date_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/entities_container/entity_panel.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/file/file_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/hierarchy/group_actions_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/hierarchy/hierarchy_colours.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/hierarchy/hierarchy_context_menus.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/hierarchy/hierarchy_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/left_sidebar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/scripts/scripts_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/settings/settings_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/left_sidebar/hierarchy_container/undo_redo/undo_redo_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/brush/brush.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/entities_container/entity_actions.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/entities_container/entity_header.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/entities_container/entity_keyframes.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/entities_container/entity_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/map/map.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/right_sidebar/brush_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/right_sidebar/mapmode_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/topbar/topbar_ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/add_mask_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/apply_path_icon.pdn" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/apply_path_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/bookmark_filled_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/bookmark_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/brush_disable_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/brush_enable_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/checkmark_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/checkmark_icon_small.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/chevron_down_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/chevron_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/clean_keyframes_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/clock_empty_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/clock_filled_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/close_button_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/close_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/colour_wheel.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/context_menu_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/delete_empty_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/delete_filled_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/edit_entity_nodes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/empty_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/finish_editing_entity_nodes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/hide_polity_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/jump_to_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/mask_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/maximise_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/more_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/naissance_entity_ui_mockup.pdn" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/pencil_empty_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/pencil_filled_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/pin_empty_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/pin_filled_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/plus_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/preview_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/redo_button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/scripts_button_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/settings_button_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/simplify_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/subtract_mask_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/interface/undo_button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/ABRS/save_load.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/apply_path_to_keyframes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/clean_keyframes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/edit_entity_nodes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/set_entity_fill.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/set_entity_stroke.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/set_entity_zoom_level.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/simplify_all_entity_keyframes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/entities/simplify_entity.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/actions/undo_redo_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/brush/brush_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/date/date_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/entities/entity_delta_actions_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/entities/entity_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/entities/entity_keyframes_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/global_initialisation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/groups/group_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/history/history_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/map/polity_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/map/projection_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/map/rendering_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/map/tile_layers_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/masks/mask_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/optimisation_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/parsing_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/settings_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/framework/variables/variable_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/draw_loop_hierarchy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/draw_loop_map_event.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/draw_loop_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/key_monitoring.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/map_monitoring.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/events/mouse_monitoring.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/date_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/file_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/group_actions_navigation_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/group_actions_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/group_masks_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/hierarchy_context_menus.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/hierarchy_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/scripts_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/settings_document_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/settings_global_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/settings_map_layers_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/settings_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/left_sidebar/undo_redo_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/brush_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/entity_customisation_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/entity_localisation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/entity_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/entity_variables_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/graph_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/keyframe_actions_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/keyframe_navigation_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/map_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/polity_actions_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/polity_navigation_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/map/variable_actions_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/right_sidebar/brush_navigation_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/right_sidebar/brush_options_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/right_sidebar/map_brush_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/topbar/topbar_ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/ui_config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/ui_framework.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/interface/ui_initialisation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/startup.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/GLTFLoader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/Sortable.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/colorpicker.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/colorpicker.iife.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/dat.gui.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/html2canvas.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/leader-line.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/leaflet-geodesy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/leaflet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/leaflet.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/maptalks.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/maptalks.mapboxgl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/maptalks.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/maptalks.three.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/maptalksgl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/ol.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/popper.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/scale.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/stats.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/three.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/tippy-bundle.umd.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/turf.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.Renderer.Canvas.Tile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.Renderer.SVG.Tile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.VectorGrid.Protobuf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.VectorGrid.Slicer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.VectorGrid.bundled.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Leaflet.VectorGrid.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Symbolizer.Fill.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Symbolizer.Line.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Symbolizer.Point.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Symbolizer.PolyBase.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/Symbolizer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/bundle-extra.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libraries/vector_grid/slicerWebWorker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/preload.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/3d_elevation_testing.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/3d_osm_buildings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/3d_testing.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/RobotExpressive.glb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/typhoon3.png" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="35mtyOn93paUK9lzSxgDF9chfHv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="" />
+      <created>1763727329215</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1763727329215</updated>
+      <workItem from="1763727331086" duration="24000" />
+    </task>
+    <servers />
+  </component>
+</project>

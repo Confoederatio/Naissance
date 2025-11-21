@@ -1,0 +1,304 @@
+/* -- Generic Component styling -- */
+[component] {
+    padding: var(--cell-padding);
+    
+    button {
+        background-color: var(--bg-secondary-colour);
+        border: 1px solid var(--bg-primary-colour);
+        border-radius: calc(var(--padding)*0.5);
+        color: var(--body-colour);
+        font-family: var(--body-font-family);
+        padding: calc(var(--padding)*0.5) calc(var(--padding)*1.5);
+        transition: all 0.5s ease;
+    }
+    button:hover {
+        background-color: var(--accent-primary-colour);
+        cursor: pointer;
+    }
+    input {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--body-colour);
+        color: var(--body-colour);
+        field-sizing: content;
+        font-family: var(--body-font-family);
+    }
+    input:not([type]) {
+        padding-bottom: 1.5px;
+    }
+    input[type="number"] {
+        min-width: calc(var(--default-width)/4);
+    }
+    select {
+        background-color: var(--bg-secondary-colour);
+        border: 1px solid var(--bg-primary-colour);
+        color: var(--body-colour);
+        font-family: var(--body-font-family);
+        margin-right: var(--padding);
+        padding: calc(var(--padding)*0.25) calc(var(--padding)*0.5);
+        transition: all 0.5s ease;
+    }
+    > ul {
+        padding-inline-start: 0;
+    }
+    ul {
+        padding-inline-start: 0.5rem;
+    }
+}
+
+/* -- ve.BIUF -- */
+[component="ve-biuf"] {
+    position: relative;
+    
+    #biuf-toolbar {
+        display: table;
+        left: 50%;
+        margin: auto;
+        position: absolute;
+        transform: translateX(-50%);
+    }
+    button {
+        padding: 0;
+    }
+}
+
+/* -- ve.Button -- */
+[component="ve-button"] {
+    display: inline;
+    
+    button:has(icon) {
+        padding: var(--cell-padding);
+    }
+}
+
+/* -- ve.Checkbox -- */
+[component="ve-checkbox"] {
+    input {
+        margin-left: 0;
+        min-width: auto;
+        position: relative;
+        top: -1px;
+        vertical-align: middle;
+    }
+    li:has(b) {
+        padding: calc(var(--padding)*0.75) 0;
+    }
+    #name:not(:empty) {
+        display: inline;
+        margin-right: calc(var(--cell-padding)*1.5);
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+    }
+}
+
+/* -- ve.Colour -- */
+[component="ve-colour"] {
+    input {
+        border: 1px solid var(--body-colour);
+        outline: none;
+
+        height: 1rem;
+        padding: 0;
+        margin-left: 0.2rem;
+        vertical-align: middle;
+        width: 1rem;
+    }
+    input::-webkit-color-swatch {
+        border: none;
+        padding-bottom: 0;
+    }
+    input::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+}
+
+/* -- ve.Datalist -- */
+[component="ve-datalist"] input {
+    min-width: calc(var(--default-width)/2);
+}
+
+/* -- ve.Date -- */
+[component="ve-date"] {
+    input#day {
+        min-width: 1rem;
+    }
+    input#month {
+        padding-bottom: 0.5px; /* -- Half pixel needed for some reason to remain in-place -- */
+    }
+    #year-type {
+        margin-right: var(--padding);
+    }
+}
+
+/* -- ve.Interface -- */
+[component="ve-interface"] {
+    summary#name {
+        padding-bottom: var(--cell-padding);
+    }
+    summary:hover {
+        cursor: pointer;
+    }
+    tr td {
+        vertical-align: top;
+    }
+}
+[component="ve-interface"]:not(:has(summary)) {
+    padding-inline-start: 0;
+    
+    td[id^="0-"] [component] {
+        padding-left: 0;
+    }
+}
+[component="ve-interface"]:has(summary) td:has([component="ve-interface"]) {
+    padding-inline-start: 0.5rem;
+}
+.ve-disable-nesting {
+    > table > tbody > tr > td {
+        padding: 0;
+        padding-inline-start: 0;
+    }
+}
+
+/* -- ve.PageMenu -- */
+[component="ve-page-menu"] {
+    .navbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--cell-padding);
+        position: relative;
+        padding-bottom:var(--padding);
+    }
+    .tab {
+        color: var(--header-colour);
+        padding: var(--padding);
+        transition: background-color 0.3s;
+    }
+    .tab:hover {
+        cursor: pointer;
+    }
+    .underline {
+        background-color: var(--accent-secondary-colour);
+        border-radius: calc(var(--cell-padding)/2);
+        height: var(--cell-padding);
+        position: absolute;
+        pointer-events: none;
+        
+        transition: left 0.5s ease, width 0.5s ease;
+    }
+}
+
+/* -- ve.Radio -- */
+[component="ve-radio"] {
+    input {
+        min-width: auto;
+    }
+    legend {
+        padding-inline: 0;
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+    }
+}
+
+/* -- ve.Range -- */
+[component="ve-range"] {
+    input[type="range"] {
+        vertical-align: middle;
+    }
+    #name:not(:empty) {
+        margin-right: calc(var(--padding)*0.5);
+    }
+    #value-label {
+        margin-left: calc(var(--padding)*0.5);
+        vertical-align: middle;
+    }
+}
+
+/* -- ve.RawInterface -- */
+[component="ve-raw-interface"] {
+    > [component="ve-button"] {
+      padding: 0;
+    }
+    [component="ve-button"]:has(button #name icon):not(:nth-child(-n + 2)) {
+        icon { justify-content: space-around; }
+    }
+}
+
+/* -- ve.Select -- */
+[component="ve-select"] {
+    #name:not(:empty) {
+        margin-right: calc(var(--padding)*0.5);
+    }
+}
+
+/* -- ve.Text -- */
+[component="ve-text"] input {
+    min-width: calc(var(--default-width)/2);
+}
+
+/* -- ve.Time -- */
+[component="ve-time"] input::-webkit-calendar-picker-indicator {
+    color-scheme: dark;
+}
+
+/* -- ve.Toggle -- */
+[component="ve-toggle"] {
+    > #name {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+    }
+    .toggle-icon {
+    }
+    .toggle-icon {
+        font-size: calc(var(--body-font-size)*2);
+        height: var(--body-font-size);
+    }
+    .toggle-icon.off {
+        color: rgb(240, 60, 60);
+    }
+    .toggle-icon.on {
+        color: rgb(0, 204, 106);
+    }
+}
+
+/* -- ve.UndoRedo -- */
+[component="ve-undo-redo"] {
+    [data-is-selected="true"] {
+        background: var(--body-colour);
+        color: var(--bg-primary-colour);
+        padding-left: 0.5rem  !important;
+    }
+    .no-markers {
+        list-style: none;
+    }
+    [component="ve-html"]:has(#canvas-container) {
+        max-height: 40rem;
+        min-height: 40rem;
+        overflow: clip;
+    }
+}
+
+/* -- ve.URL -- */
+[component="ve-url"] {
+    input {
+        min-width: calc(var(--default-width)/2);
+    }
+    #open-link {
+        font-weight: calc(var(--body-font-weight) + 200);
+    }
+    #open-link[valid-url="false"], #open-link[valid-url="true"]:not(:hover) {
+        opacity: 0.8;
+    }
+    #open-link[valid-url="true"] {
+        color: var(--accent-secondary-colour);
+    }
+    #open-link[valid-url="true"]:hover {
+        color: var(--accent-primary-colour);
+        cursor: pointer;
+        opacity: 1;
+    }
+}

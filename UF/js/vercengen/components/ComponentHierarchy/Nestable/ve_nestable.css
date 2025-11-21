@@ -1,0 +1,112 @@
+/* -- Default Nestable styling -- */
+.nst-container {
+    position: absolute;
+}
+.nst-list li {
+    list-style: none;
+}
+.nst-item {
+    color: var(--body-colour);
+    font-family: var(--body-font-family);
+    padding: 0;
+    position: relative;
+	
+    > .nst-content {
+        border: 1px solid var(--bg-primary-colour);
+        border-radius: 3px;
+        padding: 0 0.5rem 0 0.5rem;
+        background-color: var(--bg-secondary-colour);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }	
+	
+    &.nst-error > .nst-content {
+        border-color: #b71c1c;
+        background-color: #ffebee;
+    }
+    > .nst-handle {
+        line-height: 0.5rem;
+        text-align: center;
+    }
+	
+    .nst-button {
+        color: var(--body-colour);
+        
+        width: 20px;
+        height: 20px;
+        top: 5px;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        left: 7px;
+        font-size: 16px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+	
+    &.nst-collapsed .nst-list {
+        display: none;
+    }
+}
+
+.nst-error.nst-placeholder {
+    border-color: #b71c1c;
+    background-color: #ffebee;
+    position: relative;
+}
+.nst-active > .nst-content {
+    background-color: #bbdefb;
+}
+.nst-handle {
+    cursor: move;
+}
+.nst-placeholder {
+    border: 1px dashed #999;
+    border-radius: 3px;
+    color: var(--body-colour);
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    background-color: #e1f5fe;
+}
+.nst-list {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+li > .nst-list,
+li > .nst-list {
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+/* -- Vercengen Nestable styling -- */
+.ve-hierarchy {
+    .nst-button { display: none; }
+    .nst-content:has(~ ol) .nst-button { display: block; }
+    .nst-list {
+        li {
+            list-style: none;
+        }
+    }
+    ol, ul {
+        box-sizing: border-box;
+        margin-left: 1rem;
+        padding: 0;
+        width: 100%;
+
+        li {
+            width: 100%;
+        }
+    }
+
+    > [data-nestable-disabled="dragging"]:first-child .nst-handle {
+        display: none;
+    }
+    [data-nestable-disabled="dragging"] .nst-handle { 
+        visibility: hidden; 
+    }
+}

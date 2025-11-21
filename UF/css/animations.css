@@ -1,0 +1,24 @@
+@keyframes ve-expand {
+    from {
+        height: 0;
+        margin: 0;
+        opacity: 0;
+        padding-bottom: 0;
+        padding-top: 0;
+        pointer-events: none;
+        visibility: hidden !important;
+    }
+    to {}
+}
+@keyframes ve-minimise {
+    from {}
+    to {
+        height: 0;
+        margin: 0;
+        opacity: 0;
+        padding-bottom: 0;
+        padding-top: 0;
+        pointer-events: none;
+        visibility: hidden !important;
+    }
+}

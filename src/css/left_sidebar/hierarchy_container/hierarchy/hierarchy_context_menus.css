@@ -1,4 +1,0 @@
-.hierarchy #context-menu-container {
-  position: fixed;
-  left: calc(var(--left-sidebar-width) + 12px + 0.5rem);
-}

@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+
+html, head, body {
+  height: 100%;
+  margin: 0px;
+}
+
+/* -- App container -- */
+#app-container {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: calc(clamp(20rem, 20vw, 80rem) + 4rem);
+  top: 0px;
+}
+
+/* -- Scrollbar styling -- */
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(200, 200, 200);
+  border-radius: 0.125rem;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+/* -- Tooltip styling -- */
+.tippy-box {
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 0px;
+  bottom: 0.25vh;
+  padding: 0.25vh;
+
+  color: white;
+  font-family: "Raleway";
+  font-weight: 300;
+  font-size: 1vh;
+}
+
+/* -- Root constants -- */
+:root {
+    --geometry-selection-colour: yellow;
+}

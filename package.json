@@ -1,32 +1,30 @@
 {
-  "name": "naissance",
-  "productName": "naissance",
+  "name": "uf-browser",
   "version": "1.0.0",
-  "description": "My Electron application description",
-  "main": "src/main.js",
+  "description": "Universal Framework variant for Browser/Electron versions.",
+  "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": {
-    "name": "Australis",
-    "email": "htmlprogrammingbn@gmail.com"
+  "repository": {
+    "type": "git",
+    "url": "uf-browser"
   },
-  "license": "MIT",
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "stats.js": "^0.17.0"
-  },
+  "keywords": [
+    "UF",
+    "Universal",
+    "Framework",
+    "Browser",
+    "Electron",
+    "Hanseceltica"
+  ],
+  "author": "Vis/Australis",
+  "license": "ISC",
   "devDependencies": {
-    "@electron-forge/cli": "^6.1.1",
-    "@electron-forge/maker-deb": "^6.1.1",
-    "@electron-forge/maker-rpm": "^6.1.1",
-    "@electron-forge/maker-squirrel": "^6.1.1",
-    "@electron-forge/maker-zip": "^6.1.1",
-    "electron": "24.0.0"
+    "electron": "^38.1.2"
+  },
+  "dependencies": {
+    "shell": "^0.12.0"
   }
 }
