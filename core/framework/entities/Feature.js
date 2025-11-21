@@ -21,7 +21,7 @@ naissance.Feature = class extends ve.Class {
 		//Push to naissance.Feature.instances
 		naissance.Feature.instances.push(this);
 		setTimeout(() => {
-			if (main.brush.selected_feature?.entities && !this.cannot_nest_self) { //[WIP] - This is pretty primitive, since it dumps .cannot_nest_self features in the base. It needs to do a look-behind scan
+			if (main.brush.selected_feature?.entities && !this.cannot_nest_self) { //Sanity check to make sure .cannot_nest_self is invalid for nesting
 				this.parent = main.brush.selected_feature;
 				main.brush.selected_feature.entities.push(this);
 			}

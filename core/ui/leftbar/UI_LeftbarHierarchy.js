@@ -164,7 +164,7 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 					) return;
 					
 					//console.log(e.target, local_instance.element)
-					if (local_instance instanceof naissance.Feature) {
+					if (local_instance instanceof naissance.Feature && local_instance.entities !== undefined) {
 						DALS.Timeline.parseAction({
 							options: { name: "Select Feature", key: "select_feature" },
 							value: [{ type: "Brush", select_feature_id: local_instance.id }]

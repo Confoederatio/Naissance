@@ -52,6 +52,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			
 			//naissance.FeatureGroup, naissance.FeatureLayer handling
 			if (local_entity instanceof naissance.Feature && local_entity.drawHierarchyDatatype) {
+				//console.log(this, `is calling`, local_entity)
 				hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
 			} else {
 				//naissance.Feature generic handling
