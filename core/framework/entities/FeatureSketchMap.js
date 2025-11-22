@@ -59,8 +59,14 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 								}, { name: " ", style: { display: "inline" } }),
 								
 								delete_button: veButton(() => {
-									local_entity.remove();
-									this._entities.splice(i, 1);
+									DALS.Timeline.parseAction({
+										options: { name: "Deleted SketchMap Geometry", key: "delete_sketch_map_geometry" },
+										value: [{
+											type: "FeatureSketchMap",
+											feature_id: this.id,
+											delete_entity: { id: i }
+										}]
+									});
 								}, { name: "<icon>delete</icon> Delete" })
 							}, { name: " " })
 						}
@@ -72,9 +78,10 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 				//Instantiate UI handlers
 				if (local_entity instanceof maptalks.Marker) {
 					local_entity.addEventListener("click", (e) => {
-						let local_interface = veContextMenu({
+						let local_symbol = e.target.getSymbol();
+						local_entity.context_menu = veContextMenu({
 							...local_generic_ui().pre_ui,
-							name_element: new ve.Text((local_properties.name) ? local_properties.name : "", { 
+							name_element: new ve.Text((local_symbol?.textName) ? local_symbol?.textName : "", { 
 								name: "Name",
 								onchange: (v, e) => {
 									DALS.Timeline.parseAction({
@@ -102,12 +109,13 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 					});
 				} else {
 					local_entity.addEventListener("click", (e) => {
-						let local_interface = veContextMenu({
+						local_entity.context_menu = veContextMenu({
 							...local_generic_ui().pre_ui,
 							...local_generic_ui().post_ui
-						}, { id: "sketch_geometry_context_menu" })
+						}, { id: "sketch_geometry_context_menu" });
 					});
 				}
+				
 				local_entity.addEventListener("editend", (e) => {
 					DALS.Timeline.parseAction({
 						options: { name: "Edited SketchMap Geometry", key: "edit_sketch_map_geometry" },
@@ -299,6 +307,8 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 	 *   - `.do_not_refresh=false`: {@link boolean}
 	 *   - `.id`: {@link string}
 	 * - #### Internal Commands:
+	 * - `.delete_entity`: {@link Object}
+	 *   - `.id`: {@link number} - The index of the deleted geometry.
 	 * - `.edit_entity`: {@link Object}
 	 *   - `.id`: {@link number} - The index of the edited geometry.
 	 *   - `.value`: {@link string} - The JSON value of the edited geometry.
@@ -332,6 +342,14 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 			//clear_layer
 			if (json.clear_layer)
 				sketch_map_obj.clearLayer();
+			if (json.delete_entity && json.delete_entity.id) 
+				if (sketch_map_obj._entities[json.delete_entity.id]) {
+					let local_entity = sketch_map_obj._entities[json.delete_entity.id];
+					
+					sketch_map_obj._entities.splice(json.delete_entity.id, 1);
+					local_entity.remove();
+					if (local_entity.context_menu) local_entity.context_menu.close();
+				}
 			//edit_entity
 			if (json.edit_entity)
 				if (sketch_map_obj._entities[json.edit_entity.id]) {
