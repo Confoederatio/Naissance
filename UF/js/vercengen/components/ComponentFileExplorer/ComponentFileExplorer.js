@@ -358,6 +358,7 @@ ve.FileExplorer = class extends ve.Component {
 									});
 							} catch (e) {
 								veToast(e.toString());
+								console.error(e);
 							}
 					})
 				}, { name: "Save File" });

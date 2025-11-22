@@ -169,6 +169,7 @@ naissance.History = class extends ve.Class {
 		}
 		
 		//Return statement
+		console.log(json_obj);
 		return JSON.stringify(json_obj);
 	}
 };

@@ -109,7 +109,7 @@ naissance.Brush = class extends ve.Class {
 				style: { display: "inline" },
 				x: 1, y: 2
 			}),
-			stroke_width: new ve.Number(1, {
+			stroke_width: veNumber(1, {
 				name: "Width",
 				binding: "this.stroke_width",
 				step: 1,
@@ -192,8 +192,8 @@ naissance.Brush = class extends ve.Class {
 			polygonFill: this.brush_options.colour.getHex(), //[WIP] - Using this.colour doesn't work for now because Proxy<Array> does not have a getter
 			polygonOpacity: this.opacity/100,
 			lineColor: this.brush_options.stroke_colour.getHex(),
-			lineOpacity: this.brush_options.stroke_opacity/100,
-			lineWidth: this.brush_options.stroke_width
+			lineOpacity: this.stroke_opacity/100,
+			lineWidth: this.stroke_width
 		};
 	}
 	

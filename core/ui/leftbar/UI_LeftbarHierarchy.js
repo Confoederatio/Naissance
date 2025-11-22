@@ -11,7 +11,7 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 		UI_LeftbarHierarchy.instances.push(this);
 	}
 	
-	refresh () { //[WIP] - Finish function body
+	refresh () {
 		//Declare local instance variables
 		let actions_bar = new ve.HierarchyDatatype({
 			create_new_group: new ve.Button(() => {
@@ -64,6 +64,17 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 				let instance = e.on_stop_data.movedNode?.instance?.options?.instance;
 				let old_parent = e.on_stop_data.originalParentItem?.instance?.options?.instance;
 				let new_parent = e.on_stop_data.newParentItem?.instance?.options?.instance;
+				
+				if (new_parent === undefined && instance) {
+					if (instance.parent.entities)
+						for (let i = instance.parent.entities.length - 1; i >= 0; i--)
+							if (instance.parent.entities[i].class_name === instance.class_name && instance.parent.entities[i].id === instance.id) {
+								instance.parent.entities.splice(i, 1);
+								break;
+							}
+					delete instance.parent;
+					this.refresh();
+				}
 				
 				//1. Check if allow_reassignment[0] is true
 				{
@@ -137,6 +148,9 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 					veToast(`${allow_reassignment[1]} cannot nest itself.`);
 					setTimeout(() => this.refresh(), 100);
 				}
+				
+				//3.3. Call renderer update
+				main.renderer.update();
 			},
 			style: {
 				padding: 0
