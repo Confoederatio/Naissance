@@ -69,6 +69,27 @@ naissance.Feature = class extends ve.Class {
 					this.entities[i].hide();
 	}
 	
+	remove () {
+		//Remove from naissance.Feature .entities
+		for (let i = 0; i < naissance.Feature.instances.length; i++) {
+			let local_feature = naissance.Feature.instances[i];
+			
+			if (local_feature.entities)
+				for (let x = 0; x < local_feature.entities.length; x++)
+					if (local_feature.entities[x].id === this.id)
+						naissance.Feature.instances.splice(x, 1);
+		}
+		
+		//Remove from naissance.Feature.instances
+		for (let i = 0; i < naissance.Feature.instances.length; i++)
+			if (naissance.Feature.instances[i].id === this.id)
+				naissance.Feature.instances.splice(i, 1);
+		
+		//Rerender deleted feature and remove it from the map
+		if (this.draw) this.draw();
+		UI_LeftbarHierarchy.refresh();
+	}
+	
 	show () {
 		this._is_visible = true;``
 		
@@ -88,6 +109,10 @@ naissance.Feature = class extends ve.Class {
 		
 		//Parse commands for feature_obj
 		if (feature_obj) {
+			//delete_feature
+			if (json.delete_feature === true)
+				feature_obj.remove();
+			
 			//set_name
 			if (typeof json.set_name === "string")
 				feature_obj._name = json.set_name;

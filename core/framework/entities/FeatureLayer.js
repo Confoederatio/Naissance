@@ -122,6 +122,12 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					}
 				}
 			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Delete Layer", key: "delete_layer" },
+					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
+				});
+			}, { name: "<icon>delete</icon>", style: { order: 100 } }),
 			
 			...hierarchy_obj
 		}, {

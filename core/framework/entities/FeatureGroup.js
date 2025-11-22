@@ -123,6 +123,12 @@ naissance.FeatureGroup = class extends naissance.Feature {
 					}
 				}
 			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Delete Group", key: "delete_group" },
+					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
+				});
+			}, { name: "<icon>delete</icon>", style: { order: 100 } }),
 			
 			...hierarchy_obj
 		}, {
@@ -246,7 +252,8 @@ naissance.FeatureGroup = class extends naissance.Feature {
 	 * - `.create_group`: {@link Object}
 	 *   - `.do_not_refresh=false`: {@link boolean}
 	 *   - `.id`: {@link string}
-	 * 
+	 * - #### Internal Commands:
+	 * - `.delete_feature`: {@link boolean}
 	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
