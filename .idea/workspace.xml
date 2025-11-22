@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_initialise.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_initialise.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Brush.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Renderer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/autosave.naissance" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/test.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/test.naissance" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +40,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -61,7 +59,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763727329215</updated>
-      <workItem from="1763727331086" duration="5766000" />
+      <workItem from="1763727331086" duration="12685000" />
     </task>
     <servers />
   </component>

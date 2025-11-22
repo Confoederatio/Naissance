@@ -8,14 +8,19 @@
 			document.addEventListener("keydown", (e) => {
 				if (e.keyCode === 17) { //Ctrl
 					if (is_naissance)
-						try { map.scrollWheelZoom.disable(); } catch (e) {} //Disable map zoom upon Ctrl down
+						try { 
+							map.scrollWheelZoom.disable(); 
+						} catch (e) { console.log(e); } //Disable map zoom upon Ctrl down
 					HTML.ctrl_pressed = true;
 				}
 			});
 			document.addEventListener("keyup", (e) => {
 				if (e.keyCode === 17) { //Ctrl
-					if (is_naissance)
-						try { map.scrollWheelZoom.enable(); } catch (e) {} //Re-enable map zoom upon Ctrl up
+					if (is_naissance) {
+						try { 
+							map.scrollWheelZoom.enable(); 
+						} catch (e) { console.log(e); } //Re-enable map zoom upon Ctrl up
+					}
 					delete HTML.ctrl_pressed;
 				}
 			});

@@ -4,6 +4,7 @@ naissance.Brush = class extends ve.Class {
 		super();
 		
 		//Declare local instance variables
+		this.node_editor = new naissance.BrushNodeEditor();
 		this.radius = 50000;
 		this._selected_feature = undefined;
 		this._selected_geometry = undefined;
@@ -54,6 +55,7 @@ naissance.Brush = class extends ve.Class {
 				name: "Brush Mode:", x: 1, y: 0,
 				onchange: (v) => {
 					console.log(`Brush Mode changed to:`, v);
+					setTimeout(() => this.node_editor.update());
 				}
 			}),
 			
@@ -131,7 +133,6 @@ naissance.Brush = class extends ve.Class {
 				x: 0, y: 3
 			})
 		}, { name: "Brush Options:", open: true });
-		
 		this.optimisation = veInterface({
 			simplify: veRange(0.05, {
 				binding: "this.simplify",
@@ -149,6 +150,7 @@ naissance.Brush = class extends ve.Class {
 			
 			return `X: ${String.formatNumber(cursor_coordinates.x, 2)}; Y: ${String.formatNumber(cursor_coordinates.y, 2)} | Size: ${String.formatNumber(this.radius/1000, 2)}km`;
 		});
+		
 		super.open("instance", {
 			anchor: "bottom_right",
 			mode: "static_window",
@@ -186,15 +188,73 @@ naissance.Brush = class extends ve.Class {
 			old_selected_geometry.draw(); //Update draw
 	}
 	
+	getAddPolygon (arg0_geometry) {
+		//Convert from parameters
+		let geometry = arg0_geometry;
+		
+		//Process geometry if valid
+		if (this._selected_geometry instanceof naissance.GeometryPolygon) {
+			let turf_geometry = Geospatiale.convertMaptalksToTurf(geometry);
+			
+			//1. Brush; Simplify handling
+			if (main.brush.simplify > 0)
+				turf_geometry = turf.simplify(turf_geometry, {
+					tolerance: main.brush.simplify
+				});
+			
+			//2. Commit; Layer handling
+			{
+				//2.1. Fetch the current layer of the present geometry
+				let current_layer = this._selected_geometry.getLayer();
+				
+				//2.2. If defined, buffer first (to prevent zero-width holes), then difference all geometries in the layer from turf_cursor_geometry
+				if (current_layer) {
+					let all_layer_geometries = current_layer.getAllGeometries();
+					
+					for (let i = 0; i < all_layer_geometries.length; i++)
+						if (all_layer_geometries[i].id !== this._selected_geometry.id && all_layer_geometries[i].geometry) try {
+							if (!["override", "node_override"].includes(this.mode))
+								turf_geometry = turf.difference(turf.featureCollection([
+									turf_geometry,
+									turf.buffer(Geospatiale.convertMaptalksToTurf(all_layer_geometries[i].geometry), 0.001, { units: "kilometers"})
+								]));
+						} catch (e) { console.warn(e); }
+				}
+			}
+			
+			//Return statement
+			return Geospatiale.convertTurfToMaptalks(turf_geometry);
+		}
+	}
+	
 	getBrushSymbol () {
 		//Return statement
 		return {
-			polygonFill: this.brush_options.colour.getHex(), //[WIP] - Using this.colour doesn't work for now because Proxy<Array> does not have a getter
+			polygonFill: this.brush_options.colour.getHex(),
 			polygonOpacity: this.opacity/100,
 			lineColor: this.brush_options.stroke_colour.getHex(),
 			lineOpacity: this.stroke_opacity/100,
 			lineWidth: this.stroke_width
 		};
+	}
+	
+	getRemovePolygon (arg0_geometry) {
+		//Convert from parameters
+		let geometry = arg0_geometry;
+		
+		//Process geometry if valid
+		if (this._selected_geometry instanceof naissance.GeometryPolygon) {
+			let turf_geometry = Geospatiale.convertMaptalksToTurf(geometry);
+			
+			//1. Brush; Simplify handling
+			if (main.brush.simplify > 0)
+				turf_geometry = turf.simplify(turf_geometry, {
+					tolerance: main.brush.simplify
+				});
+			
+			//Return statement
+			return Geospatiale.convertTurfToMaptalks(turf_geometry);
+		}
 	}
 	
 	handleEvents () {
@@ -216,38 +276,12 @@ naissance.Brush = class extends ve.Class {
 		
 		//Cursor handler
 		map.on("mousemove", (e) => {
-			if (this.disabled) return;
 			this.cursor.setCoordinates(e.coordinate);
+			if (this.disabled || ["node", "node_override"].includes(main.brush.mode)) return;
 			
 			if (this._selected_geometry instanceof naissance.GeometryPolygon && (HTML.left_click || HTML.right_click)) {
-				let turf_cursor_geometry = Geospatiale.convertMaptalksToTurf(this.cursor);
-				
-				//1. Brush; Simplify handling
-				if (main.brush.simplify > 0)
-					turf_cursor_geometry = turf.simplify(turf_cursor_geometry, {
-						tolerance: main.brush.simplify
-					});
-				
-				//2. Commit; Layer handling
-				if (HTML.left_click && !["node_override", "override"].includes(this.mode)) {
-					//1. Fetch the current layer of the present geometry
-					let current_layer = this._selected_geometry.getLayer();
-					
-					//2. If defined, buffer first (to prevent zero-width holes), then difference all geometries in the layer from turf_cursor_geometry
-					if (current_layer) {
-						let all_layer_geometries = current_layer.getAllGeometries();
-						
-						for (let i = 0; i < all_layer_geometries.length; i++)
-							if (all_layer_geometries[i].id !== this._selected_geometry.id && all_layer_geometries[i].geometry) try {
-								turf_cursor_geometry = turf.difference(turf.featureCollection([
-									turf_cursor_geometry,
-									turf.buffer(Geospatiale.convertMaptalksToTurf(all_layer_geometries[i].geometry), 0.001, { units: "kilometers"})
-								]));
-							} catch (e) { console.warn(e); }
-					}
-				}
-				
-				let processed_geometry = Geospatiale.convertTurfToMaptalks(turf_cursor_geometry);
+				let processed_geometry = (HTML.left_click) ?
+					this.getAddPolygon(this.cursor) : this.getRemovePolygon(this.cursor);
 				
 				if (processed_geometry)
 					if (HTML.left_click) {
@@ -356,6 +390,9 @@ naissance.Brush = class extends ve.Class {
 			} else if (json.select_geometry_id === false) {
 				main.brush.selected_geometry = undefined;
 			}
+			
+			//Handle brush mode
+			main.brush.node_editor.update();
 		}
 	}
 	

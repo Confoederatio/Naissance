@@ -11,6 +11,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	constructor () {
 		super();
 		this.class_name = "GeometryPolygon";
+		this.node_editor_mode = "Polygon";
 		
 		//Declare UI
 		this.interface = veInterface({
@@ -128,7 +129,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			if (this.geometry) {
 				this.keyframes_ui.v = this.history.interface.v;
 				this.geometry.addEventListener("click", (e) => {
-					super.open("instance", { name: this.name, width: "20rem" });
+					if (!["node", "node_override"].includes(main.brush.mode))
+						super.open("instance", { name: this.name, width: "20rem" });
 				});
 			}
 		}
@@ -206,13 +208,38 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		});
 	}
 	
-	removeKeyframe (arg0_date) {
+	handleNodeEditorEnd (arg0_e) {
 		//Convert from parameters
-		let date = (arg0_date) ? arg0_date : main.date;
+		let e = arg0_e;
 		
-		//Remove keyframe and update value
-		this.history.removeKeyframe(date);
-		this.draw();
+		//Push action to timeline
+		if (main.brush.node_editor.mode === "add") {
+			e.geometry = main.brush.getAddPolygon(e.geometry);
+			DALS.Timeline.parseAction({
+				options: { name: "Add to Polygon", key: "add_to_polygon" },
+				value: [{
+					type: "GeometryPolygon",
+					
+					geometry_id: this.id,
+					add_to_polygon: { geometry: e.geometry.toJSON() },
+					simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_brush) ?
+						main.brush.simplify : undefined
+				}]
+			});
+		} else if (main.brush.node_editor.mode === "remove") {
+			e.geometry = main.brush.getRemovePolygon(e.geometry);
+			DALS.Timeline.parseAction({
+				options: { name: "Remove from Polygon", key: "remove_from_polygon" },
+				value: [{
+					type: "GeometryPolygon",
+					geometry_id: this.id,
+					remove_from_polygon: { geometry: e.geometry.toJSON() }
+				}]
+			});
+		}
+		
+		main.brush.node_editor.disable();
+		main.brush.node_editor.enable();
 	}
 	
 	/**
