@@ -111,7 +111,7 @@ naissance.Brush = class extends ve.Class {
 				style: { display: "inline" },
 				x: 1, y: 2
 			}),
-			stroke_width: veNumber(1, {
+			stroke_width: veNumber(2, {
 				name: "Width",
 				binding: "this.stroke_width",
 				step: 1,
