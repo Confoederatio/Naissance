@@ -39,10 +39,10 @@ We intend on their eventual integration into Naissance HGIS over time.
 Note that stages may not necessarily be worked on a linear order.
 
 **S1. (Polish)**
-- Implement lookback for selected feature nesting
-- Guarantee Hierarchy consistency
+- [x] Implement lookback for selected feature nesting
+- [x] Guarantee Hierarchy consistency
 - Add manual commit mode for ve.UndoRedo
-- Guarantee deterministic render order
+- [x] Guarantee deterministic render order
 - Guarantee symbol feature parity for naissance.Polygon, naissance.Line, naissance.Point (Geometry inspector)
 - Finish Geometry inspector for labels, zoom behaviours, and better property data editors
 - Modularise delete button at the naissance.Feature, naissance.Geometry layer
@@ -60,10 +60,10 @@ Note that stages may not necessarily be worked on a linear order.
 **S2. (Capability, Backend)**
 - Group Masks (from old Naissance), applies to both naissance.Group/naissance.Layers
   - Active masks should display in a scrollable folder under the brush window
-- Fluid Node editor tied to Brush:
-  - If node editing is true, geometries come directly from DrawTool when created
-  - If node editing is true, selected geometry has node editing automatically turned on
-  - If node editing is false, rename brush editing (finish DrawTool if active, re-enable painting for selected geometries)
+- [x] Fluid Node editor tied to Brush:
+  - [x] If node editing is true, geometries come directly from DrawTool when created
+  - [x] If node editing is true, selected geometry has node editing automatically turned on
+  - [x] If node editing is false, re-enable brush editing (finish DrawTool if active, re-enable painting for selected geometries)
 - Upgrade Vercengen to 1.0:
   - ve.CodeMirror
     - Multitab option
