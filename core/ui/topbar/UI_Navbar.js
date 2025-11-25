@@ -120,6 +120,9 @@ global.UI_Navbar = class {
 					},
 					keyframes: {
 						name: "Keyframes"
+					},
+					metadata: {
+						name: "Metadata"
 					}
 				},
 				map: {

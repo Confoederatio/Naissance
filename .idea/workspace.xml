@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +44,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
       </set>
     </attachedChunks>
   </component>
@@ -56,7 +57,9 @@
       <option name="presentableId" value="Default" />
       <updated>1763727329215</updated>
       <workItem from="1763727331086" duration="16355000" />
-      <workItem from="1763806208092" duration="13000" />
+      <workItem from="1763806208092" duration="1909000" />
+      <workItem from="1764001661232" duration="237000" />
+      <workItem from="1764001957906" duration="1192000" />
     </task>
     <servers />
   </component>
