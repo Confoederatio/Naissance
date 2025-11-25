@@ -7,7 +7,7 @@
 		{
 			document.addEventListener("keydown", (e) => {
 				if (e.keyCode === 17) { //Ctrl
-					if (is_naissance)
+					if (window.is_naissance)
 						try { 
 							map.scrollWheelZoom.disable(); 
 						} catch (e) { console.log(e); } //Disable map zoom upon Ctrl down
@@ -16,7 +16,7 @@
 			});
 			document.addEventListener("keyup", (e) => {
 				if (e.keyCode === 17) { //Ctrl
-					if (is_naissance) {
+					if (window.is_naissance) {
 						try { 
 							map.scrollWheelZoom.enable(); 
 						} catch (e) { console.log(e); } //Re-enable map zoom upon Ctrl up

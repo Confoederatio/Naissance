@@ -16,9 +16,9 @@
  *   - `.name`: {@link string}
  *   - `.navigation_only=false`: {@link boolean}
  *   - 
- *   - `.load_function`: {@link function} - Automatically loads the text content of a valid extension into this function.
- *   - `.save_extension`: {@link string} - The save dot extension that files can be loaded from.
- *   - `.save_function`: {@link function}
+ *   - `.load_function`: {@link function}(arg0_data:{@link string}, arg1_file_path:{@link string}) - Automatically loads the text content of a valid extension into this function.
+ *   - `.save_extension`: {@link Array}<{@link string}>|{@link string} - The save dot extension that files can be loaded from. `.*` refers to all file extensions.
+ *   - `.save_function`: {@link function} - Returns the value of the current savedata state.
  *   
  * ##### Instance:
  * - `.clipboard`: {@link Array}<{@link string}> - The list of full file paths currently stored in the clipboard.
@@ -76,6 +76,8 @@ ve.FileExplorer = class extends ve.Component {
 		options.folder_icon = (options.folder_icon) ? options.folder_icon : "<icon>folder</icon>";
 		options.folder_options = (options.folder_options) ? options.folder_options : {};
 		options.name = (options.name) ? options.name : "";
+		if (options.save_extension) 
+			options.save_extension = Array.toArray(options.save_extension);
 		
 		//options.navigation_only override
 		if (options.navigation_only)
@@ -232,8 +234,8 @@ ve.FileExplorer = class extends ve.Component {
 		if (!this.options.disable_actions)
 			hierarchy_obj.selection = new ve.HierarchyDatatype({
 				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `Clipboard (${String.formatNumber(this.clipboard.length)})` : "Clipboard is empty."} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `
-				${String.formatNumber(this.selected.length)} Element(s) selected &nbsp; ` : ""}
-				`, { style: { padding: 0 }}),
+				${String.formatNumber(this.selected.length)} Element(s) selected` : ""}
+				`, { style: { marginRight: "auto", padding: 0 }}),
 				actions_menu: new ve.RawInterface({
 					copy_button: new ve.Button((e) => {
 						if (this.selected.length === 0) return; //Internal guard clause if nothing is selected
@@ -308,14 +310,39 @@ ve.FileExplorer = class extends ve.Component {
 									new ve.Toast(`You cannot create a folder with no name.`);
 								}
 							})
-						}, { name: "Create New Folder" })
-					}, { name: "<icon>create_new_folder</icon>", tooltip: "Create New Folder" })
+						}, { can_rename: false, name: "Create New Folder" })
+					}, { name: "<icon>create_new_folder</icon>", tooltip: "Create New Folder" }),
+					new_file_button: new ve.Button((e) => {
+						let local_modal = new ve.Window({
+							html: new ve.HTML(`Create a new file:`),
+							new_file_name: new ve.Text("", { name: " " }),
+							confirm_button: new ve.Button((e) => {
+								let new_file_path = path.join(this.v, local_modal.components_obj.new_file_name.v);
+								
+								if (!fs.existsSync()) {
+									fs.closeSync(fs.openSync(new_file_path, "w"));
+									this.refresh();
+									new ve.Toast(`Created empty text file at: ${new_file_path}`);
+								} else {
+									new ve.Toast(`The specified path already exists as a file! Delete it first before creating a new file with the same name.`);
+								}
+							})
+						}, { can_rename: false, name: "Create New File" });
+					}, { name: "<icon>note_add</icon>", tooltip: "Create New File" } )
 				}, {
-					style: { marginLeft: "auto", order: 99, padding: 0 }
+					style: { marginLeft: "auto",order: 99, marginTop: "var(--cell-padding)", padding: 0 }
 				}),
 			}, {
 				attributes: { "data-ve-is-information": true },
-				disabled: true
+				disabled: true,
+				style: {
+					".nst-content": { 
+						display: "flex", 
+						flexDirection: "column",
+						paddingBottom: `var(--cell-padding)`,
+						paddingTop: `var(--cell-padding)`
+					},
+				}
 			});
 		
 		//options.save_function
@@ -327,7 +354,7 @@ ve.FileExplorer = class extends ve.Component {
 			hierarchy_obj.save_button.element.onclick = () => {
 				let local_modal = new ve.Window({
 					html: new ve.HTML(`Save file as:`),
-					new_file_name: new ve.Text(`autosave${(this.options.save_extension) ? this.options.save_extension : ""}`, { name: " " }),
+					new_file_name: new ve.Text(`autosave${(this.options.save_extension[0]) ? this.options.save_extension[0] : ""}`, { name: " " }),
 					confirm_button: new ve.Button((e) => {
 						let save_file_name = path.join(this.v, local_modal.new_file_name.v);
 						
@@ -361,7 +388,7 @@ ve.FileExplorer = class extends ve.Component {
 								console.error(e);
 							}
 					})
-				}, { name: "Save File" });
+				}, { can_rename: false, name: "Save File" });
 			};
 		}
 		
@@ -411,7 +438,9 @@ ve.FileExplorer = class extends ve.Component {
 			if (all_files_in_directory[i].isDirectory()) {
 				hierarchy_obj[local_full_path] = new ve.HierarchyDatatype(
 					{
-						folder_icon: new ve.HTML(this.options.folder_icon),
+						folder_icon: new ve.HTML(this.options.folder_icon, {
+							tooltip: `/${all_files_in_directory[i].name}/`
+						}),
 						actions_menu: new ve.RawInterface({
 							rename: new ve.Button((e) => {
 								ve.FileExplorer.rename(local_full_path, () => this.refresh());
@@ -466,14 +495,15 @@ ve.FileExplorer = class extends ve.Component {
 				hierarchy_obj[local_full_path] = new ve.HierarchyDatatype(
 					{
 						file_icon: new ve.HTML(this.options.file_icon, {
-							style: { opacity: 0.6 }
+							style: { opacity: 0.6 },
+							tooltip: all_files_in_directory[i].name
 						}),
 						actions_menu: new ve.RawInterface({
 							rename: new ve.Button((e) => {
 								ve.FileExplorer.rename(local_full_path, () => this.refresh());
 							}, {
 								name: `<icon>drive_file_rename_outline</icon>`,
-								limit: () => (this.options.navigation_only && path.extname(local_full_path) === this.options.save_extension) || !this.options.navigation_only,
+								limit: () => (this.options.navigation_only && this.options.save_extension.includes(path.extname(local_full_path))) || !this.options.navigation_only,
 								tooltip: "Rename",
 								style: { padding: `var(--cell-padding)` }
 							}),
@@ -487,7 +517,7 @@ ve.FileExplorer = class extends ve.Component {
 											}
 											if (this.options.load_function)
 												try {
-													this.options.load_function(data);
+													this.options.load_function(data, local_full_path);
 													veToast(`Loaded savefile ${local_full_path}`);
 												} catch (e) {
 													veWindow(`Error loading savefile: ${e}`, { name: `Error loading savefile` });
@@ -499,7 +529,7 @@ ve.FileExplorer = class extends ve.Component {
 							}, {
 								name: `<icon>sync_arrow_down</icon>`,
 								tooltip: "Load Savefile",
-								limit: () => this.options.load_function && (this.options.save_extension === undefined || path.extname(local_full_path) === this.options.save_extension),
+								limit: () => this.options.load_function && (this.options.save_extension === undefined || this.options.save_extension.includes(path.extname(local_full_path)) || this.options.save_extension.includes(".*")),
 								style: { padding: `var(--cell-padding)` }
 							}),
 							...Object.fromEntries(

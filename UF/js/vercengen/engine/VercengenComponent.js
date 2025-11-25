@@ -79,6 +79,9 @@
  * - {@link ve.Component.ve.Radio|veRadio}(arg0_value:{@link Object}<{@link boolean}>\* | {@link Object}<{@link boolean}>\*
  * - {@link ve.Component.ve.Range|veRange}(arg0_value:{@link number}, arg1_options: {@link Object}) | {@link number}
  * - {@link ve.Component.ve.RawInterface|veRawInterface}(arg0_components_obj:{@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}>
+ * - {@link ve.Component.ve.ScriptManager|veScriptManager}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ *   - {@link ve.Component.ve.ScriptManagerBlockly|veScriptManagerBlockly}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ *   - {@link ve.Component.ve.ScriptManagerCodemirror|veScriptManagerCodemirror}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Select|veSelect}(arg0_value:{@link ve.Object}<{@link string}>, arg1_options:{@link Object}) | {@link string} - The key of the selected option.
  * - {@link ve.Component.ve.Telephone|veTelephone}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Text|veText}(arg0_value:{@link string}, arg1_options: {@link Object}) | {@link string}
@@ -87,7 +90,6 @@
  * - {@link ve.Component.ve.UndoRedo|veUndoRedo}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The {@link DALS.Timeline} ID that the UndoRedo component is currently navigating.
  * - {@link ve.Component.ve.URL|veURL}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * 
- * @class
  * @memberof ve
  * @namespace ve.Component
  * @type {ve.Component}

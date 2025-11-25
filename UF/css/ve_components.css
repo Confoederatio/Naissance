@@ -140,6 +140,9 @@
     summary:hover {
         cursor: pointer;
     }
+    > table {
+        width: 100%;
+    }
     tr td {
         vertical-align: top;
     }

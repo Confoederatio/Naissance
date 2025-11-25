@@ -201,6 +201,10 @@
     position: fixed;
     z-index: 99;
 }
+.ve.toast:has(> icon) {
+    align-items: center;
+    display: flex;
+}
 
 /* -- ve.Tooltip -- */
 .tippy-arrow {

@@ -10,6 +10,10 @@
         .nst-content:hover {
             cursor: pointer;
         }
+        .nst-content [component="ve-text"] {
+            max-width: 12rem;
+            overflow: hidden;
+        }
         
         [component="ve-button"] {
             display: inline;

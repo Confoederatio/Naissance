@@ -176,9 +176,9 @@
 		}
 		
 		//Declare local internal helper functions
-		function internalCloseDragElement (e) {
+		function internalCloseDragElement (arg0_e) {
 			//Declare local instance variables
-			var e = (e || window.event);
+			let e = (arg0_e || window.event);
 			
 			//Stop moving when mouse button is released
 			document.onmouseup = null;
@@ -187,22 +187,22 @@
 			resize_edge = null;
 		}
 		
-		function internalElementDrag (e) {
+		function internalElementDrag (arg0_e) {
 			//Declare local instance variables
-			var e = (e || window.event);
-			var min_height = 50;
-			var min_width = 50;
-			var viewport_height = window.innerHeight;
-			var viewport_width = window.innerWidth;
+			let e = (arg0_e || window.event);
+			let min_height = 50;
+			let min_width = 50;
+			let viewport_height = window.innerHeight;
+			let viewport_width = window.innerWidth;
 			
 			e.preventDefault();
 			
 			if (is_resizing && options.is_resizable) {
-				var delta_x = e.clientX - position_three;
-				var delta_y = e.clientY - position_four;
+				let delta_x = e.clientX - position_three;
+				let delta_y = e.clientY - position_four;
 				
 				//Define resize operations
-				var resize_ops = {
+				let resize_ops = {
 					'e': function() {
 						let new_width = initial_width + delta_x;
 						// Constrain width to not exceed viewport boundary
@@ -254,17 +254,17 @@
 					resize_ops[resize_edge]();
 				}
 			} else {
-				if (options.draggable == false) return;
+				if (options.draggable === false) return;
 				
 				position_one = position_three - e.clientX;
 				position_two = position_four - e.clientY;
 				position_three = e.clientX;
 				position_four = e.clientY;
 				
-				var el_height = el.offsetHeight;
-				var el_width = el.offsetWidth;
-				var new_left = el.offsetLeft - position_one;
-				var new_top = el.offsetTop - position_two;
+				let el_height = el.offsetHeight;
+				let el_width = el.offsetWidth;
+				let new_left = el.offsetLeft - position_one;
+				let new_top = el.offsetTop - position_two;
 				
 				new_top = Math.max(0, Math.min(new_top, viewport_height - el_height));
 				new_left = Math.max(0, Math.min(new_left, viewport_width - el_width));
@@ -282,6 +282,7 @@
 			if (document.querySelectorAll(`
 				input:focus, 
 				[contenteditable]:not(#window-name):focus,
+				#scene:hover,
 				.wysiwyg-editor-container:hover,
 				.ve-drag-disabled:hover
 			`).length) return;
@@ -326,7 +327,7 @@
 			if (el.scrollWidth > el_width) {
 				el.style.overflowX = "auto";
 			}
-		}, 50);
+		}, 150);
 		
 		//Return statement
 		return el;

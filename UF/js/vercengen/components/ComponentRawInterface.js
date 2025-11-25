@@ -7,6 +7,7 @@
  * ##### Constructor:
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}>
  * - `arg1_options`: {@link Object}
+ *   - `.no_name_element=false`: {@link boolean}
  * 
  * ##### Instance:
  * - `<component_key>`: {@link ve.Component} - Contains any destructured components.
@@ -38,11 +39,12 @@ ve.RawInterface = class extends ve.Component {
 		//Format html_string
 		let html_string = [];
 		
-		html_string.push(`<span id = "name"></span>`);
+		if (!this.options.no_name_element)
+			html_string.push(`<span id = "name"></span>`);
 		this.element.innerHTML = html_string.join("");
 		
 		//KEEP AT BOTTOM!
-		this.name = options.name;
+		this.name = this.options.name;
 		this.reserved_keys = Object.keys(this).concat(["reserved_keys", "v"]);
 		this.v = components_obj;
 	}

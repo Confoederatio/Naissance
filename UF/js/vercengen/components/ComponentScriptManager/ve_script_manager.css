@@ -1,0 +1,65 @@
+/* -- ve.ScriptManager -- */
+.ve.window:has([component="ve-script-manager"].theme-light), .blocklyToolboxDiv.theme-light {
+    border: 1px solid black;
+    border-radius: var(--cell-padding);
+    --bg-primary-colour: rgba(255, 255, 255, 0.7);
+    --bg-secondary-colour: rgb(235, 235, 235);
+    --body-colour: rgba(0, 0, 0, 0.83);
+    --header-colour: rgba(0, 0, 0, 0.83);
+    
+    .resize-handle:hover {
+        background-color: var(--body-colour);
+    }
+}
+    /* -- ve.ScriptManager.console_el -- */
+    .ve-script-manager-console {
+        font-family: var(--monospace-font-family), monospace;
+        
+        .error:before {
+            content: "[ERROR] ";
+            color: var(--accent-secondary-colour);
+        }
+        .message:before {
+            content: "[INFO] "
+        }
+    }
+
+/* -- ve.ScriptManagerBlockly -- */
+.blocklyFlyout .blocklyWorkspace {
+    transform: scaleY(0.95);
+}
+.blocklyFlyoutBackground {
+    fill: var(--bg-primary-colour) !important;
+}
+.blocklyToolboxDiv {
+    background-color: var(--bg-primary-colour);
+    color: var(--body-colour);
+    
+    .blocklyTreeLabel {
+        font-family: var(--body-font-family);
+    }
+    .blocklyTreeRow {
+        transition: all 0.5s ease;
+    }
+}
+.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+    background-color: var(--accent-primary-colour);
+}
+[component="ve-script-manager-blockly"] {
+    svg {
+        .blocklyTrash, .blocklyZoom {
+            filter: brightness(100);
+        }
+        .blocklyWorkspace rect.blocklyMainBackground {
+            fill: var(--bg-secondary-colour) !important;
+        }
+    }
+}
+[component="ve-script-manager-blockly"].disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+text.blocklyText {
+    font-family: var(--body-font-family);
+}

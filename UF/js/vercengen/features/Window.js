@@ -7,23 +7,27 @@
  * ##### Constructor:
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}>
  * - `arg1_options`: {@link Object}
- *   - `anchor="top_left"` - Either 'bottom_left'/'bottom_right'/'top_left'/'top_right'.
- *   - `height="auto"`: {@link number}
- *   - `width="12rem"`: {@link number}
- *   - `x=HTML.mouse_x`: {@link number}
- *   - `y=HTML.mouse_y`: {@link number}
+ *   - `.anchor="top_left"` - Either 'bottom_left'/'bottom_right'/'top_left'/'top_right'.
+ *   - `.height="auto"`: {@link number}
+ *   - `.width="12rem"`: {@link number}
+ *   - `.x=HTML.mouse_x`: {@link number}
+ *   - `.y=HTML.mouse_y`: {@link number}
  *   -
- *   - `do_not_wrap=false`: {@link boolean} - Whether to disable wrapping in an always open ve.Interface.
- *   - `id`: {@link string}
- *   - `mode="window"`: {@link string} - Either 'static_ui'/'static_window'/'window'.
- *   - `name=""`: {@link string} - Auto-resolves to 'Window' instead if `.can_rename=true`.
- *   - `theme`: {@link string} - The CSS theme to apply to the Feature.
+ *   - `.do_not_wrap=false`: {@link boolean} - Whether to disable wrapping in an always open ve.Interface.
+ *   - `.id`: {@link string}
+ *   - `.mode="window"`: {@link string} - Either 'static_ui'/'static_window'/'window'.
+ *   - `.name=""`: {@link string} - Auto-resolves to 'Window' instead if `.can_rename=true`.
+ *   - `.theme`: {@link string} - The CSS theme to apply to the Feature.
  *   -
- *   - `can_close`: {@link boolean}
- *   - `can_rename`: {@link boolean}
- *   - `draggable`: {@link boolean}
- *   - `headless`: {@link boolean}
- *   - `resizeable`: {@link boolean}
+ *   - `.can_close`: {@link boolean}
+ *   - `.can_rename`: {@link boolean}
+ *   - `.draggable`: {@link boolean}
+ *   - `.headless`: {@link boolean}
+ *   - `.resizeable`: {@link boolean}
+ *   - 
+ *   - `.onuserchange`: {@link function}(arg0_v:{@link Object}, arg1_e:{@link Event}) - Fires upon user changes to the window. Changes are discrete, and the set of Object keys may vary.
+ *     - `arg0_v`: {@link Object}
+ *       - `.name`: {@link string}
  *   
  * ##### Instance:
  * - `.v`: {@link Object}<{@link ve.Component}>
@@ -154,6 +158,13 @@ ve.Window = class extends ve.Feature {
 			<div id = "feature-body" class = "feature-body"></div>
 		`;
 		this.element.style.zIndex = ve.Window.instances.length.toString();
+		
+		let window_name_el = this.element.querySelector(`#window-name`);
+		if (window_name_el)
+			window_name_el.addEventListener("input", (e) => {
+				if (this.options.onuserchange)
+					this.options.onuserchange({ name: window_name_el.innerHTML }, e);
+			});
 		
 		//Instantiate element handlers
 		if (this.options.can_close && !this.options.headless) {
