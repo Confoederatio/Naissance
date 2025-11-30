@@ -6,6 +6,38 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/ve_components.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/ve_components.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/array/array_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/array/array_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_initialise.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_initialise.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/object/object_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/object/object_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentBIUF.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentBIUF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNumber.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNumber.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerBlockly.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerBlockly.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerCodemirror.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerCodemirror.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSelect.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSelect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentText.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentText.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ComponentWYSIWYG.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ComponentWYSIWYG.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ve_wysiwyg.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ve_wysiwyg.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/Demo.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/Demo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/telestyle/vercengen_telestyle.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/telestyle/vercengen_telestyle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Scene.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Scene.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Tooltip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +91,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
+      <workItem from="1764176738442" duration="3050000" />
     </task>
     <servers />
   </component>

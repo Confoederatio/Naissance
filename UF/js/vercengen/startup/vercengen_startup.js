@@ -10,8 +10,59 @@ global.path = require("path");
 		 * 
 		 * @namespace ve
 		 */
-		global.ve = {};
-	ve.debug_mode = false;
+		global.ve = {
+			/**
+			 * Registry is initialised from {@link window.ve_registry} if it exists. Otherwise, default settings are used across Vercengen.
+			 * @type {Object}
+			 */
+			registry: (window.ve_registry) ? window.ve_registry :{
+				/**
+				 * Determines whether or not to run linters at runtime.
+				 * @type {boolean}
+				 */
+				debug_mode: true,
+				
+				/**
+				 * @type {{"<component_key>": ve.Component}}
+				 */
+				components: {},
+				/**
+				 * @type {{"<feature_key>": ve.Feature}}
+				 */
+				features: {},
+				/**
+				 * Theme keys hold Telestyle CSS objects.
+				 * @type {{"<theme_key>": Object}}
+				 */
+				themes: {},
+				
+				settings: {
+					/**
+					 * Whether names can be automatically imputed from the key name. False by default.
+					 * @type {boolean}
+					 */
+					automatic_naming: false,
+					
+					//Component-wide settings
+					
+					/**
+					 * Component settings for {@link ve.ScriptManager}.
+					 */
+					ScriptManager: {
+						/**
+						 * Either false if no automatic save file is declared, or the file path to save settings in.
+						 * @type {boolean|string}
+						 */
+						save_file: "settings/ScriptManager_settings.json",
+						/**
+						 * Determines whether `._settings` are shared between instances of {@link ve.ScriptManager}.
+						 * @type {boolean}
+						 */
+						share_settings_across_instances: true
+					}
+				}
+			}
+		};
 	
 	/**
 	 * Returns all non-evaluated files in a folder, so long as an evaluated set is provided.
@@ -182,6 +233,7 @@ global.path = require("path");
 		document.body.appendChild(ve.window_overlay_el);
 		setTimeout(() => {
 			ve.Component.linter(); //Lint ve.Component library
+			ve.Feature.linter(); //Lint ve.Feature library
 		}, 100);
 	};
 	
@@ -208,8 +260,9 @@ global.path = require("path");
 		//Declare local instance variables
 		let load_patterns = (!options.do_not_import_UF) ? [
 			"!UF/archives",
-			//"UF/js/vercengen/(vercengen_initialisation).js",
 			"UF",
+			
+			//Blockly/Maptalks
 			"UF/libraries",
 			"UF/libraries/blockly.js",
 			"UF/libraries/bi_blockly/",
@@ -218,6 +271,16 @@ global.path = require("path");
 			"UF/libraries/mapbox-gl.js",
 			"UF/libraries/mapbox-gl.css",
 			"UF/libraries/maptalks.mapboxgl.min.js",
+			
+			//Univer
+			"UF/libraries/univer/react.production.min.js",
+			"UF/libraries/univer/react-dom.production.min.js",
+			"UF/libraries/univer/rxjs.umd.min.js",
+			"UF/libraries/univer/univerjs.index.js",
+			"UF/libraries/univer/univerjs.umd.index.js",
+			"UF/libraries/univer/univer.en-US.js",
+			
+			//DALS, Vercengen Components
 			"UF/js/dals/Timeline.js",
 			"UF/js/dals/Timeline_state.js",
 			"UF/js/vercengen/engine",

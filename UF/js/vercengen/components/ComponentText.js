@@ -5,7 +5,7 @@
  * - Functional binding: <span color=00ffff>veText</span>().
  * 
  * ##### Constructor:
- * - `arg0_value`: {@link string}
+ * - `arg0_value`: {@link Array}<{@link string}>|{@link string}
  * - `arg1_options`: {@link Object}
  *   - `.disabled=false`: {@link boolean}
  *   - `.length`: {@link number}
@@ -70,11 +70,22 @@ ve.Text = class extends ve.Component {
 	 * Returns the current text value.
 	 * - Accessor of: {@link ve.Text}
 	 * 
-	 * @returns {string}
+	 * @returns {string|string[]}
 	 */
 	get v () {
-		//Return statement
-		return this.value;
+		if (this.list_component) {
+			//Iterate over this.list_component.v to fetch all_values
+			let all_values = [];
+			
+			for (let i = 0; i < this.list_component.v.length; i++)
+				all_values.push(this.list_component.v[i].v);
+			
+			//Return statement
+			return all_values;
+		} else {
+			//Return statement
+			return this.value;
+		}
 	}
 	
 	/**
@@ -89,12 +100,34 @@ ve.Text = class extends ve.Component {
 		if (value === undefined) return;
 		
 		//Set value and update UI
-		if (typeof value === "object")
+		if (typeof value === "object" && !Array.isArray(value))
 			console.warn(`ve.Text: The type of value received was not a valid string! Please check to make sure your component key is not the reserved keyword 'name'.`, value);
 		
-		this.value = value;
-		this.element.querySelector("input").value = this.value;
-		this.fireFromBinding();
+		if (Array.isArray(value)) {
+			//Populate this.list_component with all_components
+			let all_components = [];
+			
+			for (let i = 0; i < value.length; i++)
+				all_components.push(new ve.Text(value[i]));
+			this.list_component = new ve.List(all_components, this.options);
+			
+			//Set value and refresh
+			this.value = value;
+			this.element.innerHTML = "";
+			this.element.appendChild(this.list_component.element);
+			this.fireFromBinding();
+		} else {
+			//Refresh this.element if possible
+			if (this.list_component) {
+				let temp_component = new ve.Text(value, this.options);
+				this.element = temp_component.element;
+				delete this.list_component;
+			}
+			
+			this.value = value;
+			this.element.querySelector("input").value = this.value;
+			this.fireFromBinding();
+		}
 	}
 };
 

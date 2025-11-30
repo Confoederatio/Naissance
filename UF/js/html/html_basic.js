@@ -1,18 +1,19 @@
 //Initialise functions
 {
-	if (!global.HTML) global.HTML = {};
+	if (!global.HTML)
+		/**
+		 * The namespace for all UF/HTML utility functions, typically for static methods.
+		 * 
+		 * @namespace HTML
+		 */
+		global.HTML = {};
 	
-	HTML.applyAttributesObject = function (arg0_el, arg1_attributes_obj) {
-		//Convert from parameters
-		let el = (typeof arg0_el === "object") ? arg0_el : document.querySelector(arg0_el);
-		let attributes_obj = (arg1_attributes_obj) ? arg1_attributes_obj : {};
-		
-		//Iterate over attributes_obj
-		Object.iterate(attributes_obj, (local_key, local_value) => {
-			el.setAttribute(local_key, local_value);
-		});
-	};
-	
+	/**
+	 * Returns a list of all parent elements from a given child.
+	 * 
+	 * @param {HTMLElement} arg0_el
+	 * @returns {HTMLElement[]}
+	 */
 	HTML.getAllParentElements = function (arg0_el) {
 		//Convert from parameters
 		let el = (typeof arg0_el === "object") ? arg0_el : document.querySelector(arg0_el);
@@ -33,26 +34,15 @@
 		return parent_els;
 	};
 	
-	HTML.getCanvasScale = function (arg0_canvas_el) { //[WIP] - Not currently functional due to regex replacement issues.
-		//Convert from parameters
-		let canvas_el = arg0_canvas_el;
-		
-		//Declare local instance variables
-		let transform_matrix = window.getComputedStyle(canvas_el).transform;
-			if (transform_matrix === "none") return 1; //Internal guard clause if no scale is present
-		
-		let matrix_values = transform_matrix.match(/matrix\(([^)]+)\)/);
-		
-		//Return statement; extract scale from matrix_values if possible
-		if (matrix_values) {
-			let matrix_array = matrix_values[1].split(", ").map(parseFloat);
-			return Math.sqrt(matrix_array[0]**2 + matrix_array[1]**2); //Extract scale from matrix
-		}
-		
-		//Return statement
-		return 1;
-	};
-	
+	/**
+	 * Converts a set anchor, and x/y_coord to a valid CSS {@link Object}.
+	 * 
+	 * @param {HTMLElement} arg0_anchor - Either 'top_left'/'top_right'/'bottom_left'/'bottom_right'.
+	 * @param {number} arg1_x
+	 * @param {number} arg2_y
+	 * 
+	 * @returns {{bottom: number, left: number, right: number, top: number}}
+	 */
 	HTML.getCSSPosition = function (arg0_anchor, arg1_x, arg2_y) {
 		//Convert from parameters
 		let anchor = (arg0_anchor) ? arg0_anchor : "top_left";
@@ -83,6 +73,14 @@
 		return return_obj;
 	};
 	
+	/**
+	 * Converts width, height numbers into a valid CSS {@link Object}.
+	 * 
+	 * @param {number} arg0_width
+	 * @param {number} arg1_height
+	 * 
+	 * @returns {{height: string, width: string}}
+	 */
 	HTML.getCSSSize = function (arg0_width, arg1_height) {
 		//Convert from parameters
 		let width = arg0_width;
@@ -95,6 +93,13 @@
 		};
 	};
 	
+	/**
+	 * Returns the actual `.innerText` content of a given element.
+	 * 
+	 * @param {HTMLElement} arg0_el
+	 * 
+	 * @returns {string}
+	 */
 	HTML.getInnerText = function (arg0_el) {
 		//Convert from parameters
 		let el = (typeof arg0_el === "object") ? arg0_el : document.querySelector(arg0_el);
@@ -114,6 +119,15 @@
 		return texts.join("");
 	};
 	
+	/**
+	 * Traverses an ordered list with `arg1_function` executing in sequential order.
+	 * 
+	 * @param {HTMLElement} arg0_ol_el
+	 * @param {function} arg1_function - (arg0_el:{@link HTMLElement}) - Defines what to do with each <li>/<ol> node.
+	 * @param {boolean} [arg2_is_nested=false] - Internal helper flag. Whether the current layer has already been nested.
+	 * 
+	 * @returns {Object}
+	 */
 	HTML.listToObject = function (arg0_ol_el, arg1_function, arg2_is_nested) {
 		//Convert from parameters
 		let ol_el = arg0_ol_el;
@@ -131,6 +145,7 @@
 			
 			//Look for nested <ol> inside the <li>
 			let nested_ol = li_el.querySelector(":scope > ol");
+			
 			return_obj[local_id] = (nested_ol) ? 
 				HTML.listToObject(nested_ol, local_function, true) : local_function(li_el);
 		});
@@ -139,6 +154,13 @@
 		return return_obj;
 	};
 	
+	/**
+	 * Converts an object into an HTML attributes string.
+	 * 
+	 * @param {Object|{"<attribute_key>": string}} arg0_object
+	 * 
+	 * @returns {string}
+	 */
 	HTML.objectToAttributes = function (arg0_object) {
 		//Convert from parameters
 		let object = (arg0_object) ? arg0_object : {};
@@ -159,6 +181,15 @@
 		return (attribute_string) ? ` ${attribute_string}` : "";
 	};
 	
+	/**
+	 * Sets the attributes of a given element based off of an {@link Object}.
+	 * 
+	 * @param {HTMLElement} arg0_element
+	 * 
+	 * @param {{"<attribute_key>": string}} arg1_attributes_obj
+	 * 
+	 * @returns {HTMLElement}
+	 */
 	HTML.setAttributesObject = function (arg0_element, arg1_attributes_obj) {
 		//Convert from parameters
 		let element = arg0_element;

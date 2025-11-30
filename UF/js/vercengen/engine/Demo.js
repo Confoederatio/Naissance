@@ -6,7 +6,7 @@ ve.Demo = class veDemo extends ve.Class { //[WIP] - Make sure .name is always po
 		
 		Object.iterate(global.ve, (local_key, local_value) => {
 			try {
-				if (Object.getPrototypeOf(local_value) === ve.Component) {
+				if (Object.getPrototypeOf(local_value) === ve.Component && !local_value.excluded_from_demo) {
 					let local_arguments = [];
 					if (local_value.demo_value !== undefined) local_arguments.push(local_value.demo_value);
 					if (local_value.demo_options !== undefined) local_arguments.push(local_value.demo_options);
@@ -26,5 +26,5 @@ ve.Demo = class veDemo extends ve.Class { //[WIP] - Make sure .name is always po
 };
 
 setTimeout(() => {
-	if (ve.debug_mode) new ve.Demo();
+	//if (ve.registry.debug_mode) new ve.Demo();
 }, 100);

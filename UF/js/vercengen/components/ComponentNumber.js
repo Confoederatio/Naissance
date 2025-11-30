@@ -5,7 +5,7 @@
  * - Functional binding: <span color=00ffff>veNumber</span>().
  * 
  * ##### Constructor:
- * - `arg0_value=0`: {@link number}
+ * - `arg0_value=0`: {@link Array}<{@link number}>|{@link number}
  * - `arg1_options`: {@link Object}
  *   - `.disabled=false`: {@link boolean}
  *   - `.max`: {@link number}
@@ -29,7 +29,7 @@ ve.Number = class extends ve.Component {
 	
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
-		let value = Math.returnSafeNumber(arg0_value);
+		let value = (!Array.isArray(arg0_value)) ? Math.returnSafeNumber(arg0_value) : arg0_value;
 		let options = (arg1_options) ? arg1_options : {};
 			super(options);
 		
@@ -64,7 +64,7 @@ ve.Number = class extends ve.Component {
 			if (this.options.max && e.target.value > this.options.max)
 				e.target.value = this.options.max;
 			if (this.options.min && e.target.value < this.options.min)
-				e,target,value = this.options.min;
+				e.target.value = this.options.min;
 			
 			this.from_binding_fire_silently = true;
 			this.v = global.Number(e.target.value);
@@ -79,11 +79,22 @@ ve.Number = class extends ve.Component {
 	 * Returns the present number stored by the component.
 	 * - Accessor of: {@link ve.Number}
 	 * 
-	 * @returns {number}
+	 * @returns {number|number[]}
 	 */
 	get v () {
-		//Return statement
-		return this.value;
+		if (this.list_component) {
+			//Iterate over this.list_component.v to fetch all_values
+			let all_values = [];
+			
+			for (let i = 0; i < this.list_component.v.length; i++)
+				all_values.push(this.list_component.v[i].v);
+			
+			//Return statement
+			return all_values;
+		} else {
+			//Return statement
+			return this.value;
+		}
 	}
 	
 	/**
@@ -96,10 +107,32 @@ ve.Number = class extends ve.Component {
 		//Convert from parameters
 		let value = arg0_value;
 		
-		//Set value and update UI
-		this.value = value;
-		this.element.querySelector("input").value = this.value;
-		this.fireFromBinding();
+		if (Array.isArray(value)) {
+			//Populate this.list_component with all_components
+			let all_components = [];
+			
+			for (let i = 0; i < value.length; i++)
+				all_components.push(new ve.Number(value[i]));
+			this.list_component = new ve.List(all_components, this.options);
+			
+			//Set value and refresh
+			this.value = value;
+			this.element.innerHTML = "";
+			this.element.appendChild(this.list_component.element);
+			this.fireFromBinding();
+		} else {
+			//Refresh this.element if possible
+			if (this.list_component) {
+				let temp_component = new ve.Number(value, this.options);
+				this.element = temp_component.element;
+				delete this.list_component;
+			}
+			
+			//Set value and update UI
+			this.value = value;
+			this.element.querySelector("input").value = this.value;
+			this.fireFromBinding();
+		}
 	}
 	
 	/**

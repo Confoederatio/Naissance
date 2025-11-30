@@ -153,7 +153,10 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 				main.renderer.update();
 			},
 			style: {
-				padding: 0
+				padding: 0,
+				"li.nst-item > .nst-content": {
+					width: "20rem"
+				}
 			}
 		});
 		

@@ -5,6 +5,7 @@
  * 
  * **Note:** Declaring duplicate ve.ScriptManager components will reset the main Blockly workspace for each new instance.
  * - Functional binding: <span color=00ffff>veScriptManager</span>().
+ * - This component has special default settings located in {@link ve.registry.settings.ScriptManager}.
  * 
  * ##### Constructor:
  * - `arg0_value`: {@link string} - The code to load into the present ve.ScriptManager.
@@ -42,9 +43,13 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @memberof ve.Component
  * @type {ve.ScriptManager}
  */
 ve.ScriptManager = class extends ve.Component {
+	static excluded_from_demo = true;
+	static instances = [];
+
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
 		let value = arg0_value;
@@ -124,6 +129,7 @@ ve.ScriptManager = class extends ve.Component {
 			"yonce": "Yonce",
 			"zenburn": "Zenburn"
 		};
+		this.id = Class.generateRandomID(ve.ScriptManager);
 		this.options = options;
 		this._settings = {
 			is_vercengen_script_manager_settings: true,
@@ -136,6 +142,16 @@ ve.ScriptManager = class extends ve.Component {
 			theme: "theme-default",
 			view_file_explorer: true
 		};
+		
+		let scriptmanager_settings = ve.registry.settings.ScriptManager;
+		
+		//Load settings from save file if available
+		if (scriptmanager_settings.save_file !== false)
+			if (fs.existsSync(scriptmanager_settings.save_file))
+				this.loadSettings(JSON.parse(fs.readFileSync(scriptmanager_settings.save_file, "utf8")));
+		if (scriptmanager_settings.share_settings_across_instances)
+			if (ve.ScriptManager.instances.length > 0)
+				this._settings = ve.ScriptManager.instances[0]._settings;
 		if (this.options.settings)
 			this._settings = {
 				...this._settings,
@@ -275,14 +291,30 @@ ve.ScriptManager = class extends ve.Component {
 											veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon> Could not load non-ScriptManager settings.</span>`, { can_rename: false, name: "Error loading settings", width: "20rem" });
 									},
 								}),
-								save_settings: new ve.File(undefined, {
-									name: "Save Settings",
-									do_not_display: true,
-									onuserchange: (v) => {
-										console.log(v);
-									},
-									save_function: () => this.saveSettings()
-								})
+								save_settings: (ve.registry.settings.ScriptManager.save_file === false) ?
+									new ve.File(undefined, {
+										name: "Save Settings",
+										do_not_display: true,
+										onuserchange: (v) => {
+											console.log(v);
+										},
+										save_function: () => this.saveSettings()
+									}) :
+									new ve.Button(() => {
+										let dirname = path.dirname(scriptmanager_settings.save_file);
+										
+										fs.mkdir(dirname, { recursive: true }, (err) => {
+											if (err) {
+												console.error(err);
+												return;
+											}
+											
+											fs.writeFileSync(scriptmanager_settings.save_file, this.saveSettings());
+											veToast(`Saved settings to ${scriptmanager_settings.save_file}!`);
+										});
+									}, {
+										name: "Save Settings"
+									})
 							}, { name: " ", style: { alignItems: "center", display: "flex" } })
 						}, { can_rename: false, name: "Settings", width: "24rem" })
 					}, { name: "Settings" }),
@@ -444,6 +476,7 @@ ve.ScriptManager = class extends ve.Component {
 		this.from_binding_fire_silently = true;
 		this.v = value;
 		delete this.from_binding_fire_silently;
+		ve.ScriptManager.instances.push(this);
 	}
 	
 	/**
@@ -521,20 +554,32 @@ ve.ScriptManager = class extends ve.Component {
 		let settings_obj = arg0_settings;
 		
 		//Declare local instance variables; parse settings
-		if (settings_obj.codemirror_theme)
-			this.setCodeEditorTheme(settings_obj.codemirror_theme);
-		if (settings_obj.keybinds)
-			this.scene_codemirror.codemirror.setOption("keyMap", settings_obj.keybinds);
-		if (settings_obj.theme)
-			this.setTheme(settings_obj.theme);
-		if (settings_obj.view_file_explorer !== undefined)
-			this.leftbar_file_explorer.element.style.display = (settings_obj.view_file_explorer) ? "block" : "none";
+		let scriptmanager_settings = ve.registry.settings.ScriptManager;
+		let settings_apply_loop = setInterval(() => {
+			try {
+				if (settings_obj.codemirror_theme)
+					this.setCodeEditorTheme(settings_obj.codemirror_theme);
+				if (settings_obj.keybinds)
+					this.scene_codemirror.codemirror.setOption("keyMap", settings_obj.keybinds);
+				if (settings_obj.theme)
+					this.setTheme(settings_obj.theme);
+				if (settings_obj.view_file_explorer !== undefined)
+					this.leftbar_file_explorer.element.style.display = (settings_obj.view_file_explorer) ? "block" : "none";
+				clearInterval(settings_apply_loop);
+			} catch (e) {}
+		}, 100);
 		
 		//Set this._settings
 		this._settings = {
 			...this._settings,
 			...settings_obj
 		};
+		
+		//Apply this._settings to all other instances if shared
+		if (scriptmanager_settings.share_settings_across_instances)
+			for (let i = 0; i < ve.ScriptManager.instances.length; i++)
+				if (ve.ScriptManager.instances[i].id !== this.id)
+					ve.ScriptManager.instances[i].loadSettings(this._settings);
 	}
 	
 	/**
@@ -574,8 +619,19 @@ ve.ScriptManager = class extends ve.Component {
 		let theme_class = arg0_theme_class;
 		
 		//Remove previous themes
-		if (this._settings.theme)
-			this.element.classList.remove(this._settings.theme);
+		if (this._settings.theme) {
+			let all_classes = this.element.getAttribute("class");
+			
+			if (all_classes) {
+				all_classes = all_classes.split(" ");
+				
+				//Iterate over all_classes and remove all previous themes
+				for (let i = all_classes.length - 1; i >= 0; i--)
+					if (all_classes[i].startsWith("theme-"))
+						all_classes.splice(i, 1);
+				this.element.setAttribute("class", all_classes.join(" "));
+			}
+		}
 		this._settings.theme = theme_class;
 		
 		//Apply new theme

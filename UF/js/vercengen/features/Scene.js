@@ -34,6 +34,8 @@ ve.Scene = class extends ve.Feature {
 				width: "100%",
 				...options.style
 			});
+			if (options.theme)
+				HTML.applyTelestyle(this.element, ve.registry.themes[options.theme]);
 			
 		//Append ve.scene_el
 		ve.scene_el.appendChild(this.element);

@@ -415,13 +415,13 @@ ve.WYSIWYG = class extends ve.Component {
 		
 		//Toggle visual/HTML view depending on current state
 		if (button_el.classList.contains("active")) { //Show visual view
-			visual_view.innerHTML = html_view.innerHTML = html_view.value;
+			visual_view.innerHTML = html_view.value;
 			html_view.style.display = "none";
 			visual_view.style.display = "block";
 			
 			button_el.classList.remove("active");
 		} else { //Show HTML view
-			html_view.innerText = visual_view.innerHTML;
+			html_view.value = visual_view.innerHTML;
 			visual_view.style.display = "none";
 			html_view.style.display = "block";
 			

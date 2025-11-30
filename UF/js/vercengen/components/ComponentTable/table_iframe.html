@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../../../../libraries/univer/react.production.min.js"></script>
+  <script src="../../../../libraries/univer/react-dom.production.min.js"></script>
+  <script src="../../../../libraries/univer/rxjs.umd.min.js"></script>
+  <script src="../../../../libraries/univer/echarts.min.js"></script>
+
+  <script src="../../../../libraries/univer/univerjs.index.js"></script>
+
+  <script src="../../../../libraries/univer/univerjs.umd.index.js"></script>
+  <script src="../../../../libraries/univer/univer.en-US.js"></script>
+  <link rel="stylesheet" href="../../../../libraries/univer/univer.index.css" />
+  <style>
+      html,
+      body,
+      #root,
+      #app {
+          padding: 0;
+          margin: 0;
+          height: 100%;
+          
+          font-family: "Karla";
+      }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+	const { createUniver } = UniverPresets
+	const { LocaleType, mergeLocales } = UniverCore
+	const { UniverSheetsCorePreset } = UniverPresetSheetsCore
+	
+	const { univerAPI } = createUniver({
+		locale: LocaleType.EN_US,
+		locales: {
+			[LocaleType.EN_US]: mergeLocales(UniverPresetSheetsCoreEnUS),
+		},
+		presets: [UniverSheetsCorePreset()],
+	})
+	
+	univerAPI.createWorkbook({ name: 'Test Sheet' });
+	
+	function getArrayData () {
+		let all_worksheets = univerAPI.getActiveWorkbook().getSheets();
+		let data_obj = [];
+		
+		for (let i = 0; i < all_worksheets.length; i++) {
+			let local_data_obj = all_worksheets[i]._worksheet._cellData._matrix;
+			
+			//Set .data to just be the matrix since it can contain functions as well
+			data_obj[i] = [];
+			
+			//Iterate over all_rows in local_data_obj
+      let all_rows = Object.keys(local_data_obj);
+			
+			for (let x = 0; x < all_rows.length; x++) {
+				let local_row = local_data_obj[all_rows[x]];
+				let local_row_array = [];
+				
+				let all_cells = Object.keys(local_row);
+				
+				for (let y = 0; y < all_cells.length; y++)
+          local_row_array.push(local_row[all_cells[y]].v);
+				data_obj[i].push(local_row_array);
+      }
+		}
+		
+		//Return statement
+		return data_obj;
+	}
+  
+  function getData () {
+		let all_worksheets = univerAPI.getActiveWorkbook().getSheets();
+		let data_obj = {};
+    
+		for (let i = 0; i < all_worksheets.length; i++) {
+			let local_data_obj = all_worksheets[i]._worksheet._cellData._matrix;
+			
+			//Set .data to just be the matrix since it can contain functions as well
+			data_obj[all_worksheets[i].getSheetId()] = {
+				id: all_worksheets[i].getSheetId(),
+        index: i,
+				name: all_worksheets[i].getSheetName(),
+        
+        data: local_data_obj
+			}
+    }
+		
+		//Return statement
+    return data_obj;
+	}
+	
+	function setData (arg0_data_obj) {
+		//Convert from parameters
+    let data_obj = (arg0_data_obj) ? arg0_data_obj : {};
+		
+		//Iterate over all_sheet_keys in data_obj
+    let all_sheet_keys = Object.keys(data_obj);
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+		//1. Reset workbook first
+		univerAPI.createUniverSheet();
+		
+		//2. Create any missing sheets
+    if (all_sheets.length < all_sheet_keys.length)
+			for (let i = all_sheet_keys.length - all_sheets.length; i < all_sheet_keys.length; i++) {
+				let local_sheet = data_obj[all_sheet_keys[i]];
+				
+				univerAPI.getActiveWorkbook().create(local_sheet.name);
+      }
+		all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+    //3. Populate all sheets with extant data
+		for (let i = 0; i < all_sheet_keys.length; i++) {
+			let local_sheet = data_obj[all_sheet_keys[i]];
+			
+			all_sheets[i].setName(local_sheet.name);
+			all_sheets[i]._worksheet._cellData._matrix = local_sheet.data;
+			all_sheets[i].refreshCanvas();
+    }
+  }
+	
+	function toggleDarkMode (arg0_value) {
+		univerAPI.toggleDarkMode(arg0_value);
+  }
+	
+</script>
+</body>
+</html>

@@ -180,7 +180,7 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 			}, {
 				name: "<icon>more_vert</icon>",
 				tooltip: "Edit Sketch Map",
-				style: { order: 100 }
+				style: { order: 100, padding: 0 }
 			})
 		}, {
 			ignore_component: true,

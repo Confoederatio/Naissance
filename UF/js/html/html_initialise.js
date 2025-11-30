@@ -2,6 +2,9 @@
 {
 	if (!global.HTML) global.HTML = {};
 	
+	/**
+	 * Initialises HTML related fields and functions.
+	 */
 	HTML.initialise = function () {
 		//Add event listeners
 		{
@@ -11,6 +14,10 @@
 						try { 
 							map.scrollWheelZoom.disable(); 
 						} catch (e) { console.log(e); } //Disable map zoom upon Ctrl down
+					/**
+					 * Whether the `Ctrl` key is currently pressed.
+					 * @type {boolean}
+					 */
 					HTML.ctrl_pressed = true;
 				}
 			});
@@ -25,7 +32,15 @@
 				}
 			});
 			document.addEventListener("mousemove", (e) => {
+				/**
+				 * The current mouse X position.
+				 * @type {number}
+				 */
 				HTML.mouse_x = e.clientX;
+				/**
+				 * The current mouse Y position.
+				 * @type {number}
+				 */
 				HTML.mouse_y = e.clientY;
 			});
 		}

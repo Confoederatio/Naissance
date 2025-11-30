@@ -330,7 +330,7 @@ ve.FileExplorer = class extends ve.Component {
 						}, { can_rename: false, name: "Create New File" });
 					}, { name: "<icon>note_add</icon>", tooltip: "Create New File" } )
 				}, {
-					style: { marginLeft: "auto",order: 99, marginTop: "var(--cell-padding)", padding: 0 }
+					style: { marginLeft: "auto", order: 99, marginTop: "var(--cell-padding)", padding: 0 }
 				}),
 			}, {
 				attributes: { "data-ve-is-information": true },

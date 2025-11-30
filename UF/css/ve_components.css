@@ -67,7 +67,7 @@
     display: inline;
     
     button:has(icon) {
-        padding: var(--cell-padding);
+        padding: calc(var(--padding)*0.5);
     }
 }
 
@@ -85,7 +85,7 @@
     }
     #name:not(:empty) {
         display: inline;
-        margin-right: calc(var(--cell-padding)*1.5);
+        margin-right: calc(var(--padding));
     }
     ul {
         list-style: none;
@@ -134,13 +134,16 @@
 
 /* -- ve.Interface -- */
 [component="ve-interface"] {
+    height: 100%;
+    
     summary#name {
-        padding-bottom: var(--cell-padding);
+        padding-bottom: calc(var(--padding)*0.5);
     }
     summary:hover {
         cursor: pointer;
     }
     > table {
+        height: 100%;
         width: 100%;
     }
     tr td {
@@ -169,9 +172,9 @@
     .navbar {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--cell-padding);
+        gap: calc(var(--padding)*0.5);
         position: relative;
-        padding-bottom:var(--padding);
+        padding-bottom: var(--padding);
     }
     .tab {
         color: var(--header-colour);
@@ -222,6 +225,8 @@
 
 /* -- ve.RawInterface -- */
 [component="ve-raw-interface"] {
+    padding: 0;
+    
     > [component="ve-button"] {
       padding: 0;
     }

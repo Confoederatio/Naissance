@@ -188,7 +188,7 @@ ve.File = class extends ve.Component {
 			}, {
 				name: (this.options.name) ? this.options.name : "Select File",
 				style: {
-					marginLeft: (!this.options.do_not_display) ? `calc(var(--cell-padding))` : 0,
+					marginLeft: (!this.options.do_not_display) ? `calc(var(--padding)*0.5)` : 0,
 					whiteSpace: "nowrap"
 				}
 			})

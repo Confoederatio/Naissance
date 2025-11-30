@@ -35,7 +35,7 @@ ve.Select = class veSelect extends ve.Component {
 	};
 	static demo_options = {
 		onchange: (e) => {
-			if (ve.debug_mode)
+			if (ve.registry.debug_mode)
 				console.log(`ve.Select: Changed selection to:`, e);
 		}
 	};

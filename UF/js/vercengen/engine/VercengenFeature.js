@@ -61,6 +61,7 @@ ve.Feature = class {
 		//Declare local instance variables
 		this.child_class = this.constructor;
 		this.child_class_obj = ve[this.child_class.prototype.constructor.name];
+		this.class_name = this.constructor.class_name;
 		this.id = Class.generateRandomID(ve.Feature);
 		this.is_vercengen_feature = true;
 		if (typeof components_obj === "function" || typeof components_obj === "string") {
@@ -194,5 +195,41 @@ ve.Feature = class {
 					if (!local_value.owner || local_value.owner.is_vercengen_feature)
 						this.components_obj[local_key].setOwner(this, [this]);
 			});
+	}
+	
+	/**
+	 * Runs over all Vercengen features that extend <span color="yellow">{@link ve.Feature}</span> and lints them in addition to declaring `ve[local_key]`() as a functional binding for each.
+	 * - Static method of: {@link ve.Feature}
+	 * 
+	 * Ensures the following properties if `ve.registry.debug_mode=true`:
+	 * - Not a duplicate feature
+	 */
+	static linter () {
+		Object.iterate(global.ve, (local_key, local_value) => {
+			try {
+				if (Object.getPrototypeOf(local_value) === ve.Feature) {
+					let local_prefix = `ve.Feature: ve.${local_key}`;
+					
+					if (!global[`ve${local_key}`]) {
+						global[`ve${local_key}`] = function () {
+							return new ve[local_key](...arguments);
+						};
+					} else if (typeof global[`ve${local_key}`] !== "function") {
+						console.error(`ve.${local_key} cannot have its functional binding registered, since it is already reserved elsewhere as a non-function. Use Ctrl + F to find where it has been reserved in your codebase.`);
+					}
+					
+					//Append to ve.registry.features
+					if (!ve.registry.components[local_key] && !ve.registry.features[local_key]) {
+						local_value.class_name = local_key;
+						ve.registry.features[local_key] = local_value;
+					} else {
+						let error_value = (ve.registry.components[local_key]) ?
+							ve.registry.components[local_key] : ve.registry.features[local_key];
+						
+						console.error(`Could not replace with duplicate component. A component/feature with the key: ${local_key} already exists as:`, error_value, "Duplicate registered as", local_value);
+					}
+				}
+			} catch (e) { console.error(e); }
+		});
 	}
 };

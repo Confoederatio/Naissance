@@ -135,6 +135,10 @@
             outline: none;
             resize: none;
         }
+        
+        a {
+            color: var(--accent-secondary-colour);
+        }
     }
     .modal {
         display: none;
@@ -229,9 +233,19 @@
 }
 
 /* -- Toolbar fixes -- */
+@keyframes ve-wysiwyg-submenu-fade {
+    from {}
+    99% {
+        opacity: 0;
+        pointer-events: all;
+    }
+    to { 
+        opacity: 0;
+        pointer-events: none;
+    }
+}
 .has-submenu:not(:hover) .submenu:not(:hover) {
-    opacity: 0;
-    pointer-events: none;
+    animation: 0.2s ve-wysiwyg-submenu-fade forwards;
 }
 .submenu {
     background-color: white;

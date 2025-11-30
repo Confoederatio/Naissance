@@ -169,7 +169,7 @@
 		
 		//Internal guard clauses
 		if (typeof object !== "object")
-			throw new Error("arg0_object is not of type Object.");
+			console.error("arg0_object is not of type Object.", object);
 		if (!local_function)
 			throw new Error("arg1_function is not defined.");
 		if (local_function.length === 0)

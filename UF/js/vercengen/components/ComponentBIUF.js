@@ -21,6 +21,7 @@
  *
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @memberof ve.Component
  * @type {ve.BIUF}
  */
 ve.BIUF = class extends ve.Component {

@@ -127,7 +127,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					options: { name: "Delete Layer", key: "delete_layer" },
 					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
 				});
-			}, { name: "<icon>delete</icon>", style: { order: 100 } }),
+			}, { name: "<icon>delete</icon>", style: { order: 100, padding: 0 } }),
 			
 			...hierarchy_obj
 		}, {

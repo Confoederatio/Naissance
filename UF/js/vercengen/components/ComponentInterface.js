@@ -112,7 +112,8 @@ ve.Interface = class extends ve.Component {
 			if (!this.reserved_keys.includes(local_key)) {
 				if (
 					(local_value.name === undefined || local_value.name.length === 0) &&
-					(local_value.options.name === undefined || local_value.options.name.length === 0)
+					(local_value.options.name === undefined || local_value.options.name.length === 0) &&
+					ve.registry.settings.automatic_naming
 				)
 					local_value.name = local_key;
 				this[local_key] = local_value;

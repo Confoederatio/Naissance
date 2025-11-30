@@ -144,6 +144,9 @@ ve.Window = class extends ve.Feature {
 			setTimeout(() => {
 				this.setCoords(this.x, this.y);
 				this.setSize(options.width, options.height);
+				
+				if (this.options.theme)
+					HTML.applyTelestyle(this.element, ve.registry.themes[this.options.theme]);
 			});
 		}
 		
@@ -188,8 +191,14 @@ ve.Window = class extends ve.Feature {
 			});
 		}
 		
+		this.element.addEventListener("mousedown", (e) => {
+			//console.log(e);
+			this.select();
+		});
+		
 		//Push Window instance to ve.Window.instances
 		this.refresh(this.components_obj);
+		this.select();
 		ve.window_overlay_el.appendChild(this.element);
 		ve.Window.instances.push(this);
 	}
@@ -352,6 +361,30 @@ ve.Window = class extends ve.Feature {
 		
 		//Return statement
 		return (!options.return_object) ? highest_z_index[0] : highest_z_index[1];
+	}
+	
+	/** 
+	 * Normalises all z-indexes over the set of ve.Windows. 
+	 * */
+	static normaliseZIndexes () {
+		//Declare local instance variables
+		var overlay_el = ve.window_overlay_el;
+		
+		//Get all elements with [data-window-id] and their z-index values
+		var all_windows = Array.from(overlay_el.querySelectorAll('[data-window-id]'));
+		
+		// Extract z-index values and sort them numerically
+		var z_indexes = all_windows
+		.map((window) => ({
+			element: window,
+			z_index: parseInt(window.style.zIndex || 0, 10),
+		}))
+		.sort((a, b) => a.z_index - b.z_index);
+		
+		// Assign normalized z-index values (1, 2, 3, ...)
+		z_indexes.forEach((item, index) => {
+			item.element.style.zIndex = (index + 1).toString();
+		});
 	}
 };
 

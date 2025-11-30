@@ -12,6 +12,8 @@
 	 *  @param {String} [arg0_options.selector_class="uf-chevron minimise"] - The class to add to the chevron controller.
 	 *  @param {String} [arg0_options.src="./UF/gfx/chevron_icon.png"] - The source of the chevron image.
 	 *  @param {Boolean} [arg0_options.is_collapsed=false] - Whether the section should start in a collapsed state.
+	 *  
+	 * @returns {HTMLElement}
 	 */
 	HTML.createSection = function (arg0_options) {
 		//Convert from parameters
@@ -105,7 +107,7 @@
 		let position_four = 0;
 		let is_resizing = false;
 		let resize_edge = null;
-		let resize_threshold = 5; // pixels from edge to trigger resize
+		let resize_threshold = 5; //Pixels from edge to trigger resize
 		let initial_width = 0;
 		let initial_height = 0;
 		let initial_left = 0;
