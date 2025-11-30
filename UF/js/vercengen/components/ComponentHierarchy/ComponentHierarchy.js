@@ -7,6 +7,8 @@
  * ##### Constructor:
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}|{@link ve.HierarchyDatatype}> - The individual items to append to the current hierarchy.
  * - `arg1_options`: {@link Object}
+ *   - `.disable_searchbar=false`: {@link boolean}
+ *   - `.searchbar_style`: {@link Object} - The Telestyle object to apply to the searchbar.
  * 
  * ##### Instance:
  * - `.components_obj`: {@link Object}<{@link ve.Component}|{@link ve.HierarchyDatatype}>
@@ -78,6 +80,39 @@ ve.Hierarchy = class extends ve.Component {
 		 * @type {ve.Component[]}
 		 */
 		this.components_obj = components_obj;
+		
+		//0. Append searchbar to this.components_obj
+		if (!this.options.disable_searchbar) {
+			let searchbar_interface = new ve.RawInterface({
+				searchbar_icon: new ve.HTML("<icon>search</icon>"),
+				searchbar_input: new ve.Datalist({
+					
+				}, {
+					attributes: {
+						placeholder: "Search for item ..."
+					},
+					name: " ",
+					onuserchange: (v) => {
+						this.updateSearchFilter(v);
+					}
+				})
+			}, { 
+				name: " ",
+				style: {
+					alignItems: "center", 
+					backgroundColor: `var(--bg-secondary-colour)`,
+					border: `1px solid var(--bg-primary-colour)`,
+					borderRadius: "3px",
+					display: "flex",
+					overflow: "hidden",
+					marginBottom: "calc(var(--cell-padding)*1.25)",
+					padding: "0 0.5rem 0 0.5rem",
+					width: "20rem",
+					...this.options.searchbar_style
+				} 
+			});
+			searchbar_interface.bind(this.element);
+		}
 		
 		//1. Append all non-hierarchy datatype Vercengen components to controls; iterate over all this.components_obj
 		Object.iterate(this.components_obj, (local_key, local_value) => {
@@ -182,6 +217,41 @@ ve.Hierarchy = class extends ve.Component {
 		
 		//Remove item
 		hierarchy_datatype.remove();
+	}
+	
+	/**
+	 * Updates the current search filter based on the inputted query. Ignores `.options.disabled=true` fields, since they are likely kept at the top as action menus.
+	 * - Method of: {@link ve.Hierarchy}
+	 * 
+	 * @param {string} arg0_name
+	 */
+	updateSearchFilter (arg0_name) {
+		//Convert from parameters
+		let name = (arg0_name) ? arg0_name : "";
+		
+		//Declare local instance variables
+		let all_hierarchy_datatype_els = this.element.querySelectorAll(`[component="ve-hierarchy-datatype"]`);
+		
+		//If name is nothing, restore visibility to all hidden results
+		if (name.length === 0) {
+			for (let i = 0; i < all_hierarchy_datatype_els.length; i++)
+				all_hierarchy_datatype_els[i].style.display = "block";
+		} else {
+			let all_filtered_els = [];
+			
+			for (let i = 0; i < all_hierarchy_datatype_els.length; i++)
+				if (all_hierarchy_datatype_els[i].instance.name.toLowerCase().trim().indexOf(name.toLowerCase().trim()) !== -1) {
+					all_hierarchy_datatype_els[i].style.display = "block";
+					all_filtered_els.push(all_hierarchy_datatype_els[i]);
+				} else {
+					all_hierarchy_datatype_els[i].style.display = "none";
+				}
+			
+			for (let i = 0; i < all_hierarchy_datatype_els.length; i++)
+				for (let x = 0; x < all_filtered_els.length; x++)
+					if (all_hierarchy_datatype_els[i].contains(all_filtered_els[x]) || all_hierarchy_datatype_els[i].instance.options.disabled === true)
+						all_hierarchy_datatype_els[i].style.display = "block";
+		}
 	}
 };
 

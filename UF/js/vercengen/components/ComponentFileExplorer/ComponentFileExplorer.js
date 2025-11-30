@@ -559,7 +559,7 @@ ve.FileExplorer = class extends ve.Component {
 		//Set hierarchy depending on whether it already exists or not
 		let file_explorer_el = this.element.querySelector(`#file-explorer-body`);
 		
-		this.hierarchy = new ve.Hierarchy(hierarchy_obj);
+		this.hierarchy = new ve.Hierarchy(hierarchy_obj, { disable_searchbar: true });
 		file_explorer_el.innerHTML = "";
 		file_explorer_el.appendChild(this.hierarchy.element);
 		
