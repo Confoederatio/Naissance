@@ -84,6 +84,7 @@ ve.Feature = class {
 				if (!this[local_key]) this[local_key] = local_value;
 			});
 		} catch (e) { console.error(e); }
+		ve.Feature.instances.push(this);
 	}
 	
 	/**

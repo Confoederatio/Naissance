@@ -191,16 +191,24 @@ ve.Window = class extends ve.Feature {
 			});
 		}
 		
+		//Improved window ergonomics by only listening to headers, allowing for casual body editing
 		this.element.addEventListener("mousedown", (e) => {
-			//console.log(e);
-			this.select();
+			let feature_header_el = this.element.querySelector(`#feature-header`);
+			
+			if (feature_header_el) {
+				if (this.element.querySelector(`#feature-header`).contains(e.target))
+					this.select();
+			} else {
+				this.select();
+			}
 		});
+		this.element.addEventListener("dblclick", () => this.select());
 		
 		//Push Window instance to ve.Window.instances
 		this.refresh(this.components_obj);
-		this.select();
 		ve.window_overlay_el.appendChild(this.element);
 		ve.Window.instances.push(this);
+		this.select();
 	}
 	
 	/**
@@ -245,7 +253,7 @@ ve.Window = class extends ve.Feature {
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
-	refresh (arg0_components_obj) { //[WIP] - Finish ve.Interface wrapping
+	refresh (arg0_components_obj) {
 		//Convert from parameters
 		this.components_obj = arg0_components_obj;
 		
@@ -355,8 +363,9 @@ ve.Window = class extends ve.Feature {
 		for (let i = 0; i < ve.Window.instances.length; i++) {
 			let local_instance = ve.Window.instances[i];
 			
-			if (local_instance.getZIndex() > highest_z_index[0])
-				highest_z_index = [local_instance.getZIndex(), local_instance];
+			if (!local_instance.element.classList.contains("ve-context-menu"))
+				if (local_instance.getZIndex() > highest_z_index[0])
+					highest_z_index = [local_instance.getZIndex(), local_instance];
 		}
 		
 		//Return statement
@@ -368,13 +377,13 @@ ve.Window = class extends ve.Feature {
 	 * */
 	static normaliseZIndexes () {
 		//Declare local instance variables
-		var overlay_el = ve.window_overlay_el;
+		let overlay_el = ve.window_overlay_el;
 		
 		//Get all elements with [data-window-id] and their z-index values
-		var all_windows = Array.from(overlay_el.querySelectorAll('[data-window-id]'));
+		let all_windows = Array.from(overlay_el.querySelectorAll(`.ve.window`));
 		
 		// Extract z-index values and sort them numerically
-		var z_indexes = all_windows
+		let z_indexes = all_windows
 		.map((window) => ({
 			element: window,
 			z_index: parseInt(window.style.zIndex || 0, 10),
@@ -384,6 +393,7 @@ ve.Window = class extends ve.Feature {
 		// Assign normalized z-index values (1, 2, 3, ...)
 		z_indexes.forEach((item, index) => {
 			item.element.style.zIndex = (index + 1).toString();
+			item.element.style.setProperty("--local-z-index", (index + 1).toString());
 		});
 	}
 };

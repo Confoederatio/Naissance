@@ -31,7 +31,7 @@
  * @memberof ve.Feature
  * @type {ve.ContextMenu}
  */
-ve.ContextMenu = class extends ve.Feature { //[WIP] - Finish class body
+ve.ContextMenu = class extends ve.Feature {
 	constructor (arg0_components_obj, arg1_options) {
 		//Convert from parameters
 		let components_obj = arg0_components_obj;
@@ -143,7 +143,8 @@ ve.ContextMenu = class extends ve.Feature { //[WIP] - Finish class body
 			window_obj.element.context_menu_instance = this;
 			if (options.id)
 				window_obj.id = options.id;
-		
+			window_obj.element.classList.add("ve-context-menu");
+			
 		this.windows.push(window_obj);
 		
 		//Post-processing

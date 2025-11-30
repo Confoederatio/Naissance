@@ -1,4 +1,7 @@
 /* -- ve.ContextMenu -- */
+.ve-context-menu {
+    z-index: calc(var(--local-z-index) + 999) !important; /* -- Z-indexes of ve.ContextMenus should be above ve.Windows -- */
+}
 .ve.window {
     scrollbar-width: none;
     
