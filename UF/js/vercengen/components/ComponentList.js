@@ -10,6 +10,7 @@
  *   - `.do_not_display_info_button=false`: {@link boolean}
  *   - `.max`: {@link number} - The maximum number of elements in the array.
  *   - `.min=0`: {@link number} - The minimum number of elements in the array.
+ *   - `.options`: {@link Object} - The `.options` field to pass onto elements in the array.
  *   
  * ##### Instance:
  * - `.v`: {@link Array}<{@link ve.Component}>
@@ -49,6 +50,7 @@ ve.List = class extends ve.Component {
 				this.element.appendChild(this.components_el);
 			this.add_item_button = new ve.Button(() => {
 				this.addItem();
+				this.fireToBinding();
 			}, { name: "<icon>add</icon>", tooltip: "Add Item" });
 			this.add_item_button.bind(this.element);
 		this.options = options;
@@ -108,7 +110,7 @@ ve.List = class extends ve.Component {
 		}
 		
 		//Push item to end of stack
-		this.value.push(global[`ve${this.class_name}`](this.placeholder));
+		this.value.push(global[`ve${this.class_name}`](this.placeholder, this.options.options));
 		this.draw();
 	}
 	
@@ -160,6 +162,7 @@ ve.List = class extends ve.Component {
 						
 						this.value = Array.moveElement(this.value, i, new_index);
 						this.draw();
+						this.fireToBinding();
 						i = new_index;
 					}, {
 						name: "<icon>chevron_left</icon>",
@@ -185,6 +188,7 @@ ve.List = class extends ve.Component {
 						
 						this.value = Array.moveElement(this.value, i, new_index);
 						this.draw();
+						this.fireToBinding();
 						i = new_index;
 					}, {
 						name: "<icon>chevron_right</icon>",
@@ -200,6 +204,7 @@ ve.List = class extends ve.Component {
 						
 						this.value.splice(i, 0, global[`ve${this.class_name}`](this.placeholder));
 						this.draw();
+						this.fireToBinding();
 					}, { name: "<icon>first_page</icon>", tooltip: "Insert Item Before" }),
 					insert_after_button: new ve.Button(() => {
 						if (this.options.max && this.value.length >= this.options.max) {
@@ -209,10 +214,12 @@ ve.List = class extends ve.Component {
 						
 						this.value.splice(i + 1, 0, global[`ve${this.class_name}`](this.placeholder));
 						this.draw();
+						this.fireToBinding();
 					}, { name: "<icon>last_page</icon>", tooltip: "Insert Item After" }),
 					delete_button: new ve.Button(() => {
 						this.deleteItem(i);
 						if (this.overlay_window) this.overlay_window.close();
+						this.fireToBinding();
 					}, { name: "<icon>delete</icon>", tooltip: "Delete Item" }),
 				}, { style: { alignItems: "center", display: "flex", justifyContent: "center" } })
 			}, {

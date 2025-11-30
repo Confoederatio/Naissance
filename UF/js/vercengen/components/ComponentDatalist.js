@@ -46,6 +46,7 @@ ve.Datalist = class extends ve.Component {
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-datalist");
 			this.element.instance = this;
+			this.id = Class.generateRandomID();
 		
 		this.options = options;
 		this.value = value;
@@ -54,8 +55,8 @@ ve.Datalist = class extends ve.Component {
 		let html_string = [];
 		html_string.push(`<span id = "name"></span>`);
 		
-		html_string.push(`<input list = "datalist" type = "text"${HTML.objectToAttributes(attributes)}>`);
-		html_string.push(`<datalist id = "datalist">`);
+		html_string.push(`<input list = "datalist-${this.id}" type = "text"${HTML.objectToAttributes(attributes)}>`);
+		html_string.push(`<datalist id = "datalist-${this.id}">`);
 		html_string.push(`</datalist>`);
 		
 		//Populate element and initialise handlers
@@ -80,7 +81,7 @@ ve.Datalist = class extends ve.Component {
 	 */
 	get v () {
 		//Declare local instance variables
-		let local_value = this.element.querySelector(`input[list="datalist"]`).value;
+		let local_value = this.element.querySelector(`input[list="datalist-${this.id}"]`).value;
 		
 		let local_option = this.element.querySelector(`option[value="${local_value}"`);
 		

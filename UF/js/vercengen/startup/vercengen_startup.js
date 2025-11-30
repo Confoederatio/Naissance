@@ -46,6 +46,14 @@ global.path = require("path");
 					//Component-wide settings
 					
 					/**
+					 * Component settings for {@link ve.MultiTag}.
+					 * @type {{"<registry_key>": string[]}}
+					 */
+					MultiTag: {
+						global: []
+					},
+					
+					/**
 					 * Component settings for {@link ve.ScriptManager}.
 					 */
 					ScriptManager: {
