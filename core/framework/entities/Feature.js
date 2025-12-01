@@ -70,10 +70,11 @@ naissance.Feature = class extends ve.Class {
 	}
 	
 	remove () {
-		//Remove from naissance.Feature .entities
+		//Remove from local_feature.entities
 		for (let i = 0; i < naissance.Feature.instances.length; i++) {
 			let local_feature = naissance.Feature.instances[i];
 			
+			if (local_feature.hide) local_feature.hide();
 			if (local_feature.entities)
 				for (let x = 0; x < local_feature.entities.length; x++)
 					if (local_feature.entities[x].id === this.id)

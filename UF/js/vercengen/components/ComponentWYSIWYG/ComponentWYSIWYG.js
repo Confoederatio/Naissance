@@ -52,6 +52,8 @@ ve.WYSIWYG = class extends ve.Component {
 		
 		//Declare local instance variables
 		this.element = document.createElement("span");
+		this.element.setAttribute("component", "ve-wysiwyg");
+		this.element.instance = this;
 		let html_string = [];
 
 		//Div header

@@ -275,6 +275,12 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 					}
 				}
 			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Delete TileLayer", key: "delete_tile_layer" },
+					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
+				});
+			}, { name: "<icon>delete</icon>", tooltip: "Delete", style: { order: 100, padding: 0 }}),
 			edit_tile_layer: veButton(() => {
 				if (this.tile_layer_window) this.tile_layer_window.close();
 				this.tile_layer_window = veWindow({
@@ -339,7 +345,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 				name: "<icon>more_vert</icon>",
 				tooltip: "Edit Tile Layer",
 				style: {
-					order: 100,
+					order: 101,
 					padding: 0
 				}
 			})
