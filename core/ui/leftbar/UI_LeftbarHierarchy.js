@@ -34,8 +34,22 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 					options: { name: "Create Sketch Map", key: "create_sketch_map" },
 					value: [{ type: "FeatureSketchMap", create_sketch_map: { id: feature_id } }]
 				});
-			}, { name: "<icon>app_registration</icon>", tooltip: "Create New Sketch Map" })
-		}, { disabled: true });
+			}, { name: "<icon>app_registration</icon>", tooltip: "Create New Sketch Map" }),
+			create_new_tile_layer: new ve.Button(() => {
+				let feature_id = Class.generateRandomID(naissance.Feature);
+				DALS.Timeline.parseAction({
+					options: { name: "Create Tile Layer", key: "create_tile_layer" },
+					value: [{ type: "FeatureTileLayer", create_tile_layer: { id: feature_id } }]
+				});
+			}, { name: "<icon>view_module</icon>", tooltip: "Create New Tile Layer" })
+		}, { 
+			disabled: true,
+			style: {
+				".nst-content": {
+					paddingRight: 0
+				}
+			}
+		});
 			actions_bar.element.classList.add("actions-bar");
 		this.hierarchy_obj = {};
 		

@@ -68,6 +68,7 @@ ve.Range = class extends ve.Component {
 			this.fireToBinding();
 		});
 		this.name = options.name;
+		this.v = this.value;
 	}
 	
 	/**

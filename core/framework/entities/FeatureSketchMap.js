@@ -208,7 +208,7 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 	}
 	
 	fromJSON (arg0_json) {
-		//Declare local instance variables
+		//Convert from parameters
 		let json = (typeof arg0_json !== "object") ? JSON.parse(arg0_json) : arg0_json;
 		
 		//Declare local instance variables
