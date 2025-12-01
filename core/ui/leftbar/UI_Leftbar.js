@@ -32,6 +32,7 @@ global.UI_Leftbar = class extends ve.Class {
 				components_obj: {
 					map_settings: veButton(() => {
 						console.warn(`UI_Leftbar: [WIP] - Map settings are not yet implemented.`);
+						new UI_MapSettings();
 					}, { 
 						name: `<icon>settings</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">Map Settings</span>`,
 						style: { "#name": { alignItems: "center", display: "flex" } }

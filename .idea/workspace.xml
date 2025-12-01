@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/common/feature_tile_layer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/css/ve_components.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/ve_components.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ComponentWYSIWYG.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentWYSIWYG/ComponentWYSIWYG.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Feature.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Feature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/autosave.naissance" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +64,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="27905000" />
+      <workItem from="1764176738442" duration="31954000" />
     </task>
     <servers />
   </component>

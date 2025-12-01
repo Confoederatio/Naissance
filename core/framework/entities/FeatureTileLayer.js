@@ -224,7 +224,10 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 	
 	draw () {
 		//Refresh layer
-		this.layer._setOptions(this.options);
+		this.layer._setOptions({
+			...this.options,
+			spatialReference: map.getSpatialReference()
+		});
 		
 		try {
 			map.removeLayer(this.layer);

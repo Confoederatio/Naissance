@@ -81,4 +81,9 @@ naissance.Renderer = class extends ve.Class {
 			if (rendering_order[i].draw)
 				rendering_order[i].draw();
 	}
+	
+	//[WIP] - Finish function body
+	static parseAction (arg0_json) {
+		
+	}
 };

@@ -195,14 +195,14 @@ ve.Window = class extends ve.Feature {
 		this.element.addEventListener("mousedown", (e) => {
 			let feature_header_el = this.element.querySelector(`#feature-header`);
 			
-			if (feature_header_el) {
+			if (feature_header_el)
 				if (this.element.querySelector(`#feature-header`).contains(e.target))
 					this.select();
-			} else {
-				this.select();
-			}
 		});
-		this.element.addEventListener("dblclick", () => this.select());
+		this.element.addEventListener("dblclick", () => {
+			if (this.element.querySelector(`#feature-header`))
+				this.select();
+		});
 		
 		//Push Window instance to ve.Window.instances
 		this.refresh(this.components_obj);
