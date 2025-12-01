@@ -3,10 +3,176 @@ if (!global.naissance) global.naissance = {};
  * @type {naissance.FeatureTileLayer}
  */
 naissance.FeatureTileLayer = class extends naissance.Feature {
+	static tilemap_presets = {
+		//CARTO
+		//Carto Dark
+		carto_dark_all: {
+			name: "Carto Dark All",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_dark_only_labels: {
+			name: "Carto Dark (Only Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_dark_nolabels: {
+			name: "Carto Dark (No Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		
+		//Carto Light
+		carto_light_all: {
+			name: "Carto Light All",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_light_only_labels: {
+			name: "Carto Light (Only Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_light_nolabels: {
+			name: "Carto Light (No Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		
+		//Carto Voyager
+		carto_voyager: {
+			name: "Carto Voyager",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_voyager_labels_under: {
+			name: "Carto Voyager (Labels Under)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_voyager_only_labels: {
+			name: "Carto Voyager (Only Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		carto_voyager_nolabels: {
+			name: "Carto Voyager (No Labels)",
+			options: {
+				urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png",
+				subdomains: ["a","b","c","d"]
+			}
+		},
+		
+		//ESRI
+		esri_satellite: {
+			name: "ESRI Satellite",
+			options: {
+				urlTemplate: "https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		
+		//Google
+		google_maps_road: {
+			name: "Google Maps (Road)",
+			options: {
+				urlTemplate: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		google_maps_roads: {
+			name: "Google Maps (Roads)",
+			options: {
+				urlTemplate: "https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		google_maps_satellite: {
+			name: "Google Maps (Satellite)",
+			options: {
+				urlTemplate: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		google_maps_satellite_hybrid: {
+			name: "Google Maps (Satellite Hybrid)",
+			options: {
+				urlTemplate: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		google_maps_terrain: {
+			name: "Google Maps (Terrain)",
+			options: {
+				urlTemplate: "https://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}",
+				subdomains: ["a", "b", "c"]	
+			}
+		},
+		
+		//MapTiler
+		maptiler_aquarelle: { name: "MapTiler Aquarelle" },
+		maptiler_backdrop: { name: "MapTiler Backdrop" },
+		maptiler_basic: { name: "MapTiler Basic" },
+		maptiler_bright: { name: "MapTiler Bright" },
+		maptiler_dataviz: { name: "MapTiler Dataviz" },
+		maptiler_landscape: { name: "MapTiler Landscape" },
+		maptiler_openstreetmap: { name: "MapTiler OSM" },
+		maptiler_ocean: { name: "MapTiler Ocean" },
+		maptiler_outdoor: { name: "MapTiler Outdoor" },
+		maptiler_satellite: { name: "MapTiler Satellite" },
+		maptiler_streets: { name: "MapTiler Streets" },
+		maptiler_toner: { name: "MapTiler Toner" },
+		maptiler_topo: { name: "MapTiler Topo" },
+		maptiler_winter: { name: "MapTiler Winter" },
+		
+		//OSM
+		osm: {
+			name: "OSM",
+			options: {
+				urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		osm_english: {
+			name: "OSM English",
+			options: {
+				urlTemplate: "https://cdn.lima-labs.com/{z}/{x}/{y}.png?api=demo",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+		osm_humanitarian: {
+			name: "OSM Humanitarian",
+			options: {
+				urlTemplate: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+				subdomains: ["a", "b", "c"]
+			}
+		},
+	}; //[WIP] - Read tilemap_presets from common JSON file in future
+	
 	constructor (arg0_options) {
 		super();
 		this.class_name = "FeatureTileLayer";
 		this.options = (arg0_options) ? arg0_options : {
+			preset: "carto_light_all",
+			
 			urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
 			subdomains: ["a","b","c","d"],
 			
@@ -37,6 +203,25 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		});
 	}
 	
+	_DALS_recalculatePreset (arg0_preset) {
+		//Convert from parameters
+		let preset = arg0_preset;
+		
+		//Declare local instance variables
+		let presets_obj = naissance.FeatureTileLayer.tilemap_presets;
+		let preset_obj = presets_obj[preset];
+		
+		if (preset.startsWith("maptiler_")) {
+			this._DALS_addOptions({
+				urlTemplate: `https://api.maptiler.com/maps/${preset.replace("maptiler_", "")}/${(this.tile_layer_window.resolution.v !== "null") ? this.tile_layer_window.resolution.v : ""}{z}/{x}/{y}.png?key=${this.tile_layer_window.advanced_options.maptiler_key.v}`
+			});
+		} else {
+			this._DALS_addOptions({
+				...preset_obj.options
+			});
+		}
+	}
+	
 	draw () {
 		//Refresh layer
 		this.layer._setOptions(this.options);
@@ -50,12 +235,24 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 	
 	drawHierarchyDatatype () {
 		//Declare local instance variables
+		let preset_options = {};
+		let presets_obj = naissance.FeatureTileLayer.tilemap_presets;
+		
+		//Populate preset_options
+		Object.iterate(presets_obj, (local_key, local_value) => {
+			preset_options[local_key] = { 
+				name: local_value.name,
+				selected: (this.options.preset === local_key)
+			};
+		});
+		
+		//Return this.interface
 		this.interface = new ve.HierarchyDatatype({
-			icon: new ve.HTML(`<icon>view_module</icon>`),
+			icon: new ve.HTML(`<icon>${(this.is_base_layer) ? "map" : "view_module"}</icon>`, { tooltip: (this.is_base_layer) ? "Base FeatureTileLayer" : "FeatureTileLayer" }),
 			hide_visibility: veButton(() => {
 				this.hide();
 			}, {
-				name: "<icon>visibility</icon>",
+				name: `<icon>visibility</icon>`,
 				limit: () => this._is_visible,
 				tooltip: "Hide Tile Layer",
 				style: {
@@ -81,28 +278,62 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 			edit_tile_layer: veButton(() => {
 				if (this.tile_layer_window) this.tile_layer_window.close();
 				this.tile_layer_window = veWindow({
-					opacity: veRange(0, { 
+					opacity: veRange(0, {
 						name: "Opacity",
 						onuserchange: (v) => this._DALS_addOptions({ opacity: v })
 					}),
-					url_template: veURL("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", { 
-						name: "URL Template",
-						onuserchange: (v) => this._DALS_addOptions({ urlTemplate: v })
+					resolution: veSelect({
+						"256/": {
+							name: "256",
+							selected: true
+						},
+						"null": {
+							name: "512"
+						}
+					}, { 
+						name: "Resolution",
+						onuserchange: (v) => this._DALS_recalculatePreset(this.options.preset)
 					}),
-					subdomains: veText(["a", "b", "c", "d"], { 
-						name: "Subdomains",
-						onuserchange: (v) => this._DALS_addOptions({ subdomains: v })
+					set_preset: veSelect(preset_options, { 
+						name: "Tilemap Preset",
+						onuserchange: (v) => {
+							this.options.preset = v;
+							this._DALS_recalculatePreset(this.options.preset);
+						}
 					}),
 					
-					max_available_zoom: veNumber(0, { 
-						name: "Max Available Zoom", 
-						min: -1,
-						onuserchange: (v) => this._DALS_addOptions({ maxAvailableZoom: (v > 0) ? v : null })
-					}),
-					repeat_world: veToggle(false, { 
-						name: "Repeat World",
-						onuserchange: (v) => this._DALS_addOptions({ repeatWorld: v })
-					}),
+					advanced_options: veInterface({
+						maptiler_key: veText("xWbyIIrJg1lF1fmQFByp", { name: "Maptiler Key" }),
+						url_template: veURL("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
+							name: "URL Template",
+							onuserchange: (v) => this._DALS_addOptions({ urlTemplate: v })
+						}),
+						subdomains: veText(["a", "b", "c", "d"], {
+							name: "Subdomains",
+							onuserchange: (v) => this._DALS_addOptions({ subdomains: v })
+						}),
+						
+						max_available_zoom: veNumber(0, {
+							name: "Max Available Zoom",
+							min: -1,
+							onuserchange: (v) => this._DALS_addOptions({ maxAvailableZoom: (v > 0) ? v : null })
+						}),
+						repeat_world: veToggle(false, {
+							name: "Repeat World",
+							onuserchange: (v) => this._DALS_addOptions({ repeatWorld: v })
+						})
+					}, { name: "Advanced Options" }),
+					
+					apply_as_base_layer: veButton(() => {
+						DALS.Timeline.parseAction({
+							options: { name: "Apply TileLayer as Base", key: "apply_tile_layer_as_base" },
+							value: [{
+								type: "FeatureTileLayer",
+								feature_id: this.id,
+								apply_as_base_layer: true
+							}]
+						});
+					}, { name: "Apply as Base Layer" })
 				}, { name: `Edit ${this._name}`, can_rename: false, width: "24rem" });
 			}, {
 				name: "<icon>more_vert</icon>",
@@ -190,6 +421,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 	 *   - `.id`: {@link string}
 	 * - #### Internal Commands:
 	 * - `.add_options`: {@link Object} - Mutates specified TileLayer options.
+	 * - `.apply_as_base_layer`: {@link boolean}
 	 * - `.set_options`: {@link Object} - Overrides all options for the {@link naissance.FeatureTileLayer} and replaces them with the object specified.
 	 */
 	static parseAction (arg0_json) {
@@ -219,6 +451,20 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 					...json.add_options
 				};
 				tile_layer_obj.draw();
+			}
+			
+			//apply_as_base_layer
+			if (json.apply_as_base_layer) {
+				//Iterate over all naissance.Feature.instances; remove .is_base_layer flag from all instances first
+				for (let i = 0; i < naissance.Feature.instances.length; i++)
+					if (naissance.Feature.instances[i] instanceof naissance.FeatureTileLayer)
+						delete naissance.Feature.instances[i].is_base_layer;
+				
+				//Replace base layer
+				map.removeBaseLayer();
+				map.setBaseLayer(tile_layer_obj.layer);
+				tile_layer_obj.is_base_layer = true;
+				UI_LeftbarHierarchy.refresh();
 			}
 			
 			//set_options
