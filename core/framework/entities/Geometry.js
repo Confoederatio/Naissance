@@ -80,10 +80,7 @@ naissance.Geometry = class extends ve.Class {
 			multitag: veButton(() => {}, {
 				name: "<icon>new_label</icon>", tooltip: "Manage Tags",
 				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
+					marginLeft: "auto", order: 99, padding: 0
 				}
 			}),
 			hide_visibility: veButton(() => {
@@ -95,12 +92,7 @@ naissance.Geometry = class extends ve.Class {
 				name: `<icon>visibility</icon>`,
 				limit: () => this._is_visible,
 				tooltip: "Hide Geometry",
-				style: {
-					marginLeft: "auto", order: 100, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
+				style: { order: 100, padding: 0 }
 			}),
 			show_visibility: veButton(() => {
 				DALS.Timeline.parseAction({
@@ -111,12 +103,7 @@ naissance.Geometry = class extends ve.Class {
 				name: "<icon>visibility_off</icon>",
 				limit: () =>  !this._is_visible,
 				tooltip: "Show Geometry",
-				style: {
-					marginLeft: "auto", order: 100, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
+				style: { order: 100, padding: 0 }
 			}),
 			delete_button: veButton(() => {
 				DALS.Timeline.parseAction({
@@ -126,7 +113,7 @@ naissance.Geometry = class extends ve.Class {
 			}, {
 				name: "<icon>delete</icon>",
 				tooltip: "Delete Geometry",
-				style: { cursor: "pointer", order: 101, padding: 0 }
+				style: { order: 101, padding: 0 }
 			})
 		};
 	}
