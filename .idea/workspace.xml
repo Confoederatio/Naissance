@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/autosave.naissance" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +65,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="43187000" />
+      <workItem from="1764176738442" duration="43324000" />
     </task>
     <servers />
   </component>
