@@ -25,24 +25,14 @@ ve.Map = class extends ve.Component {
 	
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
+		let options = (arg1_options) ? arg1_options : {};
+			super(options);
 		let value = {
 			center: [51.505, -0.09],
 			zoom: 5,
-			/*spatialReference: {
-				projection: 'EPSG:3857' // Ensure that both Maptalks and Leaflet use the same projection
-			},*/
-			baseLayer: new maptalks.TileLayer("base", {
-				spatialReference: {
-					projection:'EPSG:3857'
-				},
-				urlTemplate: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-				subdomains: ["a", "b", "c"],
-				repeatWorld: false
-			}),
+			baseLayer: this.getDefaultBaseLayer(),
 			...arg0_value
 		};
-		let options = (arg1_options) ? arg1_options : {};
-			super(options);
 			
 		//Declare local instance variables
 		this.id = Class.generateRandomID(ve.Map);
@@ -105,6 +95,38 @@ ve.Map = class extends ve.Component {
 				//Simply remove the layer itself from the map if possible
 				all_layers[i].remove();
 			}
+		
+		//Reset base layer
+		this.map.setBaseLayer(this.getDefaultBaseLayer());
+		this.map.setSpatialReference(this.getDefaultSpatialReference());
+	}
+	
+	/**
+	 * Returns options for the default {@link maptalks.TileLayer} used for the main map.
+	 * - Method of: {@link ve.Map}
+	 * 
+	 * @returns {maptalks.TileLayer}
+	 */
+	getDefaultBaseLayer () {
+		//Return statement
+		return new maptalks.TileLayer("base", {
+			urlTemplate: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+			subdomains: ["a", "b", "c"],
+			repeatWorld: false
+		});
+	}
+	
+	/**
+	 * Returns the default spatial reference for {@link maptalks.Map}.
+	 * - Method of: {@link ve.Map}
+	 * 
+	 * @returns {{projection: string}}
+	 */
+	getDefaultSpatialReference () {
+		//Return statement
+		return {
+			projection: "EPSG:3857" //Ensure that both Maptalks and Leaflet use the same projection
+		}
 	}
 }
 

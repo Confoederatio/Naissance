@@ -51,6 +51,10 @@
 		naissance.Geometry.instances = [];
 		console.log(`DALS.Timeline.loadState called.`);
 		
+		//0. Handle main map
+		if (json.map_settings)
+			UI_MapSettings.fromJSON(json.map_settings);
+		
 		//1. Handle naissance.Geometry classes
 		//Iterate over json to load in each class
 		Object.iterate(json, (local_key, local_value) => {
@@ -93,6 +97,11 @@
 	DALS.Timeline.saveState = function () { //[WIP] - Finish function body for naissance.Feature
 		//Declare local instance variables
 		let json_obj = {};
+		
+		//Set json_obj.map_settings
+		try {
+			if (global.map) json_obj.map_settings = UI_MapSettings.toJSON();
+		} catch (e) { console.error(e); }
 		
 		//Iterate over all naissance.Geometry.instances and serialise them
 		for (let i = 0; i < naissance.Geometry.instances.length; i++) {

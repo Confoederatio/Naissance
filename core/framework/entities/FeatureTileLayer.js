@@ -39,6 +39,21 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		});
 	}
 	
+	_DALS_applyAsBaseLayer (arg0_do_not_add_to_undo_redo) {
+		//Convert from parameters
+		let do_not_add_to_undo_redo = arg0_do_not_add_to_undo_redo;
+		
+		//Fire action
+		DALS.Timeline.parseAction({
+			options: { name: "Apply TileLayer as Base", key: "apply_tile_layer_as_base" },
+			value: [{
+				type: "FeatureTileLayer",
+				feature_id: this.id,
+				apply_as_base_layer: true
+			}]
+		}, do_not_add_to_undo_redo);
+	}
+	
 	_DALS_recalculatePreset (arg0_preset) {
 		//Convert from parameters
 		let preset = arg0_preset;
@@ -138,16 +153,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 						})
 					}, { name: "Advanced Options" }),
 					
-					apply_as_base_layer: veButton(() => {
-						DALS.Timeline.parseAction({
-							options: { name: "Apply TileLayer as Base", key: "apply_tile_layer_as_base" },
-							value: [{
-								type: "FeatureTileLayer",
-								feature_id: this.id,
-								apply_as_base_layer: true
-							}]
-						});
-					}, { name: "Apply as Base Layer" })
+					apply_as_base_layer: veButton(() => this._DALS_applyAsBaseLayer(), { name: "Apply as Base Layer" })
 				}, { name: `Edit ${this._name}`, can_rename: false, width: "24rem" });
 			}, {
 				name: "<icon>more_vert</icon>",
@@ -187,12 +193,15 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		let json = (typeof arg0_json !== "object") ? JSON.parse(arg0_json) : arg0_json;
 		
 		this.id = json.id;
+		this.is_base_layer = json.is_base_layer;
 		this._name = json.name;
 		this.options = json.options;
 		
 		//Draw call, draw hierarchy datatype
 		this.draw();
 		this.drawHierarchyDatatype();
+		if (this.is_base_layer)
+			this._DALS_applyAsBaseLayer(true);
 	}
 	
 	hide () {
@@ -214,6 +223,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		//Declare local instance variables
 		let json_obj = {
 			id: this.id,
+			is_base_layer: this.is_base_layer,
 			name: this._name,
 			options: this.options
 		};

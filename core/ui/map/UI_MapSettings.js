@@ -102,11 +102,22 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 			}, do_not_add_to_undo_redo);
 	}
 	
-	fromJSON (arg0_json) {
+	static fromJSON (arg0_json) {
 		//Convert from parameters
+		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
+		
+		//Set spatial reference
+		if (json.spatial_reference)
+			map.setSpatialReference(json.spatial_reference);
 	}
 	
-	toJSON () {
+	static toJSON () {
 		//Declare local instance variables
+		let json_obj = {
+			spatial_reference: map.getSpatialReference().toJSON()
+		};
+		
+		//Return statement
+		return json_obj;
 	}
 };
