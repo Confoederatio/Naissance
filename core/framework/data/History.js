@@ -41,29 +41,27 @@ naissance.History = class extends ve.Class {
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
 			//Set components_obj
-			components_obj[local_key] = new ve.RawInterface({
-				date_info: new ve.HTML((e) => `${local_value.timestamp}`, { x: 0, y: 0 }),
-				jump_to_date: new ve.HTML((e) => {
-					let icon_el = document.createElement("icon");
-					icon_el.innerHTML = `arrow_forward`;
-					icon_el.addEventListener("click", (e) => {
-						DALS.Timeline.parseAction({
-							options: { name: "Set Date", key: "load_date" },
-							value: [
-								{ type: "global", set_date: Date.convertTimestampToDate(local_key) },
-								{ type: "global", refresh_date: true }
-							]
-						});
+			components_obj[local_key] = new ve.Interface({
+				date_info: new ve.HTML(String.formatDate(local_value.date), { 
+					tooltip: `Timestamp: ${local_value.timestamp}`,
+					x: 0, y: 0
+				}),
+				jump_to_date: veButton((e) => {
+					DALS.Timeline.parseAction({
+						options: { name: "Set Date", key: "load_date" },
+						value: [
+							{ type: "global", set_date: Date.convertTimestampToDate(local_key) },
+							{ type: "global", refresh_date: true }
+						]
 					});
-					
-					//Return statement
-					return icon_el;
-				}, { tooltip: "Jump to Date", style: { cursor: "pointer" } })
+				}, { 
+					name: "<icon>arrow_forward</icon>",
+					tooltip: "Jump to Date", 
+					style: { cursor: "pointer" }, 
+					x: 1, y: 0 
+				})
 			}, {
-				name: String.formatDate(local_value.date),
-				style: {
-					display: "flex"
-				}
+				is_folder: false
 			});
 		}, { sort_mode: "date_descending" });
 		

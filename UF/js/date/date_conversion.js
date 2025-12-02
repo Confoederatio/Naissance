@@ -51,7 +51,7 @@
 			
 			let month_minutes = days_in_month*24*60;
 			if (minutes < month_minutes) {
-				date_obj.month = i; //0 = January
+				date_obj.month = i + 1; //1 = January
 				break;
 			}
 			

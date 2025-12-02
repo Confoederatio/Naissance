@@ -5,6 +5,8 @@
  * 
  * The reason this does not always serialise to an {@link Array} is so that formulas and format data can be preserved.
  * 
+ * [WIP] - Add CSV compatibility and auto-coercion formatting at a later date.
+ * 
  * ##### Constructor:
  * - `arg0_value`: {@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object}
  *   - Nested arrays: [n1] - Container, [n2] - Sheet, [n3] - Row
@@ -26,6 +28,7 @@
  */
 ve.Table = class extends ve.Component {
 	static demo_value = [[["Test","hello",1,7,"Row 1"],["","world",2,8,"Row 2"],["","this",3,9,"Row 3"],["","is",4,10,"Row 4"],["","a",5,11,"Row 5"],["","test",6,12,"Row 6"],["","",7,"",""]]];
+	static instances = [];
 	
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
@@ -52,6 +55,7 @@ ve.Table = class extends ve.Component {
 				Object.keys(options.attributes, (local_key, local_value) => {
 					this.element.setAttribute(local_key, local_value.toString());
 				});
+		this.id = Class.generateRandomID(ve.Table);
 		this.options = options;
 		this.value = value;
 		
@@ -62,10 +66,12 @@ ve.Table = class extends ve.Component {
 				//Parse options
 				if (this.options.dark_mode)
 					this.setDarkMode(this.options.dark_mode);
+				this.iframe_el.contentWindow.setID(this.id);
 				
 				clearInterval(this.initialisation_loop);
 			} catch (e) {}
 		});
+		ve.Table.instances.push(this);
 		
 		if (options.name) this.name = options.name;
 	}
@@ -97,6 +103,7 @@ ve.Table = class extends ve.Component {
 		
 		//Set data in iframe_el if object
 		this.iframe_el.contentWindow.setData(value);
+		this.fireFromBinding();
 	}
 	
 	/**
@@ -167,6 +174,17 @@ ve.Table = class extends ve.Component {
 		let value = arg0_value;
 		
 		this.iframe_el.contentWindow.toggleDarkMode(value);
+	}
+	
+	static fireToBinding (arg0_table_id) { //[WIP] - Finish function body
+		//Convert from parameters
+		let table_id = arg0_table_id;
+		
+		//Declare local instance variables
+		let table_obj = ve.Table.instances.filter((v) => v.id === table_id)[0];
+		
+		if (table_obj)
+			table_obj.fireToBinding();
 	}
 };
 

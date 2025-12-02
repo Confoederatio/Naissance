@@ -33,6 +33,25 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});
+		this.variables_ui = veInterface({
+			open_variables_editor: veButton(() => {
+				if (this.variables_editor) this.variables_editor.close();
+				this.variables_editor = veWindow({
+					table_editor: veTable(this.metadata.variables, {
+						dark_mode: true,
+						onuserchange: (v) => this.metadata.variables = v
+					})
+				}, {
+					name: "Variables Editor",
+					can_rename: false,
+					height: "20rem",
+					width: "30rem"
+				});
+			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),
+			open_help_menu: veButton(() => {
+				
+			}, { name: "<icon>info</icon> Help Menu", x: 1, y: 0 })
+		}, { name: "Variables", open: true });
 		
 		//Add keyframe with default brush symbol upon instantiation
 		let brush_symbol = main.brush.getBrushSymbol();

@@ -92,7 +92,7 @@
 		}, 100);
 		
 		//Reload cursor
-		main.layers.cursor_layer.addGeometry(main.brush.cursor)
+		main.layers.cursor_layer.addGeometry(main.brush.cursor);
 	};
 	
 	DALS.Timeline.saveState = function () { //[WIP] - Finish function body for naissance.Feature
@@ -111,7 +111,7 @@
 				id: local_geometry.id,
 				class_name: local_geometry.class_name,
 				history: local_geometry.history.toJSON(),
-				metadata: JSON.stringify(local_geometry.metadata),
+				metadata: local_geometry.metadata,
 				type: "geometry"
 			};
 		}
