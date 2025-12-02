@@ -113,6 +113,9 @@ global.UI_Navbar = class {
 							name: "TileLayer"
 						}
 					},
+					metadata: {
+						name: "Metadata"
+					}
 				},
 				date: {
 					name: "Date",

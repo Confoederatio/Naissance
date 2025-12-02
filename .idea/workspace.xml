@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/date/date_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_basic.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/date/date_conversion.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_conversion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentTable/ComponentTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentTable/ComponentTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentTable/table_iframe.html" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentTable/table_iframe.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/HistoryKeyframe.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/HistoryKeyframe.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/autosave.naissance" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +67,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="48998000" />
+      <workItem from="1764176738442" duration="49145000" />
     </task>
     <servers />
   </component>

@@ -39,7 +39,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				this.variables_editor = veWindow({
 					table_editor: veTable(this.metadata.variables, {
 						dark_mode: true,
-						onuserchange: (v) => this.metadata.variables = v
+						onuserchange: (v) => {
+							
+							this.metadata.variables = v
+						}
 					})
 				}, {
 					name: "Variables Editor",
