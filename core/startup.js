@@ -48,6 +48,9 @@ global.path = require("path");
 			user: {}
     };
 		if (!global.naissance) global.naissance = {};
+			main.map.settings = {
+				autoload_last_date: true
+			};
 			main.user.brush = new naissance.Brush();
 		
 		//1.1. Append all layers to map
