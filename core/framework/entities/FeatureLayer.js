@@ -90,44 +90,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Set this.interface
 		this.interface = new ve.HierarchyDatatype({
 			icon: new ve.HTML(`<icon>layers</icon>`),
-			hide_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Hide Layer", key: "hide_layer" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: false }]
-				});
-			}, {
-				name: "<icon>visibility</icon>",
-				limit: () => this._is_visible,
-				tooltip: "Hide Layer",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			show_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Show Layer", key: "show_layer" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: true }]
-				});
-			}, {
-				name: "<icon>visibility_off</icon>",
-				limit: () => !this._is_visible,
-				tooltip: "Show Layer",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			delete_button: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete Layer", key: "delete_layer" },
-					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
-				});
-			}, { name: "<icon>delete</icon>", style: { order: 100, padding: 0 } }),
+			...super.drawHierarchyDatatypeGenerics(),
 			
 			...hierarchy_obj
 		}, {

@@ -91,44 +91,7 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		//Set this.interface
 		this.interface = new ve.HierarchyDatatype({
 			icon: new ve.HTML(`<icon>folder</icon>`),
-			hide_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Hide Group", key: "hide_group" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: false }]
-				});
-			}, {
-				name: "<icon>visibility</icon>",
-				limit: () => this._is_visible,
-				tooltip: "Hide Group",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			show_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Show Group", key: "show_group" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: true }]
-				});
-			}, {
-				name: "<icon>visibility_off</icon>",
-				limit: () => !this._is_visible,
-				tooltip: "Show Group",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			delete_button: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete Group", key: "delete_group" },
-					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
-				});
-			}, { name: "<icon>delete</icon>", style: { order: 100, padding: 0 } }),
+			...super.drawHierarchyDatatypeGenerics(),
 			
 			...hierarchy_obj
 		}, {

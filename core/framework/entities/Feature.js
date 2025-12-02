@@ -58,6 +58,44 @@ naissance.Feature = class extends ve.Class {
 			this._parent = value;
 	}
 	
+	drawHierarchyDatatypeGenerics () {
+		//Return statement
+		return {
+			hide_visibility: veButton(() => {
+				this.hide();
+			}, {
+				name: `<icon>visibility</icon>`,
+				limit: () => this._is_visible,
+				tooltip: "Hide Tile Layer",
+				style: {
+					marginLeft: "auto", order: 99, padding: 0,
+					"button": {
+						marginLeft: "1rem"
+					}
+				}
+			}),
+			show_visibility: veButton(() => {
+				this.show();
+			}, {
+				name: "<icon>visibility_off</icon>",
+				limit: () =>  !this._is_visible,
+				tooltip: "Show Tile Layer",
+				style: {
+					marginLeft: "auto", order: 99, padding: 0,
+					"button": {
+						marginLeft: "1rem"
+					}
+				}
+			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Delete Feature", key: "delete_feature" },
+					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
+				});
+			}, { name: "<icon>delete</icon>", tooltip: "Delete", style: { order: 100, padding: 0 }}),
+		};
+	}
+	
 	hide () {
 		//Declare local instance variables
 		this._is_visible = false;

@@ -88,38 +88,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		//Return this.interface
 		this.interface = new ve.HierarchyDatatype({
 			icon: new ve.HTML(`<icon>${(this.is_base_layer) ? "map" : "view_module"}</icon>`, { tooltip: (this.is_base_layer) ? "Base FeatureTileLayer" : "FeatureTileLayer" }),
-			hide_visibility: veButton(() => {
-				this.hide();
-			}, {
-				name: `<icon>visibility</icon>`,
-				limit: () => this._is_visible,
-				tooltip: "Hide Tile Layer",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			show_visibility: veButton(() => {
-				this.show();
-			}, {
-				name: "<icon>visibility_off</icon>",
-				limit: () =>  !this._is_visible,
-				tooltip: "Show Tile Layer",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			delete_button: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete TileLayer", key: "delete_tile_layer" },
-					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
-				});
-			}, { name: "<icon>delete</icon>", tooltip: "Delete", style: { order: 100, padding: 0 }}),
+			...super.drawHierarchyDatatypeGenerics(),
 			edit_tile_layer: veButton(() => {
 				if (this.tile_layer_window) this.tile_layer_window.close();
 				this.tile_layer_window = veWindow({

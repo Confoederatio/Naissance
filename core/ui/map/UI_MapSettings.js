@@ -103,10 +103,10 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 	}
 	
 	fromJSON (arg0_json) {
-		
+		//Convert from parameters
 	}
 	
 	toJSON () {
-		
+		//Declare local instance variables
 	}
 };
