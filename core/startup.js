@@ -105,6 +105,7 @@ global.path = require("path");
 	ve.start({
 		//Accepts wildcards (*), exclusionary patterns (!), and folders/file paths
 		load_files: [
+			"common",
 			"!core/startup.js",
 			"!core/archives",
 			"core"

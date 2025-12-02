@@ -3,9 +3,6 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class {
 		super();
 		
 		//Declare local instance variables
-		let proj_ortho = "+proj=gnom +lat_0=90 +lon_0=0 +x_0=6300000 +y_0=6300000 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
-		let proj_ortho_transform = proj4("WGS84", proj_ortho);
-		
 		let previous_window = document.querySelector(`.ve.window[id="UI_MapSettings"]`)?.instance;
 		if (previous_window) previous_window.close();
 		let projection_obj = {
@@ -70,19 +67,8 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class {
 							},
 							measure: "EPSG:4326"
 						},
-						resolutions: [
-							156543.03392804097, 78271.51696402048, 39135.75848201024,
-							19567.87924100512, 9783.93962050256, 4891.96981025128,
-							2445.98490512564, 1222.99245256282, 611.49622628141,
-							305.748113140705, 152.8740565703525, 76.43702828517625,
-							38.21851414258813,
-						],
-						fullExtent: {
-							top: 6378137 * Math.PI,
-							left: -6378137 * Math.PI,
-							bottom: -6378137 * Math.PI,
-							right: 6378137 * Math.PI,
-						}
+						fullExtent: config.defines.map.custom_projections_full_extent,
+						resolutions: config.defines.map.custom_projections_resolutions,
 					});
 			}, { 
 				name: "Apply Proj4JS Projection", 
