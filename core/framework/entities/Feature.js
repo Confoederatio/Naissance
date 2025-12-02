@@ -62,7 +62,10 @@ naissance.Feature = class extends ve.Class {
 		//Return statement
 		return {
 			hide_visibility: veButton(() => {
-				this.hide();
+				DALS.Timeline.parseAction({
+					options: { name: "Hide Feature", key: "hide_feature" },
+					value: [{ type: "Feature", feature_id: this.id, set_visibility: false }]
+				});
 			}, {
 				name: `<icon>visibility</icon>`,
 				limit: () => this._is_visible,
@@ -75,7 +78,10 @@ naissance.Feature = class extends ve.Class {
 				}
 			}),
 			show_visibility: veButton(() => {
-				this.show();
+				DALS.Timeline.parseAction({
+					options: { name: "Show Feature", key: "show_feature" },
+					value: [{ type: "Feature", feature_id: this.id, set_visibility: true }]
+				});
 			}, {
 				name: "<icon>visibility_off</icon>",
 				limit: () =>  !this._is_visible,
