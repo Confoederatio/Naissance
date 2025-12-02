@@ -9,6 +9,7 @@ naissance.Geometry = class extends ve.Class {
 		this.id = Class.generateRandomID(naissance.Geometry);
 		this.instance = this;
 		this.is_naissance_geometry = true; //Identifier flag for Naissance-bound reflection engine
+		this.metadata = {};
 		
 		//Initialise this.options
 		if (!this.options) this.options = {};
@@ -86,7 +87,7 @@ naissance.Geometry = class extends ve.Class {
 			hide_visibility: veButton(() => {
 				DALS.Timeline.parseAction({
 					options: { name: "Show Geometry", key: "show_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, hide_geometry: true }]
+					value: [{ type: "Geometry", geometry_id: this.id, set_visibility: false }]
 				});
 			}, {
 				name: `<icon>visibility</icon>`,
@@ -97,7 +98,7 @@ naissance.Geometry = class extends ve.Class {
 			show_visibility: veButton(() => {
 				DALS.Timeline.parseAction({
 					options: { name: "Show Geometry", key: "show_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, hide_geometry: false }]
+					value: [{ type: "Geometry", geometry_id: this.id, set_visibility: true }]
 				});
 			}, {
 				name: "<icon>visibility_off</icon>",
@@ -182,8 +183,8 @@ naissance.Geometry = class extends ve.Class {
 	 * <br>
 	 * - #### Extraneous Commands:
 	 * - `.delete_geometry`: {@link boolean}
-	 * - `.hide_geometry`: {@link boolean}
 	 * - `.set_name`: {@link string}
+	 * - `.set_visibility`: {@link boolean}
 	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
@@ -198,11 +199,11 @@ naissance.Geometry = class extends ve.Class {
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
 			
-			//hide_geometry
-			if (json.hide_geometry === true) {
-				geometry_obj.hide();
-			} else if (json.hide_geometry === false) {
+			//set_visibility
+			if (json.set_visibility === true) {
 				geometry_obj.show();
+			} else if (json.set_visibility === false) {
+				geometry_obj.hide();
 			}
 			
 			//set_name

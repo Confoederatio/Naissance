@@ -62,6 +62,7 @@
 				let geometry_obj = new naissance[local_value.class_name]();
 				if (local_value.id) geometry_obj.id = local_value.id;
 				geometry_obj.history.fromJSON(local_value.history);
+				if (local_value.metadata) geometry_obj.metadata = local_value.metadata;
 				try {
 					if (geometry_obj.draw) geometry_obj.draw();
 				} catch (e) { console.warn(e); }
@@ -110,6 +111,7 @@
 				id: local_geometry.id,
 				class_name: local_geometry.class_name,
 				history: local_geometry.history.toJSON(),
+				metadata: JSON.stringify(local_geometry.metadata),
 				type: "geometry"
 			};
 		}
