@@ -82,4 +82,12 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class {
 			width: "30rem"
 		});
 	}
+	
+	_DALS_setCustomProjection (arg0_proj4js_string, arg1_do_not_add_to_undo_redo) { //[WIP] - Finish function body
+		
+	}
+	
+	_DALS_setProjection (arg0_projection, arg1_do_not_add_to_undo_redo) { //[WIP] - Finish function body
+		
+	}
 };
