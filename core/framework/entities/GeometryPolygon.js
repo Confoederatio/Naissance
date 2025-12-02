@@ -155,25 +155,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}">pentagon</icon>`, {
 				tooltip: "GeometryPolygon"
 			}),
-			multitag: veButton(() => {}, { 
-				name: "<icon>new_label</icon>", tooltip: "Manage Tags",
-				style: { 
-					marginLeft: "auto", order: 99, padding: 0,
-					"button": {
-						marginLeft: "1rem"
-					}
-				}
-			}),
-			delete: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete Geometry", key: "delete_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, delete_geometry: true }]
-				});
-			}, {
-				name: "<icon>delete</icon>",
-				tooltip: "Delete Polygon",
-				style: { cursor: "pointer", order: 100, padding: 0 }
-			}),
+			...super.drawHierarchyDatatypeGenerics(),
 			context_menu: veButton(() => {
 				super.open("instance", { name: this.name, width: "20rem" });
 			}, {

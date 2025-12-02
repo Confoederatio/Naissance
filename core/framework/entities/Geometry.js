@@ -74,6 +74,63 @@ naissance.Geometry = class extends ve.Class {
 		}, this.fire_action_silently);
 	}
 	
+	drawHierarchyDatatypeGenerics () {
+		//Return statement
+		return {
+			multitag: veButton(() => {}, {
+				name: "<icon>new_label</icon>", tooltip: "Manage Tags",
+				style: {
+					marginLeft: "auto", order: 99, padding: 0,
+					"button": {
+						marginLeft: "1rem"
+					}
+				}
+			}),
+			hide_visibility: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Show Geometry", key: "show_geometry" },
+					value: [{ type: "Geometry", geometry_id: this.id, hide_geometry: true }]
+				});
+			}, {
+				name: `<icon>visibility</icon>`,
+				limit: () => this._is_visible,
+				tooltip: "Hide Geometry",
+				style: {
+					marginLeft: "auto", order: 100, padding: 0,
+					"button": {
+						marginLeft: "1rem"
+					}
+				}
+			}),
+			show_visibility: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Show Geometry", key: "show_geometry" },
+					value: [{ type: "Geometry", geometry_id: this.id, hide_geometry: false }]
+				});
+			}, {
+				name: "<icon>visibility_off</icon>",
+				limit: () =>  !this._is_visible,
+				tooltip: "Show Geometry",
+				style: {
+					marginLeft: "auto", order: 100, padding: 0,
+					"button": {
+						marginLeft: "1rem"
+					}
+				}
+			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction({
+					options: { name: "Delete Geometry", key: "delete_geometry" },
+					value: [{ type: "Geometry", geometry_id: this.id, delete_geometry: true }]
+				});
+			}, {
+				name: "<icon>delete</icon>",
+				tooltip: "Delete Geometry",
+				style: { cursor: "pointer", order: 101, padding: 0 }
+			})
+		};
+	}
+	
 	fromJSON () {
 		console.warn(`naissance.Geometry.fromJSON() was called for: ${this.class_name}, but was not defined.`);
 	}
@@ -129,6 +186,18 @@ naissance.Geometry = class extends ve.Class {
 		if (this.draw) this.draw();
 	}
 	
+	/**
+	 * Parses a JSON action for a target Geometry.
+	 * - Static method of: {@link naissance.Geometry}
+	 * 
+	 * `arg0_json`: {@link Object|string}
+	 * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
+	 * <br>
+	 * - #### Extraneous Commands:
+	 * - `.delete_geometry`: {@link boolean}
+	 * - `.hide_geometry`: {@link boolean}
+	 * - `.set_name`: {@link string}
+	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
 		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
@@ -141,6 +210,13 @@ naissance.Geometry = class extends ve.Class {
 			//delete_geometry
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
+			
+			//hide_geometry
+			if (json.hide_geometry === true) {
+				geometry_obj.hide();
+			} else if (json.hide_geometry === false) {
+				geometry_obj.show();
+			}
 			
 			//set_name
 			if (typeof json.set_name === "object") {

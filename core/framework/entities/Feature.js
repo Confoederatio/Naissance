@@ -66,7 +66,7 @@ naissance.Feature = class extends ve.Class {
 			}, {
 				name: `<icon>visibility</icon>`,
 				limit: () => this._is_visible,
-				tooltip: "Hide Tile Layer",
+				tooltip: "Hide Feature",
 				style: {
 					marginLeft: "auto", order: 99, padding: 0,
 					"button": {
@@ -79,7 +79,7 @@ naissance.Feature = class extends ve.Class {
 			}, {
 				name: "<icon>visibility_off</icon>",
 				limit: () =>  !this._is_visible,
-				tooltip: "Show Tile Layer",
+				tooltip: "Show Feature",
 				style: {
 					marginLeft: "auto", order: 99, padding: 0,
 					"button": {
