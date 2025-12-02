@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/map/UI_MapSettings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_Navbar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/autosave.naissance" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +68,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="41876000" />
+      <workItem from="1764176738442" duration="43187000" />
     </task>
     <servers />
   </component>

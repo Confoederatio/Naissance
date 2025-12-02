@@ -108,6 +108,9 @@ global.UI_Navbar = class {
 							rectangle: {
 								name: "Rectangle"
 							}
+						},
+						tile_layer: {
+							name: "TileLayer"
 						}
 					},
 				},

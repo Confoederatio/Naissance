@@ -22,8 +22,22 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		
 		this.interface = veWindow({
 			date_settings: veInterface({
-				autoload_last_date: veToggle(main.map.settings.autoload_last_date, { name: "Autoload last date", tooltip: "If no load date is specified, this field defaults to the current date." }),
-				constant_load_date: veDate(main.map.settings.constant_load_date, { name: "Constant Load Date" })
+				autoload_last_date: veToggle(main.map.settings.autoload_last_date, { 
+					name: "Autoload last date", 
+					tooltip: "If no load date is specified, this field defaults to the current date.",
+					to_binding: "main.map.settings.autoload_last_date",
+					x: 0, y: 0
+				}),
+				constant_load_date: veToggle(main.map.settings.constant_load_date, {
+					name: "Constant Load Date",
+					to_binding: "main.map.settings.constant_load_date",
+					x: 0, y: 1
+				}),
+				constant_load_date_value: veDate(main.map.settings.constant_load_date_value, {
+					tooltip: "Superseded by Autoload last date.",
+					to_binding: "main.map.settings.constant_load_date_value",
+					x: 1, y: 1
+				})
 			}, { name: "Date", open: true }),
 			projection_settings: veInterface({
 				projection: veSelect(this.projection_obj, {
@@ -106,6 +120,17 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		//Convert from parameters
 		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 		
+		//Declare local instance variables
+		if (json.settings)
+			main.map.settings = json.settings;
+		
+		//Set date
+		if (json.date)
+			if (main.map.settings.autoload_last_date) {
+				main.date = JSON.parse(json.date);
+			} else if (main.map.settings.constant_load_date) {
+				main.date = main.map.settings.constant_load_date
+			}
 		//Set spatial reference
 		if (json.spatial_reference)
 			map.setSpatialReference(json.spatial_reference);
@@ -114,6 +139,8 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 	static toJSON () {
 		//Declare local instance variables
 		let json_obj = {
+			date: JSON.stringify(main.date),
+			settings: main.map.settings,
 			spatial_reference: map.getSpatialReference().toJSON()
 		};
 		
