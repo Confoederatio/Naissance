@@ -27,14 +27,11 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class {
 					//Declare local instance variables
 					let local_projection = projection_obj[v];
 					
-					if (local_projection.options) {
-						map.setSpatialReference(local_projection.options);
-						
-						//Refresh this.draw() call
-						for (let i = 0; i < naissance.Feature.instances.length; i++)
-							if (naissance.Feature.instances[i] instanceof naissance.FeatureTileLayer)
-								naissance.Feature.instances[i].draw();
-					}
+					if (local_projection.options)
+						DALS.Timeline.parseAction({
+							options: { name: "Set Map Projection", key: "set_map_projection" },
+							value: [{ type: "Renderer", set_map_spatial_reference: local_projection.options }]
+						});
 				},
 				x: 0, y: 0
 			}),
@@ -48,27 +45,30 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class {
 				let proj4js_transform = proj4("WGS84", proj4js_string);
 				
 				if (proj4js_string.length > 0)
-					map.setSpatialReference({
-						projection: {
-							code: "proj4-custom",
-							project: (c) => {
-								if (!Array.isArray(c.toArray())) return new maptalks.Coordinate([0, 0]);
-								let pc = proj4js_transform.forward(c.toArray());
-								
-								//If projection returns invalid or NaN, return neutral coords
-								if (!pc || isNaN(pc[0]) || isNaN(pc[1])) pc = [0, 0];
-								return new maptalks.Coordinate(pc);
+					DALS.Timeline.parseAction({
+						options: { name: "Set Map Projection", key: "set_map_projection" },
+						value: [{ type: "Renderer", set_map_spatial_reference: {
+							projection: {
+								code: "proj4-custom",
+								project: (c) => {
+									if (!Array.isArray(c.toArray())) return new maptalks.Coordinate([0, 0]);
+									let pc = proj4js_transform.forward(c.toArray());
+									
+									//If projection returns invalid or NaN, return neutral coords
+									if (!pc || isNaN(pc[0]) || isNaN(pc[1])) pc = [0, 0];
+									return new maptalks.Coordinate(pc);
+								},
+								unproject: (pc) => {
+									if (!Array.isArray(pc.toArray())) return new maptalks.Coordinate([0, 0]);
+									let result = proj4js_transform.inverse(pc.toArray());
+									if (!result || isNaN(result[0]) || isNaN(result[1])) result = [0, 0];
+									return new maptalks.Coordinate(result);
+								},
+								measure: "EPSG:4326"
 							},
-							unproject: (pc) => {
-								if (!Array.isArray(pc.toArray())) return new maptalks.Coordinate([0, 0]);
-								let result = proj4js_transform.inverse(pc.toArray());
-								if (!result || isNaN(result[0]) || isNaN(result[1])) result = [0, 0];
-								return new maptalks.Coordinate(result);
-							},
-							measure: "EPSG:4326"
-						},
-						fullExtent: config.defines.map.custom_projections_full_extent,
-						resolutions: config.defines.map.custom_projections_resolutions,
+							fullExtent: config.defines.map.custom_projections_full_extent,
+							resolutions: config.defines.map.custom_projections_resolutions
+						} }]
 					});
 			}, { 
 				name: "Apply Proj4JS Projection", 
