@@ -104,11 +104,9 @@ naissance.History = class extends ve.Class {
 		let timestamp = Date.getTimestamp(options.date);
 		
 		//1. If options.absolute_keyframe = true, iterate over all keyframes in this.keyframes, and return the most recent one
-		let all_keyframes = Object.keys(this.keyframes).sort().reverse();
-		
 		if (options.absolute_keyframe) {
 			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
-				if (Date.convertTimestampToInt(local_keyframe) <= Date.convertTimestampToInt(timestamp))
+				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
 					return_keyframe = this.keyframes[local_key];
 			}, { sort_mode: "date_ascending" });
 			
@@ -123,26 +121,34 @@ naissance.History = class extends ve.Class {
 				timestamp: timestamp,
 				value: []
 			};
+			
+			//console.log(`Calling once:`, this.keyframes);
+			
 			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
-				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
-				for (let x = 0; x < local_keyframe.value.length; x++)
-					if (typeof local_keyframe.value[x] === "object") {
-						let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
-						
-						return_keyframe.value[x] = {
-							...(return_keyframe.value[x]) ? return_keyframe.value[x] : {},
-							...local_keyframe.value[x]
-						};
-						
-						//Handle nested .variables
-						if (local_keyframe.value[x] && local_keyframe.value[x].variables)
-							return_keyframe.value[x].variables = {
-								...old_variables,
-								...local_keyframe.value[x].variables
+				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp)) {
+					for (let x = 0; x < local_keyframe.value.length; x++) {
+						if (typeof local_keyframe.value[x] === "object") {
+							let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
+							
+							return_keyframe.value[x] = {
+								...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
+								...local_keyframe.value[x]
 							};
-					} else if (local_keyframe.value[x] !== undefined) {
-						return_keyframe.value[x] = local_keyframe.value[x];
+							
+							//Handle nested .variables
+							if (local_keyframe.value[x] && local_keyframe.value[x].variables)
+								return_keyframe.value[x].variables = {
+									...old_variables,
+									...local_keyframe.value[x].variables
+								};
+						} else if (local_keyframe.value[x] !== undefined) {
+							return_keyframe.value[x] = local_keyframe.value[x];
+						}
 					}
+					
+					//console.log(`Keyframe inside time domain:`, local_keyframe);
+				}
+				//console.log(`Keyframe outside time domain:`, local_keyframe);
 			}, { sort_mode: "date_ascending" });
 			
 			//Return statement
@@ -177,7 +183,6 @@ naissance.History = class extends ve.Class {
 		}
 		
 		//Return statement
-		console.log(json_obj);
 		return JSON.stringify(json_obj);
 	}
 };

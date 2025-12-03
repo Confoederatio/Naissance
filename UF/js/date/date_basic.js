@@ -62,7 +62,7 @@
 	
 	Date.getBlankDate = function () {
 		//Return statement
-		return { year: 1, month: 1, day: 1, hour: 0, minute: 0 };
+		return { year: 0, month: 1, day: 1, hour: 0, minute: 0 }; //Must be Year 0, even if it doesn't exist
 	};
 	
 	Date.getCurrentDate = function () {
@@ -134,118 +134,94 @@
 	};
 	
 	Date.getMonthsFromDays = function (arg0_date_object) {
-		//Convert from parameters
+		// Convert from parameters
 		let date_obj = Date.convertTimestampToDate(arg0_date_object);
 		
 		//Declare local instance variables
 		let is_leap_year = Date.isLeapYear(date_obj.year);
-		let months = 0;
+		let remaining_days = date_obj.day;
+		let months = 1;
 		
-		//Iterate over all_months and calculate months
-		Object.iterate(Date.months, (local_key, local_value) => {
-			let local_days_in_month = local_value.days;
-				if (is_leap_year && local_value.leap_year_days)
-					local_days_in_month = local_value.leap_year_days;
-			date_obj.day -= local_days_in_month;
-			if (date_obj.day >= 0) months++;
-		});
+		// Iterate over all months and count full ones
+		let all_months = Object.keys(Date.months);
+		for (let i = 0; i < all_months.length; i++) {
+			let local_month = Date.months[all_months[i]];
+			let days_in_month = local_month.days;
+			
+			if (is_leap_year && local_month.leap_year_days)
+				days_in_month = local_month.leap_year_days;
+			
+			if (remaining_days > days_in_month) {
+				remaining_days -= days_in_month;
+				months++;
+			} else {
+				break; // stop once we reach the current month
+			}
+		}
 		
-		//Return statement
-		return months + 1;
+		// Clamp just in case (should never exceed 12)
+		if (months > 12) months = 12;
+		
+		// Return statement
+		return months;
 	};
 	
-	Date.getTimestamp = function (arg0_date_object) { //[WIP] - Refactor function later
-		//Convert from parameters
+	Date.getTimestamp = function (arg0_date_object) {
+		// Merge with defaults (1-indexed months)
 		let date_obj = {
 			...Date.getBlankDate(),
-			...arg0_date_object
+			...arg0_date_object,
 		};
 		
-		//Declare local instance variables
 		let minutes = 0;
 		
-		// Normalise date_obj (1-based months)
-		{
-			// 1. Normalise minutes to hours
-			if (date_obj.minute >= 60) {
-				date_obj.hour += Math.floor(date_obj.minute / 60);
-				date_obj.minute = date_obj.minute % 60;
+		// --- Normalise minor overflows ---
+		if (date_obj.minute >= 60) {
+			date_obj.hour += Math.floor(date_obj.minute / 60);
+			date_obj.minute %= 60;
+		}
+		if (date_obj.hour >= 24) {
+			date_obj.day += Math.floor(date_obj.hour / 24);
+			date_obj.hour %= 24;
+		}
+		while (date_obj.month > 12) {
+			date_obj.month -= 12;
+			date_obj.year++;
+		}
+		while (date_obj.month < 1) {
+			date_obj.month += 12;
+			date_obj.year--;
+		}
+		
+		// --- 1. Add full years before the current one ---
+		const target_year = date_obj.year - 1; // sum only years completed
+		if (target_year >= 0) {
+			for (let y = 0; y <= target_year; y++) {
+				minutes += (Date.isLeapYear(y) ? 366 : 365) * 24 * 60;
 			}
-			
-			// 2. Normalise hours to days
-			if (date_obj.hour >= 24) {
-				date_obj.day += Math.floor(date_obj.hour / 24);
-				date_obj.hour = date_obj.hour % 24;
-			}
-			
-			// 3. Normalise months to years (since 1–12)
-			while (date_obj.month > 12) {
-				date_obj.month -= 12;
-				date_obj.year++;
-			}
-			
-			while (date_obj.month < 1) {
-				date_obj.month += 12;
-				date_obj.year--;
-			}
-			
-			// 4. Normalise days to months
-			while (true) {
-				let all_months = Object.keys(Date.months);
-				let local_month = Date.months[all_months[date_obj.month - 1]]; // -1 for index
-				let days_in_month = local_month.days;
-				
-				// Handle leap years
-				if (Date.isLeapYear(date_obj.year) && local_month.leap_year_days)
-					days_in_month = local_month.leap_year_days;
-				
-				if (date_obj.day > days_in_month) {
-					date_obj.day -= days_in_month;
-					date_obj.month++;
-					
-					if (date_obj.month > 12) {
-						date_obj.year++;
-						date_obj.month = 1;
-					}
-				} else {
-					break;
-				}
+		} else {
+			for (let y = -1; y >= target_year; y--) {
+				minutes -= (Date.isLeapYear(y) ? 366 : 365) * 24 * 60;
 			}
 		}
 		
-		// Calculate timestamp
-		{
-			// 1. Add years
-			if (date_obj.year >= 0) {
-				for (let i = 0; i < date_obj.year; i++)
-					minutes += (Date.isLeapYear(i) ? 366 : 365) * 24 * 60;
-			} else {
-				for (let i = -1; i >= date_obj.year; i--)
-					minutes -= (Date.isLeapYear(i) ? 366 : 365) * 24 * 60;
-			}
-			
-			// 2. Add months (1-based)
-			let all_months = Object.keys(Date.months);
-			
-			for (let i = 1; i < date_obj.month; i++) {
-				let local_month = Date.months[all_months[i - 1]];
-				let days_in_month = local_month.days;
-				
-				if (Date.isLeapYear(date_obj.year) && local_month.leap_year_days)
-					days_in_month = local_month.leap_year_days;
-				
-				minutes += days_in_month * 24 * 60;
-			}
-			
-			// 3. Add days
-			minutes += date_obj.day * 24 * 60;
-			
-			// 4. Add hours and minutes
-			minutes += date_obj.hour * 60 + date_obj.minute;
+		// --- 2. Add completed months of current year ---
+		let all_months = Object.keys(Date.months);
+		for (let i = 1; i < date_obj.month; i++) {
+			let m = Date.months[all_months[i - 1]];
+			let dim = Date.isLeapYear(date_obj.year)
+				? m.leap_year_days || m.days
+				: m.days;
+			minutes += dim * 24 * 60;
 		}
 		
-		// Return absolute timestamp
-		return Math.abs(minutes);
+		// --- 3. Add completed days ---
+		minutes += (date_obj.day - 1) * 24 * 60;
+		
+		// --- 4. Add partial day ---
+		minutes += date_obj.hour * 60 + date_obj.minute;
+		
+		return minutes;
 	};
 	
 	Date.isLeapYear = function (arg0_year) {

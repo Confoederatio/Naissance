@@ -101,6 +101,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						if (!v.close) return;
 						
 						//Call DALS.Timeline.parseAction() .set_history 
+						DALS.Timeline.parseAction({
+							options: { name: "Edit Geometry History", key: "edit_geometry_history" },
+							value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
+						});
 					}
 				});
 			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),

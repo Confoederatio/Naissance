@@ -184,6 +184,7 @@ naissance.Geometry = class extends ve.Class {
 	 * <br>
 	 * - #### Extraneous Commands:
 	 * - `.delete_geometry`: {@link boolean}
+	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
 	 * - `.set_name`: {@link string}
 	 * - `.set_visibility`: {@link boolean}
 	 */
@@ -199,6 +200,10 @@ naissance.Geometry = class extends ve.Class {
 			//delete_geometry
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
+			
+			//set_history
+			//if (json.set_history)
+			//	geometry_obj.history.fromJSON(json.set_history);
 			
 			//set_visibility
 			if (json.set_visibility === true) {
