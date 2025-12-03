@@ -125,8 +125,8 @@ naissance.History = class extends ve.Class {
 			//console.log(`Calling once:`, this.keyframes);
 			
 			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
-				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp)) {
-					for (let x = 0; x < local_keyframe.value.length; x++) {
+				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
+					for (let x = 0; x < local_keyframe.value.length; x++)
 						if (typeof local_keyframe.value[x] === "object") {
 							let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
 							
@@ -144,11 +144,6 @@ naissance.History = class extends ve.Class {
 						} else if (local_keyframe.value[x] !== undefined) {
 							return_keyframe.value[x] = local_keyframe.value[x];
 						}
-					}
-					
-					//console.log(`Keyframe inside time domain:`, local_keyframe);
-				}
-				//console.log(`Keyframe outside time domain:`, local_keyframe);
 			}, { sort_mode: "date_ascending" });
 			
 			//Return statement
