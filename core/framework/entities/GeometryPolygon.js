@@ -12,6 +12,16 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		super();
 		this.class_name = "GeometryPolygon";
 		this.node_editor_mode = "Polygon";
+		this.window_options = {
+			width: "20rem",
+			onuserchange: (v) => {
+				if (v.name)
+					DALS.Timeline.parseAction({
+						options: { name: "Rename Geometry", key: "rename_geometry" },
+						value: [{ type: "Geometry", geometry_id: this.id, set_name: v.name }]
+					});
+			}
+		};
 		
 		//Declare UI
 		this.interface = veInterface({
@@ -46,12 +56,9 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 							//1. Reset all [2].variables from all keyframes
 							Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
 								let local_value = local_keyframe.value;
-								console.log(local_value[2] && local_value[2].variables);
-								console.log(Object.keys(local_value[2]).length);
 								
 								if (local_value[2] && local_value[2].variables)
 									if (Object.keys(local_value[2]).length === 1) {
-										console.log(`Deleting keyframe:`, local_key);
 										delete this.history.keyframes[local_key];
 									} else {
 										delete local_value[2].variables;
@@ -88,19 +95,18 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						}
 					})
 				}, {
-					name: "Variables Editor",
+					name: `Variables Editor (${this.name})`,
 					can_rename: false,
 					height: "20rem",
 					width: "30rem",
 					
 					onuserchange: (v) => {
-						if (!v.close) return;
-						
 						//Call DALS.Timeline.parseAction() .set_history 
-						DALS.Timeline.parseAction({
-							options: { name: "Edit Geometry History", key: "edit_geometry_history" },
-							value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
-						});
+						if (v.close)
+							DALS.Timeline.parseAction({
+								options: { name: "Edit Geometry History", key: "edit_geometry_history" },
+								value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
+							});
 					}
 				});
 			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),
@@ -206,7 +212,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				this.keyframes_ui.v = this.history.interface.v;
 				this.geometry.addEventListener("click", (e) => {
 					if (!["node", "node_override"].includes(main.brush.mode))
-						super.open("instance", { name: this.name, width: "20rem" });
+						super.open("instance", { name: this.name, ...this.window_options });
 				});
 			}
 		}
@@ -233,7 +239,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}),
 			...super.drawHierarchyDatatypeGenerics(),
 			context_menu: veButton(() => {
-				super.open("instance", { name: this.name, width: "20rem" });
+				super.open("instance", { name: this.name, ...this.window_options });
 			}, {
 				name: "<icon>more_vert</icon>",
 				tooltip: "More Actions",

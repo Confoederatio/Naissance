@@ -79,7 +79,26 @@ naissance.Geometry = class extends ve.Class {
 	drawHierarchyDatatypeGenerics () {
 		//Return statement
 		return {
-			multitag: veButton(() => {}, {
+			multitag: veButton(() => {
+				if (this.tags_editor) this.tags_editor.close();
+				this.tags_editor = veWindow({
+					tags_list: veMultiTag(this.metadata.tags, {
+						onuserchange: (v) => this.metadata.tags = v
+					})
+				}, {
+					name: `Edit Tags (${this.name})`,
+					can_rename: false,
+					width: "20rem",
+					
+					onuserchange: (v) => {
+						if (v.close)
+							DALS.Timeline.parseAction({
+								options: { name: "Edit Geometry Tags", key: "edit_geometry_tags" },
+								value: [{ type: "Geometry", geometry_id: this.id, set_tags: this.metadata.tags }]
+							});
+					}
+				})
+			}, {
 				name: "<icon>new_label</icon>", tooltip: "Manage Tags",
 				style: {
 					marginLeft: "auto", order: 99, padding: 0
@@ -186,6 +205,7 @@ naissance.Geometry = class extends ve.Class {
 	 * - `.delete_geometry`: {@link boolean}
 	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
 	 * - `.set_name`: {@link string}
+	 * - `.set_tags`: {@link Array}<{@link string}>
 	 * - `.set_visibility`: {@link boolean}
 	 */
 	static parseAction (arg0_json) {
@@ -202,8 +222,8 @@ naissance.Geometry = class extends ve.Class {
 				geometry_obj.remove();
 			
 			//set_history
-			//if (json.set_history)
-			//	geometry_obj.history.fromJSON(json.set_history);
+			if (json.set_history)
+				geometry_obj.history.fromJSON(json.set_history);
 			
 			//set_visibility
 			if (json.set_visibility === true) {
@@ -213,15 +233,29 @@ naissance.Geometry = class extends ve.Class {
 			}
 			
 			//set_name
-			if (typeof json.set_name === "object") {
-				let date = (json.set_name.date) ? json.set_name.date : main.date;
-				let new_name = json.set_name.name;
-				geometry_obj.history.addKeyframe(date, undefined, undefined, { name: new_name });
-				geometry_obj.draw();
-			} else if (typeof json.set_name === "string") {
-				geometry_obj.history.addKeyframe(main.date, undefined, undefined, { name: json.set_name });
-				geometry_obj.draw();
+			if (json.set_name) {
+				if (typeof json.set_name === "object") {
+					let date = (json.set_name.date) ? json.set_name.date : main.date;
+					let new_name = json.set_name.name;
+					geometry_obj.history.addKeyframe(date, undefined, undefined, { name: new_name });
+					geometry_obj.draw();
+				} else if (typeof json.set_name === "string") {
+					geometry_obj.history.addKeyframe(main.date, undefined, undefined, { name: json.set_name });
+					geometry_obj.draw();
+				}
+				
+				//Refresh .instance_window .name if visible
+				if (geometry_obj.instance_window) {
+					let current_keyframe = geometry_obj.history.getKeyframe();
+					
+					if (current_keyframe.value[2] && current_keyframe.value[2].name)
+						geometry_obj.instance_window.setName(current_keyframe.value[2].name);
+				}
 			}
+			
+			//set_tags
+			if (json.set_tags)
+				geometry_obj.metadata.tags = Array.toArray(json.set_tags);
 		}
 	}
 };

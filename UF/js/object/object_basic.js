@@ -180,11 +180,11 @@
 			//Sort all_local_keys by .sort_mode
 			if (options.sort_mode === "date_ascending") {
 				all_local_keys = all_local_keys.sort((a, b) => {
-					return Date.convertTimestampToInt(a) - Date.convertTimestampToInt(b);
+					return parseInt(a) - parseInt(b);
 				});
 			} else if (options.sort_mode === "date_descending") {
 				all_local_keys = all_local_keys.sort((a, b) => {
-					return Date.convertTimestampToInt(b) - Date.convertTimestampToInt(a);
+					return parseInt(b) - parseInt(a);
 				});
 			}
 		

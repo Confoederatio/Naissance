@@ -145,16 +145,17 @@ ve.MultiTag = class extends ve.Component {
 		if (!this.components_obj.list) {
 			let element_options = {
 				onuserchange: (v, e) => {
-					if (!this.local_tags.includes(v)) {
-						this.local_tags.push(v);
-						if (!this.registry_array.includes(v))
-							this.registry_array.push(v);
-						this.notifyAllInstances();
-						this.fireToBinding();
-					} else {
-						veToast(`<icon>warning</icon> This tag is a duplicate of a previous tag, and will not be registered.`);
-						e.v = "";
-					}
+					if (this.local_tags)
+						if (!this.local_tags.includes(v)) {
+							this.local_tags.push(v);
+							if (!this.registry_array.includes(v))
+								this.registry_array.push(v);
+							this.notifyAllInstances();
+							this.fireToBinding();
+						} else {
+							veToast(`<icon>warning</icon> This tag is a duplicate of a previous tag, and will not be registered.`);
+							e.v = "";
+						}
 				}
 			};
 			this.components_obj.datalist.options = element_options;

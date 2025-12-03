@@ -164,7 +164,7 @@ ve.Window = class extends ve.Feature {
 		
 		let window_name_el = this.element.querySelector(`#window-name`);
 		if (window_name_el)
-			window_name_el.addEventListener("input", (e) => {
+			window_name_el.addEventListener("focusout", (e) => {
 				if (this.options.onuserchange)
 					this.options.onuserchange({ name: window_name_el.innerHTML }, e);
 			});
@@ -325,6 +325,23 @@ ve.Window = class extends ve.Feature {
 		HTML.applyTelestyle(this.element, {
 			...HTML.getCSSPosition(this.options.anchor, x, y)
 		});
+	}
+	
+	/**
+	 * Sets the current name of the window.
+	 * - Method of: {@link ve.Window}
+	 * 
+	 * @param {string} arg0_name
+	 */
+	setName (arg0_name) {
+		//Convert from parameters
+		let name = (arg0_name) ? arg0_name : "";
+		
+		//Set name
+		this.name = name;
+		try {
+			this.element.querySelector(`#feature-header #window-name`).innerText = this.name;
+		} catch (e) {}
 	}
 	
 	/**
