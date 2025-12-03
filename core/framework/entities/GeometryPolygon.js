@@ -39,9 +39,23 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				this.variables_editor = veWindow({
 					table_editor: veTable(this.metadata.variables, {
 						dark_mode: true,
-						onuserchange: (v) => {
+						onuserchange: (v, e) => { //[WIP] - Finish function body
+							let array_values = e.convertToArray();
 							
-							this.metadata.variables = v
+							console.log(`Array values:`, array_values, `Raw value:`, v);
+							
+							//Iterate over array_values, check for any valid dates in the A column, and if found, diff variables to keyframes
+							for (let i = 0; i < array_values.length; i++) //Local spreadsheet loop
+								for (let x = 0; x < array_values[i].length; x++) { //Local row loop
+									//1. Check if array_values[i][x][0] is a valid date
+									
+									//2. Push row to DALS.Timeline.parseAction .set_data
+									//2.1. If it is a valid date, check initial header to see each cell's corresponding variable name
+									
+									//2.2. Diff value with current keyframe (typeof, strict equality match; if untrue, push to DALS)
+								}
+							
+							this.metadata.variables = v;
 						}
 					})
 				}, {
@@ -81,6 +95,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		//Return statement
 		return is_selected;
 	}
+	
 	set selected (v) {
 		//Set selected, then update draw
 		this._selected = v;

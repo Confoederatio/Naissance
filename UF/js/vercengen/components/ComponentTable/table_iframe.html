@@ -64,8 +64,16 @@
 				
 				let all_cells = Object.keys(local_row);
 				
-				for (let y = 0; y < all_cells.length; y++)
-          local_row_array.push(local_row[all_cells[y]].v);
+				for (let y = 0; y < all_cells.length; y++) {
+					let local_cell = local_row[all_cells[y]];
+					
+					if (local_cell.f !== undefined) {
+						local_row_array.push(local_cell.f);
+          } else if (local_cell.v !== undefined) {
+						local_row_array.push(local_cell.v);
+          }
+        }
+				
 				data_obj[i].push(local_row_array);
       }
 		}

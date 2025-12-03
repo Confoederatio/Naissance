@@ -62,7 +62,7 @@
 	
 	Date.getBlankDate = function () {
 		//Return statement
-		return { year: 0, month: 0, day: 0, hour: 0, minute: 0 };
+		return { year: 1, month: 1, day: 1, hour: 0, minute: 0 };
 	};
 	
 	Date.getCurrentDate = function () {

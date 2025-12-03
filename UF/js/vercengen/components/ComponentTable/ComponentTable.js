@@ -126,7 +126,7 @@ ve.Table = class extends ve.Component {
 	 * 
 	 * @returns {Object}
 	 */
-	fromArray (arg0_array, arg1_do_not_display) {
+	fromArray (arg0_array, arg1_do_not_display) { //[WIP] - fromArray() needs to coerce variables
 		//Convert from parameters
 		let array = arg0_array;
 		let do_not_display = arg1_do_not_display;
@@ -141,8 +141,20 @@ ve.Table = class extends ve.Component {
 			for (let x = 0; x < array[i].length; x++) {
 				let local_row_obj = {};
 				
-				for (let y = 0; y < array[i][x].length; y++)
-					local_row_obj[y] = { v: array[i][x][y] };
+				for (let y = 0; y < array[i][x].length; y++) {
+					let local_value = array[i][x][y];
+					
+					//Coerce types based on local_value
+					if (local_value.startsWith("=")) {
+						local_row_obj[y] = { f: local_value };
+					} else {
+						if (isNaN(parseFloat(local_value))) {
+							local_row_obj[y] = { v: local_value, t: 1 };
+						} else {
+							local_row_obj[y] = { v: local_value, t: 2 };
+						}
+					}
+				}
 				
 				local_data_obj[x] = local_row_obj;
 			}

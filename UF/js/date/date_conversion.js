@@ -1,5 +1,29 @@
 //Initialise functions
 {
+	Date.convertStringToDate = function (arg0_date_string, arg1_delimiter) {
+		//Convert from parameters
+		let date_string = arg0_date_string;
+		let delimiter = (arg1_delimiter) ? arg1_delimiter : ".";
+		
+		//Declare local instance variables
+		let date_array = date_string.split(delimiter);
+		let date_obj = Date.getBlankDate();
+		let date_properties = ["year", "month", "day", "hour", "minute"];
+		
+		//Check to make sure that the inputted date_string is valid
+		for (let i = 0; i < date_array.length; i++)
+			if (isNaN(parseInt(date_array[i])))
+				return;
+		
+		//Iterate over all elements in date_array and cast them to a date object
+		for (let i = 0; i < date_array.length; i++)
+			if (date_properties[i])
+				date_obj[date_properties[i]] = parseInt(date_array[i]);
+		
+		//Return statement
+		return date_obj;
+	};
+	
 	Date.convertTimestampToDate = function (arg0_timestamp) {
 		//Convert from parameters
 		let timestamp = arg0_timestamp;
