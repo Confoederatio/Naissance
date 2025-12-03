@@ -43,10 +43,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 							let array_values = e.convertToArray();
 							this.history.do_not_draw = true;
 							
-							//console.log(array_values);
-							
-							//Instead of diffing, the geometry variables editor should simply have the reserved namespace .data.variables which it stores all its variables in, allowing us to rebuild variables each time values are changed. State is saved on window close.
-							
 							//1. Reset all [2].variables from all keyframes
 							Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
 								let local_value = local_keyframe.value;
@@ -382,8 +378,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					]));
 					polygon_obj.addKeyframe(main.date, (turf_difference) ? 
 						Geospatiale.convertTurfToMaptalks(turf_difference).toJSON() : null);
-					/*console.log((turf_difference) ?
-						Geospatiale.convertTurfToMaptalks(turf_difference).toJSON() : null);*/
 				}
 			}
 			
