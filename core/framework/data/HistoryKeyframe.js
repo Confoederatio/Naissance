@@ -18,15 +18,23 @@ naissance.HistoryKeyframe = class extends ve.Class {
 	 * 
 	 * @param {...any} argn_arguments
 	 */
-	addData (...argn_arguments) {
+	addData (...argn_arguments) { //[WIP] - Handle nested .variables
 		//Iterate over all arguments and add it to .value, concatenating any objects if they exist
 		for (let i = 0; i < argn_arguments.length; i++)
 			if (argn_arguments[i] !== undefined)
 				if (typeof argn_arguments[i] === "object" && argn_arguments[i] !== null) {
+					let old_variables = (this.value[i].variables) ? this.value[i].variables : {};
+					
 					this.value[i] = {
-						...this.value[i],
+						...(this.value[i]) ? this.value[i] : {},
 						...argn_arguments[i]
 					};
+					
+					if (argn_arguments[i].variables)
+						this.value[i].variables = {
+							...old_variables,
+							...argn_arguments[i].variables
+						};
 				} else {
 					this.value[i] = argn_arguments[i];
 				}

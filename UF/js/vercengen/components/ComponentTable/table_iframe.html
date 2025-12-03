@@ -41,9 +41,9 @@
 	})
 	
 	univerAPI.createWorkbook({ name: 'Test Sheet' });
-	univerAPI.addEvent(univerAPI.Event.SheetEditEnded, (e) => {
+	univerAPI.addEvent(univerAPI.Event.SheetValueChanged, (e) => {
 		window.parent.ve.Table.fireToBinding(window.table_id);
-  }) //((e) => window.parent.ve.Table.fireToBinding(window.table_id));
+	});
 	
 	function getArrayData () {
 		let all_worksheets = univerAPI.getActiveWorkbook().getSheets();
@@ -71,6 +71,8 @@
 						local_row_array.push(local_cell.f);
           } else if (local_cell.v !== undefined) {
 						local_row_array.push(local_cell.v);
+          } else {
+						local_row_array.push(undefined);
           }
         }
 				

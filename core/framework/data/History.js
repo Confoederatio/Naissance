@@ -127,9 +127,16 @@ naissance.History = class extends ve.Class {
 				for (let x = 0; x < local_keyframe.value.length; x++)
 					if (typeof local_keyframe.value[x] === "object") {
 						return_keyframe.value[x] = {
-							...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
+							...(return_keyframe.value[x]) ? return_keyframe.value[x] : {},
 							...local_keyframe.value[x]
 						};
+						
+						//Handle nested .variables
+						if (local_keyframe.value[x] && local_keyframe.value[x].variables)
+							return_keyframe.value[x].variables = {
+								...(return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {},
+								...local_keyframe.value[x].variables
+							};
 					} else if (local_keyframe.value[x] !== undefined) {
 						return_keyframe.value[x] = local_keyframe.value[x];
 					}

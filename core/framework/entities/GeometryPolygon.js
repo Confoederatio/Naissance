@@ -42,18 +42,11 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						onuserchange: (v, e) => { //[WIP] - Finish function body
 							let array_values = e.convertToArray();
 							
-							console.log(`Array values:`, array_values, `Raw value:`, v);
+							//Instead of diffing, the geometry variables editor should simply have the reserved namespace .data.variables which it stores all its variables in, allowing us to rebuild variables each time values are changed. State is saved on window close.
 							
-							//Iterate over array_values, check for any valid dates in the A column, and if found, diff variables to keyframes
-							for (let i = 0; i < array_values.length; i++) //Local spreadsheet loop
-								for (let x = 0; x < array_values[i].length; x++) { //Local row loop
-									//1. Check if array_values[i][x][0] is a valid date
-									
-									//2. Push row to DALS.Timeline.parseAction .set_data
-									//2.1. If it is a valid date, check initial header to see each cell's corresponding variable name
-									
-									//2.2. Diff value with current keyframe (typeof, strict equality match; if untrue, push to DALS)
-								}
+							//1. Reset all [2].variables from all keyframes
+							
+							//2. Reconstruct .variables for all keyframes
 							
 							this.metadata.variables = v;
 						}
@@ -278,7 +271,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	 *   - `.geometry`: {@link string}
 	 * - `.remove_from_polygon`: {@link Object}
 	 *   - `.geometry`: {@link string}
-	 * - `.set_data`: {@link Object}
+	 * - `.set_properties`: {@link Object}
 	 *   - `<data_key>`: {@link any}
 	 * - `.set_polygon`: {@link string} - The JSON to set the polygon geometry to.
 	 * - `.set_symbol`: {@link Object}
@@ -353,7 +346,11 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			
 			//set_properties
 			if (json.set_properties) {
-				polygon_obj.addKeyframe(main.date, undefined, undefined, json.set_properties);
+				if (json.set_properties.date) {
+					polygon_obj.addKeyframe(json.set_properties.date, undefined, undefined, json.set_properties.value);
+				} else {
+					polygon_obj.addKeyframe(main.date, undefined, undefined, json.set_properties);
+				}
 			} else if (json.set_properties === null) {
 				polygon_obj.addKeyframe(main.date, undefined, undefined, null);
 			}

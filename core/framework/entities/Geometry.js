@@ -1,6 +1,7 @@
 if (!global.naissance) global.naissance = {};
 naissance.Geometry = class extends ve.Class {
 	static instances = [];
+	static reserved_keys = ["name"];
 	
 	constructor () {
 		//Convert from parameters
