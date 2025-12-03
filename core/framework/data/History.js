@@ -37,6 +37,7 @@ naissance.History = class extends ve.Class {
 	draw () {
 		//Declare local instance variables
 		let components_obj = {};
+		this.interface = new ve.Interface({}, { name: "Keyframes", width: 99 });
 		
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
@@ -126,6 +127,8 @@ naissance.History = class extends ve.Class {
 				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
 				for (let x = 0; x < local_keyframe.value.length; x++)
 					if (typeof local_keyframe.value[x] === "object") {
+						let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
+						
 						return_keyframe.value[x] = {
 							...(return_keyframe.value[x]) ? return_keyframe.value[x] : {},
 							...local_keyframe.value[x]
@@ -134,7 +137,7 @@ naissance.History = class extends ve.Class {
 						//Handle nested .variables
 						if (local_keyframe.value[x] && local_keyframe.value[x].variables)
 							return_keyframe.value[x].variables = {
-								...(return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {},
+								...old_variables,
 								...local_keyframe.value[x].variables
 							};
 					} else if (local_keyframe.value[x] !== undefined) {

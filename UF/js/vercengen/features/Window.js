@@ -176,7 +176,9 @@ ve.Window = class extends ve.Feature {
 				close_button.src = `./UF/gfx/close_icon_dark.png`;
 			this.element.querySelector(`#feature-header`).appendChild(close_button);
 			
-			close_button.onclick = () => {
+			close_button.onclick = (e) => {
+				if (this.options.onuserchange)
+					this.options.onuserchange({ close: true }, e);
 				this.remove();
 			};
 		}

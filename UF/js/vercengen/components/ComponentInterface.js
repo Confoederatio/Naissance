@@ -101,11 +101,12 @@ ve.Interface = class extends ve.Component {
 		
 		//Set this.components_obj; invoke this.redraw()
 		//1. Reset old destructured bindings for components_obj by deleting their addresses
-		Object.iterate(components_obj, (local_key, local_value) => {
+		Object.iterate(this.components_obj, (local_key, local_value) => {
 			if (!this.reserved_keys.includes(local_key)) delete this[local_key];
 			if (this.components_obj[local_key])
 				this.removeComponent(this.components_obj[local_key]);
 		});
+		
 		this.components_obj = components_obj;
 		//2. Set new destructured bindings for components_obj by deleting their addresses
 		Object.iterate(components_obj, (local_key, local_value) => {
@@ -147,6 +148,9 @@ ve.Interface = class extends ve.Component {
 	 * - Method of: {@link ve.Interface}
 	 */
 	redraw () {
+		//Reset this.element.querySelector("table")
+		this.element.querySelector("table").innerHTML = "";
+		
 		this.components_obj = ve.Interface.assignComponentCoordinates(this.components_obj);
 		this.dimensions = ve.Interface.getDefinedComponentDimensions(this.components_obj);
 		this.resize(this.dimensions[0] + 1, this.dimensions[1] + 1);

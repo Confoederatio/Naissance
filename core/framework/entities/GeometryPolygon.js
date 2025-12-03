@@ -41,21 +41,67 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						dark_mode: true,
 						onuserchange: (v, e) => { //[WIP] - Finish function body
 							let array_values = e.convertToArray();
+							this.history.do_not_draw = true;
+							
+							//console.log(array_values);
 							
 							//Instead of diffing, the geometry variables editor should simply have the reserved namespace .data.variables which it stores all its variables in, allowing us to rebuild variables each time values are changed. State is saved on window close.
 							
 							//1. Reset all [2].variables from all keyframes
+							Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
+								let local_value = local_keyframe.value;
+								console.log(local_value[2] && local_value[2].variables);
+								console.log(Object.keys(local_value[2]).length);
+								
+								if (local_value[2] && local_value[2].variables)
+									if (Object.keys(local_value[2]).length === 1) {
+										console.log(`Deleting keyframe:`, local_key);
+										delete this.history.keyframes[local_key];
+									} else {
+										delete local_value[2].variables;
+									}
+							});
 							
-							//2. Reconstruct .variables for all keyframes
+							//2. Reconstruct .variables for all valid keyframes
+							for (let i = 0; i < array_values.length; i++)
+								for (let x = 0; x < array_values[i].length; x++) //Iterate over all rows in spreadsheets
+									if (array_values[i][x][0]) {
+										let local_date = Date.convertStringToDate(array_values[i][x][0].toString());
+										let local_variables_obj = {};
+										
+										//If local_date is defined, iterate over all values in row and append them to local_variables_obj
+										if (local_date && array_values[i][x].length > 1) {
+											for (let y = 1; y < array_values[i][x].length; y++) {
+												let local_cell_variable_name = y;
+												if (array_values[i][0][y])
+													local_cell_variable_name = array_values[i][0][y];
+												
+												local_variables_obj[local_cell_variable_name] = array_values[i][x][y];
+											}
+											
+											this.history.addKeyframe(local_date, undefined, undefined, {
+												variables: local_variables_obj
+											});
+										}
+									}
 							
 							this.metadata.variables = v;
+							delete this.history.do_not_draw;
+							this.history.draw();
+							this.keyframes_ui.v = this.history.interface.v;
 						}
 					})
 				}, {
 					name: "Variables Editor",
 					can_rename: false,
 					height: "20rem",
-					width: "30rem"
+					width: "30rem",
+					
+					onuserchange: (v) => {
+						if (!v.close) return;
+						
+						//Call DALS.Timeline.parseAction() .set_history 
+					}
 				});
 			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),
 			open_help_menu: veButton(() => {
@@ -277,7 +323,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	 * - `.set_symbol`: {@link Object}
 	 *   - `<symbol_key>`: {@link any}
 	 */
-	static parseAction (arg0_json) {
+	static parseAction (arg0_json) { //[WIP] - Add .set_history
 		//Convert from parameters
 		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 		
