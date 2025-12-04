@@ -27,6 +27,7 @@
  *   - 
  *   - `.onuserchange`: {@link function}(arg0_v:{@link Object}, arg1_e:{@link Event}) - Fires upon user changes to the window. Changes are discrete, and the set of Object keys may vary.
  *     - `arg0_v`: {@link Object}
+ *       - `.close`: {@link boolean} - Whether the change is a close event.
  *       - `.name`: {@link string}
  *   
  * ##### Instance:
@@ -36,6 +37,7 @@
  * - <span color=00ffff>{@link ve.Window.getZIndex|getZIndex}</span>() | {@link number}
  * - <span color=00ffff>{@link ve.Window.select|select}</span>()
  * - <span color=00ffff>{@link ve.Window.setCoords|setCoords}</span>(arg0_x:{@link number}, arg1_y:{@link number})
+ * - <span color=00ffff>{@link ve.Window.setName|setName}</span>(arg0_name:{@link string})
  * - <span color=00ffff>{@link ve.Window.setSize|setSize}</span>(arg0_width:{@link number}|{@link string}, arg1_height:{@link number}|{@link string})
  * - <span color=00ffff>{@link ve.Window.refresh|refresh}</span>(arg0_components_obj:{@link Object}<{@link ve.Component}>)
  * 

@@ -5,8 +5,6 @@
  * 
  * The reason this does not always serialise to an {@link Array} is so that formulas and format data can be preserved.
  * 
- * [WIP] - Add CSV compatibility and auto-coercion formatting at a later date.
- * 
  * ##### Constructor:
  * - `arg0_value`: {@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object}
  *   - Nested arrays: [n1] - Container, [n2] - Sheet, [n3] - Row
@@ -20,6 +18,12 @@
  * - <span color=00ffff>{@link ve.Table.convertToArray|convertToArray}</span>() | {@link Array}<{@link Array}<{@link Array}<{@link any}>>>
  * - <span color=00ffff>{@link ve.Table.fromArray|fromArray}</span>(arg0_array:{@link Array}<{@link Array}<{@link Array}<{@link any}>>>, arg1_do_not_display=false:{@link boolean}) | {@link Object}
  * - <span color=00ffff>{@link ve.Table.setDarkMode|setDarkMode}</span>(arg0_value=false:{@link boolean})
+ * 
+ * ##### Static Fields:
+ * - `.instances`: {@link Array}<this:{@link ve.Table}>
+ *
+ * ##### Static Methods:
+ * - <span color=00ffff>{@link ve.Table.fireToBinding|fireToBinding}</span>(arg0_table_id:{@link string})
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
@@ -126,7 +130,7 @@ ve.Table = class extends ve.Component {
 	 * 
 	 * @returns {Object}
 	 */
-	fromArray (arg0_array, arg1_do_not_display) { //[WIP] - fromArray() needs to coerce variables
+	fromArray (arg0_array, arg1_do_not_display) {
 		//Convert from parameters
 		let array = arg0_array;
 		let do_not_display = arg1_do_not_display;
@@ -188,7 +192,13 @@ ve.Table = class extends ve.Component {
 		this.iframe_el.contentWindow.toggleDarkMode(value);
 	}
 	
-	static fireToBinding (arg0_table_id) { //[WIP] - Finish function body
+	/**
+	 * Fires to_binding statically, used by the embedded iframe since it has no `this` context.
+	 * - Static method of: {@link ve.Table}
+	 * 
+	 * @param {string} arg0_table_id
+	 */
+	static fireToBinding (arg0_table_id) {
 		//Convert from parameters
 		let table_id = arg0_table_id;
 		

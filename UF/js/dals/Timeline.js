@@ -23,7 +23,6 @@ Object.defineProperty(DALS, "timeline", {
 	}
 });
 
-//[WIP] - Implement DALS.undo()/DALS.redo()
 /**
  * <span color = "yellow">{@link DALS.Timeline}</span>: Represents a singular timeline in an undo/redo tree within the Delta Action Logging System (DALS). `.value` is structured as an {@link Array}<{@link Object}>, with [0] representing the head state, and subsequent elements state mutations.
  * 

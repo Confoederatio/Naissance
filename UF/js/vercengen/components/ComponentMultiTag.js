@@ -4,6 +4,8 @@
  * Represents a multi tag input with unique metadata attributes for keywording.
  * - Functional binding: <span color=00ffff>veMultiTag</span>().
  * 
+ * [WIP] - Arrays appear to be 1-indexed when shifting or deleting. This behaviour should be changed.
+ * 
  * ##### Constructor:
  * - `arg0_value`: {@link Array}<{@link string}>
  * - `arg1_options`: {@link Object}

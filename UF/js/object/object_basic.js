@@ -161,7 +161,7 @@
 	 * @param {Object} [arg2_options]
 	 *  @param [arg2_options.sort_mode] - Either 'ascending'/'descending'. Sorts object keys.
 	 */
-	Object.iterate = function (arg0_object, arg1_function, arg2_options) { //[WIP] - CConsider fixing performance with Date/History
+	Object.iterate = function (arg0_object, arg1_function, arg2_options) {
 		//Convert from parameters
 		let object = arg0_object;
 		let local_function = arg1_function;
