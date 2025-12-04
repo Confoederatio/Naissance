@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/GLITCHED_LAYER.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/autosave.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/blank.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/keyframe_concat.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/keyframe_test.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/sketch_map_test.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/test.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/test2.naissance" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/variable_testing.naissance" beforeDir="false" />
-    </list>
+    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,7 +63,7 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="67763000" />
+      <workItem from="1764176738442" duration="68107000" />
     </task>
     <servers />
   </component>
