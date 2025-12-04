@@ -22,6 +22,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.MultiTag}
  */
@@ -69,6 +70,10 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Returns the global registry array shared by all {@link ve.MultiTag} components with this namespace.
 	 * - Accessor of: {@link ve.MultiTag}
+	 *
+	 * @alias registry_array
+	 * @memberof ve.Component.ve.MultiTag
+	 * @type {string[]}
 	 * 
 	 * @returns {string[]}
 	 */
@@ -87,6 +92,10 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Returns the string array stored by the component.
 	 * - Accessor of: {@link ve.MultiTag}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.MultiTag
+	 * @type {string[]}
 	 * 
 	 * @returns {string[]}
 	 */
@@ -98,6 +107,10 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Sets the string array stored by the component.
 	 * - Accessor of: {@link ve.MultiTag}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.MultiTag
+	 * @type {string[]}
 	 * 
 	 * @param {string[]} arg0_value
 	 */
@@ -114,6 +127,9 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Notifies all instances sharing the same `.options.tags_key` and updates their tag suggestions.
 	 * - Method of: {@link ve.MultiTag}
+	 *
+	 * @alias notifyAllInstances
+	 * @memberof ve.Component.ve.MultiTag
 	 */
 	notifyAllInstances () {
 		//Declare local instance variables
@@ -127,6 +143,9 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Refreshes the current {@link ve.List} display as well as any {@link ve.Datalist} components attached to it.
 	 * - Method of: {@link ve.MultiTag}
+	 *
+	 * @alias refresh
+	 * @memberof ve.Component.ve.MultiTag
 	 */
 	refresh () {
 		//Declare local instance variables
@@ -194,6 +213,9 @@ ve.MultiTag = class extends ve.Component {
 	/**
 	 * Updates tags locally and ensures that {@link this.registry_array} is synchronised correctly to account for them.
 	 * - Method of: {@link ve.MultiTag}
+	 *
+	 * @alias updateLocalTags
+	 * @memberof ve.Component.ve.MultiTag
 	 */
 	updateLocalTags () {
 		//Declare local instance variables

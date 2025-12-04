@@ -20,6 +20,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Checkbox}
  */
@@ -96,6 +97,10 @@ ve.Checkbox = class extends ve.Component {
 	/**
 	 * Returns the present ve.Checkbox list value.
 	 * - Accessor of {@link ve.Checkbox}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Checkbox
+	 * @type {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
 	 * 
 	 * @returns {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
 	 */
@@ -129,6 +134,10 @@ ve.Checkbox = class extends ve.Component {
 	/**
 	 * Sets the present ve.Checkbox list value.
 	 * - Accessor of: {@link ve.Checkbox}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Checkbox
+	 * @type {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
 	 * 
 	 * @param {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}} arg0_value
 	 */
@@ -165,6 +174,9 @@ ve.Checkbox = class extends ve.Component {
 	/**
 	 * Generates HTML recursively for a nested checkbox element.
 	 * - Static method of: {@link ve.Checkbox}
+	 *
+	 * @alias #generateHTMLRecursively
+	 * @memberof ve.Component.ve.Checkbox
 	 * 
 	 * @param {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}} arg0_value
 	 * @returns {string[]}

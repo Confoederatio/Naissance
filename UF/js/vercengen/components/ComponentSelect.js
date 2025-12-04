@@ -20,6 +20,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Select}
  */
@@ -85,6 +86,10 @@ ve.Select = class veSelect extends ve.Component {
 	/**
 	 * Gets the currently selected key from its `.id`.
 	 * - Accessor of: {@link ve.Select}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Select
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -98,6 +103,10 @@ ve.Select = class veSelect extends ve.Component {
 	/**
 	 * Sets the current selected key value.
 	 * - Accessor of: {@link ve.Select}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Select
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */
@@ -121,6 +130,9 @@ ve.Select = class veSelect extends ve.Component {
 	
 	/**
 	 * Returns the HTML string of the present component as an {@link Array}<{@link string}>
+	 *
+	 * @alias generateHTML
+	 * @memberof ve.Component.ve.Select
 	 * 
 	 * @returns {string[]}
 	 */

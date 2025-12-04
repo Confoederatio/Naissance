@@ -27,6 +27,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Table}
  */
@@ -83,6 +84,10 @@ ve.Table = class extends ve.Component {
 	/**
 	 * Returns the current Object value, including both formulas/cells.
 	 * - Accessor of: {@link ve.Table}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Table
+	 * @type {Object}
 	 * 
 	 * @returns {Object}
 	 */
@@ -94,6 +99,10 @@ ve.Table = class extends ve.Component {
 	/**
 	 * Sets the Object value contained in the Component, including both formulas/cells.
 	 * - Accessor of: {@link ve.Table}
+	 * 
+	 * @alias v
+	 * @memberof ve.Component.ve.Table
+	 * @type {Object}
 	 * 
 	 * @param {Object} arg0_value
 	 */
@@ -113,6 +122,9 @@ ve.Table = class extends ve.Component {
 	/**
 	 * Converts the present value to a 3D array.
 	 * - Method of: {@link ve.Table}
+	 *
+	 * @alias convertToArray
+	 * @memberof ve.Component.ve.Table
 	 * 
 	 * @returns {Array}
 	 */
@@ -125,6 +137,8 @@ ve.Table = class extends ve.Component {
 	 * Sets the present component value from an exported 3D array.
 	 * - Method of: {@link ve.Table}
 	 * 
+	 * @alias fromArray
+	 * @memberof ve.Component.ve.Table
 	 * @param {Array} arg0_array
 	 * @param {boolean} [arg1_do_not_display=false]
 	 * 
@@ -183,6 +197,9 @@ ve.Table = class extends ve.Component {
 	 * Sets the theme of the current Table component, either to dark mode or light mode.
 	 * - Method of: {@link ve.Table}
 	 * 
+	 * @alias setDarkMode
+	 * @memberof ve.Component.ve.Table
+	 * 
 	 * @param {boolean} [arg0_value=false]
 	 */
 	setDarkMode (arg0_value) {
@@ -195,6 +212,9 @@ ve.Table = class extends ve.Component {
 	/**
 	 * Fires to_binding statically, used by the embedded iframe since it has no `this` context.
 	 * - Static method of: {@link ve.Table}
+	 * 
+	 * @alias #fireToBinding
+	 * @memberof ve.Component.ve.Table
 	 * 
 	 * @param {string} arg0_table_id
 	 */

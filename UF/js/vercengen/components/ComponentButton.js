@@ -12,6 +12,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Button}
  */
@@ -62,6 +63,10 @@ ve.Button = class extends ve.Component {
 	/**
 	 * Returns the function bound to the present button.
 	 * - Accessor of: {@link ve.Button}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Button
+	 * @type {function}
 	 * 
 	 * @returns {function}
 	 */
@@ -72,7 +77,11 @@ ve.Button = class extends ve.Component {
 	
 	/**
 	 * Sets the function for the present button.
-	 * - Accessor of: {@link ve.Button} 
+	 * - Accessor of: {@link ve.Button}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Button
+	 * @type {function}
 	 * 
 	 * @param {function} arg0_value
 	 */

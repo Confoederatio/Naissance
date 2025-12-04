@@ -17,6 +17,7 @@
  *     
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Tooltip}
  */
@@ -46,11 +47,31 @@ ve.Tooltip = class extends ve.Feature {
 		tippy(this.anchor_element, { allowHTML: true, content: this.element, interactive: true });
 	}
 	
+	/**
+	 * Returns the element of the current tooltip.
+	 * - Method of: {@link ve.Tooltip}
+	 * 
+	 * @alias v
+	 * @memberof ve.Feature.ve.Tooltip
+	 * @type {HTMLElement}
+	 * 
+	 * @returns {HTMLElement}
+	 */
 	get v () {
 		//Return statement
 		return this.element;
 	}
 	
+	/**
+	 * Sets the value of the current tooltip using a {@link Array}<{@link ve.Component}> type, a string, or a function that returns a string.
+	 * - Method of: {@link ve.Tooltip}
+	 *
+	 * @alias v
+	 * @memberof ve.Feature.ve.Tooltip
+	 * @type {HTMLElement}
+	 * 
+	 * @param {function|string|ve.Component[]} arg0_value
+	 */
 	set v (arg0_value) {
 		//Convert from parameters
 		let components_obj = arg0_value;

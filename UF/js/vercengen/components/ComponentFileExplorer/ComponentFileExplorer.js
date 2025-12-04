@@ -43,6 +43,7 @@
  *
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.FileExplorer}
  */
@@ -129,6 +130,10 @@ ve.FileExplorer = class extends ve.Component {
 	 * Returns the present file path.
 	 * - Accessor of {@link ve.FileExplorer} 
 	 * 
+	 * @alias v
+	 * @memberof ve.Component.ve.FileExplorer
+	 * @type {string}
+	 * 
 	 * @returns {string}
 	 */
 	get v () {
@@ -139,6 +144,10 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Sets the present file path.
 	 * - Accessor of {@link ve.FileExplorer}
+	 * 
+	 * @alias v
+	 * @memberof ve.Component.ve.FileExplorer
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */
@@ -156,6 +165,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Clears the present keyboard.
 	 * - Method of {@link ve.FileExplorer}
+	 * 
+	 * @alias clearClipboard
+	 * @memberof ve.Component.ve.FileExplorer
 	 */
 	clearClipboard () {
 		this.clipboard = [];
@@ -163,7 +175,10 @@ ve.FileExplorer = class extends ve.Component {
 	
 	/**
 	 * Deselects a specific file path and removes it from {@link this.selected}.
-	 * - Method of {@link ve.FileExplorer} 
+	 * - Method of {@link ve.FileExplorer}
+	 * 
+	 * @alias deselect
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string} arg0_file_path
 	 * @param {Object} [arg1_options]
@@ -195,6 +210,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Deselects all file paths, clearing {@link this.selected}.
 	 * - Method of {@link ve.FileExplorer}
+	 *
+	 * @alias deselectAll
+	 * @memberof ve.Component.ve.FileExplorer
 	 */
 	deselectAll () {
 		//Iterate over all this.selected and deselect them
@@ -206,6 +224,16 @@ ve.FileExplorer = class extends ve.Component {
 		});
 	}
 	
+	/**
+	 * Fires a select toggle element for the full path.
+	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias fireSelectToggle
+	 * @memberof ve.Component.ve.FileExplorer
+	 * 
+	 * @param {string} v
+	 * @param {ve.FileExplorer} e
+	 */
 	fireSelectToggle (v, e) {
 		if (e.owners)
 			for (let i = e.owners.length - 1; i >= 0; i--)
@@ -219,6 +247,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Refreshes the current file explorer path, rerendering the display for folders and files within the Component.
 	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias refresh
+	 * @memberof ve.Component.ve.FileExplorer
 	 */
 	refresh () {
 		//Declare local instance variables
@@ -573,6 +604,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Selects a specific file path, then returns {@link this.selected}.
 	 * - Method of {@link ve.FileExplorer}
+	 *
+	 * @alias select
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string} arg0_file_path
 	 * 
@@ -596,6 +630,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Selects all file paths in the current folder being navigated.
 	 * - Method of {@link ve.FileExplorer}
+	 *
+	 * @alias selectAll
+	 * @memberof ve.Component.ve.FileExplorer
 	 */
 	selectAll () {
 		//Declare local instance variables
@@ -612,6 +649,9 @@ ve.FileExplorer = class extends ve.Component {
 	/**
 	 * Sets the clipboard to the current selection.
 	 * - Method of {@link ve.FileExplorer}
+	 *
+	 * @alias setClipboard
+	 * @memberof ve.Component.ve.FileExplorer
 	 */
 	setClipboard () {
 		this.clipboard = structuredClone(this.selected);

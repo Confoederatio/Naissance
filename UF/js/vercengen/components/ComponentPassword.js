@@ -14,6 +14,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Password}
  */
@@ -62,6 +63,10 @@ ve.Password = class extends ve.Component {
 	/**
 	 * Returns the current password.
 	 * - Accessor of: {@link ve.Password}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Password
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -73,6 +78,10 @@ ve.Password = class extends ve.Component {
 	/**
 	 * Sets the new password for the present component.
 	 * - Accessor of: {@link ve.Password}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Password
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

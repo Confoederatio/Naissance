@@ -43,6 +43,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.ScriptManager}
  */
@@ -482,6 +483,10 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Returns the current output code in the present Component.
 	 * - Accessor of: {@link ve.ScriptManager}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManager
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -493,6 +498,10 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Sets the current output code in the present Component.
 	 * - Accessor of: {@link ve.ScriptManager}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManager
+	 * @type {string}
 	 *
 	 * @param {string} arg0_value
 	 */
@@ -542,6 +551,9 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Loads a new settings object and refreshes the present Component to display them, then sets {@link this._settings}.
 	 * - Method of: {@link ve.ScriptManager}
+	 *
+	 * @alias loadSettings
+	 * @memberof ve.Component.ve.ScriptManager
 	 * 
 	 * @param {Object} [arg0_settings]
 	 *  @param {string} [arg0_settings.codemirror_theme] - One of the default CodeMirror themes. [View CodeMirror theming list](https://codemirror.net/5/demo/theme.html)
@@ -585,6 +597,9 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Returns the present {@link this._settings} as a string.
 	 * - Method of: {@link ve.ScriptManager}
+	 *
+	 * @alias saveSettings
+	 * @memberof ve.Component.ve.ScriptManager
 	 * 
 	 * @returns {string}
 	 */
@@ -596,6 +611,9 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Sets the present code editor theme to a default CodeMirror theme. [View CodeMirror theming list](https://codemirror.net/5/demo/theme.html)
 	 * - Method of: {@link ve.ScriptManager}
+	 *
+	 * @alias setCodeEditorTheme
+	 * @memberof ve.Component.ve.ScriptManager
 	 * 
 	 * @param {string} arg0_theme_class
 	 */
@@ -611,6 +629,9 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Sets the theme of the overall editor.
 	 * - Method of: {@link ve.ScriptManager}
+	 *
+	 * @alias setTheme
+	 * @memberof ve.Component.ve.ScriptManager
 	 * 
 	 * @param {string} arg0_theme_class - Either 'theme-default'/'theme-light'
 	 */
@@ -642,6 +663,9 @@ ve.ScriptManager = class extends ve.Component {
 	/**
 	 * Displays a load error window given an error, or a variable that resolves to a {@link string}.
 	 * - Method of: {@link ve.ScriptManager}
+	 *
+	 * @alias throwLoadError
+	 * @memberof ve.Component.ve.ScriptManager
 	 * 
 	 * @param {Error|string} arg0_error
 	 */

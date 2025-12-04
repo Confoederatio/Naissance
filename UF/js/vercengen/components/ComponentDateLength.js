@@ -14,6 +14,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.veDateLength}
  */
@@ -69,6 +70,10 @@ ve.DateLength = class extends ve.Component {
 	
 	/**
 	 * Returns the date length contained in the current component.
+	 *
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.Date
+	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */
@@ -85,6 +90,10 @@ ve.DateLength = class extends ve.Component {
 	
 	/**
 	 * Sets the date length contained in the current component.
+	 *
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.Date
+	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @param {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */

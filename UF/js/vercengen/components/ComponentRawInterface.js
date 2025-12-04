@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.RawInterface}
  */
@@ -51,9 +52,13 @@ ve.RawInterface = class extends ve.Component {
 	
 	/**
 	 * Returns the current {@link this.components_obj}.
-	 * - Accessor of: {@link ve.RawInterface} 
+	 * - Accessor of: {@link ve.RawInterface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.RawInterface
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
-	 * @returns {{"<component_key>": ve.Component}}}
+	 * @returns {{"<component_key>": ve.Component}}
 	 */
 	get v () {
 		//Return statement
@@ -63,6 +68,10 @@ ve.RawInterface = class extends ve.Component {
 	/**
 	 * Sets and redraws {@link this.components_obj}.
 	 * - Accessor of: {@link ve.RawInterface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.RawInterface
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */

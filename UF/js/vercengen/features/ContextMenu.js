@@ -28,6 +28,7 @@
  * 
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.ContextMenu}
  */
@@ -64,6 +65,9 @@ ve.ContextMenu = class extends ve.Feature {
 	/**
 	 * Adds a given context menu with a set `.options.id` to prevent duplicates.
 	 * - Method of: {@link ve.ContextMenu}
+	 *
+	 * @alias addContextMenu
+	 * @memberof ve.Feature.ve.ContextMenu
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 * @param {Object} [arg1_options]
@@ -163,6 +167,9 @@ ve.ContextMenu = class extends ve.Feature {
 	/**
 	 * Closes the present context menu and all its associated layers.
 	 * - Method of: {@link ve.ContextMenu}
+	 *
+	 * @alias close
+	 * @memberof ve.Feature.ve.ContextMenu
 	 * 
 	 * @returns {ve.ContextMenu}
 	 */
@@ -179,6 +186,9 @@ ve.ContextMenu = class extends ve.Feature {
 	/**
 	 * Returns the current X offset in px from the anchored first layer. Default padding is 4px.
 	 * - Method of: {@link ve.ContextMenu}
+	 *
+	 * @alias getCurrentOffset
+	 * @memberof ve.Feature.ve.ContextMenu
 	 * 
 	 * @returns {number}
 	 */
@@ -197,6 +207,9 @@ ve.ContextMenu = class extends ve.Feature {
 	/**
 	 * Opens the present context menu with its bound {@link this.components_obj}.
 	 * - Method of: {@link ve.ContextMenu}
+	 *
+	 * @alias open
+	 * @memberof ve.Feature.ve.ContextMenu
 	 * 
 	 * @returns {ve.ContextMenu}
 	 */
@@ -210,7 +223,10 @@ ve.ContextMenu = class extends ve.Feature {
 	
 	/**
 	 * Removes a context menu layer based on its order.
-	 * - Method of: {@link ve.ContextMenu} 
+	 * - Method of: {@link ve.ContextMenu}
+	 *
+	 * @alias removeContextMenu
+	 * @memberof ve.Feature.ve.ContextMenu
 	 * 
 	 * @param {number} arg0_index
 	 * 

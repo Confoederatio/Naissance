@@ -22,6 +22,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Radio}
  */
@@ -83,6 +84,10 @@ ve.Radio = class extends ve.Component {
 	/**
 	 * Returns the present value of the checked options.
 	 * - Accessor of: {@link ve.Radio}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Radio
+	 * @type {Object<boolean>}
 	 * 
 	 * @returns {Object<boolean>}
 	 */
@@ -94,6 +99,10 @@ ve.Radio = class extends ve.Component {
 	/**
 	 * Sets the present value of the checked options.
 	 * - Accessor of: {@link ve.Radio}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Radio
+	 * @type {Object<boolean>}
 	 * 
 	 * @param {Object<boolean>} arg0_value
 	 */
@@ -130,6 +139,9 @@ ve.Radio = class extends ve.Component {
 	/**
 	 * Generates HTML recursively given a current value compatible with the component's initialising `arg0_value`.
 	 * - Static method of: {@link ve.Radio}
+	 *
+	 * @alias #generateHTMLRecursively
+	 * @memberof ve.Component.ve.Radio
 	 * 
 	 * @param {Object<boolean>} arg0_value
 	 * @param {ve.Radio} arg1_this

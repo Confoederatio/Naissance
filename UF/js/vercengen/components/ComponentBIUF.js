@@ -21,6 +21,7 @@
  *
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.BIUF}
  */
@@ -28,7 +29,7 @@ ve.BIUF = class extends ve.Component {
 	static demo_value = `<b>Bold</b> <i>Italic</i>, <u>Underline</u>, and regular text formatting are supported by BIUF fields.`;
 	static demo_options = {
 		onchange: (e) => {
-			console.log(`ve.ComponentBIUF:`, e);
+			console.log(`ve.BIUF:`, e);
 		}
 	};
 	
@@ -77,7 +78,11 @@ ve.BIUF = class extends ve.Component {
 	
 	/**
 	 * Returns the current HTML content in the present Component.
-	 * - Accessor of {@link ve.ComponentBIUF}
+	 * - Accessor of {@link ve.BIUF}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.BIUF
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -87,8 +92,12 @@ ve.BIUF = class extends ve.Component {
 	}
 	
 	/**
-	 * Sets the HTML content value for {@link ve.ComponentBIUF}
-	 * - Accessor of {@link ve.ComponentBIUF}
+	 * Sets the HTML content value for {@link ve.BIUF}
+	 * - Accessor of {@link ve.BIUF}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.BIUF
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */
@@ -105,7 +114,10 @@ ve.BIUF = class extends ve.Component {
 	
 	/**
 	 * Initialises all event handlers for BIUF buttons and keybinds.
-	 * - Method of: {@link ve.ComponentBIUF}
+	 * - Method of: {@link ve.BIUF}
+	 *
+	 * @alias handleBIUF
+	 * @memberof ve.Component.ve.BIUF
 	 * 
 	 * @param {HTMLElement} arg0_biuf_el - The mounted BIUF element.
 	 */
@@ -133,7 +145,10 @@ ve.BIUF = class extends ve.Component {
 	
 	/**
 	 * Initialises the present BIUF toolbar.
-	 * - Method of: {@link ve.ComponentBIUF}
+	 * - Method of: {@link ve.BIUF}
+	 *
+	 * @alias initBIUFToolbar
+	 * @memberof ve.Component.ve.BIUF
 	 */
 	initBIUFToolbar () {
 		//Declare local instance variables
@@ -178,7 +193,10 @@ ve.BIUF = class extends ve.Component {
 	
 	/**
 	 * Fires an onuserchange event whilst synchronising the present value.
-	 * - Method of: {@link ve.ComponentBIUF}
+	 * - Method of: {@link ve.BIUF}
+	 *
+	 * @alias sendOnchangeEvent
+	 * @memberof ve.Component.ve.BIUF
 	 */
 	sendOnchangeEvent () {
 		this.value = this.v;
@@ -189,7 +207,7 @@ ve.BIUF = class extends ve.Component {
 //Functional binding
 
 /**
- * @returns {ve.ComponentBIUF}
+ * @returns {ve.BIUF}
  */
 veBIUF = function () {
 	//Return statement

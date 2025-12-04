@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Map}
  */
@@ -53,6 +54,10 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Returns the current mounted map.
 	 * - Accessor of: {@link ve.Map}
+	 *
+	 * @alias addItem
+	 * @memberof ve.Component.ve.Map
+	 * @type {ve.Map}
 	 * 
 	 * @returns {ve.Map}
 	 */
@@ -64,6 +69,10 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Redraws and sets a new map with the same options as determined by `arg0_value`.
 	 * - Accessor of: {@link ve.Map}
+	 *
+	 * @alias addItem
+	 * @memberof ve.Component.ve.Map
+	 * @type {ve.Map}
 	 * 
 	 * @param {Object} arg0_value
 	 */
@@ -78,6 +87,9 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Clears the present map whilst preserving any {@link maptalks.VectorLayer} where possible.
 	 * - Method of: {@link ve.Map}
+	 *
+	 * @alias clear
+	 * @memberof ve.Component.ve.Map
 	 */
 	clear () {
 		//Declare local instance variables
@@ -104,6 +116,9 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Returns options for the default {@link maptalks.TileLayer} used for the main map.
 	 * - Method of: {@link ve.Map}
+	 *
+	 * @alias getDefaultBaseLayer
+	 * @memberof ve.Component.ve.Map
 	 * 
 	 * @returns {maptalks.TileLayer}
 	 */
@@ -119,6 +134,9 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Returns the default spatial reference for {@link maptalks.Map}.
 	 * - Method of: {@link ve.Map}
+	 *
+	 * @alias getDefaultSpatialReference
+	 * @memberof ve.Component.ve.Map
 	 * 
 	 * @returns {{projection: string}}
 	 */

@@ -22,6 +22,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Hierarchy}
  */
@@ -53,6 +54,10 @@ ve.Hierarchy = class extends ve.Component {
 	 * Returns the current {@link this.components_obj}.
 	 * - Accessor of {@link ve.Hierarchy}
 	 * 
+	 * @alias v
+	 * @memberof ve.Component.ve.Hierarchy
+	 * @type {ve.Component[]}
+	 * 
 	 * @returns {ve.Component[]}
 	 */
 	get v () {
@@ -63,6 +68,10 @@ ve.Hierarchy = class extends ve.Component {
 	/**
 	 * Sets the current {@link this.components_obj} displayed in the hierarchy.
 	 * - Accessor of {@link ve.Hierarchy}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Hierarchy
+	 * @type {ve.Component[]}
 	 * 
 	 * @param arg0_components_obj
 	 */
@@ -139,6 +148,10 @@ ve.Hierarchy = class extends ve.Component {
 	
 	/**
 	 * Appends the associated hierarchy datatype to the hierarchy.
+	 * - Method of: {@link ve.Hierarchy}
+	 * 
+	 * @alias addItem
+	 * @memberof ve.Component.ve.Hierarchy
 	 * 
 	 * @param {HTMLElement} arg0_parent_el
 	 * @param {ve.HierarchyDatatype} arg1_hierarchy_datatype
@@ -157,6 +170,9 @@ ve.Hierarchy = class extends ve.Component {
 	/**
 	 * Returns an object representative of the items in the hierarchy.
 	 * - Method of: {@link ve.Hierarchy}
+	 *
+	 * @alias getHierarchyObject
+	 * @memberof ve.Component.ve.Hierarchy
 	 * 
 	 * @param {Object} [arg0_options]
 	 *  @param {boolean} [arg0_options.flatten_object=false] - Whether the object should be flattened, returning only serialisable JSON keys.
@@ -208,6 +224,9 @@ ve.Hierarchy = class extends ve.Component {
 	/**
 	 * Removes the associated hierarchy datatype from the hierarchy.
 	 * - Method of: {@link ve.Hierarchy}
+	 *
+	 * @alias removeItem
+	 * @memberof ve.Component.ve.Hierarchy
 	 * 
 	 * @param {ve.HierarchyDatatype} arg0_hierarchy_datatype
 	 */
@@ -222,6 +241,9 @@ ve.Hierarchy = class extends ve.Component {
 	/**
 	 * Updates the current search filter based on the inputted query. Ignores `.options.disabled=true` fields, since they are likely kept at the top as action menus.
 	 * - Method of: {@link ve.Hierarchy}
+	 *
+	 * @alias updateSearchFilter
+	 * @memberof ve.Component.ve.Hierarchy
 	 * 
 	 * @param {string} arg0_name
 	 */

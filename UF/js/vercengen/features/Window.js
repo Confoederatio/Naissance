@@ -49,6 +49,7 @@
  *   
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Window}
  */
@@ -218,6 +219,10 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Returns the components currently visible in the Window.
 	 * - Accessor of: {@link ve.Window}
+	 *
+	 * @alias v
+	 * @memberof ve.Feature.ve.Window
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @returns {{"<component_key>": ve.Component}}
 	 */
@@ -229,6 +234,10 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Sets the components visible in the current window.
 	 * - Accessor of: {@link ve.Window}
+	 *
+	 * @alias v
+	 * @memberof ve.Feature.ve.Window
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
@@ -244,6 +253,9 @@ ve.Window = class extends ve.Feature {
 	 * Returns the current z-index of this {@link ve.Window}.
 	 * - Method of: {@link ve.Window}
 	 *
+	 * @alias getZIndex
+	 * @memberof ve.Feature.ve.Window
+	 *
 	 * @returns {number}
 	 */
 	getZIndex () {
@@ -254,6 +266,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Refreshes the components display for the current Window.
 	 * - Method of: {@link ve.Window}
+	 *
+	 * @alias refresh
+	 * @memberof ve.Feature.ve.Window
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
@@ -296,6 +311,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Selects the current {@link ve.Window} instance, raising its z-index above all other Windows.
 	 * - Method of: {@link ve.Window}
+	 *
+	 * @alias select
+	 * @memberof ve.Feature.ve.Window
 	 */
 	select () {
 		//Declare local instance variables
@@ -309,6 +327,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Sets the present coords of the window to a given X, Y coordinate relative to the present anchor.
 	 * - Method of: {@link ve.Window}
+	 *
+	 * @alias setCoords
+	 * @memberof ve.Feature.ve.Window
 	 * 
 	 * @param {number} arg0_x
 	 * @param {number} arg1_y
@@ -332,6 +353,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Sets the current name of the window.
 	 * - Method of: {@link ve.Window}
+	 *
+	 * @alias setName
+	 * @memberof ve.Feature.ve.Window
 	 * 
 	 * @param {string} arg0_name
 	 */
@@ -349,6 +373,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Sets the given size of the current window using either numbers or CSS calculated strings in Telestyle. Any functions must return either a number/string.
 	 * - Method of: {@link ve.Window}
+	 *
+	 * @alias setSize
+	 * @memberof ve.Feature.ve.Window
 	 * 
 	 * @param {function|number|string} arg0_width
 	 * @param {function|number|string} arg1_height
@@ -367,6 +394,9 @@ ve.Window = class extends ve.Feature {
 	/**
 	 * Returns the highest z-index over the set of all Windows in {@link ve.Window.instances}.
 	 * - Static method of: {@link ve.Window}
+	 *
+	 * @alias #getHighestZIndex
+	 * @memberof ve.Feature.ve.Window
 	 * 
 	 * @param {Object} [arg0_options]
 	 *  @param {boolean} [arg0_options.return_object=false] - Whether to return a ve.Window instance.
@@ -394,7 +424,10 @@ ve.Window = class extends ve.Feature {
 	}
 	
 	/** 
-	 * Normalises all z-indexes over the set of ve.Windows. 
+	 * Normalises all z-indexes over the set of ve.Windows.
+	 *
+	 * @alias #normaliseZIndexes
+	 * @memberof ve.Feature.ve.Window
 	 * */
 	static normaliseZIndexes () {
 		//Declare local instance variables

@@ -13,6 +13,7 @@
  * 
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Scene}
  */
@@ -46,6 +47,10 @@ ve.Scene = class extends ve.Feature {
 	 * Returns {@link this.components_obj}
 	 * - Accessor of: {@link ve.Scene}
 	 *
+	 * @alias v
+	 * @memberof ve.Feature.ve.Scene
+	 * @returns {{"<component_key>": ve.Component}}
+	 *
 	 * @returns {{"<component_key>": ve.Component}}
 	 */
 	get v () {
@@ -56,6 +61,10 @@ ve.Scene = class extends ve.Feature {
 	/**
 	 * Sets the `components_obj` variable stored in the present scene.
 	 * - Accessor of: {@link ve.Scene}
+	 *
+	 * @alias v
+	 * @memberof ve.Feature.ve.Scene
+	 * @returns {{"<component_key>": ve.Component}}
 	 *
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
@@ -84,6 +93,9 @@ ve.Scene = class extends ve.Feature {
 	/**
 	 * Creates a draw loop for the present scene using {@link setInterval}() polling.
 	 * - Method of: {@link ve.Scene}
+	 *
+	 * @alias draw
+	 * @memberof ve.Feature.ve.Scene
 	 * 
 	 * @param {function} arg0_function - (this:{@link ve.Scene}
 	 * @param {number} [arg1_interval=100]

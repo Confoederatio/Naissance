@@ -30,6 +30,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Interface}
  */
@@ -81,6 +82,10 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Returns the  `this.components_obj` variable of the present Component.
 	 * - Accessor of: {@link ve.Interface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Interface
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @returns {{"<component_key>": ve.Component}}
 	 */
@@ -92,6 +97,10 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Sets a new `this.components_obj` variable for the present Component and redraws the interface.
 	 * - Accessor of: {@link ve.Interface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Interface
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
@@ -129,6 +138,9 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Adds a new component and destructures it to the present component before redrawing the ve.Interface.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias addComponent
+	 * @memberof ve.Component.ve.Interface
 	 * 
 	 * @param {string} arg0_component_key
 	 * @param {ve.Component} arg1_component_obj
@@ -146,6 +158,9 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Redraws the entire UI for {@link ve.Interface}, including refreshing individual table cells.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias redraw
+	 * @memberof ve.Component.ve.Interface
 	 */
 	redraw () {
 		//Reset this.element.querySelector("table")
@@ -162,6 +177,9 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Refreshes the current UI without recalculating coordinates.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias refresh
+	 * @memberof ve.Component.ve.Interface
 	 */
 	refresh () {
 		//Iterate over all extant this.components_obj and remove all their elements
@@ -201,6 +219,9 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Removes a component mounted to the current interface.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias removeComponent
+	 * @memberof ve.Component.ve.Interface
 	 * 
 	 * @param {ve.Component} arg0_component_obj
 	 */
@@ -216,6 +237,9 @@ ve.Interface = class extends ve.Component {
 	
 	/**
 	 * Resizes the `.dimensions` of the present interface component.
+	 *
+	 * @alias resize
+	 * @memberof ve.Component.ve.Interface
 	 * 
 	 * @param {number} arg0_width
 	 * @param {number} arg1_height
@@ -275,6 +299,9 @@ ve.Interface = class extends ve.Component {
 	/**
 	 * Iterates over all components and assigns their coordinates.
 	 * - Static method of: {@link ve.Interface}
+	 *
+	 * @alias #assignComponentCoordinates
+	 * @memberof ve.Component.ve.Interface
 	 * 
 	 * @param {Object} arg0_components_obj
 	 */
@@ -316,6 +343,9 @@ ve.Interface = class extends ve.Component {
 	
 	/**
 	 * Returns the current `.dimensions` [width, height] of defined components prior to assigning coordinates to non-defined coordinates.
+	 *
+	 * @alias #getDefinedComponentDimensions
+	 * @memberof ve.Component.ve.Interface
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 * 

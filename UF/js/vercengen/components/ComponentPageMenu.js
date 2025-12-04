@@ -25,6 +25,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.PageMenu}
  */
@@ -125,6 +126,10 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	/**
 	 * Returns the current page visible in the component.
 	 * - Accessor of: {@link ve.Interface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.PageMenu
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -136,6 +141,10 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	/**
 	 * Sets the new page visible by the component.
 	 * - Accessor of: {@link ve.Interface}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.PageMenu
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_page_key
 	 */
@@ -167,6 +176,9 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	/**
 	 * Updates the underline underneath the active tab and animates it.
 	 * - Method of: {@link ve.PageMenu}
+	 *
+	 * @alias updateUnderline
+	 * @memberof ve.Component.ve.PageMenu
 	 */
 	updateUnderline () {
 		//Declare local instance variables

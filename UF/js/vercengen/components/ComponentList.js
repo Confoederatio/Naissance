@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.List}
  */
@@ -75,6 +76,10 @@ ve.List = class extends ve.Component {
 	/**
 	 * Returns the current array value.
 	 * - Accessor of: {@link ve.List}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.List
+	 * @type {ve.Component[]}
 	 * 
 	 * @returns {ve.Component[]}
 	 */
@@ -86,6 +91,10 @@ ve.List = class extends ve.Component {
 	/**
 	 * Sets the current array value.
 	 * - Accessor of: {@link ve.List}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.List
+	 * @type {ve.Component[]}
 	 * 
 	 * @param {ve.Component[]} arg0_value
 	 */
@@ -102,6 +111,9 @@ ve.List = class extends ve.Component {
 	/**
 	 * Adds an item to the end of the array.
 	 * - Method of: {@link ve.List}
+	 *
+	 * @alias addItem
+	 * @memberof ve.Component.ve.List
 	 */
 	addItem () {
 		if (this.options.max && this.value.length >= this.options.max) { //Internal guard clause for this.options.max
@@ -117,6 +129,9 @@ ve.List = class extends ve.Component {
 	/**
 	 * Deletes an item from the array given its index.
 	 * - Method of: {@link ve.List}
+	 *
+	 * @alias deleteItem
+	 * @memberof ve.Component.ve.List
 	 * 
 	 * @param {number} arg0_index
 	 */
@@ -138,6 +153,9 @@ ve.List = class extends ve.Component {
 	/**
 	 * Redraws the present array.
 	 * - Method of: {@link ve.List}
+	 *
+	 * @alias draw
+	 * @memberof ve.Component.ve.List
 	 */
 	draw () {
 		//Draw .components_el from this.value

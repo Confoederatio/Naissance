@@ -208,8 +208,12 @@ ve.File = class extends ve.Component {
 	/**
 	 * Returns the current file path pointed to by the component.
 	 * - Accessor of: {@link ve.File}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Date
+	 * @type {string[]}
 	 * 
-	 * @returns {string}
+	 * @returns {string[]}
 	 */
 	get v () {
 		//Return statement
@@ -219,6 +223,10 @@ ve.File = class extends ve.Component {
 	/**
 	 * Sets the current file path pointed to by the component.
 	 * - Accessor of {@link ve.File}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Date
+	 * @type {string}
 	 * 
 	 * @param {string[]} arg0_value
 	 */

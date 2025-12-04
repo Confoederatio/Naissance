@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Colour}
  */
@@ -61,6 +62,10 @@ ve.Colour = class extends ve.Component {
 	/**
 	 * Returns the current [R, G, B] value.
 	 * - Accessor of: {@link ve.Colour}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Colour
+	 * @type {number[]}
 	 * 
 	 * @returns {number[]}
 	 */
@@ -72,6 +77,10 @@ ve.Colour = class extends ve.Component {
 	/**
 	 * Sets the current [R, G, B] value (although HTML components internally store colour values as hex).
 	 * - Accessor of: {@link ve.Colour}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Colour
+	 * @type {number[]}
 	 * 
 	 * @param {number[]|string} arg0_value
 	 */
@@ -89,6 +98,9 @@ ve.Colour = class extends ve.Component {
 	/**
 	 * Returns the hexadecimal value of {@link ve.Colour} as a string.
 	 * - Method of: {@link ve.Colour}
+	 *
+	 * @alias getHex
+	 * @memberof ve.Component.ve.Colour
 	 * 
 	 * @returns {string}
 	 */
@@ -100,6 +112,9 @@ ve.Colour = class extends ve.Component {
 	/**
 	 * Returns the 'R,G,B' value of {@link ve.Colour} as a string.
 	 * - Method of: {@link ve.Colour}
+	 *
+	 * @alias toString
+	 * @memberof ve.Component.ve.Colour
 	 * 
 	 * @returns {string}
 	 */

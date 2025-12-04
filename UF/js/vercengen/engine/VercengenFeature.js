@@ -41,6 +41,7 @@ if (!global.ve) global.ve = {};
  * - {@link ve.Feature.ve.Tooltip|ve.Tooltip}(arg0_components_obj:{@link Object}<{@link ve.Component}>|{@link string}|{@link ve.Component}, arg1_options:{@link Object}) - Spawns a tooltip for the given `.options.element`.
  * - {@link ve.Feature.ve.Window|ve.Window}(arg0_components_obj:{@link Object}<{@link ve.Component}>|{@link string}, arg1_options:{@link Object}) - Default ve.Feature for encapsulating components in <span color = "yellow">{@link ve.Class}</span>.
  * 
+ * @class
  * @memberof ve
  * @namespace ve.Feature
  * @type {ve.Feature}

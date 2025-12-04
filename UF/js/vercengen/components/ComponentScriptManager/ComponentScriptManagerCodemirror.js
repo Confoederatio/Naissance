@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.ScriptManagerCodemirror}
  */
@@ -81,6 +82,10 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 	/**
 	 * Returns the code value for the present Component.
 	 * - Accessor of: {@link ve.ScriptManagerCodemirror}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManagerCodemirror
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -92,6 +97,10 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 	/**
 	 * Sets the code value for the present Component.
 	 * - Accessor of: {@link ve.ScriptManagerCodemirror}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManagerCodemirror
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

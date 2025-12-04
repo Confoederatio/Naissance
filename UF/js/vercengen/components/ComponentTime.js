@@ -16,6 +16,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Time}
  */
@@ -71,6 +72,10 @@ ve.Time = class extends ve.Component {
 	/**
 	 * Returns the present time value.
 	 * - Accessor of: {@link ve.Time}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Time
+	 * @type {{hour: number, minute: number}}
 	 * 
 	 * @returns {{hour: number, minute: number}}
 	 */
@@ -88,6 +93,10 @@ ve.Time = class extends ve.Component {
 	/**
 	 * Sets the time value for the component.
 	 * - Accessor of: {@link ve.Time}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Time
+	 * @type {{hour: number, minute: number}}
 	 * 
 	 * @param {{hour: number, minute: number}} arg0_value
 	 */

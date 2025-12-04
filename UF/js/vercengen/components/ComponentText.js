@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Text}
  */
@@ -69,6 +70,10 @@ ve.Text = class extends ve.Component {
 	/**
 	 * Returns the current text value.
 	 * - Accessor of: {@link ve.Text}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Text
+	 * @type {string|string[]}
 	 * 
 	 * @returns {string|string[]}
 	 */
@@ -91,6 +96,10 @@ ve.Text = class extends ve.Component {
 	/**
 	 * Sets the current text value for the component.
 	 * - Accessor of: {@link ve.Text}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Text
+	 * @type {string|string[]}
 	 * 
 	 * @param {string} arg0_value
 	 */

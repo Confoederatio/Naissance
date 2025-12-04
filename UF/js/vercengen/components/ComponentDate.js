@@ -17,6 +17,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Date}
  */
@@ -72,6 +73,10 @@ ve.Date = class extends ve.Component {
 	/**
 	 * Returns the date contained in the present component.
 	 * - Accessor of: {@link ve.Date}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Date
+	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}}
 	 */
@@ -87,6 +92,10 @@ ve.Date = class extends ve.Component {
 	/**
 	 * Sets the date contained in the present component.
 	 * - Accessor of: {@link ve.Date}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Date
+	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @param {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */
@@ -121,6 +130,9 @@ ve.Date = class extends ve.Component {
 	/**
 	 * Handles input events for {@link ve.Date}. Local helper function, since inputs need to be constrained to valid dates to remain fluid.
 	 * - Method of: {@link ve.Date}
+	 *
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.Date
 	 */
 	handleEvents () {
 		this.element.querySelector(`#year`).addEventListener("change", (e) => {

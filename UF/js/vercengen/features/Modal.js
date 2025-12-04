@@ -15,6 +15,7 @@
  * 
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Modal}
  */
@@ -62,6 +63,9 @@ ve.Modal = class extends ve.Feature {
 	/**
 	 * Removes the current Modal from the DOM.
 	 * - Method of: {@link ve.Modal}
+	 *
+	 * @alias close
+	 * @memberof ve.Feature.ve.Modal
 	 */
 	close () {
 		//Declare local instance variables

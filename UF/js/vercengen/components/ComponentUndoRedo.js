@@ -16,6 +16,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.UndoRedo}
  */
@@ -95,6 +96,10 @@ ve.UndoRedo = class extends ve.Component {
 	/**
 	 * Returns the current {@link DALS.Timeline} object of the present Component.
 	 * - Accessor of: {@link ve.UndoRedo}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.UndoRedo
+	 * @type {DALS.Timeline}
 	 * 
 	 * @returns {DALS.Timeline}
 	 */
@@ -106,6 +111,10 @@ ve.UndoRedo = class extends ve.Component {
 	/**
 	 * Sets the new {@link DALS.Timeline} from a timeline ID.
 	 * - Method of: {@link ve.UndoRedo}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.UndoRedo
+	 * @type {DALS.Timeline}
 	 * 
 	 * @param arg0_value
 	 */
@@ -129,6 +138,9 @@ ve.UndoRedo = class extends ve.Component {
 	/**
 	 * Redraws the current interface.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias draw
+	 * @memberof ve.Component.ve.UndoRedo
 	 */
 	draw (arg0_force_update) {
 		//Convert from parameters
@@ -504,6 +516,9 @@ ve.UndoRedo = class extends ve.Component {
 	/**
 	 * Handles events for {@link this.canvas_container_el}.
 	 * - Method of: {@link ve.Interface}
+	 *
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.UndoRedo
 	 */
 	handleEvents () {
 		//Declare local instance variables

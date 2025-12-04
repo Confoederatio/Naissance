@@ -21,6 +21,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Range}
  */
@@ -74,6 +75,10 @@ ve.Range = class extends ve.Component {
 	/**
 	 * Returns the number currently selected by the {@link ve.Range}.
 	 * - Accessor of: {@link ve.Range}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Range
+	 * @type {number}
 	 * 
 	 * @returns {number}
 	 */
@@ -85,6 +90,10 @@ ve.Range = class extends ve.Component {
 	/**
 	 * Sets the number currently selected by {@link ve.Range}
 	 * - Accessor of: {@link ve.Range}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Range
+	 * @type {number}
 	 * 
 	 * @param {number} arg0_value
 	 */
@@ -104,6 +113,9 @@ ve.Range = class extends ve.Component {
 	/**
 	 * Converts the present value to a string and returns it.
 	 * - Method of: {@link ve.Range}
+	 *
+	 * @alias toString
+	 * @memberof ve.Component.ve.Range
 	 * 
 	 * @returns {string}
 	 */
@@ -115,6 +127,9 @@ ve.Range = class extends ve.Component {
 	/**
 	 * Returns the number stored by the present string.
 	 * - Method of: {@link ve.Range}
+	 *
+	 * @alias valueOf
+	 * @memberof ve.Component.ve.Range
 	 * 
 	 * @returns {number}
 	 */

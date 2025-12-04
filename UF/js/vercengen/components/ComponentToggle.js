@@ -18,6 +18,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Toggle}
  */
@@ -65,6 +66,10 @@ ve.Toggle = class extends ve.Component {
 	/**
 	 * Returns the current boolean value.
 	 * - Accessor of: {@link ve.Toggle}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Time
+	 * @type {boolean}
 	 * 
 	 * @returns {boolean}
 	 */
@@ -76,6 +81,10 @@ ve.Toggle = class extends ve.Component {
 	/**
 	 * Sets the current boolean value of the toggle.
 	 * - Accessor of: {@link ve.Toggle}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Time
+	 * @type {boolean}
 	 * 
 	 * @param {boolean} arg0_value
 	 */
@@ -92,6 +101,9 @@ ve.Toggle = class extends ve.Component {
 	/**
 	 * Internal helper function. Updates the present name based on the boolean state of the toggle.
 	 * - Method of: {@link ve.Toggle}
+	 *
+	 * @alias updateName
+	 * @memberof ve.Component.ve.Time
 	 */
 	updateName () {
 		//Set new this.name

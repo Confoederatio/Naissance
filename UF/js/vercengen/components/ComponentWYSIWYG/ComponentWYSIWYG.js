@@ -30,6 +30,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.WYSIWYG}
  */
@@ -178,6 +179,10 @@ ve.WYSIWYG = class extends ve.Component {
 	 * Returns the innerHTML of the present Component's input value.
 	 * - Accessor of: {@link ve.WYSIWYG}
 	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.WYSIWYG
+	 * @type {string}
+	 * 
 	 * @returns {string}
 	 */
 	get v () {
@@ -188,6 +193,10 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Sets the HTML value for the present Component as a string.
 	 * - Accessor of: {@link ve.WYSIWYG}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.WYSIWYG
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */
@@ -204,6 +213,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Initialises event handlers for the present Component.
 	 * - Method of: {@link ve.WYSIWYG}
+	 * 
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.WYSIWYG
 	 */
 	handleEvents () {
 		//Declare local instance variables
@@ -224,6 +236,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Adds a paragraph tag on newline.
 	 * - Method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias addParagraphTag
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {KeyboardEvent} arg0_e
 	 */
@@ -245,6 +260,9 @@ ve.WYSIWYG = class extends ve.Component {
 	 * Fetches the internal .innerHTML value, resolving any conflicts between the visual view and the code view.
 	 * - Method of: {@link ve.WYSIWYG}
 	 *
+	 * @alias getWYSIWYGFromFields
+	 * @memberof ve.Component.ve.WYSIWYG
+	 *
 	 * @param {HTMLElement} arg0_wysiwyg_el
 	 *
 	 * @returns {string}
@@ -265,6 +283,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Initialises the present WYSIWYG Component.
 	 * - Method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias initWYSIWYG
+	 * @memberof ve.Component.ve.WYSIWYG
 	 */
 	initWYSIWYG () {
 		//Declare local instance variables
@@ -314,6 +335,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Check if the parent tag of an element was active.
 	 * - Method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias parentTagActive
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {HTMLElement} arg0_el
 	 * 
@@ -349,6 +373,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Internal helper function for monitoring selection changes.
 	 * - Method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias selectionChange
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {Event} arg0_e
 	 * @param {HTMLElement[]} arg1_buttons
@@ -384,6 +411,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * 	pasteEvent() - Handles paste event by removing all HTML tags.
 	 * - Method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias pasteEvent
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {ClipboardEvent} arg0_e
 	 */
@@ -403,6 +433,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Executes a code action and changes the formatting within the {@link ve.WYSIWYG} component.
 	 * - Static method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias #execCodeAction
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {HTMLElement} arg0_button_el - The button_el that determines the code action to execute.
 	 * @param {HTMLElement} arg1_editor_el
@@ -434,6 +467,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Executes a default action given its string via {@link document.execCommand}.
 	 * - Static method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias #execDefaultAction
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {string} arg0_action
 	 */
@@ -448,6 +484,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Adds a link to the current {@link ve.WYSIWYG} editor being mentioned.
 	 * - Static method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias #execLinkAction
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {HTMLElement} arg0_modal_el
 	 */
@@ -511,6 +550,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Restores a saved selection for the current {@link ve.WYSIWYG} component.
 	 * - Static method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias #restoreSelection
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @param {Selection} arg0_saved_selection
 	 */
@@ -535,6 +577,9 @@ ve.WYSIWYG = class extends ve.Component {
 	/**
 	 * Saves the current selection for later restoration by {@link ve.WYSIWYG.restoreSelection}().
 	 * - Static method of: {@link ve.WYSIWYG}
+	 *
+	 * @alias #saveSelection
+	 * @memberof ve.Component.ve.WYSIWYG
 	 * 
 	 * @returns {Range}
 	 */

@@ -23,6 +23,7 @@ if (!global.ve) global.ve = {};
  * ##### Static Fields:
  * - `.instances`: {@link Array}<this:{@link ve.Class}>
  * 
+ * @class
  * @memberof ve
  * @namespace ve.Class
  * @type {ve.Class}

@@ -93,6 +93,7 @@
  * - {@link ve.Component.ve.UndoRedo|veUndoRedo}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The {@link DALS.Timeline} ID that the UndoRedo component is currently navigating.
  * - {@link ve.Component.ve.URL|veURL}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * 
+ * @class
  * @memberof ve
  * @namespace ve.Component
  * @type {ve.Component}

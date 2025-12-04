@@ -29,6 +29,7 @@
  * 
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Navbar}
  */
@@ -68,12 +69,15 @@ ve.Navbar = class extends ve.Feature {
 	/**
 	 * Generates HTML recursively for ve.Navbar.
 	 * - Method of: {@link ve.Navbar}
+	 *
+	 * @alias generateHTMLRecursively
+	 * @memberof ve.Feature.ve.Navbar
 	 * 
 	 * @param {Object} arg0_navbar_obj
 	 * 
 	 * @returns {HTMLUListElement}
 	 */
-	generateHTMLRecursively(arg0_navbar_obj) {
+	generateHTMLRecursively (arg0_navbar_obj) {
 		//[WIP] - Refactor at a later date
 		//Convert from parameters
 		let navbar_obj = arg0_navbar_obj;

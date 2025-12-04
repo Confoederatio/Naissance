@@ -16,6 +16,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.HTML}
  */
@@ -48,8 +49,12 @@ ve.HTML = class extends ve.Component {
 	
 	/**
 	 * Returns the current HTMLElement from the component.
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.HTML
+	 * @type {HTMLElement}
 	 * 
-	 * @returns {HTMLDivElement}
+	 * @returns {HTMLElement}
 	 */
 	get v () {
 		//Return statement
@@ -59,6 +64,10 @@ ve.HTML = class extends ve.Component {
 	/**
 	 * Sets the current function/HTMLElement/string for the present HTML component.
 	 * - Accessor of: {@link ve.HTML}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.HTML
+	 * @type {HTMLElement}
 	 * 
 	 * @param {function|HTMLElement|string} arg0_value
 	 */
@@ -96,6 +105,9 @@ ve.HTML = class extends ve.Component {
 	/**
 	 * Returns the string from the present .innerHTML.
 	 * - Method of: {@link ve.HTML}
+	 *
+	 * @alias toString
+	 * @memberof ve.Component.ve.HTML
 	 * 
 	 * @returns {string}
 	 */

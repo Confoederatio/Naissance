@@ -32,6 +32,7 @@
  *   
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.HierarchyDatatype}
  */
@@ -88,6 +89,10 @@ ve.HierarchyDatatype = class extends ve.Component {
 	/**
 	 * Returns the present name value of the hierarchy datatype.
 	 * - Accessor of {@link ve.HierarchyDatatype}
+	 *
+	 * @alias name
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -99,6 +104,10 @@ ve.HierarchyDatatype = class extends ve.Component {
 	/**
 	 * Sets the new name of the hierarchy datatype.
 	 * - Accessor of {@link ve.HierarchyDatatype}
+	 *
+	 * @alias name
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @type {string}
 	 *
 	 * @param {string} arg0_value
 	 */
@@ -121,6 +130,10 @@ ve.HierarchyDatatype = class extends ve.Component {
 	/**
 	 * Returns the current {@link this.components_obj}, which contains the actions bar.
 	 * - Accessor of {@link ve.HierarchyDatatype}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @returns {{"<component_key>": ve.Component}}
 	 */
@@ -132,6 +145,10 @@ ve.HierarchyDatatype = class extends ve.Component {
 	/**
 	 * Sets a new {@link this.components_obj}, which contains the actions bar.
 	 * - Accessor of {@link ve.HierarchyDatatype}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */
@@ -148,6 +165,9 @@ ve.HierarchyDatatype = class extends ve.Component {
 	/**
 	 * Refreshes the display of this.components_obj within the present instance.
 	 * - Method of: {@link ve.HierarchyDatatype}
+	 * 
+	 * @alias refresh
+	 * @memberof ve.Component.ve.HierarchyDatatype
 	 * 
 	 * @typedef ve.HierarchyDatatype.refresh
 	 */

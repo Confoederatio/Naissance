@@ -26,6 +26,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.ScriptManagerBlockly}
  */
@@ -105,6 +106,11 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Returns the code value of the present Component by parsing ES6 JS as an Abstract Syntax Tree.
 	 * - Accessor of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
+	 * @type {string}
+	 * 
 	 * @returns {string}
 	 */
 	get v () {
@@ -117,6 +123,11 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Sets the code value of the present Component if possible.
 	 * - Accessor of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
+	 * @type {string}
+	 * 
 	 * @param {string} arg0_value
 	 */
 	set v (arg0_value) {
@@ -135,6 +146,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Disables the present workspace.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias disable
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	disable () {
 		if (this._disabled) return; //Internal guard clause to ensure file can't be disabled twice
@@ -153,6 +167,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Enables the present workspace.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias enable
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	enable () {
 		if (!this._disabled) return; //Internal guard clause to ensure file can't be enabled twice
@@ -171,6 +188,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Internal helper method. Fixes Blockly scaling issues.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias fixBlocklyScaling
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	fixBlocklyScaling () {
 		//Declare local instance variables
@@ -193,6 +213,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Internal helper method. Handles CSS issues so that Blockly can be mounted into a window.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias handleCSS
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	handleCSS () {
 		//Declare local instance variables
@@ -245,6 +268,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Hides the present workspace entirely.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias hide
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	hide () {
 		if (this._hidden) return; //Internal guard clause if already hidden
@@ -260,6 +286,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Internal helper method. Fixes Blockly transforms so that Blockly can be mounted into a window.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias interceptBlocklyTransforms
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	interceptBlocklyTransforms () {
 		//Declare local instance variables
@@ -289,6 +318,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Internal helper method. Propagates the main editor theme class down from {@link ve.ScriptManager}. Either 'theme-default'/'theme-light'.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias setTheme
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 * 
 	 * @param {string} arg0_theme_class
 	 */
@@ -308,6 +340,9 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	/**
 	 * Displays the present workspace if hidden.
 	 * - Method of: {@link ve.ScriptManagerBlockly}
+	 *
+	 * @alias show
+	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 */
 	show () {
 		if (!this._hidden) return; //Internal guard clause if already shown

@@ -21,6 +21,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Number}
  */
@@ -77,6 +78,10 @@ ve.Number = class extends ve.Component {
 	/**
 	 * Returns the present number stored by the component.
 	 * - Accessor of: {@link ve.Number}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Number
+	 * @type {number|number[]}
 	 * 
 	 * @returns {number|number[]}
 	 */
@@ -99,6 +104,10 @@ ve.Number = class extends ve.Component {
 	/**
 	 * Sets the number stored by the component.
 	 * - Accessor of: {@link ve.Number}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Number
+	 * @type {number|number[]}
 	 * 
 	 * @param {number} arg0_value
 	 */
@@ -137,6 +146,9 @@ ve.Number = class extends ve.Component {
 	/**
 	 * Converts the present number to a string.
 	 * - Method of: {@link ve.Number}
+	 *
+	 * @alias toString
+	 * @memberof ve.Component.ve.Number
 	 * 
 	 * @returns {string}
 	 */
@@ -147,6 +159,9 @@ ve.Number = class extends ve.Component {
 	/**
 	 * Converts the present value to a number.
 	 * - Method of: {@link ve.Number}
+	 *
+	 * @alias valueOf
+	 * @memberof ve.Component.ve.Number
 	 * 
 	 * @returns {number}
 	 */

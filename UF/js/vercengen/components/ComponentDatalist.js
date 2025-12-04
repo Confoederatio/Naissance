@@ -14,6 +14,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Datalist}
  */
@@ -76,6 +77,10 @@ ve.Datalist = class extends ve.Component {
 	/**
 	 * Returns the key/ID of the present datalist.
 	 * - Accessor of: {@link ve.Datalist}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Datalist
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -92,6 +97,10 @@ ve.Datalist = class extends ve.Component {
 	/**
 	 * Sets the key/ID for the present datalist.
 	 * - Accessor of: {@link ve.Datalist}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Datalist
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

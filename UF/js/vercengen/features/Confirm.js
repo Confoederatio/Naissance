@@ -16,6 +16,7 @@
  *
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Confirm}
  */
@@ -63,6 +64,9 @@ ve.Confirm = class extends ve.Feature {
 	/**
 	 * Closes the present {@link ve.Confirm} feature.
 	 * - Method of: {@link ve.Confirm}
+	 *
+	 * @alias close
+	 * @memberof ve.Feature.ve.Confirm
 	 */
 	close () {
 		if (this.modal)

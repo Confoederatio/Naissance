@@ -14,6 +14,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.URL}
  */
@@ -67,6 +68,10 @@ ve.URL = class extends ve.Component {
 	/**
 	 * Returns the present URL.
 	 * - Accessor of: {@link ve.URL}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.UndoRedo
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -77,7 +82,11 @@ ve.URL = class extends ve.Component {
 	
 	/**
 	 * Sets the URL of the present component.
-	 * - Accessor of: {@link ve.URL} 
+	 * - Accessor of: {@link ve.URL}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.UndoRedo
+	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

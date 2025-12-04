@@ -14,6 +14,7 @@
  * 
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.Toast}
  */
@@ -61,6 +62,9 @@ ve.Toast = class extends ve.Feature {
 	/**
 	 * Refreshes the toast display with a set of new components.
 	 * - Method of: {@link ve.Toast}
+	 *
+	 * @alias refresh
+	 * @memberof ve.Feature.ve.Scene
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */

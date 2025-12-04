@@ -15,6 +15,7 @@
  * 
  * @augments ve.Component
  * @augments {@link ve.Component}
+ * @class
  * @memberof ve.Component
  * @type {ve.Telephone}
  */
@@ -67,6 +68,10 @@ ve.Telephone = class extends ve.Component {
 	/**
 	 * Returns the present telephone number.
 	 * - Accessor of: {@link ve.Telephone}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Telephone
+	 * @type {string}
 	 * 
 	 * @returns {string}
 	 */
@@ -78,6 +83,10 @@ ve.Telephone = class extends ve.Component {
 	/**
 	 * Sets a new telephone number for the given component.
 	 * - Accessor of: {@link ve.Telephone}
+	 *
+	 * @alias v
+	 * @memberof ve.Component.ve.Telephone
+	 * @type {string}
 	 * 
 	 * @param arg0_value
 	 */

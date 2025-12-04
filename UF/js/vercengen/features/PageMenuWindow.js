@@ -37,6 +37,7 @@
  *
  * @augments ve.Feature
  * @augments {@link ve.Feature}
+ * @class
  * @memberof ve.Feature
  * @type {ve.PageMenuWindow}
  */

@@ -3,40 +3,11 @@ global.stream_promises = require("stream/promises");
 //Initialise functions
 {
 	/**
-	 * Returns all the subpaths in the set of file/folder paths given.
-	 * - Method of: {@link ve.FileExplorer}
-	 * 
-	 * @param {string[]} arg0_file_paths
-	 * 
-	 * @returns {string[]}
-	 */
-	ve.FileExplorer.getFiles = function (arg0_file_paths) {
-		//Convert from parameters
-		let file_paths = arg0_file_paths;
-		
-		//Declare local instance variables
-		let actual_paths = [];
-		
-		//Iterate over all file_paths
-		for (let i = 0; i < file_paths.length; i++)
-			if (fs.statSync(file_paths[i]).isDirectory()) {
-				//Iterate over all_file_paths in local directory 
-				let all_file_paths = fs.readdirSync(file_paths[i], { recursive: true });
-				
-				//Iterates over all_file_paths to recursively 
-				for (let x = 0; x < all_file_paths.length; x++)
-					actual_paths.push(path.join(file_paths[i], all_file_paths[x]));
-			} else {
-				actual_paths.push(file_paths[i]);
-			}
-		
-		//Return statement
-		return actual_paths;
-	};
-	
-	/**
 	 * Copies specific file paths in `arg0_file_paths` to `arg1_file_path`.
 	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias #copy
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string[]} arg0_file_paths - The file paths to copy.
 	 * @param {string} arg1_file_path - Where to copy the file paths to.
@@ -217,6 +188,9 @@ global.stream_promises = require("stream/promises");
 	/**
 	 * Deletes selected file paths in `arg0_file_paths` recursively with error logging.
 	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias #delete
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string[]} arg0_file_paths - The file paths to delete.
 	 * @param {function} arg1_function - Callback function once the delete operation is finished.
@@ -340,8 +314,46 @@ global.stream_promises = require("stream/promises");
 	};
 	
 	/**
+	 * Returns all the subpaths in the set of file/folder paths given.
+	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias #getFiles
+	 * @memberof ve.Component.ve.FileExplorer
+	 *
+	 * @param {string[]} arg0_file_paths
+	 *
+	 * @returns {string[]}
+	 */
+	ve.FileExplorer.getFiles = function (arg0_file_paths) {
+		//Convert from parameters
+		let file_paths = arg0_file_paths;
+		
+		//Declare local instance variables
+		let actual_paths = [];
+		
+		//Iterate over all file_paths
+		for (let i = 0; i < file_paths.length; i++)
+			if (fs.statSync(file_paths[i]).isDirectory()) {
+				//Iterate over all_file_paths in local directory 
+				let all_file_paths = fs.readdirSync(file_paths[i], { recursive: true });
+				
+				//Iterates over all_file_paths to recursively 
+				for (let x = 0; x < all_file_paths.length; x++)
+					actual_paths.push(path.join(file_paths[i], all_file_paths[x]));
+			} else {
+				actual_paths.push(file_paths[i]);
+			}
+		
+		//Return statement
+		return actual_paths;
+	};
+	
+	/**
 	 * Moves files from selected file paths in `arg0_file_paths` to `arg1_file_path`.
 	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias #move
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string[]} arg0_file_paths - The file paths to move.
 	 * @param {string} arg1_file_path - The folder path to move to.
@@ -374,6 +386,9 @@ global.stream_promises = require("stream/promises");
 	/**
 	 * Creates a modal for renaming a specific file path in `arg0_file_path`.
 	 * - Method of: {@link ve.FileExplorer}
+	 *
+	 * @alias #rename
+	 * @memberof ve.Component.ve.FileExplorer
 	 * 
 	 * @param {string} arg0_file_path - The file path to rename.
 	 * @param {function} arg1_function - Callback function after the rename operation is complete.
