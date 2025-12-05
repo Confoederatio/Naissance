@@ -410,7 +410,7 @@ naissance.Brush = class extends ve.Class {
 		for (let i = 0; i < naissance.Geometry.instances.length; i++)
 			if (naissance.Geometry.instances[i].selected)
 				json_obj.value.push({
-					type: naissance.Geometry.instances[i].class_name,
+					type: "Geometry",
 					
 					geometry_id: naissance.Geometry.instances[i].id,
 					set_symbol: symbol_obj
@@ -432,7 +432,7 @@ naissance.Brush = class extends ve.Class {
 		for (let i = 0; i < naissance.Geometry.instances.length; i++)
 			if (naissance.Geometry.instances[i].selected)
 				json_obj.value.push({
-					type: naissance.Geometry.instances[i].class_name,
+					type: "Geometry",
 					
 					geometry_id: naissance.Geometry.instances[i].id,
 					set_properties: properties_obj

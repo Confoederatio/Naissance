@@ -11,19 +11,19 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		this.polygon_symbol = new ve.Interface({
 			//Row 1: Fill
 			fill_options: new ve.Interface({
-				colour: veColour(main.brush.colour, {
+				fill_colour: veColour(main.brush.colour, {
 					name: "Fill Colour",
 					onuserchange: (v, e) => {
 						naissance.Brush.setSelectedSymbol({ polygonFill: e.getHex() });
 					}
 				}),
-				opacity: veRange(main.brush.opacity/100, {
+				fill_opacity: veRange(main.brush.opacity/100, {
 					name: "Fill Opacity",
 					onuserchange: (v) => {
 						naissance.Brush.setSelectedSymbol({ polygonOpacity: v });
 					}
 				}),
-				pattern_url: new ve.Text("", {
+				fill_pattern_url: new ve.Text("", {
 					name: "Fill Pattern",
 					attributes: {
 						placeholder: "File path or URL ..."
@@ -40,26 +40,26 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 			
 			//Row 2: Stroke
 			stroke_options: new ve.Interface({
-				colour: veColour(main.brush.stroke_colour, {
+				stroke_colour: veColour(main.brush.stroke_colour, {
 					name: "Stroke Colour",
 					onuserchange: (v, e) => {
 						naissance.Brush.setSelectedSymbol({ lineColor: e.getHex() });
 					}
 				}),
-				opacity: veRange(main.brush.stroke_opacity/100, {
+				stroke_opacity: veRange(main.brush.stroke_opacity/100, {
 					name: "Stroke Opacity",
 					onuserchange: (v, e) => {
 						naissance.Brush.setSelectedSymbol({ lineOpacity: e });
 					}
 				}),
-				width: veNumber(main.brush.stroke_width, {
+				stroke_width: veNumber(main.brush.stroke_width, {
 					name: "Stroke Width",
 					onuserchange: (v) => {
 						naissance.Brush.setSelectedSymbol({ lineWidth: v });
 					}
 				}),
 				
-				line_cap: new ve.Select({
+				stroke_line_cap: new ve.Select({
 					butt: {
 						name: "Butt",
 						selected: true
@@ -76,7 +76,7 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 						naissance.Brush.setSelectedSymbol({ lineCap: v });
 					}
 				}),
-				line_join: new ve.Select({
+				stroke_line_join: new ve.Select({
 					bevel: {
 						name: "Bevel"
 					},

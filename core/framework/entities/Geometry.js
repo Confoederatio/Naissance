@@ -26,6 +26,10 @@ naissance.Geometry = class extends ve.Class {
 					return_string.push(`Geometry visible`);
 				if (new_keyframe.value[2]?.hidden === true)
 					return_string.push(`Geometry hidden`);
+				if (new_keyframe.value[2]?.max_zoom !== undefined)
+					return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
+				if (new_keyframe.value[2]?.min_zoom !== undefined)
+					return_string.push(`Minimum zoom set to ${new_keyframe.value[2].min_zoom}`);
 				if (new_keyframe.value[2]?.name)
 					return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
 				if (new_keyframe.value[2]?.variables)

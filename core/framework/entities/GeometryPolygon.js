@@ -182,19 +182,37 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			try {
 				//console.log(`naissance.GeometryPolygon, render keyframe:`, this.value);
 				if (this.geometry) this.geometry.remove();
+				if (this.label_geometry) this.label_geometry.remove();
+				if (this.selected_geometry) this.selected_geometry.remove();
+				
+				//Draw this.geometry, this.label_geometry, this.selected_geometry
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
 					main.layers.entity_layer.addGeometry(this.geometry);
 				}
-				if (this.value[2]) { //[WIP] - Finish backend for label rendering
-					//Fetch this.value[2].label_geometry, this.value[2].label_name, this.value[2].label_symbol
+				if (this.value[2]) {
+					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
+					if (this.geometry && this.value[2].label_geometry !== null) {
+						let label_name = (this.value[2].label_name) ? this.value[2].label_name : this.value[2].name;
+						
+						//1. .label_coordinates
+						this.label_geometry = new maptalks.Marker((this.value[2].label_coordinates) ? this.value[2].label_coordinates : this.geometry.getCenter());
+						
+						//2. .label_symbol
+						if (this.value[2].label_symbol)
+							this.label_geometry.setSymbol(this.value[2].label_symbol);
+						
+						//3. .label_name/.name
+						this.label_geometry.setSymbol({ textName: label_name });
+						this.label_geometry.addTo(main.layers.label_layer);
+					}
+						
 				}
 			} catch (e) { console.error(e); }
 			
 			//3. Draw this.selected_geometry
 			try {
-				if (this.selected_geometry) this.selected_geometry.remove();
 				this.selected_geometry = undefined;
 				
 				if (this.geometry && this.selected) {
@@ -222,7 +240,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		//5. Derender geometry handler
 		if (derender_geometry) {
 			if (this.geometry) this.geometry.remove();
-			if (this.label) this.label.remove();
+			if (this.label_geometry) this.label_geometry.remove();
 			if (this.selected_geometry) this.selected_geometry.remove();
 		}
 	}
