@@ -67,28 +67,6 @@ let win;
       console.warn(e);
     }
   }
-
-  function handleOpenFolder (arg0_event, arg1_starting_path) {
-    //Convert from parameters
-    let event = arg0_event;
-		let starting_path = arg1_starting_path;
-
-    //Declare local instance variables
-    let actual_options = {
-      title: "Open Folder",
-      defaultPath: starting_path,
-      properties: ["openDirectory"]
-    };
-
-    //Show the dialog and wait for the user's choice
-		let result = dialog.showOpenDialogSync(actual_options);
-
-    //Result is an array of paths, or undefined if the user cancelled
-    if (result && result.length > 0)
-      //Return statement
-      return result[0]; //Return the first selected path
-    return undefined;
-  }
 }
 
 //App handling
@@ -111,9 +89,4 @@ let win;
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
   });
-}
-
-//Bindings handler
-{
-  ipcMain.handle("dialog:openFolder", handleOpenFolder);
 }
