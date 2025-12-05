@@ -16,8 +16,6 @@
  * - `.v`: {@link Array}<{@link ve.Component}>
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.List}
  */
@@ -80,8 +78,6 @@ ve.List = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.List
 	 * @type {ve.Component[]}
-	 * 
-	 * @returns {ve.Component[]}
 	 */
 	get v () {
 		//Return statement
@@ -94,7 +90,6 @@ ve.List = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.List
-	 * @type {ve.Component[]}
 	 * 
 	 * @param {ve.Component[]} arg0_value
 	 */
@@ -137,7 +132,7 @@ ve.List = class extends ve.Component {
 	 */
 	deleteItem (arg0_index) {
 		//Convert from parameters
-		let index = (arg0_index) ? arg0_index : this.value.length - 1;
+		let index = (arg0_index >= 0) ? arg0_index : this.value.length - 1;
 		if (this.value.length === 0) return; //Internal guard clause if there are already no elements in the array
 		
 		if (this.options.min && this.value.length - 1 < this.options.min) { //Internal guard clause for this.options.min

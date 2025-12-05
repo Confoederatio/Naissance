@@ -29,10 +29,8 @@
  * 
  * ##### Static Fields:
  * - `.instances`: {@link Array}<this:{@link ve.HierarchyDatatype}>
- *   
+ *
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.HierarchyDatatype}
  */
@@ -93,8 +91,6 @@ ve.HierarchyDatatype = class extends ve.Component {
 	 * @alias name
 	 * @memberof ve.Component.ve.HierarchyDatatype
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get name () {
 		//Return statement
@@ -107,9 +103,7 @@ ve.HierarchyDatatype = class extends ve.Component {
 	 *
 	 * @alias name
 	 * @memberof ve.Component.ve.HierarchyDatatype
-	 * @type {string}
-	 *
-	 * @param {string} arg0_value
+	 * @param arg0_value {string}
 	 */
 	set name (arg0_value) {
 		//Convert from parameters

@@ -16,8 +16,6 @@
  * - <span color=00ffff>{@link ve.Date.handleEvents|handleEvents}</span>() - Used internally to handle events for all date inputs.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Date}
  */
@@ -77,8 +75,6 @@ ve.Date = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Date
 	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
-	 * 
-	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}}
 	 */
 	get v () {
 		//Determine if #year-type needs a flip for this.value
@@ -95,7 +91,6 @@ ve.Date = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Date
-	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @param {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */

@@ -13,8 +13,6 @@
  * - `.v`: {@link UF.Date}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.veDateLength}
  */
@@ -74,8 +72,6 @@ ve.DateLength = class extends ve.Component {
 	 * @alias handleEvents
 	 * @memberof ve.Component.ve.Date
 	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
-	 * 
-	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */
 	get v () {
 		//Return statement
@@ -93,7 +89,6 @@ ve.DateLength = class extends ve.Component {
 	 *
 	 * @alias handleEvents
 	 * @memberof ve.Component.ve.Date
-	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 * 
 	 * @param {{year: number, month: number, day: number, hour: number, minute: number}} arg0_value
 	 */

@@ -16,8 +16,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Text}
  */
@@ -74,8 +72,6 @@ ve.Text = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Text
 	 * @type {string|string[]}
-	 * 
-	 * @returns {string|string[]}
 	 */
 	get v () {
 		if (this.list_component) {
@@ -99,7 +95,6 @@ ve.Text = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Text
-	 * @type {string|string[]}
 	 * 
 	 * @param {string} arg0_value
 	 */

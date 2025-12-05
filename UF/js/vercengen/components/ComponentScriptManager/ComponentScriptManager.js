@@ -42,8 +42,6 @@
  * - <span color=00ffff>{@link ve.ScriptManager.throwLoadError|throwLoadError}</span>(arg0_error:{@link Error}|{@link string})
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.ScriptManager}
  */
@@ -487,8 +485,6 @@ ve.ScriptManager = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManager
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -501,7 +497,6 @@ ve.ScriptManager = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManager
-	 * @type {string}
 	 *
 	 * @param {string} arg0_value
 	 */

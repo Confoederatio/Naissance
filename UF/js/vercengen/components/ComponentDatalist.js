@@ -13,8 +13,6 @@
  * - `.v`: {@link string} - The current ID selected by the datalist. If no valid ID is found, the raw `.value` of the datalist element is returned.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Datalist}
  */
@@ -81,8 +79,6 @@ ve.Datalist = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Datalist
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Declare local instance variables
@@ -100,7 +96,6 @@ ve.Datalist = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Datalist
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

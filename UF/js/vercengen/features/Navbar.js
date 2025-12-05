@@ -28,8 +28,6 @@
  * - <span color=00ffff>{@link ve.Navbar.generateHTMLRecursively|generateHTMLRecursively}</span>(arg0_navbar_obj: {@link Object}) | {@link HTMLUListElement}
  * 
  * @augments ve.Feature
- * @augments {@link ve.Feature}
- * @class
  * @memberof ve.Feature
  * @type {ve.Navbar}
  */

@@ -13,8 +13,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Password}
  */
@@ -67,8 +65,6 @@ ve.Password = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Password
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -81,7 +77,6 @@ ve.Password = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Password
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

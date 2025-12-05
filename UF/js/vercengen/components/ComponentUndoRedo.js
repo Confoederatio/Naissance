@@ -15,8 +15,6 @@
  * - <span color=00ffff>{@link ve.UndoRedo.handleEvents|handleEvents}</span>() - Handles events for zooming/panning around canvas.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.UndoRedo}
  */
@@ -100,8 +98,6 @@ ve.UndoRedo = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.UndoRedo
 	 * @type {DALS.Timeline}
-	 * 
-	 * @returns {DALS.Timeline}
 	 */
 	get v () {
 		//Return statement
@@ -114,7 +110,6 @@ ve.UndoRedo = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.UndoRedo
-	 * @type {DALS.Timeline}
 	 * 
 	 * @param arg0_value
 	 */

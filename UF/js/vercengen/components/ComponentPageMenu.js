@@ -24,8 +24,6 @@
  * - <span color=00ffff>{@link ve.PageMenu.updateUnderline|updateUnderline}</span>()
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.PageMenu}
  */
@@ -130,8 +128,6 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	 * @alias v
 	 * @memberof ve.Component.ve.PageMenu
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -144,7 +140,6 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.PageMenu
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_page_key
 	 */

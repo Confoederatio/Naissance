@@ -16,7 +16,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
  * @memberof ve.Component
  * @type {ve.File}
  */
@@ -212,8 +211,6 @@ ve.File = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Date
 	 * @type {string[]}
-	 * 
-	 * @returns {string[]}
 	 */
 	get v () {
 		//Return statement
@@ -226,7 +223,6 @@ ve.File = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Date
-	 * @type {string}
 	 * 
 	 * @param {string[]} arg0_value
 	 */

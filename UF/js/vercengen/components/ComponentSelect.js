@@ -19,8 +19,6 @@
  * - <span color=00ffff>{@link ve.Select.generateHTML|generateHTML}</span>() | {@link Array}<{@link string}> - Returns the HTML for the present select input.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Select}
  */
@@ -90,8 +88,6 @@ ve.Select = class veSelect extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Select
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -106,7 +102,6 @@ ve.Select = class veSelect extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Select
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

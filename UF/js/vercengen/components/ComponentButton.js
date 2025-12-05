@@ -11,8 +11,6 @@
  * - `.v`: {@link function} - Accessor. The current function stored by the {@link ve.Button} component.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Button}
  */
@@ -67,8 +65,6 @@ ve.Button = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Button
 	 * @type {function}
-	 * 
-	 * @returns {function}
 	 */
 	get v () {
 		//Return statement
@@ -81,7 +77,6 @@ ve.Button = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Button
-	 * @type {function}
 	 * 
 	 * @param {function} arg0_value
 	 */

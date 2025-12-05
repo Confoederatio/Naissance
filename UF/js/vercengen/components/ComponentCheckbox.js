@@ -19,8 +19,6 @@
  * - <span color=00ffff>{@link ve.Checkbox.generateHTMLRecursively}</span>(arg0_value:{@link boolean}|{@link Object}) | {@link Array}<{@link string}>
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Checkbox}
  */
@@ -101,8 +99,6 @@ ve.Checkbox = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Checkbox
 	 * @type {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
-	 * 
-	 * @returns {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
 	 */
 	get v () {
 		//Declare local instance variables
@@ -137,7 +133,6 @@ ve.Checkbox = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Checkbox
-	 * @type {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}}
 	 * 
 	 * @param {{"checkbox_key": boolean|{"name": string, "checkbox_key": boolean|Object|string}|string}} arg0_value
 	 */

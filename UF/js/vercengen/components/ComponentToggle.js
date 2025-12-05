@@ -17,8 +17,6 @@
  * - <span color=00ffff>{@link ve.Toggle.updateName|updateName}</span>()
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Toggle}
  */
@@ -70,8 +68,6 @@ ve.Toggle = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Time
 	 * @type {boolean}
-	 * 
-	 * @returns {boolean}
 	 */
 	get v () {
 		//Return statement
@@ -84,7 +80,6 @@ ve.Toggle = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Time
-	 * @type {boolean}
 	 * 
 	 * @param {boolean} arg0_value
 	 */

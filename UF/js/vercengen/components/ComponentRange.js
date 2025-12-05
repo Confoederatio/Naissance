@@ -20,8 +20,6 @@
  * - <span color=00ffff>{@link ve.Range.valueOf|valueOf}</span>() | {@link number}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Range}
  */
@@ -79,8 +77,6 @@ ve.Range = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Range
 	 * @type {number}
-	 * 
-	 * @returns {number}
 	 */
 	get v () {
 		//Return statement
@@ -93,7 +89,6 @@ ve.Range = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Range
-	 * @type {number}
 	 * 
 	 * @param {number} arg0_value
 	 */

@@ -1,5 +1,27 @@
 //Initialise functions
 {
+	String.formatArray = function (arg0_array) {
+		//Convert from parameters
+		let array = Array.toArray(arg0_array);
+		
+		//Declare local instance variables
+		let name_string = "";
+		
+		//Modify ending
+		if (name_string.length > 2) {
+			array[array.length - 1] = `and ${array[array.length - 1]}`;
+			name_string = array.join(", ");
+		} else if (name_string.length === 2) {
+			array[array.length - 1] = `and ${array[array.length - 1]}`;
+			name_string = array.join(" ");
+		} else {
+			name_string = array[0];	
+		}
+		
+		//Return statement
+		return name_string;
+	};
+	
 	/**
 	 * Formats a Date object into a default string.
 	 * @param {Object} arg0_date
@@ -34,6 +56,29 @@
 		
 		//Return statement
 		return `${String.formatNumber(days)} day(s), ${String.formatNumber(hours)} hour(s), ${String.formatNumber(minutes)} minute(s), ${String.formatNumber(seconds)} second(s)`;
+	};
+	
+	String.formatObject = function (arg0_object) {
+		//Convert from parameters
+		let object = (arg0_object) ? arg0_object : {};
+		
+		//Internal guard clause if object is empty
+		if (Object.keys(object).length === 0) return "None";
+		
+		//Declare local instance variables
+		let string_array = [];
+		
+		//Iterate over object and parse it to a string
+		Object.iterate(object, (local_key, local_value) => {
+			if (typeof string_array === "object") {
+				string_array.push(`${local_key}: ${JSON.stringify(local_value)}`);
+			} else {
+				string_array.push(`${local_key}: ${local_value.toString()}`);
+			}
+		});
+		
+		//Return statement
+		return string_array.join(", ");
 	};
 	
 	/**

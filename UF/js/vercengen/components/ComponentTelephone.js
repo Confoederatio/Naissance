@@ -14,8 +14,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Telephone}
  */
@@ -72,8 +70,6 @@ ve.Telephone = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Telephone
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -86,7 +82,6 @@ ve.Telephone = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Telephone
-	 * @type {string}
 	 * 
 	 * @param arg0_value
 	 */

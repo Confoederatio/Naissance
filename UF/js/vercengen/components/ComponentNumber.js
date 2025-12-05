@@ -20,8 +20,6 @@
  * - <span color=00ffff>{@link ve.Number.valueOf|valueOf}</span>() | {@link number}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Number}
  */
@@ -82,8 +80,6 @@ ve.Number = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Number
 	 * @type {number|number[]}
-	 * 
-	 * @returns {number|number[]}
 	 */
 	get v () {
 		if (this.list_component) {
@@ -107,7 +103,6 @@ ve.Number = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Number
-	 * @type {number|number[]}
 	 * 
 	 * @param {number} arg0_value
 	 */

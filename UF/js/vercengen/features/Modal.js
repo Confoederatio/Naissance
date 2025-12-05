@@ -14,8 +14,6 @@
  * - <span color=00ffff>{@link ve.Modal.close|close}</span>()
  * 
  * @augments ve.Feature
- * @augments {@link ve.Feature}
- * @class
  * @memberof ve.Feature
  * @type {ve.Modal}
  */

@@ -16,8 +16,6 @@
  * - `.v`: {@link Object}<{@link ve.Component}>
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.RawInterface}
  */
@@ -57,8 +55,6 @@ ve.RawInterface = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.RawInterface
 	 * @type {{"<component_key>": ve.Component}}
-	 * 
-	 * @returns {{"<component_key>": ve.Component}}
 	 */
 	get v () {
 		//Return statement
@@ -71,7 +67,6 @@ ve.RawInterface = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.RawInterface
-	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */

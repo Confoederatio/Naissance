@@ -38,6 +38,7 @@ naissance.History = class extends ve.Class {
 		//Declare local instance variables
 		let components_obj = {};
 		this.interface = new ve.Interface({}, { name: "Keyframes", width: 99 });
+		this.getKeyframe({ refresh_localisation: true });
 		
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
@@ -47,6 +48,7 @@ naissance.History = class extends ve.Class {
 					tooltip: `Timestamp: ${local_value.timestamp}`,
 					x: 0, y: 0
 				}),
+				localisation: veHTML(local_value.localisation, { x: 1, y: 0 }),
 				jump_to_date: veButton((e) => {
 					DALS.Timeline.parseAction({
 						options: { name: "Set Date", key: "load_date" },
@@ -59,7 +61,7 @@ naissance.History = class extends ve.Class {
 					name: "<icon>arrow_forward</icon>",
 					tooltip: "Jump to Date", 
 					style: { cursor: "pointer" }, 
-					x: 1, y: 0 
+					x: 2, y: 0 
 				})
 			}, {
 				is_folder: false
@@ -122,14 +124,18 @@ naissance.History = class extends ve.Class {
 				value: []
 			};
 			
-			//console.log(`Calling once:`, this.keyframes);
-			
 			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
+				//Parse localisation first, then concatenate
+				if (options.refresh_localisation)
+					local_keyframe.localisation = (this.options.localisation_function) ?
+						this.options.localisation_function(local_keyframe, return_keyframe) : "";
+				
 				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
 					for (let x = 0; x < local_keyframe.value.length; x++)
 						if (typeof local_keyframe.value[x] === "object") {
 							let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
 							
+							//Return keyframe
 							return_keyframe.value[x] = {
 								...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
 								...local_keyframe.value[x]

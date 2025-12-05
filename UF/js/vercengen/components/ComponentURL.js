@@ -13,8 +13,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.URL}
  */
@@ -72,8 +70,6 @@ ve.URL = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.UndoRedo
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -86,7 +82,6 @@ ve.URL = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.UndoRedo
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

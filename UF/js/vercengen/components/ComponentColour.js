@@ -16,8 +16,6 @@
  * - <span color=00ffff>{@link ve.Colour.toString|toString}</span>() | {@link string} - Returns the R,G,B value as a string.
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Colour}
  */
@@ -66,8 +64,6 @@ ve.Colour = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Colour
 	 * @type {number[]}
-	 * 
-	 * @returns {number[]}
 	 */
 	get v () {
 		//Return statement
@@ -80,7 +76,6 @@ ve.Colour = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Colour
-	 * @type {number[]}
 	 * 
 	 * @param {number[]|string} arg0_value
 	 */

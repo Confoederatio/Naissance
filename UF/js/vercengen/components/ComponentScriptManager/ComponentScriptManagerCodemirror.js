@@ -16,8 +16,6 @@
  * - `.v`: {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.ScriptManagerCodemirror}
  */
@@ -86,8 +84,6 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManagerCodemirror
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -100,7 +96,6 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManagerCodemirror
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

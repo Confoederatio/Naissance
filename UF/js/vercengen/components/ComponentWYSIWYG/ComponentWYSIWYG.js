@@ -29,8 +29,6 @@
  * - <span color=00ffff>{@link ve.WYSIWYG.saveSelection|saveSelection}</span>() | {@link Range}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.WYSIWYG}
  */
@@ -182,8 +180,6 @@ ve.WYSIWYG = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.WYSIWYG
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -196,7 +192,6 @@ ve.WYSIWYG = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.WYSIWYG
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

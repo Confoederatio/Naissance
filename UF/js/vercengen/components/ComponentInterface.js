@@ -29,8 +29,6 @@
  * - <span color=00ffff>{@link ve.Interface.getDefinedComponentDimensions|getDefinedComponentDimensions}</span>(arg0_components_obj:{@link Object}<{@link ve.Component}>)
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Interface}
  */
@@ -86,8 +84,6 @@ ve.Interface = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Interface
 	 * @type {{"<component_key>": ve.Component}}
-	 * 
-	 * @returns {{"<component_key>": ve.Component}}
 	 */
 	get v () {
 		//Return statement
@@ -100,7 +96,6 @@ ve.Interface = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Interface
-	 * @type {{"<component_key>": ve.Component}}
 	 * 
 	 * @param {{"<component_key>": ve.Component}} arg0_components_obj
 	 */

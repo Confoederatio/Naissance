@@ -26,8 +26,6 @@
  * - <span color=00ffff>{@link ve.Table.fireToBinding|fireToBinding}</span>(arg0_table_id:{@link string})
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Table}
  */
@@ -88,8 +86,6 @@ ve.Table = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Table
 	 * @type {Object}
-	 * 
-	 * @returns {Object}
 	 */
 	get v () {
 		//Return statement
@@ -102,7 +98,6 @@ ve.Table = class extends ve.Component {
 	 * 
 	 * @alias v
 	 * @memberof ve.Component.ve.Table
-	 * @type {Object}
 	 * 
 	 * @param {Object} arg0_value
 	 */

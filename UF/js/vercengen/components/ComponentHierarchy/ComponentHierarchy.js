@@ -21,8 +21,6 @@
  * - <span color=00ffff>{@link ve.Hierarchy.removeItem|removeItem}</span>(arg0_hierarchy_datatype:{@link ve.HierarchyDatatype})
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Hierarchy}
  */
@@ -57,8 +55,6 @@ ve.Hierarchy = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Hierarchy
 	 * @type {ve.Component[]}
-	 * 
-	 * @returns {ve.Component[]}
 	 */
 	get v () {
 		//Return statement
@@ -71,9 +67,7 @@ ve.Hierarchy = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Hierarchy
-	 * @type {ve.Component[]}
-	 * 
-	 * @param arg0_components_obj
+	 * @param arg0_components_obj {ve.Component[]}
 	 */
 	set v (arg0_components_obj) {
 		//Convert from parameters

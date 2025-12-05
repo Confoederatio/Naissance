@@ -6,7 +6,18 @@ naissance.Geometry = class extends ve.Class {
 	constructor () {
 		//Convert from parameters
 		super();
-		this.history = new naissance.History();
+		this.history = new naissance.History({}, {
+			localisation_function: (new_keyframe, old_keyframe) => {
+				let return_string = [];
+				
+				//Modify return_string
+				if (new_keyframe.value[2] && new_keyframe.value[2].variables)
+					return_string.push(`Variables changed to: ${JSON.stringify(new_keyframe.value[2].variables)}`);
+				
+				//Return statement
+				return return_string.join(", ");
+			}
+		});
 		this.id = Class.generateRandomID(naissance.Geometry);
 		this.instance = this;
 		this.is_naissance_geometry = true; //Identifier flag for Naissance-bound reflection engine

@@ -21,8 +21,6 @@
  * - <span color=00ffff>{@link ve.MultiTag.updateLocalTags|updateLocalTags}</span>()
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.MultiTag}
  */
@@ -96,8 +94,6 @@ ve.MultiTag = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.MultiTag
 	 * @type {string[]}
-	 * 
-	 * @returns {string[]}
 	 */
 	get v () {
 		//Return statement
@@ -110,7 +106,6 @@ ve.MultiTag = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.MultiTag
-	 * @type {string[]}
 	 * 
 	 * @param {string[]} arg0_value
 	 */

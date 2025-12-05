@@ -25,8 +25,6 @@
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.show|show}</span>()
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.ScriptManagerBlockly}
  */
@@ -110,8 +108,6 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManagerBlockly
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -126,7 +122,6 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManagerBlockly
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

@@ -21,8 +21,6 @@
  * - <span color=00ffff>{@link ve.Radio.generateHTMLRecursively|generateHTMLRecursively}</span>(arg0_value:{@link Object}<{@link boolean}>, arg1_this:{@link ve.Radio}) | {@link string}
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Radio}
  */
@@ -88,8 +86,6 @@ ve.Radio = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.Radio
 	 * @type {Object<boolean>}
-	 * 
-	 * @returns {Object<boolean>}
 	 */
 	get v () {
 		//Declare local instance variables
@@ -102,7 +98,6 @@ ve.Radio = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.Radio
-	 * @type {Object<boolean>}
 	 * 
 	 * @param {Object<boolean>} arg0_value
 	 */

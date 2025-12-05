@@ -16,8 +16,6 @@
  * - <span color=00ffff>{@link ve.Component.Map.clear|clear}</span>()
  * 
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.Map}
  */
@@ -58,8 +56,6 @@ ve.Map = class extends ve.Component {
 	 * @alias addItem
 	 * @memberof ve.Component.ve.Map
 	 * @type {ve.Map}
-	 * 
-	 * @returns {ve.Map}
 	 */
 	get v () {
 		//Return statement
@@ -72,7 +68,6 @@ ve.Map = class extends ve.Component {
 	 *
 	 * @alias addItem
 	 * @memberof ve.Component.ve.Map
-	 * @type {ve.Map}
 	 * 
 	 * @param {Object} arg0_value
 	 */

@@ -13,8 +13,6 @@
  * - <span color=00ffff>{@link ve.Toast.refresh|refresh}</span>(arg0_components_obj:{@link Object}<{@link ve.Component}>) - Refreshes the Toast display if possible.
  * 
  * @augments ve.Feature
- * @augments {@link ve.Feature}
- * @class
  * @memberof ve.Feature
  * @type {ve.Toast}
  */

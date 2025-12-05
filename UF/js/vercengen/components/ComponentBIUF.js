@@ -20,8 +20,6 @@
  * - <span color=00ffff>{@link ve.BIUF.sendOnchangeEvent|sendOnchangeEvent}</span>()
  *
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.BIUF}
  */
@@ -83,8 +81,6 @@ ve.BIUF = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.BIUF
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -97,7 +93,6 @@ ve.BIUF = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.BIUF
-	 * @type {string}
 	 * 
 	 * @param {string} arg0_value
 	 */

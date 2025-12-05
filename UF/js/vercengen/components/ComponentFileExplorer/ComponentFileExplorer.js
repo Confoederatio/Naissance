@@ -42,8 +42,6 @@
  * - <span color=00ffff>{@link ve.FileExplorer.rename|rename}</span>(arg0_file_path:{@link string}, arg1_function:{@link function}) - Opens a rename file modal with a callback function.
  *
  * @augments ve.Component
- * @augments {@link ve.Component}
- * @class
  * @memberof ve.Component
  * @type {ve.FileExplorer}
  */
@@ -133,8 +131,6 @@ ve.FileExplorer = class extends ve.Component {
 	 * @alias v
 	 * @memberof ve.Component.ve.FileExplorer
 	 * @type {string}
-	 * 
-	 * @returns {string}
 	 */
 	get v () {
 		//Return statement
@@ -147,9 +143,7 @@ ve.FileExplorer = class extends ve.Component {
 	 * 
 	 * @alias v
 	 * @memberof ve.Component.ve.FileExplorer
-	 * @type {string}
-	 * 
-	 * @param {string} arg0_value
+	 * @param arg0_value {string}
 	 */
 	set v (arg0_value) {
 		//Convert from parameters
