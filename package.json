@@ -1,6 +1,6 @@
 {
   "name": "naissance-hgis",
-  "version": "1.4.1",
+  "version": "1.5.1",
   "description": "Historical GIS project for 3D map editing, geoprocessing, visualisation, and simulation over the long run.",
   "main": "main.js",
   "scripts": {
