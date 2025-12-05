@@ -1,7 +1,20 @@
 //Initialise functions
 {
-	if (!global.Geospatiale) global.Geospatiale = {};
+	if (!global.Geospatiale)
+		/**
+		 * The namespace for all UF/Geospatiale utility functions, typically for static methods.
+		 * 
+		 * @namespace Geospatiale
+		 */
+		global.Geospatiale = {};
 	
+	/**
+	 * Converts a {@link maptalks.Geometry} into a {@link turf.Geometry}.
+	 * 
+	 * @param {maptalks.Geometry} arg0_geometry
+	 * 
+	 * @returns {turf.Geometry}
+	 */
 	Geospatiale.convertMaptalksToTurf = function (arg0_geometry) {
 		//Convert from parameters
 		let geometry = arg0_geometry;
@@ -16,6 +29,13 @@
 		return turf.feature(geojson.geometry);
 	};
 	
+	/**
+	 * Converts a {@link turf.Geometry} into a {@link maptalks.Geometry}
+	 * 
+	 * @param {turf.Geometry} arg0_geometry
+	 * 
+	 * @returns {maptalks.Geometry}
+	 */
 	Geospatiale.convertTurfToMaptalks = function (arg0_geometry) {
 		const geometry = arg0_geometry;
 		
@@ -39,6 +59,7 @@
 	
 	/**
 	 * Returns the coords/geometry format the variable represents.
+	 * 
 	 * @param {*} arg0_format - The coords/geometry format to input.
 	 *
 	 * @returns {String} - Either 'geojson_coords'/'geojson_geometry'/'leaflet_coords'/'leaflet_geometry'/'maptalks_coords'/'maptalks_geometry'/'naissance_coords'/'naissance_geometry'/'turf_coords'/'turf_geometry'.
@@ -61,6 +82,7 @@
 	
 	/**
 	 * Whether the coords type being tested are loosely GeoJSON compatible.
+	 * 
 	 * @param {*} arg0_coords
 	 *
 	 * @returns {boolean}

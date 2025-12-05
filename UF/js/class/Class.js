@@ -1,5 +1,18 @@
-if (!global.Class) global.Class = {};
+if (!global.Class)
+	/**
+	 * The namespace for all UF/Class utility functions, typically for static methods.
+	 * 
+	 * @namespace Class
+	 */
+	global.Class = {};
 
+/**
+ * Generates a random ID given the values in the `.instances` Array.
+ * 
+ * @param {Class} arg0_class
+ * 
+ * @returns {string}
+ */
 Class.generateRandomID = function (arg0_class) {
 	//Convert from parameters
 	let local_class = arg0_class;

@@ -1,7 +1,21 @@
 //Initialise functions
 {
-	if (!global.Boolean) global.Boolean = {};
+	if (!global.Boolean)
+		/**
+		 * The namespace for all UF/Boolean utility functions, typically for static methods.
+		 * 
+		 * @namespace Boolean
+		 */
+		global.Boolean = {};
 	
+	/**
+	 * Checks for strict equality between two values.
+	 * 
+	 * @param {any} arg0_variable
+	 * @param {any} arg1_variable
+	 * 
+	 * @returns {boolean}
+	 */
 	Boolean.strictEquality = function (arg0_variable, arg1_variable) {
 		//Convert from parameters
 		let variable = arg0_variable;

@@ -1,8 +1,19 @@
 //Initialise functions
 {
-	if (!global.File) global.File = {};
+	if (!global.File)
+		/**
+		 * The namespace for all UF/File utility functions, typically for static methods.
+		 * 
+		 * @namespace File
+		 */
+		global.File = {};
 	
-	File.getAllDrives = function () { //[WIP] - Refactor at a later date
+	/**
+	 * Returns all drives in the current operating system.
+	 * 
+	 * @returns {string[]}
+	 */
+	File.getAllDrives = function () {
 		const platform = process.platform;
 		
 		try {
@@ -43,6 +54,13 @@
 		}
 	};
 	
+	/**
+	 * Whether the selected file path is a valid drive.
+	 * 
+	 * @param {string} arg0_file_path
+	 * 
+	 * @returns {boolean}
+	 */
 	File.isDrive = function (arg0_file_path) {
 		//Convert from parameters
 		let file_path = arg0_file_path;

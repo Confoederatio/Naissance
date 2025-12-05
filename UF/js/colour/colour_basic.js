@@ -1,6 +1,12 @@
 //Initialise functions
 {
-	if (!global.Colour) global.Colour = {};
+	if (!global.Colour)
+		/**
+		 * The namespace for all UF/Colour utility functions, typically for static methods.
+		 * 
+		 * @namespace Colour
+		 */
+		global.Colour = {};
 	
 	/**
 	 * Converts a hex string to RGB.

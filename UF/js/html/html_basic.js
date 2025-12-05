@@ -12,6 +12,7 @@
 	 * Returns a list of all parent elements from a given child.
 	 * 
 	 * @param {HTMLElement} arg0_el
+	 * 
 	 * @returns {HTMLElement[]}
 	 */
 	HTML.getAllParentElements = function (arg0_el) {

@@ -1,5 +1,13 @@
 //Initialise functions
 {
+	/**
+	 * Converts a given string to a Date object if possible.
+	 * 
+	 * @param {string} arg0_date_string
+	 * @param [arg1_delimiter="."]
+	 * 
+	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}|undefined}
+	 */
 	Date.convertStringToDate = function (arg0_date_string, arg1_delimiter) {
 		//Convert from parameters
 		let date_string = arg0_date_string;
@@ -24,6 +32,13 @@
 		return date_obj;
 	};
 	
+	/**
+	 * Converts a timestamp to a Date object.
+	 * 
+	 * @param {number|string} arg0_timestamp
+	 * 
+	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}|*}
+	 */
 	Date.convertTimestampToDate = function (arg0_timestamp) {
 		// Convert from parameters
 		let timestamp = arg0_timestamp;
@@ -119,6 +134,13 @@
 		return date_obj;
 	};
 	
+	/**
+	 * Converts a timestamp to an integer if possible.
+	 * 
+	 * @param {number|string} arg0_timestamp
+	 * 
+	 * @returns {number}
+	 */
 	Date.convertTimestampToInt = function (arg0_timestamp) {
 		//Convert from parameters
 		let timestamp = arg0_timestamp;

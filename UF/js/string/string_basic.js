@@ -1,5 +1,20 @@
 //Initialise functions
 {
+	if (!global.String)
+		/**
+		 * The namespace for all UF/String utility functions, typically for static methods.
+		 * 
+		 * @namespace String
+		 */
+		global.String = {};
+	
+	/**
+	 * Formats an array into a string.
+	 * 
+	 * @param {Array} arg0_array
+	 * 
+	 * @returns {string}
+	 */
 	String.formatArray = function (arg0_array) {
 		//Convert from parameters
 		let array = Array.toArray(arg0_array);
@@ -42,6 +57,13 @@
 		return `${day_name} ${month_name} ${Math.abs(date.year)}${(date.year >= 0) ? "AD" : "BC"} - ${hour_name}:${minute_name}`;
 	};
 	
+	/**
+	 * Formats a date length into a string given a number of seconds.
+	 * 
+	 * @param {number} arg0_seconds
+	 * 
+	 * @returns {string}
+	 */
 	String.formatDateLength = function (arg0_seconds) {
 		//Convert from parameters
 		let seconds = Math.returnSafeNumber(arg0_seconds);
@@ -58,6 +80,13 @@
 		return `${String.formatNumber(days)} day(s), ${String.formatNumber(hours)} hour(s), ${String.formatNumber(minutes)} minute(s), ${String.formatNumber(seconds)} second(s)`;
 	};
 	
+	/**
+	 * Formats an object as a given string.
+	 * 
+	 * @param {Object} arg0_object
+	 * 
+	 * @returns {string}
+	 */
 	String.formatObject = function (arg0_object) {
 		//Convert from parameters
 		let object = (arg0_object) ? arg0_object : {};

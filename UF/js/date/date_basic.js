@@ -1,8 +1,22 @@
 //Initialise functions
 {
+	if (!global.Date)
+		/**
+		 * The namespace for all UF/Object utility functions, typically for static methods.
+		 * 
+		 * @namespace Date
+		 */
+		global.Date = {};
+	
+	/**
+	 * @type {number[]}
+	 */
 	Date.bc_leap_years = [
 		-45, -42, -39, -36, -33, -30, -27, -24, -21, -18, -15, -12, -9 //(Ideler 1825); Triennial leap years
 	];
+	/**
+	 * @type {{"<month_key>": { name: string, month: number, days: number, leap_year_days: number }}}
+	 */
 	Date.months = {
 		january: {
 			name: "January",
@@ -55,16 +69,29 @@
 		}
 	};
 	
+	/**
+	 * @type {string[]}
+	 */
 	Date.all_months = Object.keys(Date.months);
 	
 	for (let i = 0; i < Date.all_months.length; i++)
 		Date.months[Date.all_months[i]].month = i;
 	
+	/**
+	 * Returns a blank date template starting at '0AD'.
+	 * 
+	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}}
+	 */
 	Date.getBlankDate = function () {
 		//Return statement
 		return { year: 0, month: 1, day: 1, hour: 0, minute: 0 }; //Must be Year 0, even if it doesn't exist
 	};
 	
+	/**
+	 * Returns the present Date.
+	 * 
+	 * @returns {{year: number, month, day: number, hour: number, minute: number}}
+	 */
 	Date.getCurrentDate = function () {
 		//Declare local instance variables
 		let current_date = new Date();
@@ -79,6 +106,13 @@
 		};
 	};
 	
+	/**
+	 * Returns the number of days in the `.months` value within a Date object.
+	 * 
+	 * @param {Object} arg0_date_object
+	 * 
+	 * @returns {number}
+	 */
 	Date.getDaysInMonths = function (arg0_date_object) {
 		//Convert from parameters
 		let date_obj = arg0_date_object;
@@ -96,6 +130,13 @@
 		return days;
 	};
 	
+	/**
+	 * Fetches the number of leap years before a certain year.
+	 * 
+	 * @param {number} arg0_year
+	 * 
+	 * @returns {number}
+	 */
 	Date.getLeapYearsBefore = function (arg0_year) {
 		//Convert from parameters
 		let year = parseInt(arg0_year);
@@ -104,6 +145,14 @@
 		return year/4 - year/100 + year/400 - 1; //4AD was not a leap year
 	};
 	
+	/**
+	 * Fetches the number of leap years between two years.
+	 * 
+	 * @param {number|string} arg0_start_year
+	 * @param {number|string} arg1_end_year
+	 * 
+	 * @returns {number}
+	 */
 	Date.getLeapYearsBetween = function (arg0_start_year, arg1_end_year) {
 		//Convert from parameters
 		let start_year = parseInt(arg0_start_year);
@@ -113,6 +162,13 @@
 		return Date.getLeapYearsBefore(end_year) - Date.getLeapYearsBefore(start_year + 1);
 	};
 	
+	/**
+	 * Fetches the month index from its name.
+	 * 
+	 * @param {string} arg0_month_name
+	 * 
+	 * @returns {number}
+	 */
 	Date.getMonth = function (arg0_month_name) {
 		//Convert from parameters
 		let month_name = arg0_month_name.toString().toLowerCase();
@@ -133,6 +189,13 @@
 		return month_found;
 	};
 	
+	/**
+	 * Returns the number of months from the number of `.day` within the date object.
+	 * 
+	 * @param {Object} arg0_date_object
+	 * 
+	 * @returns {number}
+	 */
 	Date.getMonthsFromDays = function (arg0_date_object) {
 		// Convert from parameters
 		let date_obj = Date.convertTimestampToDate(arg0_date_object);
@@ -166,6 +229,13 @@
 		return months;
 	};
 	
+	/**
+	 * Returns a numeric timestamp from a specific Date object. Number of minutes from 1 January, 00:00 on 1AD.
+	 * 
+	 * @param {Object} arg0_date_object
+	 * 
+	 * @returns {number}
+	 */
 	Date.getTimestamp = function (arg0_date_object) {
 		// Merge with defaults (1-indexed months)
 		let date_obj = {
@@ -224,6 +294,13 @@
 		return minutes;
 	};
 	
+	/**
+	 * Whether the given year is a leap year.
+	 * 
+	 * @param {number} arg0_year
+	 * 
+	 * @returns {boolean}
+	 */
 	Date.isLeapYear = function (arg0_year) {
 		//Convert from parameters
 		let year = parseInt(arg0_year);
@@ -233,6 +310,13 @@
 		return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0) && year !== 4);
 	};
 	
+	/**
+	 * Parses a {@link float} number of years into a specific Date object.
+	 * 
+	 * @param {number} arg0_years
+	 * 
+	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}}
+	 */
 	Date.parseYears = function (arg0_years) {
 		// Convert from parameters
 		let years = parseFloat(arg0_years);
@@ -249,7 +333,7 @@
 		date_obj.day = Math.floor(days);
 		
 		// 3. Parse months (1-based)
-		date_obj.month = 1; // ✅ Start at January
+		date_obj.month = 1;
 		
 		let all_months = Object.keys(Date.months);
 		for (let i = 0; i < all_months.length; i++) {

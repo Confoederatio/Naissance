@@ -1,5 +1,20 @@
 //Initialise methods
 {
+	if (!global.Math)
+		/**
+		 * The namespace for all UF/Number utility functions, typically for static methods.
+		 * 
+		 * @namespace Math
+		 */
+		global.Math = {};
+	
+	/**
+	 * Alphabetises a given number into a string (a0-j9).
+	 * 
+	 * @param {number} arg0_string
+	 * 
+	 * @returns {string}
+	 */
 	Math.alphabetise = function (arg0_string) {
 		//Convert from parameters
 		let string = arg0_string.toString();
@@ -20,6 +35,13 @@
 		return alphabetised_string;
 	};
 	
+	/**
+	 * Numerises a given string back into a number (a0-j9).
+	 * 
+	 * @param {string} arg0_string
+	 * 
+	 * @returns {number}
+	 */
 	Math.numerise = function (arg0_string) {
 		//Convert from parameters
 		let string = arg0_string.toString();
@@ -65,6 +87,13 @@
 		return (!options.do_not_round) ? Math.round(random_number) : random_number;
 	};
 	
+	/**
+	 * Returns a safe number from a given variable.
+	 * 
+	 * @param {any} arg0_number
+	 * @param {number} [arg1_default=0]
+	 * @returns {number}
+	 */
 	Math.returnSafeNumber = function (arg0_number, arg1_default) {
 		//Convert from parameters
 		let number = parseFloat(arg0_number);
@@ -74,6 +103,13 @@
 		return (!isNaN(number)) ? number : default_value;
 	};
 	
+	/**
+	 * Rounds a number to a specific number of places.
+	 * 
+	 * @param arg0_number
+	 * @param arg1_places
+	 * @returns {string}
+	 */
 	Math.roundNumber = function (arg0_number, arg1_places) {
 		//Convert from parameters
 		let number = parseFloat(arg0_number);

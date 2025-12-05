@@ -1,5 +1,24 @@
 //Initialise methods
 {
+	if (!global.Object)
+		/**
+		 * The namespace for all UF/Object utility functions, typically for static methods.
+		 * 
+		 * @namespace Object
+		 */
+		global.Object = {};
+	
+	/**
+	 * Adds a getter/setter to a given variable string with a root object.
+	 * 
+	 * @param {Object} arg0_object
+	 * @param {string} arg1_variable_string
+	 * @param {Object} [arg2_options]
+	 *  @param {function} [arg2_options.get_function]
+	 *  @param {function} [arg2_options.set_function]
+	 *  
+	 * @returns {*}
+	 */
 	Object.addGetterSetter = function (arg0_object, arg1_variable_string, arg2_options) {
 		//Convert from parameters
 		let object = arg0_object;
@@ -121,6 +140,13 @@
 		return old_value;
 	};
 	
+	/**
+	 * Generates and returns a random unique ID given a specific object.
+	 * 
+	 * @param {Object} arg0_object
+	 * 
+	 * @returns {string}
+	 */
 	Object.generateRandomID = function (arg0_object) {
 		//Convert from parameters
 		let object = arg0_object;
@@ -143,6 +169,14 @@
 		}
 	};
 	
+	/**
+	 * Fetches a given value with a root object and variable string.
+	 * 
+	 * @param {Object} arg0_object
+	 * @param {string} arg1_variable_string
+	 * 
+	 * @returns {string}
+	 */
 	Object.getValue = function (arg0_object, arg1_variable_string) {
 		//Convert from parameters
 		let object = arg0_object;
@@ -198,6 +232,15 @@
 		}
 	};
 	
+	/**
+	 * Sets a given value with a root object and variable string.
+	 * 
+	 * @param {Object} arg0_object
+	 * @param {string} arg1_variable_string
+	 * @param {any} arg2_value
+	 * 
+	 * @returns {any}
+	 */
 	Object.setValue = function (arg0_object, arg1_variable_string, arg2_value) {
 		//Convert from parameters
 		let object = arg0_object;
