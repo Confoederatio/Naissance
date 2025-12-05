@@ -23,10 +23,10 @@
 		let name_string = "";
 		
 		//Modify ending
-		if (name_string.length > 2) {
+		if (array.length > 2) {
 			array[array.length - 1] = `and ${array[array.length - 1]}`;
 			name_string = array.join(", ");
-		} else if (name_string.length === 2) {
+		} else if (array.length === 2) {
 			array[array.length - 1] = `and ${array[array.length - 1]}`;
 			name_string = array.join(" ");
 		} else {

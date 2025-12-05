@@ -7,15 +7,34 @@ naissance.Geometry = class extends ve.Class {
 		//Convert from parameters
 		super();
 		this.history = new naissance.History({}, {
-			localisation_function: (new_keyframe, old_keyframe) => {
+			localisation_function: (new_keyframe, old_keyframe) => { //[WIP] - Finish function
+				//Declare local instance variables
 				let return_string = [];
 				
-				//Modify return_string
-				if (new_keyframe.value[2] && new_keyframe.value[2].variables)
-					return_string.push(`Variables changed to: ${JSON.stringify(new_keyframe.value[2].variables)}`);
+				//[0] .geometry change
+				if (new_keyframe.value[0])
+					return_string.push(`Geometry changed`);
+				if (new_keyframe.value[0] === null)
+					return_string.push(`Geometry removed`);
+				
+				//[1] .symbol change
+				if (new_keyframe.value[1])
+					return_string.push(`Symbol changed to: ${String.formatObject(new_keyframe.value[1])}`);
+				
+				//[2] .properties change
+				if (new_keyframe.value[2]?.hidden === false)
+					return_string.push(`Geometry visible`);
+				if (new_keyframe.value[2]?.hidden === true)
+					return_string.push(`Geometry hidden`);
+				if (new_keyframe.value[2]?.name)
+					return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
+				if (new_keyframe.value[2]?.variables)
+					return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
+				
+				console.log(return_string, String.formatArray(return_string));
 				
 				//Return statement
-				return return_string.join(", ");
+				return String.formatArray(return_string);
 			}
 		});
 		this.id = Class.generateRandomID(naissance.Geometry);
@@ -64,6 +83,11 @@ naissance.Geometry = class extends ve.Class {
 			this.parent = main.brush.selected_feature;
 			main.brush.selected_feature.entities.push(this);
 		}
+	}
+	
+	get current_keyframe () {
+		//Return statement
+		return this.history.getKeyframe();
 	}
 	
 	get name () {
@@ -115,25 +139,25 @@ naissance.Geometry = class extends ve.Class {
 					marginLeft: "auto", order: 99, padding: 0
 				}
 			}),
-			hide_visibility: veButton(() => {
+			hide_geometry: veButton(() => {
 				DALS.Timeline.parseAction({
-					options: { name: "Show Geometry", key: "show_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, set_visibility: false }]
+					options: { name: "Hide Geometry", key: "hide_geometry" },
+					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: true } }]
 				});
 			}, {
 				name: `<icon>visibility</icon>`,
-				limit: () => this._is_visible,
+				limit: () => !this.current_keyframe.value[2]?.hidden,
 				tooltip: "Hide Geometry",
 				style: { order: 100, padding: 0 }
 			}),
-			show_visibility: veButton(() => {
+			show_geometry: veButton(() => {
 				DALS.Timeline.parseAction({
 					options: { name: "Show Geometry", key: "show_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, set_visibility: true }]
+					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: false } }]
 				});
 			}, {
 				name: "<icon>visibility_off</icon>",
-				limit: () =>  !this._is_visible,
+				limit: () =>  this.current_keyframe.value[2]?.hidden,
 				tooltip: "Show Geometry",
 				style: { order: 100, padding: 0 }
 			}),
@@ -170,11 +194,6 @@ naissance.Geometry = class extends ve.Class {
 		}
 	}
 	
-	hide () {
-		this._is_visible = false;
-		if (this.draw) this.draw();
-	}
-	
 	toJSON () {
 		console.warn(`naissance.Geometry.toJSON() was called for: ${this.class_name}, but was not defined.`);
 	}
@@ -200,11 +219,6 @@ naissance.Geometry = class extends ve.Class {
 		this.draw();
 	}
 	
-	show () {
-		this._is_visible = true;
-		if (this.draw) this.draw();
-	}
-	
 	/**
 	 * Parses a JSON action for a target Geometry.
 	 * - Static method of: {@link naissance.Geometry}
@@ -216,8 +230,12 @@ naissance.Geometry = class extends ve.Class {
 	 * - `.delete_geometry`: {@link boolean}
 	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
 	 * - `.set_name`: {@link string}
+	 * - `.set_polygon`: {@link string} - The JSON to set the polygon geometry to.
+	 * - `.set_properties`: {@link Object}
+	 *   - `<data_key>`: {@link any}
 	 * - `.set_tags`: {@link Array}<{@link string}>
-	 * - `.set_visibility`: {@link boolean}
+	 * - `.set_symbol`: {@link Object}
+	 *   - `<symbol_key>`: {@link any}
 	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
@@ -232,16 +250,16 @@ naissance.Geometry = class extends ve.Class {
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
 			
+			//set_geometry
+			if (json.set_geometry) {
+				geometry_obj.addKeyframe(main.date, json.set_geometry);
+			} else if (json.set_geometry === null) {
+				geometry_obj.addKeyframe(main.date, null);
+			}
+			
 			//set_history
 			if (json.set_history)
 				geometry_obj.history.fromJSON(json.set_history);
-			
-			//set_visibility
-			if (json.set_visibility === true) {
-				geometry_obj.show();
-			} else if (json.set_visibility === false) {
-				geometry_obj.hide();
-			}
 			
 			//set_name
 			if (json.set_name) {
@@ -262,6 +280,24 @@ naissance.Geometry = class extends ve.Class {
 					if (current_keyframe.value[2] && current_keyframe.value[2].name)
 						geometry_obj.instance_window.setName(current_keyframe.value[2].name);
 				}
+			}
+			
+			//set_properties
+			if (json.set_properties) {
+				if (json.set_properties.date) {
+					geometry_obj.addKeyframe(json.set_properties.date, undefined, undefined, json.set_properties.value);
+				} else {
+					geometry_obj.addKeyframe(main.date, undefined, undefined, json.set_properties);
+				}
+			} else if (json.set_properties === null) {
+				geometry_obj.addKeyframe(main.date, undefined, undefined, null);
+			}
+			
+			//set_symbol
+			if (json.set_symbol) {
+				geometry_obj.addKeyframe(main.date, undefined, json.set_symbol);
+			} else if (json.set_symbol === null) {
+				geometry_obj.addKeyframe(main.date, undefined, null);
 			}
 			
 			//set_tags

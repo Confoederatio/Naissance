@@ -42,13 +42,15 @@ naissance.History = class extends ve.Class {
 		
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
+			
 			//Set components_obj
 			components_obj[`t_${local_key}`] = new ve.Interface({
 				date_info: new ve.HTML(String.formatDate(local_value.date), { 
 					tooltip: `Timestamp: ${local_value.timestamp}`,
 					x: 0, y: 0
 				}),
-				localisation: veHTML(local_value.localisation, { x: 1, y: 0 }),
+				localisation: veHTML(() => 
+					(local_value.localisation) ? local_value.localisation : "", { x: 1, y: 0 }),
 				jump_to_date: veButton((e) => {
 					DALS.Timeline.parseAction({
 						options: { name: "Set Date", key: "load_date" },

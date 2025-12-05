@@ -36,6 +36,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}), { name: "Finish Polygon", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
 			
 			selected: veCheckbox(this.selected, {
+				name: "Selected",
 				onuserchange: (v) => this.selected = v,
 				x: 1, y: 1
 			}),
@@ -172,6 +173,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		//2. Draw this.geometry, this.label from this.value onto map
 		if (this.value && this.value[0] === null) derender_geometry = true; //Coords are null, derender geometry
 		if (this.value && this.value[2]) {
+			if (this.value[2].hidden) derender_geometry = true;
 			if (this.value[2].max_zoom && map.getZoom() > this.value[2].max_zoom) derender_geometry = true;
 			if (this.value[2].min_zoom && map.getZoom() < this.value[2].min_zoom) derender_geometry = true;
 		}
@@ -239,6 +241,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}),
 			...super.drawHierarchyDatatypeGenerics(),
 			context_menu: veButton(() => {
+				this.history.draw();
 				super.open("instance", { name: this.name, ...this.window_options });
 			}, {
 				name: "<icon>more_vert</icon>",
@@ -323,11 +326,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	 *   - `.geometry`: {@link string}
 	 * - `.remove_from_polygon`: {@link Object}
 	 *   - `.geometry`: {@link string}
-	 * - `.set_properties`: {@link Object}
-	 *   - `<data_key>`: {@link any}
-	 * - `.set_polygon`: {@link string} - The JSON to set the polygon geometry to.
-	 * - `.set_symbol`: {@link Object}
-	 *   - `<symbol_key>`: {@link any}
 	 */
 	static parseAction (arg0_json) { //[WIP] - Add .set_history
 		//Convert from parameters
@@ -385,31 +383,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					polygon_obj.addKeyframe(main.date, (turf_difference) ? 
 						Geospatiale.convertTurfToMaptalks(turf_difference).toJSON() : null);
 				}
-			}
-			
-			//set_polygon
-			if (json.set_polygon) {
-				polygon_obj.addKeyframe(main.date, json.set_polygon);
-			} else if (json.set_polygon === null) {
-				polygon_obj.addKeyframe(main.date, null);
-			}
-			
-			//set_properties
-			if (json.set_properties) {
-				if (json.set_properties.date) {
-					polygon_obj.addKeyframe(json.set_properties.date, undefined, undefined, json.set_properties.value);
-				} else {
-					polygon_obj.addKeyframe(main.date, undefined, undefined, json.set_properties);
-				}
-			} else if (json.set_properties === null) {
-				polygon_obj.addKeyframe(main.date, undefined, undefined, null);
-			}
-			
-			//set_symbol
-			if (json.set_symbol) {
-				polygon_obj.addKeyframe(main.date, undefined, json.set_symbol);
-			} else if (json.set_symbol === null) {
-				polygon_obj.addKeyframe(main.date, undefined, null);
 			}
 			
 			//simplify_polygon
