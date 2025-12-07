@@ -41,6 +41,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				x: 1, y: 1
 			}),
 		}, { is_folder: false });
+		this.edit_ui = main.interfaces.edit_geometry_polygon.draw();
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});
@@ -222,7 +223,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 							this.label_geometries[i].addTo(main.layers.label_layer);
 						}
 					}
-						
 				}
 			} catch (e) { console.error(e); }
 			

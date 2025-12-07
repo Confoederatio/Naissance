@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryPolygon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +70,7 @@
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
-      <workItem from="1765081367837" duration="3063000" />
+      <workItem from="1765081367837" duration="3968000" />
     </task>
     <servers />
   </component>
@@ -80,7 +82,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/core/framework/entities/Geometry.js</url>
-          <line>275</line>
+          <line>273</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
