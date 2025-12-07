@@ -231,6 +231,7 @@ naissance.Geometry = class extends ve.Class {
 	 * - #### Extraneous Commands:
 	 * - `.delete_geometry`: {@link boolean}
 	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
+	 * - `.set_label_symbol`: {@link Object}
 	 * - `.set_name`: {@link string}
 	 * - `.set_polygon`: {@link string} - The JSON to set the polygon geometry to.
 	 * - `.set_properties`: {@link Object}
@@ -262,6 +263,18 @@ naissance.Geometry = class extends ve.Class {
 			//set_history
 			if (json.set_history)
 				geometry_obj.history.fromJSON(json.set_history);
+			
+			//set_label_symbol
+			if (json.set_label_symbol) {
+				geometry_obj.addKeyframe(main.date, undefined, undefined, { 
+					label_symbol: {
+						...geometry_obj.current_keyframe?.value[2]?.label_symbol,
+						...json.set_label_symbol
+					}
+				});
+			} else if (json.set_label_symbol === null) {
+				geometry_obj.addKeyframe(main.date, undefined, undefined, { label_symbol: null });
+			}
 			
 			//set_name
 			if (json.set_name) {

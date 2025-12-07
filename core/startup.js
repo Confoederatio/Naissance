@@ -23,6 +23,7 @@ global.path = require("path");
 				leftbar_ui: new UI_Leftbar(),
 				
 				//Rightbar
+				edit_geometry_label: new UI_EditGeometryLabel(),
 				edit_geometry_polygon: new UI_EditGeometryPolygon(),
 				edit_selected_geometries_ui: new UI_EditSelectedGeometries(),
 				

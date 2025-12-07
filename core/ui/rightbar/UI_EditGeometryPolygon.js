@@ -4,9 +4,18 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 	}
 	
 	/**
+	 * @param {Object} [arg0_options]
+	 *  @param {string} [arg0_options.name="Polygon Symbol"]
+	 * 
 	 * @returns {ve.Interface}
 	 */
-	draw () {
+	draw (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
+		//Initialise options
+		if (!options.name) options.name = "Polygon Symbol";
+		
 		//Return statement
 		return new ve.Interface({
 			//Row 1: Fill
@@ -94,6 +103,6 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 					}
 				}),
 			}, { name: "Stroke", open: true })
-		}, { name: "Polygon Symbol" });
+		}, { name: options.name });
 	}
 }

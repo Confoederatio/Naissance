@@ -396,6 +396,28 @@ naissance.Brush = class extends ve.Class {
 		}
 	}
 	
+	static setSelectedLabelSymbol (arg0_symbol_obj) {
+		//Convert from parameters
+		let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
+		
+		//Declare local instance variables
+		let json_obj = {
+			options: { name: "Set Selected Label Symbol", key: "set_selected_label_symbol" },
+			value: []
+		};
+		
+		//Iterate over naissance.Geometry.instances and check for .selected
+		for (let i = 0; i < naissance.Geometry.instances.length; i++)
+			if (naissance.Geometry.instances[i].selected)
+				json_obj.value.push({
+					type: "Geometry",
+					
+					geometry_id: naissance.Geometry.instances[i].id,
+					set_label_symbol: symbol_obj
+				});
+		DALS.Timeline.parseAction(json_obj);
+	}
+	
 	static setSelectedSymbol (arg0_symbol_obj) {
 		//Convert from parameters
 		let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};

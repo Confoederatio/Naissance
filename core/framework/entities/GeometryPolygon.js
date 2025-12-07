@@ -41,7 +41,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				x: 1, y: 1
 			}),
 		}, { is_folder: false });
-		this.edit_ui = main.interfaces.edit_geometry_polygon.draw();
+		this.edit_ui = main.interfaces.edit_geometry_polygon.draw({ name: "Edit Symbol" });
+		this.edit_label_ui = main.interfaces.edit_geometry_label.draw({ name: "Edit Label" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});
@@ -214,12 +215,11 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						
 						//Iterate over all this.label_geometries, apply settings
 						for (let i = 0; i < this.label_geometries.length; i++) {
-							//2. .label_symbol
-							if (this.value[2].label_symbol)
-								this.label_geometries[i].setSymbol(this.value[2].label_symbol);
-							
-							//3. .label_name/.name
-							this.label_geometries[i].setSymbol({ textName: label_name });
+							//2. .label_name/.name
+							this.label_geometries[i].setSymbol({ 
+								textName: label_name,
+								...this.value[2].label_symbol
+							});
 							this.label_geometries[i].addTo(main.layers.label_layer);
 						}
 					}
