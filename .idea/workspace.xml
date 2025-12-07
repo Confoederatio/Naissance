@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +67,8 @@
       <workItem from="1763806208092" duration="1909000" />
       <workItem from="1764001661232" duration="237000" />
       <workItem from="1764001957906" duration="1192000" />
-      <workItem from="1764176738442" duration="78784000" />
+      <workItem from="1764176738442" duration="80471000" />
+      <workItem from="1765081367837" duration="3063000" />
     </task>
     <servers />
   </component>
@@ -79,7 +81,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/core/framework/entities/Geometry.js</url>
           <line>275</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

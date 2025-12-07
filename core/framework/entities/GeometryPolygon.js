@@ -157,7 +157,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		let data = arg3_data;
 		
 		//Declare local instance variables
-		//if (coords !== undefined) coords = coords;
 		this.history.addKeyframe(date, coords, symbol, data);
 		this.draw();
 	}
@@ -180,12 +179,15 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		if (!derender_geometry) {
 			try {
-				//console.log(`naissance.GeometryPolygon, render keyframe:`, this.value);
 				if (this.geometry) this.geometry.remove();
-				if (this.label_geometry) this.label_geometry.remove();
+				if (this.label_geometries)
+					for (let i = this.label_geometries.length - 1; i >= 0; i--) {
+						this.label_geometries[i].remove();
+						this.label_geometries.splice(i, 1);
+					}
 				if (this.selected_geometry) this.selected_geometry.remove();
 				
-				//Draw this.geometry, this.label_geometry, this.selected_geometry
+				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
@@ -193,19 +195,32 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				}
 				if (this.value[2]) {
 					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
-					if (this.geometry && this.value[2].label_geometry !== null) {
-						let label_name = (this.value[2].label_name) ? this.value[2].label_name : this.value[2].name;
+					if (this.geometry && this.value[2].label_geometries !== null) {
+						let label_name = (this.value[2].label_name) ? 
+							this.value[2].label_name : this.value[2].name;
+						let label_coordinates = (this.value[2].label_coordinates) ? 
+							this.value[2].label_coordinates : [];
 						
 						//1. .label_coordinates
-						this.label_geometry = new maptalks.Marker((this.value[2].label_coordinates) ? this.value[2].label_coordinates : this.geometry.getCenter());
+						if (!this.geometry.getGeometries) {
+							this.label_geometries[0] = new maptalks.Marker((label_coordinates[0]) ? label_coordinates[0]  : this.geometry.getCenter());
+						} else {
+							let all_geometries = this.geometry.getGeometries();
+							
+							for (let i = 0; i < all_geometries.length; i++)
+								this.label_geometries[i] = new maptalks.Marker((label_coordinates[0]) ? label_coordinates[0] : all_geometries[i].getCenter());
+						}
 						
-						//2. .label_symbol
-						if (this.value[2].label_symbol)
-							this.label_geometry.setSymbol(this.value[2].label_symbol);
-						
-						//3. .label_name/.name
-						this.label_geometry.setSymbol({ textName: label_name });
-						this.label_geometry.addTo(main.layers.label_layer);
+						//Iterate over all this.label_geometries, apply settings
+						for (let i = 0; i < this.label_geometries.length; i++) {
+							//2. .label_symbol
+							if (this.value[2].label_symbol)
+								this.label_geometries[i].setSymbol(this.value[2].label_symbol);
+							
+							//3. .label_name/.name
+							this.label_geometries[i].setSymbol({ textName: label_name });
+							this.label_geometries[i].addTo(main.layers.label_layer);
+						}
 					}
 						
 				}
@@ -240,7 +255,9 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		//5. Derender geometry handler
 		if (derender_geometry) {
 			if (this.geometry) this.geometry.remove();
-			if (this.label_geometry) this.label_geometry.remove();
+			if (this.label_geometries)
+				for (let i = 0; i < this.label_geometries.length; i++)
+					this.label_geometries[i].remove();
 			if (this.selected_geometry) this.selected_geometry.remove();
 		}
 	}

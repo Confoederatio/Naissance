@@ -35,8 +35,6 @@ naissance.Geometry = class extends ve.Class {
 				if (new_keyframe.value[2]?.variables)
 					return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
 				
-				console.log(return_string, String.formatArray(return_string));
-				
 				//Return statement
 				return String.formatArray(return_string);
 			}
@@ -64,9 +62,9 @@ naissance.Geometry = class extends ve.Class {
 		this.geometry = undefined;
 		/** 
 		 * Renders any assigned name to the geometry/label.
-		 * @type {maptalks.Label|undefined}
+		 * @type {maptalks.Label[]|undefined}
 		 */
-		this.label = undefined;
+		this.label_geometries = [];
 		/** @type {boolean} */
 		this.selected = false; //Should be overridden by a getter/setter that attempts to render this.selected_geometry
 		/**
