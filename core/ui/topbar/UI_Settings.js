@@ -16,13 +16,33 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 							
 							onuserchange: (v) => {
 								main.settings.autoload_file = v;
+								UI_Settings.saveSettings();
 							}
 						})
+					}),
+					autoloading_mode: veSelect({
+						default: {
+							name: "Default",
+							selected: true
+						},
+						disable_autoload: {
+							name: "Disable Autoload"
+						},
+						load_last_save: {
+							name: "Load Last Save"
+						}
+					}, {
+						name: "Autoloading Mode",
+						onuserchange: (v) => {
+							main.settings.autoloading_mode = v;
+							UI_Settings.saveSettings();
+						}
 					}),
 					sort_settings_alphabetically: veToggle(main.settings.sort_settings_alphabetically, {
 						name: "Sort Settings Alphabetically",
 						onuserchange: (v) => {
 							main.settings.sort_settings_alphabetically = v;
+							UI_Settings.saveSettings();
 						}
 					})
 				}
@@ -70,15 +90,17 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		}
 		
 		//main.settings.autoload_file handler
-		if (main.settings.autoload_file)
-			if (fs.existsSync(main.settings.autoload_file)) {
-				let load_data = fs.readFileSync(main.settings.autoload_file, "utf8");
+		if (main.settings.autoload_file && main.settings.autoloading_mode === "default")
+			if (fs.existsSync(main.settings.autoload_file[0])) {
+				let load_data = fs.readFileSync(main.settings.autoload_file[0], "utf8");
 				
 				//Load state
-				DALS.Timeline.parseAction({
-					options: { name: "Load Save", key: "load_save" },
-					value: [{ type: "global", load_save: load_data }]
-				});
+				setTimeout(() => {
+					DALS.Timeline.parseAction({
+						options: { name: "Load Save", key: "load_save" },
+						value: [{ type: "global", load_save: load_data }]
+					});
+				}, 100);
 			}
 	}
 	
@@ -86,6 +108,6 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 	 * Saves the current `main.settings` {@link Object} to `settings.json`.
 	 */
 	static saveSettings () {
-		
+		fs.writeFileSync(`./settings.json`, JSON.stringify(main.settings, null, 2));
 	}
 }
