@@ -4,6 +4,19 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		
 		//Declare local instance variables
 		let navbar_el = document.querySelector(".ve.navbar");
+		let settings_autoloading_mode_obj = {
+			default: {
+				name: "Default"
+			},
+			disable_autoload: {
+				name: "Disable Autoload"
+			},
+			load_last_save: {
+				name: "Load Last Save"
+			}
+		};
+			settings_autoloading_mode_obj[main.settings.autoloading_mode].selected = true;
+		
 		let settings_ui = {
 			project: {
 				name: "Project",
@@ -20,18 +33,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 							}
 						})
 					}),
-					autoloading_mode: veSelect({
-						default: {
-							name: "Default",
-							selected: true
-						},
-						disable_autoload: {
-							name: "Disable Autoload"
-						},
-						load_last_save: {
-							name: "Load Last Save"
-						}
-					}, {
+					autoloading_mode: veSelect(settings_autoloading_mode_obj, {
 						name: "Autoloading Mode",
 						onuserchange: (v) => {
 							main.settings.autoloading_mode = v;
@@ -44,6 +46,10 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 							main.settings.sort_settings_alphabetically = v;
 							UI_Settings.saveSettings();
 						}
+					}),
+					open_map_settings: veButton(() => new UI_MapSettings(), {
+						name: `<icon>settings</icon> Map Settings`,
+						tooltip: `Map settings are restricted to the current project, and are not globally applied.`
 					})
 				}
 			},
