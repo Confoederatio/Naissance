@@ -3,6 +3,6 @@
     "D:\\Project 1706 - Naissance Electron\\saves\\autosave.naissance"
   ],
   "disable_autoload": true,
-  "autoloading_mode": "load_last_save",
+  "autoloading_mode": "default",
   "sort_settings_alphabetically": false
 }
