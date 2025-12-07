@@ -29,7 +29,7 @@ global.path = require("path");
 				
 				//Topbar
 				date_ui: new UI_DateMenu(),
-				navbar: global.main_navbar
+				navbar: global.main_navbar,
 			},
 			layers: {
 				//Foreground layers
@@ -47,12 +47,14 @@ global.path = require("path");
 			},
 			map: map,
 			renderer: new naissance.Renderer(map),
+			settings: {},
 			user: {}
     };
 		if (!global.naissance) global.naissance = {};
 			main.map.settings = {
 				autoload_last_date: true
 			};
+			UI_Settings.loadSettings();
 			main.user.brush = new naissance.Brush();
 		
 		//1.1. Append all layers to map

@@ -24,7 +24,8 @@ global.UI_Navbar = class {
 				}
 			},
 			settings: {
-				name: "Settings"
+				name: "Settings",
+				onclick: () => new UI_Settings()
 			},
 			view: {
 				name: "View",

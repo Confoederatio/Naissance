@@ -198,28 +198,34 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				if (this.value[2]) {
 					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
 					if (this.geometry && this.value[2].label_geometries !== null) {
+						let label_geometries = (this.value[2].label_geometries) ?
+							this.value[2].label_geometries : [];
 						let label_name = (this.value[2].label_name) ? 
 							this.value[2].label_name : this.value[2].name;
-						let label_coordinates = (this.value[2].label_coordinates) ? 
-							this.value[2].label_coordinates : [];
 						
 						//1. .label_coordinates
-						if (!this.geometry.getGeometries) {
-							this.label_geometries[0] = new maptalks.Marker((label_coordinates[0]) ? label_coordinates[0]  : this.geometry.getCenter());
+						if (label_geometries.length === 0) {
+							if (!this.geometry.getGeometries) {
+								this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
+							} else {
+								let all_geometries = this.geometry.getGeometries();
+								
+								for (let i = 0; i < all_geometries.length; i++)
+									this.label_geometries[i] = new maptalks.Marker(all_geometries[i].getCenter());
+							}
 						} else {
-							let all_geometries = this.geometry.getGeometries();
-							
-							for (let i = 0; i < all_geometries.length; i++)
-								this.label_geometries[i] = new maptalks.Marker((label_coordinates[0]) ? label_coordinates[0] : all_geometries[i].getCenter());
+							for (let i = 0; i < label_geometries.length; i++)
+								this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
 						}
 						
 						//Iterate over all this.label_geometries, apply settings
 						for (let i = 0; i < this.label_geometries.length; i++) {
 							//2. .label_name/.name
-							this.label_geometries[i].setSymbol({ 
-								textName: label_name,
-								...this.value[2].label_symbol
-							});
+							if (label_geometries.length === 0)
+								this.label_geometries[i].setSymbol({ 
+									textName: label_name,
+									...this.value[2].label_symbol
+								});
 							this.label_geometries[i].addTo(main.layers.label_layer);
 						}
 					}
