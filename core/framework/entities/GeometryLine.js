@@ -79,50 +79,58 @@ naissance.GeometryLine = class extends naissance.Geometry {
 					}
 				}
 			} catch (e) { console.error(e); }
+		}
+		
+		//4. Draw this.selected_geometry
+		try {
+			this.selected_geometry = undefined;
 			
-			//4. Draw this.selected_geometry
-			try {
-				this.selected_geometry = undefined;
-				
-				if (this.geometry && this.selected) {
-					this.selected_geometry = this.geometry.copy();
-					this.selected_geometry.setSymbol({
-						lineColor: `rgb(255, 255, 0)`,
-						lineDasharray : (main.brush.selected_geometry?.id !== this.id) ? [10, 10, 10] : undefined,
-						lineOpacity: 0.5,
-						lineWidth: 4
-					});
-					main.layers.selection_layer.addGeometry(this.selected_geometry);
-				}
-			} catch (e) { console.error(e); }
-			
-			//5. Add bindings
-			if (this.geometry) {
-				this.keyframes_ui.v = this.history.interface.v;
-				
-				this.geometry.addEventListener("click", (e) => {
-					if (!["node", "node_override"].includes(main.brush.mode) && !HTML.ctrl_pressed)
-						super.open("instance", { name: this.name, ...this.window_options });
-					
-					if (
-						HTML.ctrl_pressed && 
-						main.brush._selected_geometry?.id === this.id 
-						&& e.pickGeometryIndex !== undefined
-					) {
-						//Remove this index from the line instead
-						DALS.Timeline.parseAction({
-							options: { name: "Remove from Line", key: "remove_from_line" },
-							value: [{
-								type: "GeometryLine",
-								
-								geometry_id: main.brush._selected_geometry.id,
-								remove_from_line: e.pickGeometryIndex
-							}]
-						});
-						console.log(e);
-					}
+			if (this.geometry && this.selected) {
+				this.selected_geometry = this.geometry.copy();
+				this.selected_geometry.setSymbol({
+					lineColor: `rgb(255, 255, 0)`,
+					lineDasharray : (main.brush.selected_geometry?.id !== this.id) ? [10, 10, 10] : undefined,
+					lineOpacity: 0.5,
+					lineWidth: 4
 				});
+				main.layers.selection_layer.addGeometry(this.selected_geometry);
 			}
+		} catch (e) { console.error(e); }
+		
+		//5. Add bindings
+		if (this.geometry) {
+			this.keyframes_ui.v = this.history.interface.v;
+			
+			this.geometry.addEventListener("click", (e) => {
+				if (!["node", "node_override"].includes(main.brush.mode) && !HTML.ctrl_pressed)
+					super.open("instance", { name: this.name, ...this.window_options });
+				
+				if (
+					HTML.ctrl_pressed &&
+					main.brush._selected_geometry?.id === this.id
+					&& e.pickGeometryIndex !== undefined
+				) {
+					//Remove this index from the line instead
+					DALS.Timeline.parseAction({
+						options: { name: "Remove from Line", key: "remove_from_line" },
+						value: [{
+							type: "GeometryLine",
+							
+							geometry_id: main.brush._selected_geometry.id,
+							remove_from_line: e.pickGeometryIndex
+						}]
+					});
+				}
+			});
+		}
+		
+		//6. Derender geometry handler
+		if (derender_geometry) {
+			if (this.geometry) this.geometry.remove();
+			if (this.label_geometries)
+				for (let i = 0; i < this.label_geometries.length; i++)
+					this.label_geometries[i].remove();
+			if (this.selected_geometry) this.selected_geometry.remove();
 		}
 	}
 	
@@ -236,7 +244,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		//Parse commands for line_obj
 		if (line_obj && line_obj instanceof naissance.GeometryLine) {
 			//add_to_line
-			if (json.add_to_line) {
+			if (json.add_to_line !== undefined) {
 				let geometry = line_obj.geometry;
 				let ot_geometry = maptalks.Geometry.fromJSON(json.add_to_line.geometry);
 				
@@ -254,12 +262,12 @@ naissance.GeometryLine = class extends naissance.Geometry {
 			}
 			
 			//remove_from_line
-			if (json.remove_from_line)
+			if (json.remove_from_line !== undefined)
 				if (typeof json.remove_from_line === "number") {
-					//Attempt to splcie it out of geometries
+					//Attempt to splice it out of geometries
 					let all_geometries = line_obj.geometry.getGeometries();
-						if (all_geometries[json.remove_from_line])
-							all_geometries.splice(json.remove_from_line, 1);
+					if (all_geometries[json.remove_from_line] !== undefined)
+						all_geometries.splice(json.remove_from_line, 1);
 					
 					//Set new maptalks_line_obj
 					let maptalks_line_obj = new maptalks.MultiLineString();

@@ -256,12 +256,23 @@ naissance.Brush = class extends ve.Class {
 	getBrushSymbol () {
 		//Return statement
 		return {
+			//Point
+			'markerFile'   : 'gfx/icons/marker_default.png',
+			'markerWidth'  : 40,
+			'markerHeight' : 40,
+			'markerDx'     : 0,
+			'markerDy'     : 0,
+			'markerOpacity': 1,
+			
+			
+			//Polygon
 			polygonFill: this.brush_options.colour.getHex(),
 			polygonOpacity: this.opacity/100,
 			lineColor: this.brush_options.stroke_colour.getHex(),
 			lineOpacity: this.stroke_opacity/100,
 			lineWidth: this.stroke_width,
 			
+			//Label
 			textFaceName: (main.settings.default_label_font) ?
 				main.settings.default_label_font : "Karla, sans-serif",
 			textFill: (main.settings.default_label_colour) ?

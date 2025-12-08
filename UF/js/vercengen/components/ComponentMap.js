@@ -77,6 +77,12 @@ ve.Map = class extends ve.Component {
 		
 		//Declare local instance variables
 		this.map = new maptalks.Map(this.element, value);
+			this.map.on("click", (e) => {
+				this.map.mouse_click_coords = e.coordinate.toJSON();
+			});
+			this.map.on("mousemove", (e) => {
+				this.map.mouse_hover_coords = e.coordinate.toJSON();
+			});
 	}
 	
 	/**

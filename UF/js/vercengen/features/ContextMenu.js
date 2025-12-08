@@ -18,7 +18,7 @@
  *   - `.y=HTML.mouse_y`: {@link number}
  *   
  * ##### Methods:
- * - <span color=00ffff>{@link ve.ContextMenu.addContextMenu|addContextMenu}</span>(arg0_components_obj: {@link Object}<{@link ve.Component}>, arg1_options: {@link ve.Window|ve.Window.options}) | {@link ve.ContextMenu}
+ * - <span color=00ffff>{@link ve.ContextMenu.addContextMenu|addContextMenu}</span>(arg0_components_obj: {@link Object}<{@link ve.Component}>, arg1_options: {@link ve.Window|ve.Window.options}) | {@link ve.Window} - The return `.index`: {@link number} contains the index of the opened window.
  *   - `arg1_options`: {@link ve.Window|ve.Window.options}
  *     - `.id`: {@link string} - The ID to prevent duplicate context menus from being opened.
  * - <span color=00ffff>{@link ve.ContextMenu.close|close}</span>() | this:{@link ve.ContextMenu}
@@ -146,6 +146,7 @@ ve.ContextMenu = class extends ve.Feature {
 			if (options.id)
 				window_obj.id = options.id;
 			window_obj.element.classList.add("ve-context-menu");
+			window_obj.index = this.windows.length;
 			
 		this.windows.push(window_obj);
 		
