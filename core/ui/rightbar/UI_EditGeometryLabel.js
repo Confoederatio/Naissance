@@ -28,6 +28,10 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		
 		//Return statement
 		return new ve.Interface({
+			font_colour: veColour((main.settings.default_label_colour) ? main.settings.default_label_colour : [255, 255, 255], {
+				name: "Font Colour",
+				onuserchange: (v, e) => naissance.Brush.setSelectedLabelSymbol({ textFill: e.getHex() }),
+			}),
 			font_family: veSelect({
 				monospace: {
 					name: "Monospace"
@@ -35,10 +39,18 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 				...font_select_obj
 			}, {
 				name: "Font Family",
-				onuserchange: (v) => {
-					naissance.Brush.setSelectedLabelSymbol({ textFaceName: v });
-				},
+				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textFaceName: v }),
 				selected: (main.settings.default_label_font) ? main.settings.default_label_font : "monospace"
+			}),
+			font_stroke: veColour((main.settings.default_label_stroke) ? main.settings.default_label_stroke : [0, 0, 0], {
+				name: "Font Stroke",
+				onuserchange: (v, e) => naissance.Brush.setSelectedLabelSymbol({ textHaloFill: e.getHex() })
+			}),
+			font_stroke_width: veNumber(Math.returnSafeNumber(main.settings.default_label_stroke_width, 2), {
+				name: "Font Stroke Width",
+				
+				min: 0,
+				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textHaloRadius: v })
 			})
 		}, { name: options.name });
 	}

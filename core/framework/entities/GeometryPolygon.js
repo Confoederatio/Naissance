@@ -225,7 +225,13 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 								this.label_geometries[i].setSymbol({ 
 									textName: label_name,
 									
-									textFaceName: main.settings.default_label_font,
+									textFaceName: (main.settings.default_label_font) ? 
+										main.settings.default_label_font : "Karla, sans-serif",
+									textFill: (main.settings.default_label_colour) ? 
+										main.settings.default_label_colour : `rgb(255, 255, 255)`,
+									textHaloFill: (main.settings.default_label_stroke) ? 
+										main.settings.default_label_stroke : `rgb(0, 0, 0)`,
+									textHaloRadius: Math.returnSafeNumber(main.settings.default_label_stroke_width, 2),
 									...this.value[2].label_symbol
 								});
 							this.label_geometries[i].addTo(main.layers.label_layer);
