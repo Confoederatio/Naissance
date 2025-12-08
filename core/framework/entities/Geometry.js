@@ -26,6 +26,13 @@ naissance.Geometry = class extends ve.Class {
 					return_string.push(`Geometry visible`);
 				if (new_keyframe.value[2]?.hidden === true)
 					return_string.push(`Geometry hidden`);
+				if (new_keyframe.value[2]?.label_geometries)
+					if (new_keyframe.value[2].label_geometries.length > 0)
+						return_string.push(`Set custom label geometries`);
+				if (new_keyframe.value[2]?.label_name)
+					return_string.push(`Label name changed to: ${new_keyframe.value[2].label_name}`);
+				if (new_keyframe.value[2]?.label_symbol)
+					return_string.push(`Label symbol changed to: ${String.formatObject(new_keyframe.value[2].label_symbol)}`);
 				if (new_keyframe.value[2]?.max_zoom !== undefined)
 					return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
 				if (new_keyframe.value[2]?.min_zoom !== undefined)

@@ -56,13 +56,17 @@ ve.Interface = class extends ve.Component {
 		this.dimensions = [0, 0]; //Populate this.dimensions to [width, height];
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-interface");
+			Object.iterate(attributes, (local_key, local_value) => {
+				if (local_value !== undefined)
+					this.element.setAttribute(local_key, local_value.toString());
+			});
 			this.element.instance = this;
 			
 		this.options = options;
 			
 		let html_string = [];
 		if (options.is_folder) {
-			html_string.push(`<details class = "ve interface-folder"${HTML.objectToAttributes(attributes)}>`);
+			html_string.push(`<details class = "ve interface-folder">`);
 			html_string.push(`<summary id = "name"></summary>`);
 		}
 			html_string.push(`<table></table>`);

@@ -123,9 +123,14 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 											UI_Settings.saveSettings();
 										}
 									})
-								}, { name: "Default Label Symbol" })
+								}, {
+									attributes: { class: "ve-disable-nesting" },
+									name: "Default Label Symbol" 
+								})
 							}
 						}
+					}, {
+						style: { padding: 0 }
 					})
 				}
 			},
@@ -135,7 +140,15 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		};
 		
 		//Open UI
-		this.settings_ui = new ve.PageMenu(settings_ui);
+		this.settings_ui = new ve.PageMenu(settings_ui, {
+			style: {
+				padding: 0,
+				
+				'[component="ve-interface"]': {
+					padding: 0
+				}
+			}
+		});
 		super.open("instance", {
 			name: "Settings",
 			can_rename: false,

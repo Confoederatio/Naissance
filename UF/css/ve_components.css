@@ -165,7 +165,9 @@
 .ve-disable-nesting {
     > table > tbody > tr > td {
         padding: 0;
-        padding-inline-start: 0;
+    }
+    table tbody tr td {
+        padding-inline-start: 0 !important;
     }
 }
 
