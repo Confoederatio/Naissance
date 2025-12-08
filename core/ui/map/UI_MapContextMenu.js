@@ -34,7 +34,26 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 			}),
 			
 			new_line: veButton(() => {
-				
+				let new_line_interface = this.interface.addContextMenu({
+					line_name: veText("New Line", { name: "Name" }),
+					create_line: veButton(() => {
+						new veToast(`Created ${new_line_interface.line_name.v}`);
+						let select_geometry_id = Class.generateRandomID(naissance.Geometry);
+						
+						DALS.Timeline.parseAction({
+							options: { name: "Create GeometryLine", key: "create_GeometryLine" },
+							value: [{ type: "GeometryLine", create_line: {
+								id: select_geometry_id,
+								name: new_line_interface.line_name.v
+							}}]
+						});
+						DALS.Timeline.parseAction({
+							options: { name: "Select Geometry", key: "select_geometry" },
+							value: [{ type: "Brush", select_geometry_id: select_geometry_id }]
+						});
+						this.interface.close();
+					})
+				});
 			}, { name: "New Line" }),
 			
 			new_point: veButton(() => {

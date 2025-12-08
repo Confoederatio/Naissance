@@ -85,6 +85,20 @@ naissance.Geometry = class extends ve.Class {
 		 * @type {naissance.HistoryKeyframe.value|undefined}
 		 */
 		this.value = undefined;
+		/**
+		 * Options passed to the interface window that is opened.
+		 * @type {Object}
+		 */
+		this.window_options = {
+			width: "20rem",
+			onuserchange: (v) => {
+				if (v.name)
+					DALS.Timeline.parseAction({
+						options: { name: "Rename Geometry", key: "rename_geometry" },
+						value: [{ type: "Geometry", geometry_id: this.id, set_name: v.name }]
+					});
+			}
+		};
 		
 		//Push to naissance.Geometry.instances
 		naissance.Geometry.instances.push(this);
@@ -118,6 +132,42 @@ naissance.Geometry = class extends ve.Class {
 			options: { name: "Rename Geometry", key: "rename_Geometry" },
 			value: [{ type: "Geometry", geometry_id: this.id, set_name: value }]
 		}, this.fire_action_silently);
+	}
+	
+	get selected () {
+		//Declare local instance variables
+		let is_selected;
+		
+		//Fetch is_selected
+		if (main.brush && main.brush.selected_geometry && main.brush.selected_geometry.id === this.id) {
+			is_selected = true;
+		} else {
+			is_selected = this._selected;
+		}
+		if (this.interface && this.interface.selected)
+			this.interface.selected.v = is_selected;
+		
+		//Return statement
+		return is_selected;
+	}
+	
+	set selected (v) {
+		//Set selected, then update draw
+		this._selected = v;
+		this.draw();
+		UI_LeftbarHierarchy.refresh();
+	}
+	
+	addKeyframe (arg0_date, arg1_coords, arg2_symbol, arg3_data) {
+		//Convert from parameters
+		let date = (arg0_date) ? arg0_date : main.date;
+		let coords = arg1_coords;
+		let symbol = arg2_symbol;
+		let data = arg3_data;
+		
+		//Declare local instance variables
+		this.history.addKeyframe(date, coords, symbol, data);
+		this.draw();
 	}
 	
 	/**

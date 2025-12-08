@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMultiTag.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMultiTag.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Brush.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/map/UI_MapContextMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/map/UI_MapContextMenu.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +74,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="16858000" />
+      <workItem from="1765094029123" duration="23377000" />
     </task>
     <servers />
   </component>

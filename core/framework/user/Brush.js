@@ -188,6 +188,32 @@ naissance.Brush = class extends ve.Class {
 			old_selected_geometry.draw(); //Update draw
 	}
 	
+	getAddLine (arg0_geometry) {
+		//Convert from parameters
+		let geometry = arg0_geometry;
+		
+		//Process geometry if valid
+		if (this._selected_geometry instanceof naissance.GeometryLine) {
+			//1. Check geometry.current_keyframe[0] and union lines
+			let all_geometries = [];
+			
+			if (geometry.current_keyframe)
+				if (geometry.current_keyframe.value[0]) {
+					let current_geometry = maptalks.Geometry.fromJSON(geometry.current_keyframe.value[0]);
+					
+					if (current_geometry.getGeometries)
+						all_geometries = current_geometry.getGeometries();
+				}
+			all_geometries.push(geometry);
+			
+			let maptalks_line_obj = new maptalks.MultiLineString();
+				maptalks_line_obj.setGeometries(all_geometries);
+			
+			//Return statement
+			return maptalks_line_obj;
+		}
+	}
+	
 	getAddPolygon (arg0_geometry) {
 		//Convert from parameters
 		let geometry = arg0_geometry;
@@ -268,14 +294,18 @@ naissance.Brush = class extends ve.Class {
 	
 	handleEvents () {
 		//Map event handlers
-		map.on("mousedown", () => {
+		map.on("mousedown", (e) => {
 			setTimeout(() =>{
 				if (this.disabled) return;
 				if (HTML.left_click || HTML.right_click) map.config("draggable", false);
+				if (HTML.middle_click) this.node_editor.disable();
 			});			
 		});
-		map.on("mouseup", () => {
+		map.on("mouseup", (e) => {
 			map.config("draggable", true);
+			if (HTML.middle_click)
+				if (main.brush._selected_geometry instanceof naissance.GeometryLine)
+					this.node_editor.enable();
 		});
 		
 		//Context menu handler

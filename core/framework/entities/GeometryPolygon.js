@@ -12,16 +12,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		super();
 		this.class_name = "GeometryPolygon";
 		this.node_editor_mode = "Polygon";
-		this.window_options = {
-			width: "20rem",
-			onuserchange: (v) => {
-				if (v.name)
-					DALS.Timeline.parseAction({
-						options: { name: "Rename Geometry", key: "rename_geometry" },
-						value: [{ type: "Geometry", geometry_id: this.id, set_name: v.name }]
-					});
-			}
-		};
 		
 		//Declare UI
 		this.interface = veInterface({
@@ -57,42 +47,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		this.updateOwner();
 	}
 	
-	get selected () {
-		//Declare local instance variables
-		let is_selected;
-		
-		//Fetch is_selected
-		if (main.brush && main.brush.selected_geometry && main.brush.selected_geometry.id === this.id) {
-			is_selected = true;
-		} else {
-			is_selected = this._selected;
-		}
-		if (this.interface && this.interface.selected)
-			this.interface.selected.v = is_selected;
-		
-		//Return statement
-		return is_selected;
-	}
-	
-	set selected (v) {
-		//Set selected, then update draw
-		this._selected = v;
-		this.draw();
-		UI_LeftbarHierarchy.refresh();
-	}
-	
-	addKeyframe (arg0_date, arg1_coords, arg2_symbol, arg3_data) {
-		//Convert from parameters
-		let date = (arg0_date) ? arg0_date : main.date;
-		let coords = arg1_coords;
-		let symbol = arg2_symbol;
-		let data = arg3_data;
-		
-		//Declare local instance variables
-		this.history.addKeyframe(date, coords, symbol, data);
-		this.draw();
-	}
-	
 	draw () {
 		//Declare local instance variables
 		let brush_symbol = main.brush.getBrushSymbol();
@@ -100,9 +54,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//1. Set this.value from current relative keyframe
 		this.value = this.history.getKeyframe({ date: main.date }).value;
-		if (this.value === undefined || this.value.length === 0 || this._is_visible === false) derender_geometry = true;
+		if (this.value === undefined || this.value.length === 0 || this._is_visible === false) 
+			derender_geometry = true;
 			
-		//2. Draw this.geometry, this.label from this.value onto map
+		//2. Check any cause for derendering
 		if (this.value && this.value[0] === null) derender_geometry = true; //Coords are null, derender geometry
 		if (this.value && this.value[2]) {
 			if (this.value[2].hidden) derender_geometry = true;
@@ -110,6 +65,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			if (this.value[2].min_zoom && map.getZoom() < this.value[2].min_zoom) derender_geometry = true;
 		}
 		
+		//3. Draw this.geometry, this.label from this.value onto map
 		if (!derender_geometry) {
 			try {
 				if (this.geometry) this.geometry.remove();
@@ -174,7 +130,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				}
 			} catch (e) { console.error(e); }
 			
-			//3. Draw this.selected_geometry
+			//4. Draw this.selected_geometry
 			try {
 				this.selected_geometry = undefined;
 				
@@ -184,13 +140,13 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 						lineColor: `rgb(255, 255, 0)`,
 						lineDasharray : (main.brush.selected_geometry?.id !== this.id) ? [10, 10, 10] : undefined,
 						lineOpacity: 0.5,
-						lineWidth: 4,
+						lineWidth: 4
 					});
 					main.layers.selection_layer.addGeometry(this.selected_geometry);
 				}
 			} catch (e) { console.error(e); }
 			
-			//4. Add bindings
+			//5. Add bindings
 			if (this.geometry) {
 				this.keyframes_ui.v = this.history.interface.v;
 				this.geometry.addEventListener("click", (e) => {
@@ -200,7 +156,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}
 		}
 		
-		//5. Derender geometry handler
+		//6. Derender geometry handler
 		if (derender_geometry) {
 			if (this.geometry) this.geometry.remove();
 			if (this.label_geometries)

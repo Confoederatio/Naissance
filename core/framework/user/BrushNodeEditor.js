@@ -10,17 +10,23 @@ naissance.BrushNodeEditor = class extends ve.Class {
 		this.handleEvents();
 	}
 	
-	disable () { this.draw_tool.disable(); }
+	disable () { 
+		this.draw_tool.disable(); 
+	}
 	
-	enable () { this.draw_tool.enable(); }
+	enable () {
+		this.draw_tool.enable(); 
+	}
 	
 	handleEvents () {
 		this.draw_tool.on("drawend", (e) => {
+			if (main.brush.disabled) try { this.draw_tool.disable(); } catch (e) {}
 			if (main.brush._selected_geometry.handleNodeEditorEnd)
 				main.brush._selected_geometry.handleNodeEditorEnd(e);
 			e.geometry.remove();
 		});
 		this.draw_tool.on("drawstart", (e) => {
+			if (main.brush.disabled) try { this.draw_tool.disable(); } catch (e) {}
 			if (HTML.ctrl_pressed) {
 				this.draw_tool.setSymbol({
 					polygonFill: "rgba(240, 60, 60, 0.5)"
@@ -41,7 +47,11 @@ naissance.BrushNodeEditor = class extends ve.Class {
 				if (main.brush._selected_geometry.node_editor_mode)
 					this.draw_tool.setMode(main.brush._selected_geometry.node_editor_mode).enable();
 		} else {
-			this.draw_tool.disable();
+			if (main.brush._selected_geometry instanceof naissance.GeometryLine) {
+				this.draw_tool.setMode("FreeHandLineString").enable();
+			} else {
+				this.draw_tool.disable();
+			}
 		}
 	}
 };
