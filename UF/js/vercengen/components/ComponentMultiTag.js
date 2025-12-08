@@ -189,10 +189,11 @@ ve.MultiTag = class extends ve.Component {
 			this.components_obj.list.bind(this.element);
 			
 			//Iterate over all this.local_tags; initialise list items from local_tags
+			if (this.local_tags.length - 1 > 0)
+				for (let i = 0; i < this.local_tags.length - 1; i++)
+					this.components_obj.list.addItem();
 			for (let i = 0; i < this.local_tags.length; i++)
-				this.components_obj.list.addItem();
-			for (let i = 0; i < this.local_tags.length; i++)
-				this.components_obj.list.v[i + 1].v = this.local_tags[i];
+				this.components_obj.list.v[i].v = this.local_tags[i];
 		} else {
 			//Update suggestions on all datalist items in the list
 			this.components_obj.datalist.v = this.datalist_options;
@@ -210,7 +211,7 @@ ve.MultiTag = class extends ve.Component {
 	 * - Method of: {@link ve.MultiTag}
 	 *
 	 * @alias updateLocalTags
-	 * @memberof ve.Component.ve.MultiTag
+	 * @memberof ve.Component.ve.MultiTag	
 	 */
 	updateLocalTags () {
 		//Declare local instance variables

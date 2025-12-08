@@ -120,6 +120,11 @@ naissance.Geometry = class extends ve.Class {
 		}, this.fire_action_silently);
 	}
 	
+	/**
+	 * Returns an object of hierarchy generics that can be destructured when `drawHierarchyDatatype()` is called.
+	 * 
+	 * @returns {Object}
+	 */
 	drawHierarchyDatatypeGenerics () {
 		//Return statement
 		return {
@@ -183,6 +188,9 @@ naissance.Geometry = class extends ve.Class {
 		};
 	}
 	
+	/**
+	 * Draws the variables editor for the current geometry UI.
+	 */
 	drawVariablesEditor () {
 		//Declare local instance variables
 		this.variables_ui = veInterface({
@@ -258,10 +266,18 @@ naissance.Geometry = class extends ve.Class {
 		}, { name: "Variables", open: true });
 	}
 	
+	/**
+	 * Imports a {@link naissance.Geometry} class from JSON. Contract function.
+	 */
 	fromJSON () {
 		console.warn(`naissance.Geometry.fromJSON() was called for: ${this.class_name}, but was not defined.`);
 	}
 	
+	/**
+	 * Fetches the layer that the current {@link naissance.Geometry} is appended to, if anything. Used for masking.
+	 * 
+	 * @returns {naissance.FeatureLayer}
+	 */
 	getLayer () {
 		//Iterate over naissance.Feature.instances
 		for (let i = 0; i < naissance.Feature.instances.length; i++) {
@@ -278,10 +294,16 @@ naissance.Geometry = class extends ve.Class {
 		}
 	}
 	
+	/**
+	 * Exports a {@link naissance.Geometry} class to JSON. Contract function.
+	 */
 	toJSON () {
 		console.warn(`naissance.Geometry.toJSON() was called for: ${this.class_name}, but was not defined.`);
 	}
 	
+	/**
+	 * Removes the current {@link naissance.Geometry} instance.
+	 */
 	remove () {
 		//Remove from naissance.Feature .entities
 		for (let i = 0; i < naissance.Feature.instances.length; i++) {
