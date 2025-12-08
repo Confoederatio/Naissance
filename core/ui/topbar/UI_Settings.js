@@ -72,12 +72,35 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 									}
 								}),
 								default_label_symbol: veInterface({
+									default_label_colour: veColour((main.settings.default_label_colour) ? main.settings.default_label_colour : [255, 255, 255], {
+										name: "Font Colour",
+										onuserchange: (v, e) => {
+											main.settings.default_label_colour = e.getHex();
+											UI_Settings.saveSettings();
+										}
+									}),
 									default_label_font: veSelect(main.settings.font_registry, {
 										name: "Font Family",
 										selected: main.settings.default_label_font,
 										
 										onuserchange: (v) => {
 											main.settings.default_label_font = v;
+											UI_Settings.saveSettings();
+										}
+									}),
+									default_label_stroke: veColour((main.settings.default_label_stroke) ? main.settings.default_label_stroke : [0, 0, 0], {
+										name: "Font Stroke",
+										onuserchange: (v, e) => {
+											main.settings.default_label_stroke = e.getHex();
+											UI_Settings.saveSettings();
+										}
+									}),
+									default_label_stroke_width: veNumber(Math.returnSafeNumber(main.settings.default_label_stroke_width, 2), {
+										name: "Font Stroke Width",
+										
+										min: 0,
+										onuserchange: (v) => {
+											main.settings.default_label_stroke_width = v;
 											UI_Settings.saveSettings();
 										}
 									})

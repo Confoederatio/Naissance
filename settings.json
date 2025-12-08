@@ -10,5 +10,6 @@
     "Barlow",
     "Karla, sans-serif"
   ],
-  "default_label_font": "Arial"
+  "default_label_font": "Karla, sans-serif",
+  "default_label_stroke_width": 2
 }
