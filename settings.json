@@ -11,5 +11,6 @@
     "Karla, sans-serif"
   ],
   "default_label_font": "Karla, sans-serif",
-  "default_label_stroke_width": 2
+  "default_label_stroke_width": 2,
+  "hide_labels_by_default": false
 }

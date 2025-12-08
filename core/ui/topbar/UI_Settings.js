@@ -72,6 +72,16 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 									}
 								}),
 								default_label_symbol: veInterface({
+									hide_labels_by_default: veToggle(main.settings.hide_labels_by_default, {
+										name: "Hide Labels by Default",
+										tooltip: "Labels will not appear by default when new Geometries are created.",
+										
+										onuserchange: (v) => {
+											main.settings.hide_labels_by_default = v;
+											UI_Settings.saveSettings();
+										}
+									}),
+									
 									default_label_colour: veColour((main.settings.default_label_colour) ? main.settings.default_label_colour : [255, 255, 255], {
 										name: "Font Colour",
 										onuserchange: (v, e) => {
@@ -85,6 +95,15 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										
 										onuserchange: (v) => {
 											main.settings.default_label_font = v;
+											UI_Settings.saveSettings();
+										}
+									}),
+									default_label_font_size: veNumber(Math.returnSafeNumber(main.settings.default_label_font_size, 14), {
+										name: "Font Size",
+										
+										min: 6,
+										onuserchange: (v) => {
+											main.settings.default_label_font_size = v;
 											UI_Settings.saveSettings();
 										}
 									}),

@@ -42,6 +42,10 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textFaceName: v }),
 				selected: (main.settings.default_label_font) ? main.settings.default_label_font : "monospace"
 			}),
+			font_size: veNumber(Math.returnSafeNumber(main.settings.default_label_font_size, 14), {
+				name: "Font Size",
+				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textSize: v })
+			}),
 			font_stroke: veColour((main.settings.default_label_stroke) ? main.settings.default_label_stroke : [0, 0, 0], {
 				name: "Font Stroke",
 				onuserchange: (v, e) => naissance.Brush.setSelectedLabelSymbol({ textHaloFill: e.getHex() })
