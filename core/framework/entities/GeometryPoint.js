@@ -26,6 +26,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 	
 	draw () {
 		//Declare local instance variables
+		let brush_symbol = main.brush.getBrushSymbol();
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -56,13 +57,59 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
-					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
+					this.geometry.setSymbol({
+						markerDx: brush_symbol._markerDx,
+						markerDy: brush_symbol._markerDy,
+						markerFile: brush_symbol._markerFile,
+						markerHeight: brush_symbol._markerHeight,
+						markerOpacity: brush_symbol._markerOpacity,
+						markerWidth: brush_symbol._markerWidth,
+					});
+					if (this.value[1] && this.geometry) 
+						this.geometry.setSymbol({
+							...this.geometry.getSymbol(),
+							...this.value[1]
+						});
 					main.layers.entity_layer.addGeometry(this.geometry);
 				}
 				if (this.value[2]) {
 					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
 					if (this.geometry && this.value[2].label_geometries !== null) {
+						let label_geometries = (this.value[2].label_geometries) ?
+							this.value[2].label_geometries : [];
+						let label_name = (this.value[2].label_name) ?
+							this.value[2].label_name : this.value[2].name;
 						
+						//1. .label_coordinates
+						if (label_geometries.length === 0) {
+							this.label_geometries[0] = new maptalks.Marker(this.geometry.getCoordinates());
+						} else {
+							for (let i = 0; i < label_geometries.length; i++)
+								this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
+						}
+						
+						//Iterate over all this.label_geometries, apply settings
+						for (let i = 0; i < this.label_geometries.length; i++) {
+							//2. .label_name/.name
+							if (label_geometries.length === 0) {
+								this.label_geometries[i].setSymbol({
+									textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
+									textName: label_name,
+									
+									textFaceName: brush_symbol.textFaceName,
+									textFill: brush_symbol.textFill,
+									textHaloFill: brush_symbol.textHaloFill,
+									textHaloRadius: brush_symbol.textHaloRadius,
+									textSize: brush_symbol.textSize,
+									...this.value[2].label_symbol
+								});
+								
+								if (main.settings.hide_labels_by_default)
+									this.label_geometries[i].hide();
+							}
+							
+							this.label_geometries[i].addTo(main.layers.label_layer);
+						}
 					}
 				}
 			} catch (e) { console.error(e); }

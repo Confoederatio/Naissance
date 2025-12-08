@@ -257,13 +257,12 @@ naissance.Brush = class extends ve.Class {
 		//Return statement
 		return {
 			//Point
-			'markerFile'   : 'gfx/icons/marker_default.png',
-			'markerWidth'  : 40,
-			'markerHeight' : 40,
-			'markerDx'     : 0,
-			'markerDy'     : 0,
-			'markerOpacity': 1,
-			
+			_markerFile: "gfx/icons/marker_default.png",
+			_markerWidth: 40,
+			_markerHeight: 40,
+			_markerDx: 0,
+			_markerDy: 0,
+			_markerOpacity: 1,
 			
 			//Polygon
 			polygonFill: this.brush_options.colour.getHex(),
