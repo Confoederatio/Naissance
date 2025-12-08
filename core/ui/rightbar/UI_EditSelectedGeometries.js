@@ -14,9 +14,7 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		this.point_symbol = new ve.Interface({
 			
 		}, { name: "Point Symbol" });
-		this.label = new ve.Interface({
-			
-		}, { name: "Label" });
+		this.label_symbol = main.interfaces.edit_geometry_label.draw();
 		this.properties = new ve.Interface({
 			visibility: new ve.Interface({
 				minimum_zoom: new ve.Number(0, {
