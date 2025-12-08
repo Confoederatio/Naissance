@@ -165,6 +165,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	
 	draw () {
 		//Declare local instance variables
+		let brush_symbol = main.brush.getBrushSymbol();
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -225,14 +226,11 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 								this.label_geometries[i].setSymbol({
 									textName: label_name,
 									
-									textFaceName: (main.settings.default_label_font) ?
-										main.settings.default_label_font : "Karla, sans-serif",
-									textFill: (main.settings.default_label_colour) ?
-										main.settings.default_label_colour : `rgb(255, 255, 255)`,
-									textHaloFill: (main.settings.default_label_stroke) ?
-										main.settings.default_label_stroke : `rgb(0, 0, 0)`,
-									textHaloRadius: Math.returnSafeNumber(main.settings.default_label_stroke_width, 2),
-									textSize: Math.returnSafeNumber(main.settings.default_label_font_size, 14),
+									textFaceName: brush_symbol.textFaceName,
+									textFill: brush_symbol.textFill,
+									textHaloFill: brush_symbol.textHaloFill,
+									textHaloRadius: brush_symbol.textHaloRadius,
+									textSize: brush_symbol.textSize,
 									...this.value[2].label_symbol
 								});
 								

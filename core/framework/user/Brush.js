@@ -234,7 +234,16 @@ naissance.Brush = class extends ve.Class {
 			polygonOpacity: this.opacity/100,
 			lineColor: this.brush_options.stroke_colour.getHex(),
 			lineOpacity: this.stroke_opacity/100,
-			lineWidth: this.stroke_width
+			lineWidth: this.stroke_width,
+			
+			textFaceName: (main.settings.default_label_font) ?
+				main.settings.default_label_font : "Karla, sans-serif",
+			textFill: (main.settings.default_label_colour) ?
+				main.settings.default_label_colour : `#ffffff`,
+			textHaloFill: (main.settings.default_label_stroke) ?
+				main.settings.default_label_stroke : `#000000`,
+			textHaloRadius: Math.returnSafeNumber(main.settings.default_label_stroke_width, 2),
+			textSize: Math.returnSafeNumber(main.settings.default_label_font_size, 14)
 		};
 	}
 	

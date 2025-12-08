@@ -17,6 +17,7 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		if (!options.name) options.name = "Label Symbol";
 		
 		//Declare local instance variables
+		let brush_symbol = main.brush.getBrushSymbol();
 		let font_select_obj = {};
 		
 		//Populate font_select_obj
@@ -28,7 +29,7 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		
 		//Return statement
 		return new ve.Interface({
-			font_colour: veColour((main.settings.default_label_colour) ? main.settings.default_label_colour : [255, 255, 255], {
+			font_colour: veColour(brush_symbol.textFill, {
 				name: "Font Colour",
 				onuserchange: (v, e) => naissance.Brush.setSelectedLabelSymbol({ textFill: e.getHex() }),
 			}),
@@ -40,17 +41,17 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 			}, {
 				name: "Font Family",
 				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textFaceName: v }),
-				selected: (main.settings.default_label_font) ? main.settings.default_label_font : "monospace"
+				selected: brush_symbol.textFaceName
 			}),
-			font_size: veNumber(Math.returnSafeNumber(main.settings.default_label_font_size, 14), {
+			font_size: veNumber(brush_symbol.textSize, {
 				name: "Font Size",
 				onuserchange: (v) => naissance.Brush.setSelectedLabelSymbol({ textSize: v })
 			}),
-			font_stroke: veColour((main.settings.default_label_stroke) ? main.settings.default_label_stroke : [0, 0, 0], {
+			font_stroke: veColour(brush_symbol.textHaloFill, {
 				name: "Font Stroke",
 				onuserchange: (v, e) => naissance.Brush.setSelectedLabelSymbol({ textHaloFill: e.getHex() })
 			}),
-			font_stroke_width: veNumber(Math.returnSafeNumber(main.settings.default_label_stroke_width, 2), {
+			font_stroke_width: veNumber(brush_symbol.textHaloRadius, {
 				name: "Font Stroke Width",
 				
 				min: 0,
