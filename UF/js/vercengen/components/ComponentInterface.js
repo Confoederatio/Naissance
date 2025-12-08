@@ -66,7 +66,7 @@ ve.Interface = class extends ve.Component {
 			
 		let html_string = [];
 		if (options.is_folder) {
-			html_string.push(`<details class = "ve interface-folder">`);
+			html_string.push(`<details class = "ve interface-folder" ${(options.open) ? "open" : ""}>`);
 			html_string.push(`<summary id = "name"></summary>`);
 		}
 			html_string.push(`<table></table>`);

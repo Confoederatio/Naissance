@@ -46,77 +46,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});
-		this.variables_ui = veInterface({
-			open_variables_editor: veButton(() => {
-				if (this.variables_editor) this.variables_editor.close();
-				this.variables_editor = veWindow({
-					table_editor: veTable(this.metadata.variables, {
-						dark_mode: true,
-						onuserchange: (v, e) => { //[WIP] - Finish function body
-							let array_values = e.convertToArray();
-							this.history.do_not_draw = true;
-							
-							//1. Reset all [2].variables from all keyframes
-							Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
-								let local_value = local_keyframe.value;
-								
-								if (local_value[2] && local_value[2].variables)
-									if (Object.keys(local_value[2]).length === 1) {
-										delete this.history.keyframes[local_key];
-									} else {
-										delete local_value[2].variables;
-									}
-							});
-							
-							//2. Reconstruct .variables for all valid keyframes
-							for (let i = 0; i < array_values.length; i++)
-								for (let x = 0; x < array_values[i].length; x++) //Iterate over all rows in spreadsheets
-									if (array_values[i][x][0]) {
-										let local_date = Date.convertStringToDate(array_values[i][x][0].toString());
-										let local_variables_obj = {};
-										
-										//If local_date is defined, iterate over all values in row and append them to local_variables_obj
-										if (local_date && array_values[i][x].length > 1) {
-											for (let y = 1; y < array_values[i][x].length; y++) {
-												let local_cell_variable_name = y;
-												if (array_values[i][0][y])
-													local_cell_variable_name = array_values[i][0][y];
-												
-												local_variables_obj[local_cell_variable_name] = array_values[i][x][y];
-											}
-											
-											this.history.addKeyframe(local_date, undefined, undefined, {
-												variables: local_variables_obj
-											});
-										}
-									}
-							
-							this.metadata.variables = v;
-							delete this.history.do_not_draw;
-							this.history.draw();
-							this.keyframes_ui.v = this.history.interface.v;
-						}
-					})
-				}, {
-					name: `Variables Editor (${this.name})`,
-					can_rename: false,
-					height: "20rem",
-					width: "30rem",
-					
-					onuserchange: (v) => {
-						//Call DALS.Timeline.parseAction() .set_history 
-						if (v.close)
-							DALS.Timeline.parseAction({
-								options: { name: "Edit Geometry History", key: "edit_geometry_history" },
-								value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
-							});
-					}
-				});
-			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),
-			open_help_menu: veButton(() => {
-				
-			}, { name: "<icon>info</icon> Help Menu", x: 1, y: 0 })
-		}, { name: "Variables", open: true });
+		super.drawVariablesEditor();
 		
 		//Add keyframe with default brush symbol upon instantiation
 		let brush_symbol = main.brush.getBrushSymbol();
