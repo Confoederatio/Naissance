@@ -4,18 +4,6 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		
 		//Declare local instance variables
 		let navbar_el = document.querySelector(".ve.navbar");
-		let settings_autoloading_mode_obj = {
-			default: {
-				name: "Default"
-			},
-			disable_autoload: {
-				name: "Disable Autoload"
-			},
-			load_last_save: {
-				name: "Load Last Save"
-			}
-		};
-			settings_autoloading_mode_obj[main.settings.autoloading_mode].selected = true;
 		
 		let settings_ui = {
 			project: {
@@ -33,12 +21,23 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 							}
 						})
 					}),
-					autoloading_mode: veSelect(settings_autoloading_mode_obj, {
+					autoloading_mode: veSelect({
+						default: {
+							name: "Default"
+						},
+						disable_autoload: {
+							name: "Disable Autoload"
+						},
+						load_last_save: {
+							name: "Load Last Save"
+						}
+					}, {
 						name: "Autoloading Mode",
 						onuserchange: (v) => {
 							main.settings.autoloading_mode = v;
 							UI_Settings.saveSettings();
-						}
+						},
+						selected: main.settings.autoloading_mode
 					}),
 					sort_settings_alphabetically: veToggle(main.settings.sort_settings_alphabetically, {
 						name: "Sort Settings Alphabetically",
@@ -61,7 +60,29 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 							name: "Editor Appearance"
 						},
 						map_appearance: {
-							name: "Map Appearance"
+							name: "Map Appearance",
+							components_obj: {
+								font_registry: new ve.MultiTag(main.settings.font_registry, {
+									name: "Font Registry",
+									tags_key: "settings_font_registry",
+									
+									onuserchange: (v) => {
+										main.settings.font_registry = v;
+										UI_Settings.saveSettings();
+									}
+								}),
+								default_label_symbol: veInterface({
+									default_label_font: veSelect(main.settings.font_registry, {
+										name: "Font Family",
+										selected: main.settings.default_label_font,
+										
+										onuserchange: (v) => {
+											main.settings.default_label_font = v;
+											UI_Settings.saveSettings();
+										}
+									})
+								}, { name: "Default Label Symbol" })
+							}
 						}
 					})
 				}

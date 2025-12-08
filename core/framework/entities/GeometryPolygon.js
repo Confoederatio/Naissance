@@ -224,6 +224,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 							if (label_geometries.length === 0)
 								this.label_geometries[i].setSymbol({ 
 									textName: label_name,
+									textFaceName: main.settings.default_label_font,
 									...this.value[2].label_symbol
 								});
 							this.label_geometries[i].addTo(main.layers.label_layer);

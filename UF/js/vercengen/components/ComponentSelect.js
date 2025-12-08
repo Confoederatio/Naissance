@@ -5,12 +5,13 @@
  * - Functional binding: <span color=00ffff>veSelect</span>().
  * 
  * ##### Constructor:
- * - `arg0_value`: {@link Object}
+ * - `arg0_value`: {@link Array}<{@link string}>|{@link Object}
  *   - `<option_key>`: {@link Object|string}
  *     - `.name`: {@link string}
  *     - `.selected`: {@link boolean} - Whether the current option is selected.
  * - `arg1_options`: {@link Object}
  *   - `.disabled=false`: {@link boolean}
+ *   - `.selected`: {@link string} - Overrides the `<option_key>.selected` option in `arg0_value`. 
  * 
  * ##### Instance:
  * - `.v`: {@link string} - The selected option key. 
@@ -111,10 +112,19 @@ ve.Select = class veSelect extends ve.Component {
 		
 		//Declare local instance variables
 		if (typeof value === "object") {
-			this.value = value;
+			let actual_value_obj = {};
+			
+			if (Array.isArray(value)) {
+				for (let i = 0; i < value.length; i++)
+					actual_value_obj[value[i]] = { name: value[i] };
+			} else {
+				actual_value_obj = value;
+			}
+					
+			this.value = actual_value_obj;
 			this.element.querySelector("select").innerHTML = this.generateHTML().join("");
 			Object.iterate(this.value, (local_key, local_value) => {
-				if (local_value.selected)
+				if (local_value.selected || this.options.selected === local_key)
 					this.element.querySelector(`option[id="${local_key}"]`).selected = true;
 			});
 		} else if (typeof value === "string") {

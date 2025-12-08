@@ -16,21 +16,29 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		//Initialise options
 		if (!options.name) options.name = "Label Symbol";
 		
+		//Declare local instance variables
+		let font_select_obj = {};
+		
+		//Populate font_select_obj
+		main.settings.font_registry.forEach((local_value) => {
+			font_select_obj[local_value] = {
+				name: local_value
+			}
+		});
+		
 		//Return statement
 		return new ve.Interface({
 			font_family: veSelect({
 				monospace: {
-					name: "Monospace",
-					selected: true
+					name: "Monospace"
 				},
-				"Karla, sans-serif": {
-					name: "Karla"
-				}
+				...font_select_obj
 			}, {
 				name: "Font Family",
 				onuserchange: (v) => {
 					naissance.Brush.setSelectedLabelSymbol({ textFaceName: v });
-				}
+				},
+				selected: (main.settings.default_label_font) ? main.settings.default_label_font : "monospace"
 			})
 		}, { name: options.name });
 	}

@@ -4,5 +4,11 @@
   ],
   "disable_autoload": true,
   "autoloading_mode": "default",
-  "sort_settings_alphabetically": false
+  "sort_settings_alphabetically": false,
+  "font_registry": [
+    "Arial",
+    "Barlow",
+    "Karla, sans-serif"
+  ],
+  "default_label_font": "Arial"
 }
