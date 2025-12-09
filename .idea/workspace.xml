@@ -6,19 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenClass.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenClass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryLine.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryLine.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryPolygon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +70,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="36826000" />
+      <workItem from="1765094029123" duration="37027000" />
     </task>
     <servers />
   </component>

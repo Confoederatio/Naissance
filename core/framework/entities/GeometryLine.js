@@ -31,6 +31,10 @@ naissance.GeometryLine = class extends naissance.Geometry {
 				x: 1, y: 1
 			})
 		}, { is_folder: false });
+		this.edit_symbol_ui = veInterface({
+			edit_label: main.interfaces.edit_geometry_label.draw({ name: "Label" }),
+			edit_stroke: main.interfaces.edit_geometry_line.draw({ name: "Stroke" })
+		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});

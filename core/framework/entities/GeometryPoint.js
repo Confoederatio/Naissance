@@ -16,6 +16,9 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
 			}, { width: 99, x: 0, y: 0 })
 		}, { is_folder: false });
+		this.edit_symbol_ui = veInterface({
+			edit_label: main.interfaces.edit_geometry_label.draw({ name: "Label" })
+		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});
