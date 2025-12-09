@@ -15,7 +15,14 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//Declare UI
 		this.interface = veInterface({
-			information: veHTML(() => `ID: ${this.id}`, { x: 0, y: 0 }),
+			information: veHTML(() => {
+				//Declare local instance variables
+				let area_km2 = (this.geometry && this.isOpen("instance")) ? 
+					this.geometry.getArea()/1000000 : 0;
+				
+				//Return statement
+				return `ID: ${this.id} | Area: ${String.formatNumber(area_km2)}km^2`;
+			}, { width: 99, x: 0, y: 0 }),
 			move_to_brush: veButton(() => DALS.Timeline.parseAction({
 				options: { name: "Select Geometry" },
 				value: [{ type: "Brush", select_geometry_id: this.id }]
@@ -31,8 +38,11 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				x: 1, y: 1
 			}),
 		}, { is_folder: false });
-		this.edit_ui = main.interfaces.edit_geometry_polygon.draw({ name: "Edit Symbol" });
-		this.edit_label_ui = main.interfaces.edit_geometry_label.draw({ name: "Edit Label" });
+		this.edit_symbol_ui = veInterface({
+			edit_fill: main.interfaces.edit_geometry_polygon.draw({ name: "Fill" }),
+			edit_label: main.interfaces.edit_geometry_label.draw({ name: "Label" }),
+			edit_stroke: main.interfaces.edit_geometry_line.draw({ name: "Stroke" })
+		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
 		});

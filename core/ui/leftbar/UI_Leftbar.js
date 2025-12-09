@@ -41,9 +41,7 @@ global.UI_Leftbar = class extends ve.Class {
 			},
 			undo_redo: {
 				name: "Undo/Redo",
-				components_obj: {
-					undo_redo: new ve.UndoRedo(undefined, { name: " " })
-				}
+				components_obj: { undo_redo: veUndoRedo() }
 			}
 		}, { starting_page: "hierarchy" });
 		

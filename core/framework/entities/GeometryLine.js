@@ -8,7 +8,14 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		
 		//Declare UI
 		this.interface = veInterface({
-			information: veHTML(() => `ID: ${this.id}`, { x: 0, y: 0 }),
+			information: veHTML(() => {
+				//Declare local instance variables
+				let length_km = (this.geometry && this.isOpen("instance")) ?
+					this.geometry.getLength()/1000 : 0;
+				
+				//Return statement
+				return `ID: ${this.id} | Length: ${String.formatNumber(length_km)}km`
+			}, { width: 99, x: 0, y: 0 }),
 			move_to_brush: veButton(() => DALS.Timeline.parseAction({
 				options: { name: "Select Geometry" },
 				value: [{ type: "Brush", select_geometry_id: this.id }]
@@ -40,6 +47,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 	
 	draw () {
 		//Declare local instance variables
+		let brush_symbol = main.brush.getBrushSymbol();
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -75,7 +83,47 @@ naissance.GeometryLine = class extends naissance.Geometry {
 				if (this.value[2]) {
 					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
 					if (this.geometry && this.value[2].label_geometries !== null) {
+						let label_geometries = (this.value[2].label_geometries) ?
+							this.value[2].label_geometries : [];
+						let label_name = (this.value[2].label_name) ?
+							this.value[2].label_name : this.value[2].name;
 						
+						//1. .label_coordinates
+						if (label_geometries.length === 0) {
+							if (!this.geometry.getGeometries) {
+								this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
+							} else {
+								let all_geometries = this.geometry.getGeometries();
+								
+								for (let i = 0; i < all_geometries.length; i++)
+									this.label_geometries[i] = new maptalks.Marker(all_geometries[i].getCenter());
+							}
+						} else {
+							for (let i = 0; i < label_geometries.length; i++)
+								this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
+						}
+						
+						//Iterate over all this.label_geometries, apply settings
+						for (let i = 0; i < this.label_geometries.length; i++) {
+							//2. .label_name/.name
+							if (label_geometries.length === 0) {
+								this.label_geometries[i].setSymbol({
+									textName: label_name,
+									
+									textFaceName: brush_symbol.textFaceName,
+									textFill: brush_symbol.textFill,
+									textHaloFill: brush_symbol.textHaloFill,
+									textHaloRadius: brush_symbol.textHaloRadius,
+									textSize: brush_symbol.textSize,
+									...this.value[2].label_symbol
+								});
+								
+								if (main.settings.hide_labels_by_default)
+									this.label_geometries[i].hide();
+							}
+							
+							this.label_geometries[i].addTo(main.layers.label_layer);
+						}
 					}
 				}
 			} catch (e) { console.error(e); }

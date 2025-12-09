@@ -42,7 +42,6 @@ naissance.History = class extends ve.Class {
 		
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
-			
 			//Set components_obj
 			components_obj[`t_${local_key}`] = new ve.Interface({
 				date_info: new ve.HTML(String.formatDate(local_value.date), { 

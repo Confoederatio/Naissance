@@ -8,9 +8,7 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		 * maptalks.Polygon symbol:
 		 */
 		this.polygon_symbol = main.interfaces.edit_geometry_polygon.draw();
-		this.line_symbol = new ve.Interface({
-			
-		}, { name: "Line Symbol" });
+		this.line_symbol = main.interfaces.edit_geometry_line.draw();
 		this.point_symbol = new ve.Interface({
 			
 		}, { name: "Point Symbol" });

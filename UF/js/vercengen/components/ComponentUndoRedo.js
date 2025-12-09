@@ -569,3 +569,13 @@ ve.UndoRedo = class extends ve.Component {
 		}
 	}
 };
+
+//Functional binding
+
+/**
+ * @returns {ve.UndoRedo}
+ */
+veUndoRedo = function () {
+	//Return statement
+	return new ve.UndoRedo(...arguments);
+};

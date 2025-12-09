@@ -63,7 +63,6 @@ ve.Class = class {
 		//Close class_window/instance_window
 		clearInterval(this.draw_loop);
 		delete this.draw_loop;
-		this[`${mode}_window`].remove();
 		delete this[`${mode}_window`];
 	}
 	
@@ -149,9 +148,16 @@ ve.Class = class {
 		let components_obj = (mode === "class") ? class_components_obj : instance_components_obj;
 		
 		if (options.type === "static") {
-			this[`${mode}_window`] = new ve.Window(components_obj, { is_static: true, ...options });
+			this[`${mode}_window`] = new ve.Window(components_obj, {
+				class_instance: this,
+				class_instance_type: mode,
+				is_static: true,
+				...options 
+			});
 		} else {
 			this[`${mode}_window`] = new ve.Window(components_obj, {
+				class_instance: this,
+				class_instance_type: mode,
 				draggable: true,
 				is_static: false,
 				resizeable: true,

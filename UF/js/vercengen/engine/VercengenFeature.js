@@ -129,6 +129,10 @@ ve.Feature = class {
 	 * - Method of: {@link ve.Feature}
 	 */
 	remove () {
+		//VercengenClass handler
+		if (this.options && this.options.class_instance)
+			this.options.class_instance.close((this.options.class_instance_type) ? "instance" : "class");
+		
 		//Iterate over all instances in ve.Window.instances
 		if (this.child_class_obj && this.child_class_obj.instances && this.id)
 			for (let i = 0; i < this.child_class_obj.instances.length; i++)

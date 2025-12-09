@@ -8,7 +8,13 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		
 		//Declare UI
 		this.interface = veInterface({
-			information: veHTML(() => `ID: ${this.id}`, { x: 0, y: 0 })
+			information: veHTML(() => {
+				//Declare local instance variables
+				let coordinates = (this.geometry && this.isOpen("instance")) ? 
+					this.geometry.getCoordinates().toJSON() : { x: 0, y: 0 }
+				
+				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
+			}, { width: 99, x: 0, y: 0 })
 		}, { is_folder: false });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
