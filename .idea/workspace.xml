@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" afterDir="false" />
-    </list>
+    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,7 +66,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="37874000" />
+      <workItem from="1765094029123" duration="38475000" />
     </task>
     <servers />
   </component>
