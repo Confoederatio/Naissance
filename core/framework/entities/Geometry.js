@@ -545,8 +545,13 @@ naissance.Geometry = class extends ve.Class {
 		let old_date;
 		
 		//Iterate over all geometry_ids and populate dals_value_array
-		for (let i = 0; i < geometry_ids.length; i++)
+		for (let i = 0; i < geometry_ids.length; i++) {
+			if (symbol_obj._set_label_symbol) {
+				dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_label_symbol: symbol_obj._set_label_symbol });
+				delete symbol_obj._set_label_symbol;
+			}
 			dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_symbol: symbol_obj });
+		}
 		
 		//Add to DALS
 		if (options.date) {

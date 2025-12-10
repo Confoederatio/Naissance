@@ -10,24 +10,35 @@ global.UI_EditGeometryLine = class extends ve.Class {
 		//Initialise options
 		if (!options.name) options.name = "Line Symbol";
 		
+		//Declare local instance variables
+		let set_symbol = (arg0_symbol_obj) => {
+			//Convert from parameters
+			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
+			
+			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
+			(options._id) ?
+				naissance.Geometry.setSymbols(options._id(), symbol_obj) :
+				naissance.Brush.setSelectedSymbol(symbol_obj);
+		};
+		
 		//Return statement
 		return new ve.Interface({
 			stroke_colour: veColour(main.brush.stroke_colour, {
 				name: "Stroke Colour",
 				onuserchange: (v, e) => {
-					naissance.Brush.setSelectedSymbol({ lineColor: e.getHex() });
+					set_symbol({ lineColor: e.getHex() });
 				}
 			}),
 			stroke_opacity: veRange(main.brush.stroke_opacity/100, {
 				name: "Stroke Opacity",
 				onuserchange: (v, e) => {
-					naissance.Brush.setSelectedSymbol({ lineOpacity: e });
+					set_symbol({ lineOpacity: e });
 				}
 			}),
 			stroke_width: veNumber(main.brush.stroke_width, {
 				name: "Stroke Width",
 				onuserchange: (v) => {
-					naissance.Brush.setSelectedSymbol({ lineWidth: v });
+					set_symbol({ lineWidth: v });
 				}
 			}),
 			
@@ -45,7 +56,7 @@ global.UI_EditGeometryLine = class extends ve.Class {
 			}, {
 				name: "Line Cap",
 				onuserchange: (v) => {
-					naissance.Brush.setSelectedSymbol({ lineCap: v });
+					set_symbol({ lineCap: v });
 				}
 			}),
 			stroke_line_join: new ve.Select({
@@ -62,7 +73,7 @@ global.UI_EditGeometryLine = class extends ve.Class {
 			}, {
 				name: "Line Join",
 				onuserchange: (v) => {
-					naissance.Brush.setSelectedSymbol({ lineJoin: v });
+					set_symbol({ lineJoin: v });
 				}
 			})
 		}, { name: options.name });

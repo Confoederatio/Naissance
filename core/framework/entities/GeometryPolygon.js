@@ -39,9 +39,9 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}),
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
-			edit_fill: main.interfaces.edit_geometry_polygon.draw({ name: "Fill" }),
-			edit_label: main.interfaces.edit_geometry_label.draw({ name: "Label" }),
-			edit_stroke: main.interfaces.edit_geometry_line.draw({ name: "Stroke" })
+			edit_fill: main.interfaces.edit_geometry_polygon.draw({ _id: () => this.id, name: "Fill" }),
+			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
+			edit_stroke: main.interfaces.edit_geometry_line.draw({ _id: () => this.id, name: "Stroke" })
 		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true

@@ -5,6 +5,7 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 	
 	/**
 	 * @param {Object} [arg0_options]
+	 *  @param {function} [arg0_options._id]
 	 *  @param {string} [arg0_options.name="Polygon Symbol"]
 	 * 
 	 * @returns {ve.Interface}
@@ -16,18 +17,29 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 		//Initialise options
 		if (!options.name) options.name = "Polygon Symbol";
 		
+		//Declare local instance variables
+		let set_symbol = (arg0_symbol_obj) => {
+			//Convert from parameters
+			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
+			
+			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
+			(options._id) ?
+				naissance.Geometry.setSymbols(options._id(), symbol_obj) :
+				naissance.Brush.setSelectedSymbol(symbol_obj);
+		};
+		
 		//Return statement
 		return new ve.Interface({
 			fill_colour: veColour(main.brush.colour, {
 				name: "Fill Colour",
 				onuserchange: (v, e) => {
-					naissance.Brush.setSelectedSymbol({ polygonFill: e.getHex() });
+					set_symbol({ polygonFill: e.getHex() });
 				}
 			}),
 			fill_opacity: veRange(main.brush.opacity/100, {
 				name: "Fill Opacity",
 				onuserchange: (v) => {
-					naissance.Brush.setSelectedSymbol({ polygonOpacity: v });
+					set_symbol({ polygonOpacity: v });
 				}
 			}),
 			fill_pattern_url: new ve.Text("", {
@@ -39,7 +51,7 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 					if (v.length === 0) {
 						veToast("Reset fill pattern!");
 					} else {
-						naissance.Brush.setSelectedSymbol({ polygonPatternFile: v });
+						set_symbol({ polygonPatternFile: v });
 					}
 				}
 			})
