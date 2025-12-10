@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="" />
+    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryPoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Brush.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryLine.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditGeometryLine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_EditSelectedGeometries.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,7 +75,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="38475000" />
+      <workItem from="1765094029123" duration="45992000" />
     </task>
     <servers />
   </component>

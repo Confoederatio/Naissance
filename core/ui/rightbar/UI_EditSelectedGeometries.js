@@ -9,9 +9,7 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		 */
 		this.polygon_symbol = main.interfaces.edit_geometry_polygon.draw();
 		this.line_symbol = main.interfaces.edit_geometry_line.draw();
-		this.point_symbol = new ve.Interface({
-			
-		}, { name: "Point Symbol" });
+		this.point_symbol = main.interfaces.edit_geometry_point.draw();
 		this.label_symbol = main.interfaces.edit_geometry_label.draw();
 		this.properties = new ve.Interface({
 			visibility: new ve.Interface({

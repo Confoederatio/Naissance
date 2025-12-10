@@ -474,4 +474,32 @@ naissance.Geometry = class extends ve.Class {
 				geometry_obj.metadata.tags = Array.toArray(json.set_tags);
 		}
 	}
+	
+	static setGeometries (arg0_geometry_ids, arg1_symbol_obj, arg2_options) { //[WIP] - Finish function 
+		
+	}
+	
+	static setProperties (arg0_geometry_ids, arg1_symbol_obj, arg2_options) { //[WIP] - Finish function 
+		
+	}
+	
+	static setSymbols (arg0_geometry_ids, arg1_symbol_obj, arg2_options) { //[WIP] - Finish function body
+		//Convert from parameters
+		let geometry_ids = Array.toArray(arg0_geometry_ids);
+		let symbol_obj = (arg1_symbol_obj) ? arg1_symbol_obj : {};
+		let options = (arg2_options) ? arg2_options : {};
+		
+		//Declare local instance variables
+		let dals_value_array = [];
+		
+		//Iterate over all geometry_ids and populate dals_value_array
+		for (let i = 0; i < geometry_ids.length; i++)
+			dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_symbol: symbol_obj });
+		
+		//Add to DALS
+		DALS.Timeline.parseAction({
+			options: { name: "Set Geometry Symbols", key: "set_geometry_symbols" },
+			value: dals_value_array
+		});
+	}
 };

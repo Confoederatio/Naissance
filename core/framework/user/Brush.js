@@ -258,8 +258,8 @@ naissance.Brush = class extends ve.Class {
 		return {
 			//Point
 			_markerFile: "gfx/icons/marker_default.png",
-			_markerWidth: 40,
 			_markerHeight: 40,
+			_markerWidth: 40,
 			_markerDx: 0,
 			_markerDy: 0,
 			_markerOpacity: 1,

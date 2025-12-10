@@ -67,4 +67,4 @@ global.UI_EditGeometryLine = class extends ve.Class {
 			})
 		}, { name: options.name });
 	}
-}
+};

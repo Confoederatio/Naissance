@@ -17,7 +17,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			}, { width: 99, x: 0, y: 0 })
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
-			edit_label: main.interfaces.edit_geometry_label.draw({ name: "Label" })
+			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
+			edit_point: main.interfaces.edit_geometry_point.draw({ _id: () => this.id, name: "Point" })
 		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
