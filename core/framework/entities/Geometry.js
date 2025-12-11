@@ -334,6 +334,14 @@ naissance.Geometry = class extends ve.Class {
 	}
 	
 	/**
+	 * Hides the present Geometry. Used by {@link naissance.Feature}, not internally used.
+	 */
+	hide () {
+		this._is_visible = false;
+		this.draw();
+	}
+	
+	/**
 	 * Fetches the layer that the current {@link naissance.Geometry} is appended to, if anything. Used for masking.
 	 * 
 	 * @returns {naissance.FeatureLayer}
@@ -382,6 +390,14 @@ naissance.Geometry = class extends ve.Class {
 			
 		//Rerender deleted geometry and remove it from the map
 		this.history = new naissance.History();
+		this.draw();
+	}
+	
+	/**
+	 * Shows the present Geometry. Used by {@link naissance.Feature}, not internally used.
+	 */
+	show () {
+		this._is_visible = true;
 		this.draw();
 	}
 	
