@@ -237,6 +237,14 @@
 	 * @returns {number}
 	 */
 	Date.getTimestamp = function (arg0_date_object) {
+		//Convert from parameters
+		let date = (arg0_date_object) ? arg0_date_object : Date.getBlankDate();
+		
+		//Internal guard clause for string
+		if (typeof date === "string")
+			if (!isNaN(parseFloat(date)))
+				return parseFloat(date);
+		
 		// Merge with defaults (1-indexed months)
 		let date_obj = {
 			...Date.getBlankDate(),

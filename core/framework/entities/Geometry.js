@@ -7,6 +7,7 @@ naissance.Geometry = class extends ve.Class {
 		//Convert from parameters
 		super();
 		this.history = new naissance.History({}, {
+			_id: () => this.id,
 			localisation_function: (new_keyframe, old_keyframe) => { //[WIP] - Finish function
 				//Declare local instance variables
 				let return_string = [];
@@ -100,7 +101,7 @@ naissance.Geometry = class extends ve.Class {
 		 * @type {Object}
 		 */
 		this.window_options = {
-			width: "20rem",
+			width: "30rem",
 			onuserchange: (v) => {
 				if (v.name)
 					DALS.Timeline.parseAction({
@@ -373,6 +374,8 @@ naissance.Geometry = class extends ve.Class {
 	 * Removes the current {@link naissance.Geometry} instance.
 	 */
 	remove () {
+		super.close("instance"); //Close any open UIs
+		
 		//Remove from naissance.Feature .entities
 		for (let i = 0; i < naissance.Feature.instances.length; i++) {
 			let local_feature = naissance.Feature.instances[i];
@@ -380,7 +383,7 @@ naissance.Geometry = class extends ve.Class {
 			if (local_feature.entities)
 				for (let x = 0; x < local_feature.entities.length; x++)
 					if (local_feature.entities[x].id === this.id)
-						naissance.Feature.instances.splice(x, 1);
+						local_feature.entities.splice(x, 1);
 		}
 		
 		//Remove from naissance.Geometry.instances
@@ -391,6 +394,21 @@ naissance.Geometry = class extends ve.Class {
 		//Rerender deleted geometry and remove it from the map
 		this.history = new naissance.History();
 		this.draw();
+	}
+	
+	/**
+	 * Alias for {@link naissance.History.removeKeyframe}.
+	 * 
+	 * @param {Object} arg0_date
+	 */
+	removeKeyframe (arg0_date) {
+		//Convert from parameters
+		let date = (arg0_date) ? Date.convertTimestampToDate(arg0_date) : main.date;
+		
+		//Remove the keyframe at the given date
+		this.history.removeKeyframe(date);
+		if (Object.keys(this.history.keyframes).length === 0) //Remove geometry if no keyframes exist anymore
+			this.remove();
 	}
 	
 	/**
@@ -410,6 +428,7 @@ naissance.Geometry = class extends ve.Class {
 	 * <br>
 	 * - #### Extraneous Commands:
 	 * - `.delete_geometry`: {@link boolean}
+	 * - `.remove_keyframe`: {@link number} - The timestamp of the removed keyframe.
 	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
 	 * - `.set_label_symbol`: {@link Object}
 	 * - `.set_name`: {@link string}
@@ -443,6 +462,10 @@ naissance.Geometry = class extends ve.Class {
 			//delete_geometry
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
+			
+			//remove_keyframe
+			if (json.remove_keyframe)
+				geometry_obj.removeKeyframe(json.remove_keyframe);
 			
 			//set_geometry
 			if (json.set_geometry) {

@@ -63,6 +63,28 @@ naissance.History = class extends ve.Class {
 					tooltip: "Jump to Date", 
 					style: { cursor: "pointer" }, 
 					x: 2, y: 0 
+				}),
+				move_keyframe: veButton(() => {
+					
+				}, {
+					name: "<icon>height</icon>",
+					tooltip: "[WIP] - Move Keyframe",
+					style: { cursor: "pointer" },
+					x: 3, y: 0
+				}),
+				remove_keyframe: veButton((e) => {
+					DALS.Timeline.parseAction({
+						options: { name: "Delete Keyframe", key: "delete_keyframe" },
+						value: [
+							{ type: "Geometry", geometry_id: this.options._id(), remove_keyframe: local_key },
+							{ type: "global", refresh_date: true }
+						]
+					})
+				}, {
+					name: "<icon>delete</icon>",
+					tooltip: "Delete Keyframe",
+					style: { cursor: "pointer" },
+					x: 4, y: 0
 				})
 			}, {
 				is_folder: false
@@ -155,6 +177,31 @@ naissance.History = class extends ve.Class {
 			
 			//Return statement
 			return return_keyframe;
+		}
+	}
+	
+	moveKeyframe (arg0_date, arg1_date) { //[WIP] - Finish function body
+		//Convert from parameters
+		let date = Date.convertTimestampToDate(arg0_date);
+		let ot_date = Date.convertTimestampToDate(arg1_date);
+		
+		//Declare local instance variables
+		let ot_timestamp = Date.getTimestamp(ot_date);
+		let timestamp = Date.getTimestamp(date);
+		
+		//Internal guard clause if timestamps are the same
+		if (timestamp === ot_timestamp) return;
+		
+		//Check if keyframe_obj exists; if it does, move it
+		let keyframe_obj = this.keyframes[timestamp];
+		
+		if (keyframe_obj) {
+			keyframe_obj.date = ot_date;
+			keyframe_obj.timestamp = ot_timestamp;
+			this.keyframes[ot_timestamp] = this.keyframes[timestamp];
+			
+			delete this.keyframes[timestamp];
+			if (!this.do_not_draw) this.draw();
 		}
 	}
 	
