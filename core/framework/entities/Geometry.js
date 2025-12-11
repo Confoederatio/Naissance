@@ -11,36 +11,46 @@ naissance.Geometry = class extends ve.Class {
 				//Declare local instance variables
 				let return_string = [];
 				
-				//[0] .geometry change
-				if (new_keyframe.value[0])
-					return_string.push(`Geometry changed`);
-				if (new_keyframe.value[0] === null)
-					return_string.push(`Geometry removed`);
-				
-				//[1] .symbol change
-				if (new_keyframe.value[1])
-					return_string.push(`Symbol changed to: ${String.formatObject(new_keyframe.value[1])}`);
-				
-				//[2] .properties change
-				if (new_keyframe.value[2]?.hidden === false)
-					return_string.push(`Geometry visible`);
-				if (new_keyframe.value[2]?.hidden === true)
-					return_string.push(`Geometry hidden`);
-				if (new_keyframe.value[2]?.label_geometries)
-					if (new_keyframe.value[2].label_geometries.length > 0)
-						return_string.push(`Set custom label geometries`);
-				if (new_keyframe.value[2]?.label_name)
-					return_string.push(`Label name changed to: ${new_keyframe.value[2].label_name}`);
-				if (new_keyframe.value[2]?.label_symbol)
-					return_string.push(`Label symbol changed to: ${String.formatObject(new_keyframe.value[2].label_symbol)}`);
-				if (new_keyframe.value[2]?.max_zoom !== undefined)
-					return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
-				if (new_keyframe.value[2]?.min_zoom !== undefined)
-					return_string.push(`Minimum zoom set to ${new_keyframe.value[2].min_zoom}`);
-				if (new_keyframe.value[2]?.name)
-					return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
-				if (new_keyframe.value[2]?.variables)
-					return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
+				try {
+					//[0] .geometry change
+					if (new_keyframe.value[0])
+						return_string.push(`Geometry changed`);
+					if (new_keyframe.value[0] === null)
+						return_string.push(`Geometry removed`);
+					
+					//[1] .symbol change
+					if (new_keyframe.value[1])
+						return_string.push(`Symbol changed to: ${String.formatObject(new_keyframe.value[1])}`);
+					
+					//[2] .properties change
+					if (new_keyframe.value[2]?.hidden === false)
+						return_string.push(`Geometry visible`);
+					if (new_keyframe.value[2]?.hidden === true)
+						return_string.push(`Geometry hidden`);
+					if (new_keyframe.value[2]?.label_geometries)
+						if (new_keyframe.value[2].label_geometries.length > 0)
+							return_string.push(`Set custom label geometries`);
+					if (new_keyframe.value[2]?.label_name)
+						return_string.push(`Label name changed to: ${new_keyframe.value[2].label_name}`);
+					if (new_keyframe.value[2]?.label_symbol)
+						return_string.push(`Label symbol changed to: ${String.formatObject(new_keyframe.value[2].label_symbol)}`);
+					if (new_keyframe.value[2]?.max_zoom !== undefined)
+						return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
+					if (new_keyframe.value[2]?.min_zoom !== undefined)
+						return_string.push(`Minimum zoom set to ${new_keyframe.value[2].min_zoom}`);
+					if (new_keyframe.value[2]?.name)
+						return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
+					if (new_keyframe.value[2]?.variables)
+						return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
+				} catch (e) {
+					try {
+						JSON.stringify(old_keyframe);
+						JSON.stringify(new_keyframe);
+					} catch (e) {
+						console.error(`Was a circular reference detected? If so, ensure that you are feeding in arg0_v, and not arg1_e for the property in question.`);
+					}
+					console.error(`new_keyframe:`, new_keyframe, `old_keyframe:`, old_keyframe, `Error:`, e);
+				}
 				
 				//Return statement
 				return String.formatArray(return_string);

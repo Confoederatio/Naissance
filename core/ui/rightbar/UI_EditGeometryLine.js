@@ -24,7 +24,7 @@ global.UI_EditGeometryLine = class extends ve.Class {
 			stroke_opacity: veRange(main.brush.stroke_opacity/100, {
 				name: "Stroke Opacity",
 				onuserchange: (v, e) => {
-					set_symbol({ lineOpacity: e });
+					set_symbol({ lineOpacity: v });
 				}
 			}),
 			stroke_width: veNumber(main.brush.stroke_width, {

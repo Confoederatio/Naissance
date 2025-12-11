@@ -80,13 +80,14 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 				let new_parent = e.on_stop_data.newParentItem?.instance?.options?.instance;
 				
 				if (new_parent === undefined && instance) {
-					if (instance.parent.entities)
+					if (instance.parent && instance.parent.entities)
 						for (let i = instance.parent.entities.length - 1; i >= 0; i--)
 							if (instance.parent.entities[i].class_name === instance.class_name && instance.parent.entities[i].id === instance.id) {
 								instance.parent.entities.splice(i, 1);
 								break;
 							}
-					delete instance.parent;
+					//Remove instance._parent
+					instance._parent = undefined;
 					this.refresh();
 				}
 				
