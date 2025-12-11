@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +69,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="56948000" />
+      <workItem from="1765094029123" duration="57027000" />
     </task>
     <servers />
   </component>

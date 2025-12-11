@@ -15,13 +15,13 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				
 				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
 			}, { width: 99, x: 0, y: 0 }),
-			move_marker: veButton((v, e) => {
+			move_marker: veButton((v, local_component) => {
 				if (!this._is_being_moved) {
 					veToast(`Click a new location on the map to move this marker to.`);
 					
 					this._is_being_moved = true;
 					this.draw();
-					e.name = `Cancel Moving Marker`;
+					local_component.name = `Cancel Moving Marker`;
 					
 					map.once("click", (e) => {
 						DALS.Timeline.parseAction({
@@ -35,14 +35,14 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 						
 						delete this._is_being_moved;
 						this.draw();
-						e.name = `Move Marker`;
+						local_component.name = `Move Marker`;
 					});
 				} else {
 					veToast(`Cancelled marker movement.`);
 					
 					delete this._is_being_moved;
 					this.draw();
-					e.name = `Move Marker`;
+					local_component.name = `Move Marker`;
 				}
 			}, { name: "Move Marker", x: 0, y: 1 })
 		}, { is_folder: false });
