@@ -61,6 +61,10 @@ ve.Class = class {
 		let mode = arg0_mode;
 		
 		//Close class_window/instance_window
+		if (this[`${mode}_window`]) {
+			this[`${mode}_window`].close({ do_not_close: true });
+			this[`${mode}_window`].element.remove();
+		}
 		clearInterval(this.draw_loop);
 		delete this.draw_loop;
 		delete this[`${mode}_window`];

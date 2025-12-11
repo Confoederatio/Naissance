@@ -275,6 +275,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	 *   - `.geometry`: {@link string}
 	 * - `.remove_from_polygon`: {@link Object}
 	 *   - `.geometry`: {@link string}
+	 * - `.simplify_polygon`: {@link number} - The amount to simplify the Polygon by.
 	 */
 	static parseAction (arg0_json) { //[WIP] - Add .set_history
 		//Convert from parameters

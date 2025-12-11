@@ -120,24 +120,34 @@ ve.Feature = class {
 	 * Alias for {@link remove|this.remove}().
 	 * - Method of: {@link ve.Feature}
 	 */
-	close () {
-		this.remove();
+	close (arg0_options) {
+		this.remove(arg0_options);
 	}
 	
 	/**
 	 * Removes the {@link ve.Feature} from its static `.instances` field in addition to unmounting the feature from the DOM.
 	 * - Method of: {@link ve.Feature}
 	 */
-	remove () {
+	remove (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
 		//VercengenClass handler
-		if (this.options && this.options.class_instance)
+		if (this.options && this.options.class_instance && !options.do_not_close)
 			this.options.class_instance.close((this.options.class_instance_type) ? "instance" : "class");
 		
+		//Iterate over all instances in ve.Feature.instances
+		for (let i = 0; i < ve.Feature.instances.length; i++)
+			if (ve.Feature.instances[i].id === this.id) {
+				ve.Feature.instances.splice(i, 1);
+				break;
+			}
+		
 		//Iterate over all instances in ve.Window.instances
-		if (this.child_class_obj && this.child_class_obj.instances && this.id)
-			for (let i = 0; i < this.child_class_obj.instances.length; i++)
-				if (this.child_class_obj.instances[i].id === this.id) {
-					this.child_class_obj.instances.splice(i, 1);
+		if (this.class_name && ve[this.class_name].instances && this.id)
+			for (let i = 0; i < ve[this.class_name].instances.length; i++)
+				if (ve[this.class_name].instances[i].id === this.id) {
+					ve[this.class_name].instances.splice(i, 1);
 					break;
 				}
 		

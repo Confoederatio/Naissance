@@ -14,7 +14,26 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 					this.geometry.getCoordinates().toJSON() : { x: 0, y: 0 }
 				
 				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
-			}, { width: 99, x: 0, y: 0 })
+			}, { width: 99, x: 0, y: 0 }),
+			move_marker: veButton(() => {
+				this._is_being_moved = true;
+				veToast(`Click a new location on the map to move this marker to.`);
+				
+				map.once("click", (e) => {
+					console.log(e.coordinate);
+					
+					DALS.Timeline.parseAction({
+						options: { name: "Set Point Position", key: "set_point_position" },
+						value: [{
+							type: "GeometryPoint",
+							geometry_id: this.id,
+							set_coordinates: e.coordinate.toJSON()
+						}]
+					});
+					
+					delete this._is_being_moved;
+				})
+			}, { name: "Move Marker", x: 0, y: 1 })
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
 			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
@@ -218,6 +237,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 	 *   - `.do_not_refresh`: {@link boolean}
 	 *   - `.id`: {@link string}
 	 *   - `.name`: {@link string}
+	 * - #### Internal Commands:
+	 *   - `.set_coordinates`: {@link maptalks.Coordinate}
 	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
@@ -249,7 +270,12 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		
 		//Parse commands for point_obj
 		if (point_obj && point_obj instanceof naissance.GeometryPoint) {
-			
+			//.set_coordinates
+			if (json.set_coordinates) {
+				let maptalks_marker_obj = (this.geometry) ? this.geometry : new maptalks.Marker();
+					maptalks_marker_obj.setCoordinates(json.set_coordinates);
+				point_obj.addKeyframe(main.date, maptalks_marker_obj.toJSON());
+			}
 		}
 	}
 };
