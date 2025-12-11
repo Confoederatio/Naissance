@@ -15,25 +15,35 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				
 				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
 			}, { width: 99, x: 0, y: 0 }),
-			move_marker: veButton(() => {
-				veToast(`Click a new location on the map to move this marker to.`);
-				
-				this._is_being_moved = true;
-				this.draw();
-				
-				map.once("click", (e) => {
-					DALS.Timeline.parseAction({
-						options: { name: "Set Point Position", key: "set_point_position" },
-						value: [{
-							type: "GeometryPoint",
-							geometry_id: this.id,
-							set_coordinates: e.coordinate.toJSON()
-						}]
+			move_marker: veButton((v, e) => {
+				if (!this._is_being_moved) {
+					veToast(`Click a new location on the map to move this marker to.`);
+					
+					this._is_being_moved = true;
+					this.draw();
+					e.name = `Cancel Moving Marker`;
+					
+					map.once("click", (e) => {
+						DALS.Timeline.parseAction({
+							options: { name: "Set Point Position", key: "set_point_position" },
+							value: [{
+								type: "GeometryPoint",
+								geometry_id: this.id,
+								set_coordinates: e.coordinate.toJSON()
+							}]
+						});
+						
+						delete this._is_being_moved;
+						this.draw();
+						e.name = `Move Marker`;
 					});
+				} else {
+					veToast(`Cancelled marker movement.`);
 					
 					delete this._is_being_moved;
 					this.draw();
-				});
+					e.name = `Move Marker`;
+				}
 			}, { name: "Move Marker", x: 0, y: 1 })
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
