@@ -39,4 +39,21 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 			width: "24rem" 
 		});
 	}
+	
+	static _makeSetSymbol (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
+		//Return function
+		return (arg0_symbol_obj) => {
+			//Convert from parameters
+			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
+			
+			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
+			(options._id) ?
+				naissance.Geometry.setSymbols(options._id(), 
+					(!options.wrapper_key) ? symbol_obj : { [options.wrapper_key]: symbol_obj }) :
+				naissance.Brush.setSelectedSymbol(symbol_obj);
+		};
+	};
 };

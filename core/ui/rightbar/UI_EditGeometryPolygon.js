@@ -18,15 +18,7 @@ global.UI_EditGeometryPolygon = class extends ve.Class {
 		if (!options.name) options.name = "Polygon Symbol";
 		
 		//Declare local instance variables
-		let set_symbol = (arg0_symbol_obj) => {
-			//Convert from parameters
-			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
-			
-			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
-			(options._id) ?
-				naissance.Geometry.setSymbols(options._id(), symbol_obj) :
-				naissance.Brush.setSelectedSymbol(symbol_obj);
-		};
+		let set_symbol = UI_EditSelectedGeometries._makeSetSymbol(options);
 		
 		//Return statement
 		return new ve.Interface({

@@ -16,19 +16,12 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		
 		//Initialise options
 		if (!options.name) options.name = "Label Symbol";
+		options.wrapper_key = "_set_label_symbol";
 		
 		//Declare local instance variables
 		let brush_symbol = main.brush.getBrushSymbol();
 		let font_select_obj = {};
-		let set_symbol = (arg0_symbol_obj) => {
-			//Convert from parameters
-			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
-			
-			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
-			(options._id) ?
-				naissance.Geometry.setSymbols(options._id(), { _set_label_symbol: symbol_obj }) :
-				naissance.Brush.setSelectedSymbol(symbol_obj);
-		};
+		let set_symbol = UI_EditSelectedGeometries._makeSetSymbol(options);
 		
 		//Populate font_select_obj
 		main.settings.font_registry.forEach((local_value) => {
