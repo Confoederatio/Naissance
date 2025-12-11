@@ -392,6 +392,7 @@ naissance.Geometry = class extends ve.Class {
 	 *   - `<data_key>`: {@link any}
 	 * - `.set_tags`: {@link Array}<{@link string}>
 	 * - `.set_symbol`: {@link Object}
+	 *   - `._set_label_symbol`: {@link Object} - Private alias for `.set_label_symbol`.
 	 *   - `<symbol_key>`: {@link any}
 	 */
 	static parseAction (arg0_json) {
@@ -403,6 +404,16 @@ naissance.Geometry = class extends ve.Class {
 		
 		//Parse commands for geometry_obj
 		if (geometry_obj) {
+			//Abstraction handlers
+			{
+				//set_symbol._set_label_symbol
+				if (json.set_symbol && json.set_symbol._set_label_symbol)
+					if (!json.set_label_symbol) {
+						json.set_label_symbol = json.set_symbol._set_label_symbol;
+						delete json.set_symbol._set_label_symbol;
+					}
+			}
+			
 			//delete_geometry
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
@@ -475,24 +486,46 @@ naissance.Geometry = class extends ve.Class {
 		}
 	}
 	
-	static setGeometries (arg0_geometry_ids, arg1_geometries, arg2_options) { 
+	/**
+	 * Parses a list of commands for multiple geometries.
+	 * 
+	 * @param {string[]} arg0_geometry_ids
+	 * @param {Object} [arg1_options]
+	 *  @param {Object} [arg1_options.command="set_symbol"] - The `parseAction()` command to package up.
+	 *  @param {string} [arg1_options.key="set_geometry_symbols"]
+	 *  @param {string} [arg1_options.name="Set Geometry Symbols"]
+	 *  @param {function()|Object} [arg1_options.value] - The individual value to actually send to each command. If a function, the return value is concatenated. .arguments[0] if a function refers to the index.
+	 *  
+	 *  @param {Object} [arg1_options.date] - The date at which to apply this change.
+	 */
+	static parseActionForGeometries (arg0_geometry_ids, arg1_options) {
 		//Convert from parameters
 		let geometry_ids = Array.toArray(arg0_geometry_ids);
-		let geometries = Array.toArray(arg1_geometries);
-		let options = (arg2_options) ? arg2_options : {};
+		let options = (arg1_options) ? arg1_options : {};
+		
+		//Initialise options
+		if (!options.command) options.command = "set_symbol";
+		if (!options.key) options.key = "set_geometry_symbols";
+		if (!options.name) options.name = "Set Geometry Symbols";
+		if (!options.value) options.value = {};
 		
 		//Declare local instance variables
 		let dals_value_array = [];
 		let old_date;
 		
-		//Iterate over all geometries and parse it to JSON first
-		for (let i = 0; i < geometries.length; i++)
-			if (geometries[i].toJSON)
-				geometries[i] = geometries[i].toJSON();
-		//Iterate over all geometries and populate dals_value_array
-		for (let i = 0; i < geometry_ids.length; i++)
-			if (geometries[i])
-				dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_geometry: geometries[i] });
+		//Iterate over all geometry_ids and populate dals_value_array
+		for (let i = 0; i < geometry_ids.length; i++) {
+			let local_value = options.value;
+			
+			if (typeof options.value === "function")
+				local_value = options.value(i);
+			
+			dals_value_array.push({ 
+				type: "Geometry", 
+				geometry_id: geometry_ids[i], 
+				[options.command]: options.value 
+			});
+		}
 		
 		//Add to DALS
 		if (options.date) {
@@ -500,11 +533,27 @@ naissance.Geometry = class extends ve.Class {
 			main.date = options.date;
 		}
 		DALS.Timeline.parseAction({
-			options: { name: "Set Geometries", key: "set_geometries" },
+			options: { name: options.name, key: options.key },
 			value: dals_value_array
 		});
 		if (options.date)
 			main.date = old_date;
+	};
+	
+	static setGeometries (arg0_geometry_ids, arg1_geometries, arg2_options) { 
+		//Convert from parameters
+		let geometry_ids = Array.toArray(arg0_geometry_ids);
+		let geometries = Array.toArray(arg1_geometries);
+		let options = (arg2_options) ? arg2_options : {};
+		
+		//Parse action for geometries
+		naissance.Geometry.parseActionForGeometries(geometry_ids, {
+			command: "set_geometry",
+			key: "set_geometries",
+			name: "Set Geometries",
+			value: (i) => (geometries[i]) ? geometries[i] : undefined,
+			...options
+		});
 	}
 	
 	static setProperties (arg0_geometry_ids, arg1_properties_obj, arg2_options) {
@@ -513,25 +562,14 @@ naissance.Geometry = class extends ve.Class {
 		let properties_obj = (arg1_properties_obj) ? arg1_properties_obj : {};
 		let options = (arg2_options) ? arg2_options : {};
 		
-		//Declare local instance variables
-		let dals_value_array = [];
-		let old_date;
-		
-		//Iterate over all geometry_ids and populate dals_value_array
-		for (let i = 0; i < geometry_ids.length; i++)
-			dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_properties: properties_obj });
-		
-		//Add to DALS
-		if (options.date) {
-			old_date = JSON.parse(JSON.stringify(main.date));
-			main.date = options.date;
-		}
-		DALS.Timeline.parseAction({
-			options: { name: "Set Geometry Properties", key: "set_geometry_properties" },
-			value: dals_value_array
+		//Parse action for geometries
+		naissance.Geometry.parseActionForGeometries(geometry_ids, {
+			command: "set_properties",
+			key: "set_geometry_properties",
+			name: "Set Geometry Properties",
+			value: properties_obj,
+			...options
 		});
-		if (options.date)
-			main.date = old_date;
 	}
 	
 	static setSymbols (arg0_geometry_ids, arg1_symbol_obj, arg2_options) {
@@ -540,29 +578,10 @@ naissance.Geometry = class extends ve.Class {
 		let symbol_obj = (arg1_symbol_obj) ? arg1_symbol_obj : {};
 		let options = (arg2_options) ? arg2_options : {};
 		
-		//Declare local instance variables
-		let dals_value_array = [];
-		let old_date;
-		
-		//Iterate over all geometry_ids and populate dals_value_array
-		for (let i = 0; i < geometry_ids.length; i++) {
-			if (symbol_obj._set_label_symbol) {
-				dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_label_symbol: symbol_obj._set_label_symbol });
-				delete symbol_obj._set_label_symbol;
-			}
-			dals_value_array.push({ type: "Geometry", geometry_id: geometry_ids[i], set_symbol: symbol_obj });
-		}
-		
-		//Add to DALS
-		if (options.date) {
-			old_date = JSON.parse(JSON.stringify(main.date));
-			main.date = options.date;
-		}
-		DALS.Timeline.parseAction({
-			options: { name: "Set Geometry Symbols", key: "set_geometry_symbols" },
-			value: dals_value_array
+		//Parse action for geometries
+		naissance.Geometry.parseActionForGeometries(geometry_ids, {
+			value: symbol_obj,
+			...options
 		});
-		if (options.date)
-			main.date = old_date;
 	}
 };
