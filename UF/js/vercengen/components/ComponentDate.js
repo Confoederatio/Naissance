@@ -66,6 +66,7 @@ ve.Date = class extends ve.Component {
 		//Handle inputs
 		this.handleEvents();
 		this.name = options.name;
+		if (value) this.v = value;
 	}
 	
 	/**

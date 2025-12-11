@@ -177,7 +177,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		if (this.geometry) {
 			this.keyframes_ui.v = this.history.interface.v;
 			
-			this.geometry.addEventListener("click", (e) => {
+			this.geometry.addEventListener("click", () => {
 				super.open("instance", { name: this.name, ...this.window_options });
 			});
 		}

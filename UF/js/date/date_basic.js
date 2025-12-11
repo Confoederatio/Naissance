@@ -248,7 +248,7 @@
 		// Merge with defaults (1-indexed months)
 		let date_obj = {
 			...Date.getBlankDate(),
-			...arg0_date_object,
+			...date,
 		};
 		
 		let minutes = 0;

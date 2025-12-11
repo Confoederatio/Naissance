@@ -428,6 +428,9 @@ naissance.Geometry = class extends ve.Class {
 	 * <br>
 	 * - #### Extraneous Commands:
 	 * - `.delete_geometry`: {@link boolean}
+	 * - `.move_keyframe`: {@link number}
+	 *   - `.date`: {@link Object} - The date of the keyframe to move.
+	 *   - `.ot_date`: {@link Object} - The date to move the keyframe to.
 	 * - `.remove_keyframe`: {@link number} - The timestamp of the removed keyframe.
 	 * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
 	 * - `.set_label_symbol`: {@link Object}
@@ -462,6 +465,14 @@ naissance.Geometry = class extends ve.Class {
 			//delete_geometry
 			if (json.delete_geometry === true)
 				geometry_obj.remove();
+			
+			//move_keyframe
+			if (json.move_keyframe) {
+				console.log(geometry_obj.history.moveKeyframe);
+				geometry_obj.history.moveKeyframe(json.move_keyframe.date, json.move_keyframe.ot_date);
+				geometry_obj.history.draw();
+				geometry_obj.keyframes_ui.v = geometry_obj.history.interface.v;
+			}
 			
 			//remove_keyframe
 			if (json.remove_keyframe)

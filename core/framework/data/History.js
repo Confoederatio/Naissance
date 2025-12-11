@@ -65,10 +65,29 @@ naissance.History = class extends ve.Class {
 					x: 2, y: 0 
 				}),
 				move_keyframe: veButton(() => {
-					
+					let move_keyframe_window = veWindow({
+						new_date: veDate(JSON.parse(JSON.stringify(local_value.date)), { name: "New Date" }),
+						confirm: veButton(() => {
+							DALS.Timeline.parseAction({
+								options: { name: "Move Keyframe", key: "move_keyframe" },
+								value: [{ 
+									type: "Geometry", 
+									geometry_id: this.options._id(), 
+									move_keyframe: {
+										date: local_value.date,
+										ot_date: move_keyframe_window.new_date.v
+									}
+								}]
+							});
+							move_keyframe_window.close();
+						})
+					}, {
+						can_rename: false,
+						name: "Move Keyframe"
+					});
 				}, {
 					name: "<icon>height</icon>",
-					tooltip: "[WIP] - Move Keyframe",
+					tooltip: "Move Keyframe to Date",
 					style: { cursor: "pointer" },
 					x: 3, y: 0
 				}),
@@ -180,7 +199,7 @@ naissance.History = class extends ve.Class {
 		}
 	}
 	
-	moveKeyframe (arg0_date, arg1_date) { //[WIP] - Finish function body
+	moveKeyframe (arg0_date, arg1_date) {
 		//Convert from parameters
 		let date = Date.convertTimestampToDate(arg0_date);
 		let ot_date = Date.convertTimestampToDate(arg1_date);
