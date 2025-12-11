@@ -32,6 +32,10 @@ global.UI_EditGeometryLabel = class extends ve.Class {
 		
 		//Return statement
 		return new ve.Interface({
+			hide_label: veToggle(main.settings.hide_labels_by_default, {
+				name: "Hide Label",
+				onuserchange: (v) => set_symbol({ hide: v })
+			}),
 			font_colour: veColour(brush_symbol.textFill, {
 				name: "Font Colour",
 				onuserchange: (v, e) => set_symbol({ textFill: e.getHex() }),

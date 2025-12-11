@@ -94,7 +94,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				}
 				if (this.value[2]) {
 					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
-					if (this.geometry && this.value[2].label_geometries !== null) {
+					if (this.geometry && !this.value[2]?.label_symbol?.hide) {
 						let label_geometries = (this.value[2].label_geometries) ?
 							this.value[2].label_geometries : [];
 						let label_name = (this.value[2].label_name) ? 
