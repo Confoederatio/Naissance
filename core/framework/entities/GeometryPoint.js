@@ -16,12 +16,12 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
 			}, { width: 99, x: 0, y: 0 }),
 			move_marker: veButton(() => {
-				this._is_being_moved = true;
 				veToast(`Click a new location on the map to move this marker to.`);
 				
+				this._is_being_moved = true;
+				this.draw();
+				
 				map.once("click", (e) => {
-					console.log(e.coordinate);
-					
 					DALS.Timeline.parseAction({
 						options: { name: "Set Point Position", key: "set_point_position" },
 						value: [{
@@ -32,7 +32,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 					});
 					
 					delete this._is_being_moved;
-				})
+					this.draw();
+				});
 			}, { name: "Move Marker", x: 0, y: 1 })
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
@@ -99,6 +100,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 							...this.geometry.getSymbol(),
 							...this.value[1]
 						});
+					if (this._is_being_moved)
+						this.geometry.flash(250, 1000000);
 					main.layers.entity_layer.addGeometry(this.geometry);
 				}
 				if (this.value[2]) {

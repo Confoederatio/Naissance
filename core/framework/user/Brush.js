@@ -19,7 +19,6 @@ naissance.Brush = class extends ve.Class {
 				lineWidth: 2
 			}
 		});
-		this.cursor_geometries = [];
 		main.layers.cursor_layer.addGeometry(this.cursor);
 		
 		//Declare brush UI
