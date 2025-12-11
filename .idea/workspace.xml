@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/UF/js/geospatiale/geometries_basic.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UF/js/geospatiale/operations/planar_overlay.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/date/date_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_basic.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDate.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Feature.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Feature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_Settings.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +48,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Project 1706 - Naissance Electron\UF\js\geospatiale" />
       <recent name="D:\Project 1706 - Naissance Electron\common\defines" />
       <recent name="D:\Project 1706 - Naissance Electron\common\features" />
     </key>
@@ -73,7 +74,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="62060000" />
+      <workItem from="1765094029123" duration="65108000" />
     </task>
     <servers />
   </component>

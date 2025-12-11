@@ -57,7 +57,7 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 		for (let i = 0; i < naissance.Feature.instances.length; i++) {
 			let local_feature = naissance.Feature.instances[i];
 			
-			if (!local_feature.parent)
+			if (!local_feature._parent)
 				this.hierarchy_obj[`${local_feature.class_name}-${local_feature.id}`] = local_feature.drawHierarchyDatatype();
 		}
 		
@@ -87,7 +87,7 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 								break;
 							}
 					//Remove instance._parent
-					instance._parent = undefined;
+					instance.parent = undefined;
 					this.refresh();
 				}
 				

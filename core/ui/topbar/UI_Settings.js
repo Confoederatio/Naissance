@@ -57,7 +57,19 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 				components_obj: {
 					appearance_ui: vePageMenu({
 						editor_appearance: {
-							name: "Editor Appearance"
+							name: "Editor Appearance",
+							components_obj: {
+								hierarchy_ordering: new ve.Select({
+									features_at_top: {
+										name: "Features At Top"
+									},
+									geometries_at_top: {
+										name: "Geometries At Top"
+									}
+								}, {
+									selected: (main.settings.hierarchy_ordering) ? main.settings.hierarchy_ordering : "features_at_top"
+								})
+							}
 						},
 						map_appearance: {
 							name: "Map Appearance",

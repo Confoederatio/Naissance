@@ -56,6 +56,8 @@ naissance.Feature = class extends ve.Class {
 		//Make sure parent cannot be self
 		if (value && value.id !== this.id)
 			this._parent = value;
+		if (value === undefined)
+			this._parent = undefined;
 	}
 	
 	drawHierarchyDatatypeGenerics () {
