@@ -5,7 +5,7 @@ let { performance } = require("perf_hooks");
 
 //Metadata - Title
 let latest_fps = 0;
-let naissance_version = "1.5.1b Hatteras";
+let naissance_version = "1.5.2b Tanganyika";
 let title_update_interval;
 let win;
 
