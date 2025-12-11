@@ -70,7 +70,7 @@ ve.File = class extends ve.Component {
 						window_name = "Save File";
 				
 				this.file_explorer_modal = new ve.Window({
-					file_explorer: new ve.FileExplorer(__dirname, { 
+					file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : __dirname, { 
 						name: " ",
 						style: {
 							width: "24rem"
@@ -180,8 +180,7 @@ ve.File = class extends ve.Component {
 					})
 				}, { 
 					can_rename: false, 
-					name: window_name, 
-					resizeable: false, 
+					name: window_name,
 					width: "26rem" 
 				});
 			}, {

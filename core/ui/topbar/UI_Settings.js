@@ -59,7 +59,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 						editor_appearance: {
 							name: "Editor Appearance",
 							components_obj: {
-								hierarchy_ordering: new ve.Select({
+								hierarchy_ordering: new ve.Select({ //[WIP] - Implement hierarchy_ordering
 									features_at_top: {
 										name: "Features At Top"
 									},
@@ -67,6 +67,10 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										name: "Geometries At Top"
 									}
 								}, {
+									onuserchange: (v) => {
+										main.settings.hierarchy_ordering = v;
+										UI_Settings.saveSettings();
+									},
 									selected: (main.settings.hierarchy_ordering) ? main.settings.hierarchy_ordering : "features_at_top"
 								})
 							}
