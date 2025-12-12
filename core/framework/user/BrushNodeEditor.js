@@ -20,6 +20,16 @@ naissance.BrushNodeEditor = class extends ve.Class {
 	
 	handleEvents () {
 		this.draw_tool.on("drawend", (e) => {
+			//Internal guard clause; check to make sure that ._selected_geometry is not in a provinces layer
+			if (main.brush._selected_geometry) {
+				let layer_obj = main.brush._selected_geometry.getLayer();
+				if (layer_obj?._type === "provinces") {
+					e.geometry.remove();
+					return;
+				}
+			}
+			
+			//Otherwise, handle node additions/subtractions as normal
 			if (main.brush.disabled) try { this.draw_tool.disable(); } catch (e) {}
 			if (main.brush._selected_geometry.handleNodeEditorEnd)
 				main.brush._selected_geometry.handleNodeEditorEnd(e);
