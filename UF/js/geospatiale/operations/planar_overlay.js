@@ -12,13 +12,25 @@
 	 * @returns {FeatureCollection}
 	 */
 	Geospatiale.planarOverlay = function (arg0_layer, arg1_layer) {
-		//Convert from parameters
 		let layer_a = JSON.parse(JSON.stringify(arg0_layer));
 		let layer_b = JSON.parse(JSON.stringify(arg1_layer));
 		
-		//Declare local instance variables
-		let result_by_source = new Map(); //Track pieces per source feature
-		let seen = new Set();
+		//Split within each layer first (self-overlay)
+		layer_a = Geospatiale.planarOverlay_internal(layer_a, layer_a);
+		layer_a = turf.flatten(layer_a);  // Flatten to individual Polygons
+		
+		layer_b = Geospatiale.planarOverlay_internal(layer_b, layer_b);
+		layer_b = turf.flatten(layer_b);  // Flatten to individual Polygons
+		
+		//Then split across layers
+		return Geospatiale.planarOverlay_internal(layer_a, layer_b);
+	};
+	
+	Geospatiale.planarOverlay_internal = function (arg0_layer, arg1_layer) {
+		let layer_a = JSON.parse(JSON.stringify(arg0_layer));
+		let layer_b = JSON.parse(JSON.stringify(arg1_layer));
+		
+		let result_by_source = new Map();
 		
 		//Process layer_a
 		layer_a.features.forEach((local_feature, local_index) => {
@@ -26,50 +38,48 @@
 			let local_pieces = Geospatiale.splitFeature(local_feature, layer_b);
 			
 			result_by_source.set(local_key, {
-				pieces: local_pieces.filter((local_piece) => {
-					let local_hash = Geospatiale.hashGeometry(local_piece);
-					if (seen.has(local_hash)) return false;
-					seen.add(local_hash);
-					return true;
-				}),
+				pieces: local_pieces,
 				properties: local_feature.properties,
 				source_layer: "A"
 			});
 		});
 		
 		//Process layer_b
-		layer_b.features.forEach((local_feature, local_index) => {
-			let local_key = `B_${local_index}`;
-			let local_pieces = Geospatiale.splitFeature(local_feature, layer_a);
-			
-			result_by_source.set(local_key, {
-				pieces: local_pieces.filter((local_piece) => {
-					let local_hash = Geospatiale.hashGeometry(local_piece);
-					if (seen.has(local_hash)) return false;
-					seen.add(local_hash);
-					return true;
-				}),
-				properties: local_feature.properties,
-				source_layer: "B"
+		if (layer_a !== layer_b) {
+			layer_b.features.forEach((local_feature, local_index) => {
+				let local_key = `B_${local_index}`;
+				let local_pieces = Geospatiale.splitFeature(local_feature, layer_a);
+				
+				result_by_source.set(local_key, {
+					pieces: local_pieces,
+					properties: local_feature.properties,
+					source_layer: "B"
+				});
 			});
-		});
-		
-		//Recombine pieces into MultiPolygons
-		let result = [];
-		
-		//Iterate over all results by source
-		for (let { pieces, properties, source_layer } of result_by_source.values()) {
-			if (pieces.length === 0) continue;
-			
-			let local_multi_polygon = (pieces.length === 1) ? pieces[0] : {
-				type: "MultiPolygon",
-				coordinates: pieces.flatMap((local_piece) =>
-					(local_piece.type === "MultiPolygon") ? local_piece.coordinates : [local_piece.coordinates])
-			};
-			result.push(turf.feature(local_multi_polygon, { ...properties, source_layer }));
 		}
 		
-		//Return statement
+		let result = [];
+		let source_dedup = new Map(); // Deduplicate by (source_key + geometry_hash)
+		
+		for (let [source_key, { pieces, properties, source_layer }] of result_by_source.entries()) {
+			if (pieces.length === 0) continue;
+			
+			for (let piece of pieces) {
+				let local_hash = Geospatiale.hashGeometry(piece);
+				let dedup_key = `${source_key}_${local_hash}`;
+				
+				if (source_dedup.has(dedup_key)) continue; // Skip duplicates from same source
+				source_dedup.set(dedup_key, true);
+				
+				let local_multi_polygon = (piece.type === "MultiPolygon") ? piece : {
+					type: "MultiPolygon",
+					coordinates: [piece.coordinates]
+				};
+				result.push(turf.feature(local_multi_polygon, { ...properties, source_layer }));
+			}
+		}
+		
+		console.log(`planarOverlay_internal:`, JSON.stringify(turf.featureCollection(result)));
 		return turf.featureCollection(result);
 	};
 }

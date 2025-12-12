@@ -126,6 +126,7 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		//Declare local instance variables
 		this.id = json.id;
 		this.is_collapsed = json.is_collapsed;
+		this._name = (json.name) ? json.name : "New Group";
 		this.options = json.options;
 		
 		//Iterate over json.entities and restore them
@@ -199,6 +200,7 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		return JSON.stringify({
 			id: this.id,
 			is_collapsed: this.is_collapsed,
+			name: this._name,
 			entities: entity_ids,
 			options: this.options
 		});

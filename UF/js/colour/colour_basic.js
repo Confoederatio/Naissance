@@ -132,4 +132,18 @@
 		.join("")
 		.toLowerCase()}`;
 	};
+	
+	Colour.randomHex = function () {
+		//Return statement
+		return Colour.convertRGBToHex(Colour.randomRGB());
+	};
+	
+	Colour.randomRGB = function () {
+		//Return statement
+		return [
+			Math.randomNumber(0, 255),
+			Math.randomNumber(0, 255),
+			Math.randomNumber(0, 255)
+		];
+	};
 }
