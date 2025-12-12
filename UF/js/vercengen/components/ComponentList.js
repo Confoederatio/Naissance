@@ -62,7 +62,7 @@ ve.List = class extends ve.Component {
 		
 		if (!this.options.do_not_display_info_button) {
 			this.info_button = new ve.Button(() => {}, { 
-				name: "<icon>info</icon>", tooltip: "<kbd>RMB</kbd>: Edit Item" });
+				name: "<icon>info</icon>", tooltip: `<kbd>RMB</kbd>: ${loc("ve.registry.localisation.List_info_edit_item")}` });
 			this.info_button.bind(this.element);
 		}
 		
@@ -112,7 +112,7 @@ ve.List = class extends ve.Component {
 	 */
 	addItem () {
 		if (this.options.max && this.value.length >= this.options.max) { //Internal guard clause for this.options.max
-			veToast(`<icon>warning</icon> The length of the current list cannot exceed ${String.formatNumber(this.options.max)} element(s).`);
+			veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
 			return;
 		}
 		
@@ -136,7 +136,7 @@ ve.List = class extends ve.Component {
 		if (this.value.length === 0) return; //Internal guard clause if there are already no elements in the array
 		
 		if (this.options.min && this.value.length - 1 < this.options.min) { //Internal guard clause for this.options.min
-			veToast(`<icon>warning</icon> The length of the current list cannot go below ${String.formatNumber(this.options.min)} element(s).`);
+			veToast(`<icon>warning</icon>  ${loc("ve.registry.localisation.List_error_min_items_reached", String.formatNumber(this.options.min))}`);
 			return;
 		}
 		
@@ -179,11 +179,11 @@ ve.List = class extends ve.Component {
 						i = new_index;
 					}, {
 						name: "<icon>chevron_left</icon>",
-						tooltip: "Shift Left"
+						tooltip: loc("ve.registry.localisation.List_shift_left")
 					}),
 					shift_positions: new ve.Number(this.shift_positions, {
 						min: 1,
-						name: "Shift",
+						name: loc("ve.registry.localisation.List_shift"),
 						onuserchange: (v) => this.shift_positions = v,
 						style: {
 							marginLeft: `calc(var(--padding)*0.5)`,
@@ -205,35 +205,35 @@ ve.List = class extends ve.Component {
 						i = new_index;
 					}, {
 						name: "<icon>chevron_right</icon>",
-						tooltip: `Shift Right`
+						tooltip: loc("ve.registry.localisation.List_shift_right")
 					})
 				}, { style: { alignItems: "center", display: "flex", justifyContent: "center" } }),
 				actions_bar: new ve.RawInterface({
 					insert_before_button: new ve.Button(() => {
 						if (this.options.max && this.value.length >= this.options.max) {
-							veToast(`<icon>warning</icon> The length of the current list cannot exceed ${String.formatNumber(this.options.max)} element(s)!`);
+							veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
 							return;
 						}
 						
 						this.value.splice(i, 0, global[`ve${this.class_name}`](this.placeholder));
 						this.draw();
 						this.fireToBinding();
-					}, { name: "<icon>first_page</icon>", tooltip: "Insert Item Before" }),
+					}, { name: "<icon>first_page</icon>", tooltip: loc("ve.registry.localisation.List_insert_item_after") }),
 					insert_after_button: new ve.Button(() => {
 						if (this.options.max && this.value.length >= this.options.max) {
-							veToast(`<icon>warning</icon> The length of the current list cannot exceed ${String.formatNumber(this.options.max)} element(s)!`);
+							veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
 							return;
 						}
 						
 						this.value.splice(i + 1, 0, global[`ve${this.class_name}`](this.placeholder));
 						this.draw();
 						this.fireToBinding();
-					}, { name: "<icon>last_page</icon>", tooltip: "Insert Item After" }),
+					}, { name: "<icon>last_page</icon>", tooltip: loc("ve.registry.localisation.List_insert_item_after") }),
 					delete_button: new ve.Button(() => {
 						this.deleteItem(i);
 						if (this.overlay_window) this.overlay_window.close();
 						this.fireToBinding();
-					}, { name: "<icon>delete</icon>", tooltip: "Delete Item" }),
+					}, { name: "<icon>delete</icon>", tooltip: loc("ve.registry.localisation.List_delete_item") }),
 				}, { style: { alignItems: "center", display: "flex", justifyContent: "center" } })
 			}, {
 				is_folder: false

@@ -76,7 +76,7 @@ ve.Interface = class extends ve.Component {
 		this.element.innerHTML = html_string.join("");
 		
 		//KEEP AT BOTTOM!
-		this.name = (options.name) ? options.name : "Folder";
+		this.name = (options.name) ? options.name : loc("ve.registry.localisation.Interface_folder");
 		this.reserved_keys = Object.keys(this).concat(["reserved_keys", "v"]);
 		this.v = components_obj;
 	}

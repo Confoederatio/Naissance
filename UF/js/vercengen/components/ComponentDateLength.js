@@ -46,9 +46,9 @@ ve.DateLength = class extends ve.Component {
 		html_string.push(`<span id = "name"></span> `);
 		html_string.push(`
 			<div class = "date-container">
-				<input id = "years" size = "6" type = "number" placeholder = "Years"${attributes_string}>
-				<input id = "months" size = "6" type = "number" min = "1" max = "12" placeholder = "Months"${attributes_string}>
-				<input id = "days" size = "5" type = "number" placeholder = "Days"${attributes_string}>
+				<input id = "years" size = "6" type = "number" placeholder = "${loc("ve.registry.localisation.DateLength_years")}"${attributes_string}>
+				<input id = "months" size = "6" type = "number" min = "1" max = "12" placeholder = "${loc("ve.registry.localisation.DateLength_months")}"${attributes_string}>
+				<input id = "days" size = "5" type = "number" placeholder = "${loc("ve.registry.localisation.DateLength_days")}"${attributes_string}>
 			</div>
 			<div class = "clock-container">
 				<input id = "hours" size = "2" min = "0" max = "23" type = "number" placeholder = "HH"${attributes_string}> :

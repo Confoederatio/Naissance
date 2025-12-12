@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/UF/js/localisation/localisation_basic.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDateLength.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDateLength.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +76,7 @@
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
       <workItem from="1765094029123" duration="81362000" />
-      <workItem from="1765536946194" duration="5303000" />
+      <workItem from="1765536946194" duration="6508000" />
     </task>
     <servers />
   </component>

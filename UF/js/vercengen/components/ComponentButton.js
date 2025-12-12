@@ -25,7 +25,7 @@ ve.Button = class extends ve.Component {
 		
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
-		if (options.name === undefined) options.name = "Confirm";
+		if (options.name === undefined) options.name = loc("ve.registry.localisation.Button_confirm");
 		
 		//Declare local instance variables
 		this.element = document.createElement("div");

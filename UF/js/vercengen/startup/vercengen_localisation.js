@@ -1,5 +1,7 @@
 //Set ve.registry.localisation defaults
 ve.registry.localisation = {
+	//[WIP] - EN-GB still needs to replace veUndoRedo, veWYSIWYG, and ve.Feature classes
+	
 	//FileExplorer EN-GB
 	FileExplorer_are_you_sure_delete: "Are you sure you want to delete the following files?<br><br>£1£<br><br>This action cannot be undone!",
 	FileExplorer_are_you_sure_copy_paste: "Are you sure you want to copy/paste £1£ file(s) to £2£?",
@@ -86,5 +88,46 @@ ve.registry.localisation = {
 	ScriptManager_theme_light: "Light",
 	ScriptManager_trust_warning: "Make sure you trust the code you are about to run before executing it.",
 	ScriptManager_view: "View",
-	ScriptManager_view_file_explorer: "View File Explorer"
+	ScriptManager_view_file_explorer: "View File Explorer",
+	
+	//Button EN-GB
+	Button_confirm: "Confirm",
+	
+	//DateLength EN-GB
+	DateLength_days: "Days",
+	DateLength_months: "Months",
+	DateLength_years: "Years",
+	
+	//File EN-GB
+	File_already_exists: "File already exists. Do you want to overwrite it?",
+	File_can_only_select_files: "You can only select files.",
+	File_can_only_select_folders: "You can only select folders.",
+	File_can_only_select_one_file: "You can only select 1 file/folder path.",
+	File_confirm: "Confirm",
+	File_error_saving_file: "Error Saving File",
+	File_error_saving_file_desc: "Error saving file: £1£",
+	File_must_select_valid_path: "You must select a valid file/folder path.",
+	File_open_file: "Open File",
+	File_open_files: "Open Files",
+	File_open_folder: "Open Folder",
+	File_open_folders: "Open Folders",
+	File_save_file: "Save File",
+	File_save_file_as: "Save file as ...",
+	File_select_file: "Select File",
+	File_selected_files: "Selected £1£ file(s).",
+	File_successfully_saved_file: "Successfully saved file in: £1£",
+	
+	//Interface EN-GB
+	Interface_folder: "Folder",
+	
+	//List EN-GB
+	List_delete_item: "Delete Item",
+	List_error_max_items_reached: "The length of the current list cannot exceed £1£ element(s).",
+	List_error_min_items_reached: "The length of the current list cannot go below £1£ element(s).",
+	List_info_edit_item: "Edit Item",
+	List_insert_item_after: "Insert Item After",
+	List_insert_item_before: "Insert Item Before",
+	List_shift: "Shift",
+	List_shift_left: "Shift Left",
+	List_shift_right: "Shift Right"
 };

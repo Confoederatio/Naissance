@@ -58,16 +58,16 @@ ve.File = class extends ve.Component {
 			select_file_button: new veButton(() => {
 				if (this.file_explorer_modal) this.file_explorer_modal.close();
 				
-				let window_name = "Open File";
+				let window_name = loc("ve.registry.localisation.File_open_file");
 					if (this.options.multifile && !this.options.is_folder) {
-						window_name = "Open Files";
+						window_name = loc("ve.registry.localisation.File_open_files");
 					} else if (this.options.multifile && this.options.is_folder) {
-						window_name = "Open Folders";
+						window_name = loc("ve.registry.localisation.File_open_folders");
 					} else if (this.options.is_folder) {
-						window_name = "Open Folder";
+						window_name = loc("ve.registry.localisation.File_open_folder");
 					}
 					if (this.options.save_function)
-						window_name = "Save File";
+						window_name = loc("ve.registry.localisation.File_save_file");
 				
 				this.file_explorer_modal = new ve.Window({
 					file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : __dirname, { 
@@ -78,7 +78,7 @@ ve.File = class extends ve.Component {
 					}),
 					actions_bar: new ve.RawInterface({
 						save_name: new ve.Text("", {
-							attributes: { placeholder: "Save file as ..." },
+							attributes: { placeholder: loc("ve.registry.localisation.File_save_file_as") },
 							limit: () => this.options.save_function
 						}),
 						confirm_button: new ve.Button(() => {
@@ -88,11 +88,11 @@ ve.File = class extends ve.Component {
 								//Internal guard clauses - Error handling
 								{
 									if (selected_paths.length === 0) {
-										veToast(`<icon>warning</icon> You must select a valid file/folder path.`);
+										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_must_select_valid_path")}`);
 										return;
 									}
 									if (!this.options.multifile && selected_paths.length > 1) {
-										veToast(`<icon>warning</icon> You can only select 1 file/folder path.`);
+										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_one_file")}`);
 										return;
 									}
 									if (this.options.is_folder) {
@@ -103,7 +103,7 @@ ve.File = class extends ve.Component {
 											if (!fs.statSync(selected_paths[i]).isDirectory()) {
 												has_file = true;
 												
-												veToast(`<icon>warning</icon> You can only select folders.`);
+												veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_folders")}`);
 												return;
 											}
 									} else {
@@ -114,7 +114,7 @@ ve.File = class extends ve.Component {
 											if (fs.statSync(selected_paths[i]).isDirectory()) {
 												has_folder = true;
 												
-												veToast(`<icon>warning</icon> You can only select files.`);
+												veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_files")}`);
 												return;
 											}
 									}
@@ -123,7 +123,7 @@ ve.File = class extends ve.Component {
 								//Set selected paths
 								this.v = selected_paths;
 								this.fireToBinding();
-								veToast(`Selected ${String.formatNumber(selected_paths.length)} file(s).`);
+								veToast(loc("ve.registry.localisation.File_selected_files", String.formatNumber(selected_paths.length)));
 								this.file_explorer_modal.close();
 							} else {
 								let save_name = this.file_explorer_modal.actions_bar.save_name.v;
@@ -151,7 +151,7 @@ ve.File = class extends ve.Component {
 									//Check if file already exists, if so send a confirmation prompt
 									let save_function = () => {
 										fs.writeFile(full_save_path, save_data, () => {
-											veToast(`Successfully saved file in: ${full_save_path}`);
+											veToast(loc("ve.registry.localisation.File_successfully_saved_file", full_save_path));
 											this.file_explorer_modal.close();
 										})
 										this.v = [full_save_path];
@@ -160,15 +160,19 @@ ve.File = class extends ve.Component {
 									
 									(!fs.existsSync(full_save_path)) ?
 										save_function() :
-										veConfirm(`File already exists. Do you want to overwrite it?`, {
+										veConfirm(loc("ve.registry.localisation.File_already_exists"), {
 											special_function: () => save_function()
 										});
 								} catch (e) {
 									console.error(e);
-									veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon><span style = "margin-left: var(--padding)">Error saving file: ${e}</span></span>`, { can_rename: false, name: "Error Saving File", width: "20rem" });
+									veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon><span style = "margin-left: var(--padding)">${loc("ve.registry.localisation.File_error_saving_file_desc", e)}</span></span>`, { 
+										can_rename: false, 
+										name: loc("ve.registry.localisation.File_error_saving_file"), 
+										width: "20rem" 
+									});
 								}
 							}
-						}, { name: "Confirm" }),
+						}, { name: loc("ve.registry.localisation.File_confirm") }),
 						cancel_button: new ve.Button(() => this.file_explorer_modal.close(), { name: "Cancel" })
 					}, {
 						can_rename: false,
@@ -184,7 +188,7 @@ ve.File = class extends ve.Component {
 					width: "26rem" 
 				});
 			}, {
-				name: (this.options.name) ? this.options.name : "Select File",
+				name: (this.options.name) ? this.options.name : loc("ve.registry.localisation.File_select_file"),
 				style: {
 					marginLeft: (!this.options.do_not_display) ? `calc(var(--padding)*0.5)` : 0,
 					whiteSpace: "nowrap"
