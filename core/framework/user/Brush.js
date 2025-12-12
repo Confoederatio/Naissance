@@ -370,6 +370,9 @@ naissance.Brush = class extends ve.Class {
 			if (this.disabled || ["fill_tool", "node", "node_override"].includes(main.brush.mode)) return;
 			
 			if (this._selected_geometry instanceof naissance.GeometryPolygon && (HTML.left_click || HTML.right_click)) {
+				//Internal guard clause if in provinces layer
+				let layer_obj = this._selected_geometry.getLayer();
+					if (layer_obj?._type === "provinces") return;
 				let processed_geometry = (HTML.left_click) ?
 					this.getAddPolygon(this.cursor) : this.getRemovePolygon(this.cursor);
 				
