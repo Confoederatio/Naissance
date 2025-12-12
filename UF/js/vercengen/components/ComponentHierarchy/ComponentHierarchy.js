@@ -92,7 +92,7 @@ ve.Hierarchy = class extends ve.Component {
 					
 				}, {
 					attributes: {
-						placeholder: "Search for item ..."
+						placeholder: loc("ve.registry.localisation.Hierarchy_search_for_item")
 					},
 					name: " ",
 					onuserchange: (v) => {

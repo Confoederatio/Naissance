@@ -234,7 +234,7 @@ ve.ScriptManager = class extends ve.Component {
 				x: 0, y: 0
 			});
 				this.topbar_interface = new ve.RawInterface({
-					name_el: new ve.HTML(() => `<span id = "name">${this.name}</span>${(!options.do_not_display_file_name) ? `<span id = "file-name"> | ${(this._file_path) ? this._file_path : "None"}</span>` : ""}`,
+					name_el: new ve.HTML(() => `<span id = "name">${this.name}</span>${(!options.do_not_display_file_name) ? `<span id = "file-name"> | ${(this._file_path) ? this._file_path : loc("ve.registry.localisation.ScriptManager_none")}</span>` : ""}`,
 						{ style: { marginRight: "1rem", overflow: "clip", width: "19rem" } }),
 					/*file: new ve.Button(() => {
 						
@@ -243,7 +243,7 @@ ve.ScriptManager = class extends ve.Component {
 						if (this.settings_window) this.settings_window.close();
 						this.settings_window = new ve.Window({
 							hide_blockly_workspace_on_error: new ve.Toggle(this._settings.hide_blockly_workspace_on_error, {
-								name: "Hide/show Blockly workspace on error",
+								name: loc("ve.registry.localisation.ScriptManager_hide_show_blockly"),
 								onuserchange: (v) => this._settings.hide_blockly_workspace_on_error = v
 							}),
 							keybinds: new ve.Select({
@@ -260,14 +260,14 @@ ve.ScriptManager = class extends ve.Component {
 									selected: (this._settings.keybinds === "vim")
 								}
 							}, { 
-								name: "Keybinds",
+								name: loc("ve.registry.localisation.ScriptManager_keybinds"),
 								onuserchange: (v) => {
 									this.loadSettings({ keybinds: v });
 								}
 							}),
 							actions_bar: new ve.RawInterface({
 								load_settings: new ve.File(undefined, {
-									name: "Load Settings",
+									name: loc("ve.registry.localisation.ScriptManager_load_settings"),
 									do_not_display: true,
 									onuserchange: (v) => {
 										//Declare local instance variables
@@ -287,12 +287,16 @@ ve.ScriptManager = class extends ve.Component {
 										}
 										
 										if (display_error)
-											veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon> Could not load non-ScriptManager settings.</span>`, { can_rename: false, name: "Error loading settings", width: "20rem" });
+											veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon> ${loc("ve.registry.localisation.ScriptManager_could_not_load_settings")}</span>`, { 
+												can_rename: false, 
+												name: loc("ve.registry.ScriptManager_error_loading_settings"), 
+												width: "20rem" 
+											});
 									},
 								}),
 								save_settings: (ve.registry.settings.ScriptManager.save_file === false) ?
 									new ve.File(undefined, {
-										name: "Save Settings",
+										name: loc("ve.registry.localisation.ScriptManager_save_settings"),
 										do_not_display: true,
 										onuserchange: (v) => {
 											console.log(v);
@@ -309,14 +313,14 @@ ve.ScriptManager = class extends ve.Component {
 											}
 											
 											fs.writeFileSync(scriptmanager_settings.save_file, this.saveSettings());
-											veToast(`Saved settings to ${scriptmanager_settings.save_file}!`);
+											veToast(loc("ve.registry.ScriptManager_saved_settings", scriptmanager_settings.save_file));
 										});
 									}, {
-										name: "Save Settings"
+										name: loc("ve.registry.localisation.ScriptManager_save_settings")
 									})
 							}, { name: " ", style: { alignItems: "center", display: "flex" } })
-						}, { can_rename: false, name: "Settings", width: "24rem" })
-					}, { name: "Settings" }),
+						}, { can_rename: false, name: loc("ve.registry.ScriptManager_settings"), width: "24rem" })
+					}, { name: loc("ve.registry.ScriptManager_settings") }),
 					view: new ve.Button(() => {
 						//Populate themes_obj
 						let themes_obj = {};
@@ -330,15 +334,15 @@ ve.ScriptManager = class extends ve.Component {
 							
 							editor_theme: new ve.Select({
 								"theme-default": {
-									name: "Default",
+									name: loc("ve.registry.localisation.ScriptManager_theme_default"),
 									selected: (!["theme-light"].includes(this._settings.theme))
 								},
 								"theme-light": {
-									name: "Light",
+									name: loc("ve.registry.localisation.ScriptManager_theme_light"),
 									selected: (this._settings.theme === "theme-light")
 								}
 							}, {
-								name: "Editor Theme",
+								name: loc("ve.registry.localisation.ScriptManager_editor_theme"),
 								onchange: (v) => {
 									this.loadSettings({ theme: v });
 								},
@@ -351,7 +355,7 @@ ve.ScriptManager = class extends ve.Component {
 							codemirror_theme: new ve.Select({
 								...themes_obj
 							}, {
-								name: "Codemirror Theme",
+								name: loc("ve.registry.localisation.ScriptManager_codemirror_theme"),
 								onchange: (v) => {
 									this.loadSettings({ codemirror_theme: v });
 								},
@@ -360,49 +364,49 @@ ve.ScriptManager = class extends ve.Component {
 							
 							hide_blockly: new ve.Button(() => {
 								this.scene_blockly.hide();
-							}, { name: "Hide Blockly", limit: () => !this.scene_blockly._hidden, x: 0, y: 3 }),
+							}, { name: loc("ve.registry.localisation.ScriptManager_hide_blockly"), limit: () => !this.scene_blockly._hidden, x: 0, y: 3 }),
 							show_blockly: new ve.Button(() => {
 								this.scene_blockly.show();
 								this.v = this.v;
-							}, { name: "Show Blockly", limit: () => this.scene_blockly._hidden, x: 0, y: 3 }),
+							}, { name: loc("ve.registry.localisation.ScriptManager_show_blockly"), limit: () => this.scene_blockly._hidden, x: 0, y: 3 }),
 							
 							clear_blockly_workspace_on_error: new ve.Toggle(this._settings.clear_blockly_workspace_on_error, {
-								name: "Clear Blockly on error",
+								name: loc("ve.registry.localisation.ScriptManager_clear_blockly_on_error"),
 								onuserchange: (v) => this._settings.clear_blockly_workspace_on_error = v
 							}, { x: 0, y: 4 }),
 							display_load_errors: new ve.Toggle(this._settings.display_load_errors, {
-								name: "Display load errors",
+								name: loc("ve.registry.localisation.ScriptManager_display_load_errors"),
 								onuserchange: (v) => this._settings.display_load_errors = v
 							}),
 							show_file_explorer: new ve.Toggle(this._settings.view_file_explorer, {
-								name: "View File Explorer",
+								name: loc("ve.registry.localisation.ScriptManager_view_file_explorer"),
 								onuserchange: (v) => this.loadSettings({ view_file_explorer: v })
 							})
 						}, {
 							id: "script_manager_view"
 						});
-					}, { name: "View", x: 0, y: 2 }),
+					}, { name: loc("ve.registry.localisation.ScriptManager_view"), x: 0, y: 2 }),
 					run: new ve.Button(() => {
 						let local_context_menu = new ve.ContextMenu({
-							run_header: new ve.HTML(`<b>Run Settings:</b><br>`, { x: 0, y: 0 }),
+							run_header: new ve.HTML(`<b>${loc("ve.registry.localisation.ScriptManager_run_settings")}</b><br>`, { x: 0, y: 0 }),
 							
-							warning: new ve.HTML(`<div style = "align-items: center; display: flex"><icon style = "width: auto;">info</icon><b style = "margin-left: calc(var(--padding)*0.5);">Note:</b></div><span>Make sure you trust the code you are about to run before executing it.</span><br><br>`),
+							warning: new ve.HTML(`<div style = "align-items: center; display: flex"><icon style = "width: auto;">info</icon><b style = "margin-left: calc(var(--padding)*0.5);">${loc("ve.registry.localisation.ScriptManager_note")}</b></div><span>${loc("ve.registry.localisation.ScriptManager_trust_warning")}</span><br><br>`),
 							run_this_file_button: new ve.Button(() => {
 								try {
 									eval(this.v);
 								} catch (e) {
 									this.console_el.print(e, "error");
 								}
-							}, { name: "Run Current File" })
+							}, { name: loc("ve.registry.localisation.ScriptManager_run_current_file") })
 						}, { id: "script_manager_run" });
-					}, { name: "Run" }),
+					}, { name: loc("ve.registry.localisation.ScriptManager_run") }),
 					console: new ve.Button(() => {
 						if (this.local_console) this.local_console.close();
 						this.local_console = new ve.Window({
 							console_el: this.console_html,
 							actions_bar: new ve.RawInterface({
 								console_command: new ve.Text("", { 
-									attributes: { placeholder: "Enter console command ..." }, 
+									attributes: { placeholder: loc("ve.registry.localisation.ScriptManager_enter_console_command") }, 
 									name: " ",
 									style: { display: "inline" }
 								}),
@@ -415,20 +419,20 @@ ve.ScriptManager = class extends ve.Component {
 									} catch (e) {
 										this.console_el.print(e, "error");
 									}
-								}, { name: "Send" }),
+								}, { name: loc("ve.registry.localisation.ScriptManager_send") }),
 								information: new ve.Button(() => {
-									this.console_el.print(`Help Menu:`);
+									this.console_el.print(loc("ve.registry.localisation.ScriptManager_help_menu"));
 									this.console_el.print(`- this.console_el.print(arg0_message:string, arg1_type:string) - Prints a message to the console.`);
 									this.console_el.print(`- - arg1_type: 'error'/'info'`);
 								}, {
-									name: "Help",
-									tooltip: `Prints help information.`
+									name: loc("ve.registry.localisation.ScriptManager_help"),
+									tooltip: loc("ve.registry.localisation.ScriptManager_prints_help_information")
 								}),
 								clear_console: new ve.Button(() => {
-									let local_confirm_modal = new ve.Confirm(`Are you sure you want to clear the current console?`, {
+									let local_confirm_modal = new ve.Confirm(loc("ve.registry.localisation.ScriptManager_are_you_sure_clear_console"), {
 										special_function: () => this.console_el.innerHTML = ""
 									});
-								}, { name: "Clear Console" }),
+								}, { name: loc("ve.registry.localisation.ScriptManager_clear_console") }),
 							}, {
 								style: {
 									alignItems: "center",
@@ -436,8 +440,12 @@ ve.ScriptManager = class extends ve.Component {
 								},
 								name: " "
 							})
-						}, { can_rename: false, name: "Console", width: "40rem" });
-					}, { name: "Console" })
+						}, { 
+							can_rename: false, 
+							name: loc("ve.registry.localisation.ScriptManager_console"), 
+							width: "40rem" 
+						});
+					}, { name: loc("ve.registry.localisation.ScriptManager_console") })
 				}, { 
 					no_name_element: true,
 					is_folder: false,
@@ -669,7 +677,10 @@ ve.ScriptManager = class extends ve.Component {
 		let error = arg0_error;
 		
 		//Instantiate load message popup
-		veWindow(`Are you sure this file is ${(this.options.compatibility_message) ? this.options.compatibility_message : "ES6"} compatible? Blockly has been disabled, and the file is only editable via CodeMirror.<br><br><div style = "align-items: center; display: flex;"><icon>warning</icon>&nbsp;${error}</div><br><b>Stack Trace:</b><br><div style = "margin-left: 1rem;">${error.stack}</div>`, { name: `Error Reading File`, width: "24rem" });
+		veWindow(`${loc("ve.registry.localisation.error_compatibility", (this.options.compatibility_message) ? this.options.compatibility_message : "ES6")}<br><br><div style = "align-items: center; display: flex;"><icon>warning</icon>&nbsp;${error}</div><br><b>${loc("ve.registry.localisation.ScriptManager_stack_trace")}</b><br><div style = "margin-left: 1rem;">${error.stack}</div>`, { 
+			name: loc("ve.registry.localisation.ScriptManager_error_reading_file"), 
+			width: "24rem"
+		});
 	}
 };
 

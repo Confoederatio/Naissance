@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/UF/js/localisation/localisation_basic.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,23 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "ts.external.directory.path": "C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Project 1706 - Naissance Electron\UF\js\geospatiale" />
@@ -71,6 +78,7 @@
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
       <workItem from="1765094029123" duration="81362000" />
+      <workItem from="1765536946194" duration="5303000" />
     </task>
     <servers />
   </component>

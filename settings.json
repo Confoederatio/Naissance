@@ -3,7 +3,7 @@
     "D:\\Project 1706 - Naissance Electron\\saves\\province_test.naissance"
   ],
   "disable_autoload": true,
-  "autoloading_mode": "default",
+  "autoloading_mode": "disable_autoload",
   "sort_settings_alphabetically": false,
   "font_registry": [
     "Arial",

@@ -59,7 +59,7 @@ ve.FileExplorer = class extends ve.Component {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>check_box</icon>`,
 				onchange: (v, e) => this.fireSelectToggle(v, e),
-				tooltip: "Select"
+				tooltip: loc("ve.registry.localisation.FileExplorer_select")
 			})
 		};
 		options.file_icon = (options.file_icon) ? options.file_icon : "<icon>description</icon>";
@@ -69,7 +69,7 @@ ve.FileExplorer = class extends ve.Component {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>indeterminate_check_box</icon>`,
 				onchange: (v, e) => this.fireSelectToggle(v, e),
-				tooltip: "Select"
+				tooltip: loc("ve.registry.localisation.FileExplorer_select")
 			})
 		};
 		options.folder_icon = (options.folder_icon) ? options.folder_icon : "<icon>folder</icon>";
@@ -258,15 +258,15 @@ ve.FileExplorer = class extends ve.Component {
 		}, { disabled: true });
 		if (!this.options.disable_actions)
 			hierarchy_obj.selection = new ve.HierarchyDatatype({
-				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `Clipboard (${String.formatNumber(this.clipboard.length)})` : "Clipboard is empty."} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `
+				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_clipboard")} (${String.formatNumber(this.clipboard.length)})` : loc("ve.registry.localisation.FileExplorer_clipboard_is_empty")} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `
 				${String.formatNumber(this.selected.length)} Element(s) selected` : ""}
 				`, { style: { marginRight: "auto", padding: 0 }}),
 				actions_menu: new ve.RawInterface({
 					copy_button: new ve.Button((e) => {
 						if (this.selected.length === 0) return; //Internal guard clause if nothing is selected
 						this.setClipboard();
-						new ve.Toast(`Copied ${String.formatNumber(this.clipboard.length)} elements to clipboard.`);
-					}, { name: "<icon>copy</icon>", limit: () => this.selected.length, tooltip: "Copy Selected" }),
+						new ve.Toast(loc("ve.registry.localisation.FileExplorer_copied_elements_to_clipboard", String.formatNumber(this.clipboard.length)));
+					}, { name: "<icon>copy</icon>", limit: () => this.selected.length, tooltip: loc("ve.registry.localisation.FileExplorer_copy_selected") }),
 					cut_button: new ve.Button((e) => {
 						//This has to use a new file explorer in a modal with .options.disable_actions=true, since it would be fatal otherwise
 						if (this.selected.length === 0) return; //Internal guard clause if nothing is selected
@@ -280,23 +280,28 @@ ve.FileExplorer = class extends ve.Component {
 									this.refresh();
 									this.deselectAll();
 								});
-							}, { name: "Confirm" })
-						}, { name: `Cut/Paste ${String.formatNumber(this.selected.length)} files`, draggable: true, resizeable: true, width: "24rem" });
+							}, { name: loc("ve.registry.localisation.FileExplorer_confirm") })
+						}, { 
+							name: loc("ve.registry.localisation.FileExplorer_cut_paste_files", String.formatNumber(this.selected.length)),
+							draggable: true, 
+							resizeable: true, 
+							width: "24rem" 
+						});
 					}, { name: "<icon>cut</icon>", limit: () => this.selected.length, tooltip: "Cut Selected" }),
 					paste_button: new ve.Button((e) => {
-						let confirm = new ve.Confirm(`Are you sure you want to copy/paste ${String.formatNumber(this.clipboard.length)} file(s) to ${this.v}?`, {
-							name: `Paste ${String.formatNumber(this.clipboard.length)} files`,
+						let confirm = new ve.Confirm(loc("ve.registry.localisation.FileExplorer_are_you_sure_copy_paste", String.formatNumber(this.clipboard.length), this.v), {
+							name: loc("ve.registry.localisation.FileExplorer_paste_files", String.formatNumber(this.clipboard.length)),
 							special_function: () => {
 								confirm.close();
 								ve.FileExplorer.copy(this.clipboard, this.v, () => this.refresh());
 							}
 						});
-					}, { name: "<icon>paste</icon>", limit: () => this.clipboard.length, tooltip: "Paste Clipboard" }),
+					}, { name: "<icon>paste</icon>", limit: () => this.clipboard.length, tooltip: loc("ve.registry.localisation.FileExplorer_paste_clipboard") }),
 					
 					//clear_clipboard
 					clear_clipboard: new ve.Button((e) => {
 						this.clipboard = [];
-					}, { name: "<icon>content_paste_off</icon>", limit: () => this.clipboard.length, tooltip: "Clear Clipboard" }),
+					}, { name: "<icon>content_paste_off</icon>", limit: () => this.clipboard.length, tooltip: loc("ve.registry.localisation.FileExplorer_clear_clipboard") }),
 					
 					//move_button, delete_button
 					move_button: new ve.Button((e) => {
@@ -308,12 +313,17 @@ ve.FileExplorer = class extends ve.Component {
 									this.refresh();
 									this.deselectAll();
 								});
-							}, { name: "Confirm" })
-						}, { name: `Move ${String.formatNumber(this.selected.length)} files`, draggable: true, resizeable: true, width: "24rem" });
+							}, { name: loc("ve.registry.localisation.FileExplorer_confirm") })
+						}, { 
+							name: loc("ve.registry.localisation.FileExplorer_move_files", String.formatNumber(this.selected.length)),
+							draggable: true, 
+							resizeable: true, 
+							width: "24rem"
+						});
 					}, { name: "<icon>arrow_forward</icon>", limit: () => this.selected.length, tooltip: "Move Selected" }),
 					delete_button: new ve.Button((e) => {
-						let confirm = new ve.Confirm(`Are you sure you want to delete the following files?<br><br>${this.selected.join(", ")}<br><br>This action cannot be undone!`, {
-							name: `Delete ${String.formatNumber(this.selected.length)} files`,
+						let confirm = new ve.Confirm(loc("ve.registry.localisation.FileExplorer_are_you_sure_delete", this.selected.join(", ")), {
+							name: loc("ve.registry.localisation.FileExplorer_delete_files", String.formatNumber(this.selected.length)),
 							special_function: () => {
 								confirm.close();
 								ve.FileExplorer.delete(this.selected, () => this.refresh());
@@ -323,7 +333,7 @@ ve.FileExplorer = class extends ve.Component {
 					
 					new_folder_button: new ve.Button((e) => {
 						let local_modal = new ve.Window({
-							html: new ve.HTML(`Create a new folder:`),
+							html: new ve.HTML(loc("ve.registry.localisation.FileExplorer_create_a_new_folder")),
 							new_folder_name: new ve.Text("",  { name: " " }),
 							confirm_button: new ve.Button((e) => {
 								let new_folder_path = path.join(this.v, local_modal.components_obj.new_folder_name.v);
@@ -332,14 +342,14 @@ ve.FileExplorer = class extends ve.Component {
 									fs.mkdirSync(new_folder_path, { recursive: true });
 									this.refresh();
 								} else {
-									new ve.Toast(`You cannot create a folder with no name.`);
+									new ve.Toast(loc("ve.registry.localisation.FileExplorer_cannot_create_unnamed_folder"));
 								}
 							})
-						}, { can_rename: false, name: "Create New Folder" })
-					}, { name: "<icon>create_new_folder</icon>", tooltip: "Create New Folder" }),
+						}, { can_rename: false, name: loc("ve.registry.localisation.FileExplorer_create_new_folder") })
+					}, { name: "<icon>create_new_folder</icon>", tooltip: loc("ve.registry.localisation.FileExplorer_create_new_folder") }),
 					new_file_button: new ve.Button((e) => {
 						let local_modal = new ve.Window({
-							html: new ve.HTML(`Create a new file:`),
+							html: new ve.HTML(loc("ve.registry.localisation.FileExplorer_create_a_new_file")),
 							new_file_name: new ve.Text("", { name: " " }),
 							confirm_button: new ve.Button((e) => {
 								let new_file_path = path.join(this.v, local_modal.components_obj.new_file_name.v);
@@ -347,13 +357,13 @@ ve.FileExplorer = class extends ve.Component {
 								if (!fs.existsSync()) {
 									fs.closeSync(fs.openSync(new_file_path, "w"));
 									this.refresh();
-									new ve.Toast(`Created empty text file at: ${new_file_path}`);
+									new ve.Toast(loc("ve.registry.localisation.FileExplorer_created_empty_text_file", new_file_path));
 								} else {
-									new ve.Toast(`The specified path already exists as a file! Delete it first before creating a new file with the same name.`);
+									new ve.Toast(loc("ve.registry.localisation.FileExplorer_specified_file_path_already_exists"));
 								}
 							})
-						}, { can_rename: false, name: "Create New File" });
-					}, { name: "<icon>note_add</icon>", tooltip: "Create New File" } )
+						}, { can_rename: false, name: loc("ve.registry.localisation.FileExplorer_create_new_file") });
+					}, { name: "<icon>note_add</icon>", tooltip: loc("ve.registry.localisation.FileExplorer_create_new_file") } )
 				}, {
 					style: { marginLeft: "auto", order: 99, marginTop: "var(--cell-padding)", padding: 0 }
 				}),
@@ -374,11 +384,11 @@ ve.FileExplorer = class extends ve.Component {
 		if (this.options.save_function) {
 			hierarchy_obj.save_button = new ve.HierarchyDatatype({
 				save_as_icon: new ve.HTML(`<icon>save_as</icon>`),
-				save_name: new ve.HTML(`Save File`)
+				save_name: new ve.HTML(loc("ve.registry.localisation.FileExplorer_save_file"))
 			}, { disabled: true });
 			hierarchy_obj.save_button.element.onclick = () => {
 				let local_modal = new ve.Window({
-					html: new ve.HTML(`Save file as:`),
+					html: new ve.HTML(loc("ve.registry.localisation.FileExplorer_save_file_as")),
 					new_file_name: new ve.Text(`autosave${(this.options.save_extension[0]) ? this.options.save_extension[0] : ""}`, { name: " " }),
 					confirm_button: new ve.Button((e) => {
 						let save_file_name = path.join(this.v, local_modal.new_file_name.v);
@@ -397,7 +407,7 @@ ve.FileExplorer = class extends ve.Component {
 								//Check if file already exists, if so send a confirmation prompt
 								let save_function = () => {
 									fs.writeFile(save_file_name, save_string, () => {
-										veToast(`Successfully saved file as: ${save_file_name}`);
+										veToast(loc("ve.registry.localisation.FileExplorer_successfully_saved_file_as", save_file_name));
 										local_modal.remove();
 										this.refresh();
 									});
@@ -405,7 +415,7 @@ ve.FileExplorer = class extends ve.Component {
 								
 								(!fs.existsSync(save_file_name)) ?
 									save_function() :
-									veConfirm(`File already exists. Do you want to overwrite it?`, {
+									veConfirm(loc("ve.registry.localisation.FileExplorer_do_you_want_to_overwrite_file"), {
 										special_function: () => save_function()
 									});
 							} catch (e) {
@@ -413,13 +423,13 @@ ve.FileExplorer = class extends ve.Component {
 								console.error(e);
 							}
 					})
-				}, { can_rename: false, name: "Save File" });
+				}, { can_rename: false, name: loc("ve.registry.localisation.FileExplorer_save_file") });
 			};
 		}
 		
 		hierarchy_obj[previous_folder_path] = new ve.HierarchyDatatype({
 			up_icon: new ve.HTML(`<icon>subdirectory_arrow_left</icon>`),
-			two_dots: new ve.HTML(`Back`)
+			two_dots: new ve.HTML(loc("ve.registry.localisation.FileExplorer_back"))
 		}, { disabled: true, limit: () => !File.isDrive(this.v) });
 		
 		let previous_folder_obj = hierarchy_obj[previous_folder_path];
@@ -472,7 +482,7 @@ ve.FileExplorer = class extends ve.Component {
 							}, {
 								name: `<icon>drive_file_rename_outline</icon>`,
 								limit: () => (!this.options.navigation_only),
-								tooltip: "Rename",
+								tooltip: loc("ve.registry.localisation.FileExplorer_rename"),
 								style: { padding: `var(--cell-padding)` }
 							}),
 							...Object.fromEntries(
@@ -528,24 +538,24 @@ ve.FileExplorer = class extends ve.Component {
 								ve.FileExplorer.rename(local_full_path, () => this.refresh());
 							}, {
 								name: `<icon>drive_file_rename_outline</icon>`,
-								limit: () => (this.options.navigation_only && this.options.save_extension.includes(path.extname(local_full_path))) || !this.options.navigation_only,
-								tooltip: "Rename",
+								limit: () => (this.options.navigation_only && this.options?.save_extension.includes(path.extname(local_full_path))) || !this.options.navigation_only,
+								tooltip: loc("ve.registry.localisation.FileExplorer_rename"),
 								style: { padding: `var(--cell-padding)` }
 							}),
 							load_file: new ve.Button((e) => {
-								veConfirm(`Are you sure you want to load ${local_full_path}?`, {
+								veConfirm(loc("ve.registry.localisation.FileExplorer_are_you_sure_load", local_full_path), {
 									special_function: () => {
 										fs.readFile(local_full_path, "utf8", (err, data) => {
 											if (err) {
-												veToast(`Error upon loading file ${local_full_path}: ${e}`);
+												veToast(loc("ve.registry.localisation.FileExplorer_error_load", local_full_path, e));
 												return;
 											}
 											if (this.options.load_function)
 												try {
 													this.options.load_function(data, local_full_path);
-													veToast(`Loaded savefile ${local_full_path}`);
+													veToast(loc("ve.registry.localisation.FileExplorer_loaded_save_file", local_full_path));
 												} catch (e) {
-													veWindow(`Error loading savefile: ${e}`, { name: `Error loading savefile` });
+													veWindow(`${loc("ve.registry.localisation.FileExplorer_error_load_save_file")}: ${e}`, { name: loc("ve.registry.localisation.FileExplorer_error_load_save_file") });
 													console.error(e);
 												}
 										});
@@ -553,7 +563,7 @@ ve.FileExplorer = class extends ve.Component {
 								});
 							}, {
 								name: `<icon>sync_arrow_down</icon>`,
-								tooltip: "Load Savefile",
+								tooltip: loc("ve.registry.localisation.FileExplorer_load_save_file"),
 								limit: () => this.options.load_function && (this.options.save_extension === undefined || this.options.save_extension.includes(path.extname(local_full_path)) || this.options.save_extension.includes(".*")),
 								style: { padding: `var(--cell-padding)` }
 							}),

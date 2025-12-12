@@ -39,7 +39,11 @@ global.stream_promises = require("stream/promises");
 					overwrite_all = true;
 				}, { name: "Overwrite All" })
 			}, { name: " ", limit: () => (currently_resolved === false), style: { display: "flex" } })
-		}, { attributes: { class: "file-explorer-modal" }, name: `Copying ${String.formatNumber(file_paths.length)} file(s) to ${file_path}`, width: "24rem" });
+		}, { 
+			attributes: { class: "file-explorer-modal" }, 
+			name: loc("ve.registry.localisation.FileExplorer_copying_files_to", String.formatNumber(file_paths.length), file_path), 
+			width: "24rem" 
+		});
 		let html_el = dialog_window.components_obj.html.element;
 		let overwrite_all = false;
 		let overwrite = false;
@@ -69,7 +73,7 @@ global.stream_promises = require("stream/promises");
 				let files_progress_label_el = html_el.querySelector(`label[for="files-progress"]`);
 				
 				files_progress_bar_el.value = ((file_index + 1) / file_paths.length)*100;
-				files_progress_label_el.innerHTML = `(${String.formatNumber(file_index + 1)} of ${String.formatNumber(file_paths.length)})`;
+				files_progress_label_el.innerHTML = loc("ve.registry.FileExplorer_of_progress", String.formatNumber(file_index + 1), String.formatNumber(file_paths.length));
 				
 				//Polling check to make sure files meet conditions
 				if (fs.existsSync(target_path) && overwrite_all === false) {
@@ -151,7 +155,7 @@ global.stream_promises = require("stream/promises");
 			let destination_stream = fs.createWriteStream(ot_file_path);
 			let source_stream = fs.createReadStream(file_path);
 			
-			html_el.querySelector(`#current-file`).innerHTML = `Copying ${file_path} to ${ot_file_path}`;
+			html_el.querySelector(`#current-file`).innerHTML = loc("ve.registry.localisation.FileExplorer_copying_to", file_path, ot_file_path);
 			source_stream.on("data", (local_chunk) => {
 				copied_bytes += local_chunk.length;
 				
@@ -178,7 +182,8 @@ global.stream_promises = require("stream/promises");
 			
 			file_progress_bar_el.value = percent_progress*100;
 			file_progress_label_el.innerHTML = (eta_seconds > 0) ? 
-				`${Math.round(file_progress_bar_el.value)}% - ${String.formatDateLength(Math.ceil(eta_seconds))} remaining` : "Done";
+				loc("ve.registry.localisation.FileExplorer_eta_remaining", Math.round(file_progress_bar_el.value), String.formatDateLength(Math.ceil(eta_seconds))) :
+				loc("ve.registry.localisation.FileExplorer_done");
 		}
 		
 		//Begin copy process
@@ -211,7 +216,11 @@ global.stream_promises = require("stream/promises");
 					].join("<br>")
 				),
 			},
-			{ attributes: { class: "file-explorer-modal" }, name: `Deleting ${String.formatNumber(file_paths.length)} file(s)`, width: "24rem" }
+			{ 
+				attributes: { class: "file-explorer-modal" }, 
+				name: loc("ve.registry.localisation.FileExplorer_deleting_files", String.formatNumber(file_paths.length)), 
+				width: "24rem" 
+			}
 		);
 		
 		const html_el = dialog_window.components_obj.html.element;
@@ -239,9 +248,7 @@ global.stream_promises = require("stream/promises");
 				const files_progress_bar_el = html_el.querySelector(`progress#files-progress`);
 				const files_progress_label_el = html_el.querySelector(`label[for="files-progress"]`);
 				files_progress_bar_el.value = ((file_index + 1) / file_paths.length) * 100;
-				files_progress_label_el.innerHTML = `(${String.formatNumber(
-					file_index + 1
-				)} of ${String.formatNumber(file_paths.length)})`;
+				files_progress_label_el.innerHTML = loc("ve.registry.localisation.FileExplorer_of_progress", String.formatNumber(file_index + 1), String.formatNumber(file_paths.length));
 				
 				// Delete existing file/folder if present
 				if (fs.existsSync(local_file_path)) {
@@ -267,7 +274,7 @@ global.stream_promises = require("stream/promises");
 		// Helper: delete a file or folder, show per‑file progress
 		// ---------------------------------------------------------
 		async function deleteWithProgress(target_path) {
-			html_el.querySelector(`#current-file`).innerHTML = `Deleting ${target_path}`;
+			html_el.querySelector(`#current-file`).innerHTML = loc("ve.registry.localisation.FileExplorer_deleting_path", target_path);
 			
 			let stats;
 			try {
@@ -306,10 +313,8 @@ global.stream_promises = require("stream/promises");
 			file_progress_bar_el.value = percent_progress * 100;
 			file_progress_label_el.innerHTML =
 				eta_seconds > 0
-					? `${Math.round(file_progress_bar_el.value)}% - ${String.formatDateLength(
-						Math.ceil(eta_seconds)
-					)} remaining`
-					: "Done";
+					? loc("ve.registry.localisation.FileExplorer_eta_remaining", Math.round(file_progress_bar_el.value), String.formatDateLength(Math.ceil(eta_seconds)))  :
+					loc("ve.registry.localisation.FileExplorer_done");
 		}
 	};
 	
@@ -376,7 +381,10 @@ global.stream_promises = require("stream/promises");
 			ve.FileExplorer.delete(file_paths, (local_modal) => {
 				local_modal.remove();
 				
-				let modal = new ve.Window(`Finished moving ${files_total} file(s) to ${file_path}`, { name: "Finished moving files", width: "24rem" });
+				let modal = new ve.Window(loc("ve.registry.localisation.FileExplorer_moved_files", files_total, file_path), { 
+					name: loc("ve.registry.localisation.FileExplorer_finished_moving_files"), 
+					width: "24rem" 
+				});
 				if (callback_function)
 					callback_function(modal);
 			});
@@ -402,7 +410,7 @@ global.stream_promises = require("stream/promises");
 		let base_name = path.basename(file_path);
 		let dir_name = path.dirname(file_path);
 		let local_modal = new ve.Window({
-			html: new ve.HTML(`Rename file ${base_name} to:`),
+			html: new ve.HTML(loc("ve.registry.localisation.FileExplorer_rename_file_to", base_name)),
 			new_file_name: new ve.Text(base_name, { name: " " }),
 			confirm_button: new ve.Button((e) => {
 				try {
@@ -413,9 +421,9 @@ global.stream_promises = require("stream/promises");
 							callback_function(local_modal);
 					});
 				} catch (e) {
-					new ve.Toast(`ERROR: ${base_name} could not be renamed: ${e}`);
+					new ve.Toast(loc("ve.registry.localisation.FileExplorer_error_could_not_be_renamed", base_name, e));
 				}
 			})
-		}, { name: "Rename File", width: "24rem" });
+		}, { name: loc("ve.registry.localisation.FileExplorer_rename_file"), width: "24rem" });
 	};
 }
