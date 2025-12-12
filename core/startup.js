@@ -33,6 +33,10 @@ global.path = require("path");
 				date_ui: new UI_DateMenu(),
 				navbar: global.main_navbar,
 			},
+			_layers: { //Layers which are not appended to the map but kept internally
+				province_layers: [], //Array of all current naissance.Layers that are flagged as 'provinces'
+				provinces: new maptalks.VectorLayer("province_layer", [], { hitDetect: true, interactive: false }) 
+			},
 			layers: {
 				//Foreground layers
 				overlay_layer: new maptalks.VectorLayer("overlay_layer", [], { hitDetect: true, interactive: true, zIndex: 99 }),
