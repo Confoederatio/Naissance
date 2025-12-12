@@ -41,6 +41,9 @@ naissance.Brush = class extends ve.Class {
 					name: "Default",
 					selected: true
 				},
+				fill_tool: {
+					name: "Fill Bucket"
+				},
 				node: {
 					name: "Node"
 				},
@@ -304,6 +307,38 @@ naissance.Brush = class extends ve.Class {
 	
 	handleEvents () {
 		//Map event handlers
+		map.on("click", (e) => { //[WIP] - Finish fill handler
+			//Internal guard clause if fill tool with polygon is not selected
+			if (!(main.brush.mode === "fill_tool" && this._selected_geometry && this._selected_geometry instanceof naissance.GeometryPolygon)) return;
+			if (!main._layers.provinces) return; //Internal guard clause if main._layers.provinces is not defined
+			
+			//Iterate over all_geometries in main._layers.provinces; check if e.coordinate is inside the target geometry, if so, fill it
+			let all_geometries = main._layers.provinces.getGeometries();
+			
+			for (let i = 0; i < all_geometries.length; i++)
+				if (all_geometries[i].containsPoint(e.coordinate))
+					if (!HTML.ctrl_pressed) {
+						DALS.Timeline.parseAction({
+							options: { name: "Add to Polygon", key: "add_to_polygon" },
+							value: [{
+								type: "GeometryPolygon",
+								
+								geometry_id: this._selected_geometry.id,
+								add_to_polygon: { geometry: all_geometries[i].toJSON() }
+							}]
+						});
+					} else {
+						DALS.Timeline.parseAction({
+							options: { name: "Remove from Polygon", key: "remove_from_polygon" },
+							value: [{
+								type: "GeometryPolygon",
+								
+								geometry_id: this._selected_geometry.id,
+								remove_from_polygon: { geometry: all_geometries[i].toJSON() }
+							}]
+						});
+					}
+		});
 		map.on("mousedown", (e) => {
 			setTimeout(() =>{
 				if (this.disabled) return;
@@ -326,7 +361,7 @@ naissance.Brush = class extends ve.Class {
 		//Cursor handler
 		map.on("mousemove", (e) => {
 			this.cursor.setCoordinates(e.coordinate);
-			if (this.disabled || ["node", "node_override"].includes(main.brush.mode)) return;
+			if (this.disabled || ["fill_tool", "node", "node_override"].includes(main.brush.mode)) return;
 			
 			if (this._selected_geometry instanceof naissance.GeometryPolygon && (HTML.left_click || HTML.right_click)) {
 				let processed_geometry = (HTML.left_click) ?

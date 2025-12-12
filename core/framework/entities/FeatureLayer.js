@@ -62,6 +62,9 @@ naissance.FeatureLayer = class extends naissance.Feature {
 				
 				//Recalculate naissance.FeatureLayer.getProvincesLayer()
 				naissance.FeatureLayer.fetchProvincesLayer();
+				if (this._provinces_is_visible)
+					this.show();
+				delete this._provinces_is_visible;
 			}
 		} else if (value === "provinces") {
 			//Add to main._layers.province_layers if not already included
@@ -79,6 +82,8 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			
 			//Recalculate naissance.FeatureLayer.getProvincesLayer()
 			naissance.FeatureLayer.fetchProvincesLayer();
+			this._provinces_is_visible = JSON.parse(JSON.stringify(this._is_visible));
+			this.hide();
 		}
 		
 		//Set this._type
@@ -303,20 +308,6 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		});
 	}
 	
-	static _debugProvincesLayer () {
-		let provinces_layer = naissance.FeatureLayer.fetchProvincesLayer();
-		
-		let all_geometries = provinces_layer.getGeometries();
-		
-		for (let i = 0; i < all_geometries.length; i++)
-			all_geometries[i].setSymbol({
-				polygonFill: Colour.randomHex(),
-				polygonOpacity: 0.5
-			});
-		//provinces_layer.removeFrom(map);
-		provinces_layer.addTo(map);
-	}
-	
 	static fetchProvincesLayer () {
 		//Declare local instance variables
 		let all_feature_collections = [];
@@ -325,14 +316,15 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Declare local instance variables
 		let maptalks_geometries = [];
 		
+		//1. Populate maptalks_geometries
 		if (province_layers.length === 1) {
 			let all_geometries = province_layers[0].getAllGeometries();
 			
 			//Iterate over all_geometries and append them to maptalks_geometries
 			for (let i = 0; i < all_geometries.length; i++)
 				if (all_geometries[i] instanceof naissance.GeometryPolygon)
-					if (all_geometries[i].geometry)
-						maptalks_geometries.push(all_geometries[i].geometry.copy());
+					if (all_geometries[i].current_geometry)
+						maptalks_geometries.push(all_geometries[i].current_geometry);
 		} else if (province_layers.length > 1) {
 			//Iterate over all province_layers and convert them to geometry collections
 			for (let i = 0; i < province_layers.length; i++) {
@@ -342,8 +334,8 @@ naissance.FeatureLayer = class extends naissance.Feature {
 				//Iterate over all local_geometries and filter for naissance.GeometryPolygon
 				for (let x = 0; x < local_geometries.length; x++)
 					if (local_geometries[x] instanceof naissance.GeometryPolygon)
-						if (local_geometries[x].geometry)
-							raw_geometries.push(Geospatiale.convertMaptalksToTurf(local_geometries[x].geometry));
+						if (local_geometries[x].current_geometry)
+							raw_geometries.push(Geospatiale.convertMaptalksToTurf(local_geometries[x].current_geometry));
 				
 				//Create new turf.featureCollection() and parse it out to GeoJSON
 				all_feature_collections.push(turf.featureCollection(raw_geometries));
@@ -361,10 +353,23 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			}
 		}
 		
+		//2. Refresh layer
 		main._layers.provinces.clear(); //Clear all geometries in layer first
-		console.log(maptalks_geometries);
 		if (province_layers.length > 0)
 			main._layers.provinces.addGeometry(maptalks_geometries);
+		
+		//3. Draw layer onto map
+		let provinces_layer = main._layers.provinces;
+		
+		//Iterate over all_geometries
+		let all_geometries = provinces_layer.getGeometries();
+		
+		for (let i = 0; i < all_geometries.length; i++)
+			all_geometries[i].setSymbol({
+				polygonFill: Colour.randomHex(),
+				polygonOpacity: 0.5
+			});
+		provinces_layer.addTo(map);
 		
 		//Return statement
 		return main._layers.provinces;

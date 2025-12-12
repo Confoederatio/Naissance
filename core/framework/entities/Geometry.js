@@ -119,6 +119,15 @@ naissance.Geometry = class extends ve.Class {
 		}
 	}
 	
+	get current_geometry () {
+		//Declare local instance variables
+		let current_keyframe = this.current_keyframe;
+		
+		//Return statement
+		return (current_keyframe && current_keyframe.value[0]) ?
+			maptalks.Geometry.fromJSON(current_keyframe.value[0]) : undefined;
+	}
+	
 	get current_keyframe () {
 		//Return statement
 		return this.history.getKeyframe();
