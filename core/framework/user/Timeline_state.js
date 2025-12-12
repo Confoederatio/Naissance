@@ -42,20 +42,30 @@
 		let json = (arg0_json) ? arg0_json : {};
 		if (typeof json === "string") json = JSON.parse(json);
 		
-		//Clear map first, then naissance.Geometry.instances
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			naissance.Geometry.instances[i].remove();
-			
-		scene.map_component.clear();
-		naissance.Feature.instances = [];
-		naissance.Geometry.instances = [];
+		//0. Clear map
 		console.log(`DALS.Timeline.loadState called.`);
 		
-		//0. Handle main map
+		{
+			//Clear _layers
+			main._layers.province_layers = [];
+			if (main._layers.provinces)
+				main._layers.provinces.clear();
+			
+			//Clear geometries
+			for (let i = 0; i < naissance.Geometry.instances.length; i++)
+				naissance.Geometry.instances[i].remove();
+			
+			//Clear scene
+			scene.map_component.clear();
+			naissance.Feature.instances = [];
+			naissance.Geometry.instances = [];
+		}
+		
+		//1. Handle main map
 		if (json.map_settings)
 			UI_MapSettings.fromJSON(json.map_settings);
 		
-		//1. Handle naissance.Geometry classes
+		//2. Handle naissance.Geometry classes
 		//Iterate over json to load in each class
 		Object.iterate(json, (local_key, local_value) => {
 			if (local_value.class_name && local_value.type === "geometry") {
@@ -69,7 +79,7 @@
 			}
 		});
 		
-		//2. Handle naissance.Feature classes
+		//3. Handle naissance.Feature classes
 		Object.iterate(json, (local_key, local_value) => {
 			if (local_value.class_name && local_value.type === "feature") {
 				let feature_obj = new naissance[local_value.class_name]();
@@ -86,7 +96,7 @@
 			} catch (e) { console.warn(e); }
 		}
 		
-		//3. Force all UI_LeftbarHierarchy instances to .refresh()
+		//4. Force all UI_LeftbarHierarchy instances to .refresh()
 		setTimeout(() => {
 			UI_LeftbarHierarchy.refresh();
 		}, 100);

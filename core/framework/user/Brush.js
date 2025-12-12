@@ -316,7 +316,12 @@ naissance.Brush = class extends ve.Class {
 			let all_geometries = main._layers.provinces.getGeometries();
 			
 			for (let i = 0; i < all_geometries.length; i++)
-				if (all_geometries[i].containsPoint(e.coordinate))
+				if (all_geometries[i].containsPoint(e.coordinate)) {
+					if (this._selected_geometry.getLayer()?._type === "provinces") {
+						veToast(`<icon>warning</icon> You cannot use the fill tool on Polygons that are currently in a Province Layer!`);
+						break;
+					}
+					
 					if (!HTML.ctrl_pressed) {
 						DALS.Timeline.parseAction({
 							options: { name: "Add to Polygon", key: "add_to_polygon" },
@@ -338,6 +343,7 @@ naissance.Brush = class extends ve.Class {
 							}]
 						});
 					}
+				}
 		});
 		map.on("mousedown", (e) => {
 			setTimeout(() =>{

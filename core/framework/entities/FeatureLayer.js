@@ -233,8 +233,9 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					this.addEntity(local_geometry, true);
 		}
 		
-		//Draw HierarchyDatatype if possible
+		//Draw HierarchyDatatype if possible; switch type at bottom
 		this.drawHierarchyDatatype();
+		this.type = (json.type) ? json.type : "default";
 	}
 	
 	hasEntity (arg0_naissance_obj) {
@@ -304,6 +305,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			is_collapsed: this.is_collapsed,
 			name: this._name,
 			entities: entity_ids,
+			type: this._type,
 			options: this.options
 		});
 	}

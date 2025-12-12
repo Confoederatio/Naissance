@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/geospatiale/operations/planar_overlay.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/geospatiale/operations/planar_overlay.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Brush.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/province_test_01.naissance" beforeDir="false" afterPath="$PROJECT_DIR$/saves/province_test_01.naissance" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +73,7 @@
       <workItem from="1764001957906" duration="1192000" />
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
-      <workItem from="1765094029123" duration="78279000" />
+      <workItem from="1765094029123" duration="79498000" />
     </task>
     <servers />
   </component>
