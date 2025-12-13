@@ -15,5 +15,6 @@
   "hide_labels_by_default": false,
   "default_point_icon_folder": "D:\\Project 1706 - Naissance Electron\\gfx\\icons",
   "province_layer_opacity": 0.5,
-  "locale": ""
+  "locale": "",
+  "hierarchy_ordering": "features_at_top"
 }

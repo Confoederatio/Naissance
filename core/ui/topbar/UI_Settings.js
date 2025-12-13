@@ -59,7 +59,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 						editor_appearance: {
 							name: "Editor Appearance",
 							components_obj: {
-								hierarchy_ordering: new ve.Select({ //[WIP] - Implement hierarchy_ordering
+								hierarchy_ordering: new ve.Select({
 									features_at_top: {
 										name: "Features At Top"
 									},
@@ -74,19 +74,10 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 									onuserchange: (v) => {
 										main.settings.hierarchy_ordering = v;
 										UI_Settings.saveSettings();
+										UI_LeftbarHierarchy.refresh();
 									}
 								}),
-								locale: new ve.Select({
-									default: {
-										name: "English (EN-GB)"
-									},
-									de: {
-										name: "Deutsch (DE)"
-									},
-									fr: {
-										name: "Français (FR)"
-									}
-								}, {
+								locale: new ve.Select(config.localisation.locales, {
 									name: "Language",
 									tooltip: "The locale to change your UI to.",
 									selected: (main.settings.locale) ?
@@ -94,11 +85,11 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 									
 									onuserchange: (v) => {
 										//Declare local instance variables
-										let actual_locale = "";
-											if (v !== "default")
-												actual_locale = v;
+										let locale_obj = config.localisation.locales[v];
 										
 										//Apply locale first
+										let actual_locale = (locale_obj.key !== undefined) ? locale_obj.key : v;
+										
 										main.settings.locale = actual_locale;
 										ve.registry.locale = actual_locale;
 										UI_Settings.saveSettings();

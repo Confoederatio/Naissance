@@ -11,6 +11,26 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 		UI_LeftbarHierarchy.instances.push(this);
 	}
 	
+	drawFeatures () {
+		//Iterate over all naissance.FeatureGroups/naissance.FeatureLayers and render them recursively
+		for (let i = 0; i < naissance.Feature.instances.length; i++) {
+			let local_feature = naissance.Feature.instances[i];
+			
+			if (!local_feature._parent)
+				this.hierarchy_obj[`${local_feature.class_name}-${local_feature.id}`] = local_feature.drawHierarchyDatatype();
+		}
+	}
+	
+	drawGeometries () {
+		//Iterate over all naissance.Geometries and render them at base
+		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
+			let local_geometry = naissance.Geometry.instances[i];
+			
+			if (!local_geometry.parent && local_geometry.drawHierarchyDatatype)
+				this.hierarchy_obj[`${local_geometry.class_name}-${local_geometry.id}`] = local_geometry.drawHierarchyDatatype();
+		}
+	}
+	
 	refresh () {
 		//Declare local instance variables
 		let actions_bar = new ve.HierarchyDatatype({
@@ -51,23 +71,16 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 			}
 		});
 			actions_bar.element.classList.add("actions-bar");
+		let geometries_at_top = (global?.main?.settings?.hierarchy_ordering === "geometries_at_top");
+			
 		this.hierarchy_obj = {};
-		
-		//1. Iterate over all naissance.FeatureGroups/naissance.FeatureLayers and render them recursively
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
-			let local_feature = naissance.Feature.instances[i];
-			
-			if (!local_feature._parent)
-				this.hierarchy_obj[`${local_feature.class_name}-${local_feature.id}`] = local_feature.drawHierarchyDatatype();
-		}
-		
-		//2. Iterate over all naissance.Geometries and render them at base
-		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-			let local_geometry = naissance.Geometry.instances[i];
-			
-			if (!local_geometry.parent && local_geometry.drawHierarchyDatatype)
-				this.hierarchy_obj[`${local_geometry.class_name}-${local_geometry.id}`] = local_geometry.drawHierarchyDatatype();
-		}
+			if (!geometries_at_top) {
+				this.drawFeatures();
+				this.drawGeometries();
+			} else {
+				this.drawGeometries();
+				this.drawFeatures();
+			}
 		
 		let current_hierarchy = new ve.Hierarchy({
 			actions_bar: actions_bar,
