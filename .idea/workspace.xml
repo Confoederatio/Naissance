@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDateLength.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDateLength.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRadio.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRadio.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +72,7 @@
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
       <workItem from="1765094029123" duration="81362000" />
-      <workItem from="1765536946194" duration="6508000" />
+      <workItem from="1765536946194" duration="8735000" />
     </task>
     <servers />
   </component>

@@ -7,9 +7,13 @@
  * ##### Constructor:
  * - `arg0_value`: {@link Object}
  *   - `<radio_group_key>`: {@link Object}
- *     - `<radio_key>`: {@link boolean}
- *   - `<radio_key>`: {@link boolean}
+ *     - `.is_category`: true - You must set `.is_category` to true for it to take effect.
+ *     - `<radio_key>`: {@link Object}
+ *   - `<radio_key>`: {@link Object}
+ *     - `.name`: {@link string}
+ *     - `.selected`: {@link boolean}
  * - `arg1_options`: {@link Object}
+ *   - `.selected`: {@link string} - Overrides the `<option_key>.selected` option in `arg0_value`.
  * 
  * ##### Instance:
  * - `.v`: {@link Object}<{@link boolean}> - Recursive value, the same as `arg0_value`.
@@ -24,7 +28,7 @@
  * @memberof ve.Component
  * @type {ve.Radio}
  */
-ve.Radio = class extends ve.Component {
+ve.Radio = class extends ve.Component { //[WIP] - ve.Radio should be refactored similarly to ve.Select
 	static demo_value = {
 		radio_one: true,
 		radio_two: false,
@@ -153,12 +157,16 @@ ve.Radio = class extends ve.Component {
 		
 		//Iterate over all keys in value
 		Object.iterate(value, (local_key, local_value) => {
-			if (typeof local_value === "boolean") {
-				html_string.push(`<li><input id = "${local_key}" name = "radio-${local_this.id}" type = "radio"${(local_value) ? " checked" : ""}>${(local_key) ? `<label for = "${local_key}">${local_key}</label>` : ""}</li>`);
-			} else if (typeof local_value === "object") {
+			let is_checked = (local_value === true || local_value.checked);
+				if (local_this.options.checked === local_key) is_checked = true;
+			
+			if (typeof local_value === "object" && local_value.is_category) {
 				html_string.push(`<ul id = "${local_key}">`);
 					html_string.push(...ve.Radio.generateHTMLRecursively(local_value, local_this));
 				html_string.push(`</ul>`);
+			} else {
+				if (local_key !== "is_category")
+					html_string.push(`<li><input id = "${local_key}" name = "radio-${local_this.id}" type = "radio"${(is_checked) ? " checked" : ""}>${(local_key) ? `<label for = "${local_key}">${(local_value?.name) ? local_value?.name : local_key}</label>` : ""}</li>`);
 			}
 		});
 		

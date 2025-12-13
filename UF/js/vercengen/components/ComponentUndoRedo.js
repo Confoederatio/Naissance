@@ -391,27 +391,33 @@ ve.UndoRedo = class extends ve.Component {
 					filter_button: new ve.Button(() => {
 						let local_context_menu = new ve.ContextMenu({
 							radio_select: new ve.Radio({
-								"Alphabetical (A-Z)": (this.options.sort_mode === "alphabetical_ascending"),
-								"Alphabetical (Z-A)": (this.options.sort_mode === "alphabetical_descending"),
-								"Chronological (Ascending)": (this.options.sort_mode === "chronological_ascending"),
-								"Chronological (Descending)": (this.options.sort_mode === "chronological_descending"),
-								"Last Modified": (this.options.sort_mode === "last_modified"),
-								"Least Actions": (this.options.sort_mode === "least_actions"),
-								"Most Actions": (this.options.sort_mode === "most_actions")
+								alphabetical_ascending: {
+									name: "Alphabetical (A-Z)"
+								},
+								alphabetical_descending: {
+									name: "Alphabetical (Z-A)"
+								},
+								chronological_ascending: {
+									name: "Chronological (Ascending)"
+								},
+								chronological_descending: {
+									name: "Chronological (Descending)"
+								},
+								last_modified: {
+									name: "Last Modified"
+								},
+								least_actions: {
+									name: "Least Actions"
+								},
+								most_actions: {
+									name: "Most Actions"
+								}
 							}, {
 								name: "<b>Sort Timelines:</b><br><br>",
+								selected: this.options.sort_mode,
+								
 								onchange: (v, e) => {
-									let local_dictionary = {
-										"Alphabetical (A-Z)": "alphabetical_ascending",
-										"Alphabetical (Z-A)": "alphabetical_descending",
-										"Chronological (Ascending)": "chronological_ascending",
-										"Chronological (Descending)": "chronological_descending",
-										"Last Modified": "last_modified",
-										"Least Actions": "least_actions",
-										"Most Actions": "most_actions"
-									};
-									
-									this.options.sort_mode = local_dictionary[v];
+									this.options.sort_mode = v;
 									this.draw(true);
 								}
 							})
