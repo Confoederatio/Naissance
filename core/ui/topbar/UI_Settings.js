@@ -67,11 +67,49 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										name: "Geometries At Top"
 									}
 								}, {
+									name: "Hierarchy Ordering",
+									selected: (main.settings.hierarchy_ordering) ? 
+										main.settings.hierarchy_ordering : "features_at_top",
+									
 									onuserchange: (v) => {
 										main.settings.hierarchy_ordering = v;
 										UI_Settings.saveSettings();
+									}
+								}),
+								locale: new ve.Select({
+									default: {
+										name: "English (EN-GB)"
 									},
-									selected: (main.settings.hierarchy_ordering) ? main.settings.hierarchy_ordering : "features_at_top"
+									de: {
+										name: "Deutsch (DE)"
+									},
+									fr: {
+										name: "Français (FR)"
+									}
+								}, {
+									name: "Language",
+									tooltip: "The locale to change your UI to.",
+									selected: (main.settings.locale) ?
+										main.settings.locale : "default",
+									
+									onuserchange: (v) => {
+										//Declare local instance variables
+										let actual_locale = "";
+											if (v !== "default")
+												actual_locale = v;
+										
+										//Apply locale first
+										main.settings.locale = actual_locale;
+										ve.registry.locale = actual_locale;
+										UI_Settings.saveSettings();
+										
+										//Reload save
+										let cached_state = DALS.Timeline.saveState();
+										
+										ve.clear();
+										initialiseGlobal();
+										setTimeout(() => DALS.Timeline.loadState(cached_state), 200);
+									}
 								})
 							}
 						},

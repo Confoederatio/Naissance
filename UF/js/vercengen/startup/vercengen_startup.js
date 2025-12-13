@@ -87,6 +87,28 @@ global.path = require("path");
 		};
 	
 	/**
+	 * Clears all Vercengen components from both state and DOM.
+	 */
+	ve.clear = function () {
+		//Iterate over all ve classes and try to close them
+		Object.iterate(ve, (local_key, local_value) => {
+			if (typeof local_value === "function")
+				if (local_value.instances) {
+					for (let i = 0; i < local_value.instances.length; i++) {
+						if (local_value.instances[i]?.close) try {
+							local_value.instances[i].close();
+						} catch (e) {}
+						if (local_value.instances[i]?.remove) try {
+							local_value.instances[i].remove();
+						} catch (e) {}
+					}
+					
+					local_value.instances = [];
+				}
+		});
+	};
+	
+	/**
 	 * Returns all non-evaluated files in a folder, so long as an evaluated set is provided.
 	 *
 	 * @param {string} arg0_folder_path
