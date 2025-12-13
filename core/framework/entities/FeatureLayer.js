@@ -369,7 +369,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		for (let i = 0; i < all_geometries.length; i++)
 			all_geometries[i].setSymbol({
 				polygonFill: Colour.randomHex(),
-				polygonOpacity: 0.5
+				polygonOpacity: Math.returnSafeNumber(main.settings.province_layer_opacity, 0.5)
 			});
 		provinces_layer.addTo(map);
 		
