@@ -258,9 +258,8 @@ ve.FileExplorer = class extends ve.Component {
 		}, { disabled: true });
 		if (!this.options.disable_actions)
 			hierarchy_obj.selection = new ve.HierarchyDatatype({
-				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_clipboard")} (${String.formatNumber(this.clipboard.length)})` : loc("ve.registry.localisation.FileExplorer_clipboard_is_empty")} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `
-				${String.formatNumber(this.selected.length)} Element(s) selected` : ""}
-				`, { style: { marginRight: "auto", padding: 0 }}),
+				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_clipboard")} (${String.formatNumber(this.clipboard.length)})` : loc("ve.registry.localisation.FileExplorer_clipboard_is_empty")} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_elements_selected", String.formatNumber(this.selected.length))}` : ""}
+				`, { style: { marginRight: "auto", padding: 0 }}), //[WIP] - Fix localisation
 				actions_menu: new ve.RawInterface({
 					copy_button: new ve.Button((e) => {
 						if (this.selected.length === 0) return; //Internal guard clause if nothing is selected
