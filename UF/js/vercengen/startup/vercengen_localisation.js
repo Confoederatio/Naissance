@@ -129,5 +129,30 @@ ve.registry.localisation = {
 	List_insert_item_before: "Insert Item Before",
 	List_shift: "Shift",
 	List_shift_left: "Shift Left",
-	List_shift_right: "Shift Right"
+	List_shift_right: "Shift Right",
+	
+	//UndoRedo EN-GB
+	UndoRedo_actions_map: "Actions Map",
+	UndoRedo_branch_at_node: "Branch At Node",
+	UndoRedo_coords_display: "X: £1£, Y: £2£ | Scale: £3£",
+	UndoRedo_initialisation: "S. Init",
+	UndoRedo_jump_to: "Jump To",
+	UndoRedo_name: "Name:",
+	UndoRedo_split_from_timeline: "Split From Timeline",
+	UndoRedo_timeline: "Timeline",
+	UndoRedo_timeline_view: "Timeline View",
+	UndoRedo_unlisted: "Unlisted",
+	
+	//Sort filter
+	UndoRedo_sorting_filter: "Sorting Filter",
+	UndoRedo_sort_timelines: "Sort Timelines:",
+	
+	//Sort filters
+	UndoRedo_alphabetical_ascending: "Alphabetical (A-Z)",
+	UndoRedo_alphabetical_descending: "Alphabetical (Z-A)",
+	UndoRedo_chronological_ascending: "Chronological (Ascending)",
+	UndoRedo_chronological_descending: "Chronological (Descending)",
+	UndoRedo_last_modified: "Last Modified",
+	UndoRedo_least_actions: "Least Actions",
+	UndoRedo_most_actions: "Most Actions"
 };
