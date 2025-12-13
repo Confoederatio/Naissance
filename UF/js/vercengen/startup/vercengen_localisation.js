@@ -210,7 +210,7 @@ ve.registry.localisation = {
 	FileExplorer_copy_selected_de: "Ausgewählte kopieren",
 	FileExplorer_delete_files_de: "£1£ Dateien löschen",
 	FileExplorer_do_you_want_to_overwrite_file_de: "Datei existiert bereits. Möchten Sie sie überschreiben?",
-	FileExplorer_elements_selected: "£1£ Elemente ausgewählt",
+	FileExplorer_elements_selected_de: "£1£ Elemente ausgewählt",
 	FileExplorer_error_load_de: "Fehler beim Laden der Datei £1£: £2£",
 	FileExplorer_error_load_save_file_de: "Fehler beim Laden der Speicherdatei",
 	FileExplorer_load_save_file_de: "Speicherdatei laden",
