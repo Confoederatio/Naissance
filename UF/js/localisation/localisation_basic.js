@@ -3,6 +3,7 @@
 	/**
 	 * Performs a localisation replacement for the text in question.
 	 * 
+	 * @memberof global
 	 * @param {string} arg0_localisation_key - Starts from the `global` root {@link Object}.
 	 * @param {...string} argn_arguments - Any arguments that should be replaced by the key text in £n£ form, i.e. £1£, £2£.
 	 * 

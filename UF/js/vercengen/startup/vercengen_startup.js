@@ -4,6 +4,10 @@ global.path = require("path");
 
 //Initialise functions
 {
+	/**
+	 * @namespace global
+	 */
+	if (!global) global = {};
 	if (!global.ve)
 		/**
 		 * The root namespace for all Vercengen classes and options.
