@@ -1,8 +1,9 @@
 //Set ve.registry.localisation defaults
 ve.registry.localisation = {
-	//[WIP] - EN-GB still needs to replace veUndoRedo, veWYSIWYG, and ve.Feature classes
+	//EN-GB (British English, Default)
 	
-	//FileExplorer EN-GB
+	//ve.Component
+	//FileExplorer
 	FileExplorer_are_you_sure_delete: "Are you sure you want to delete the following files?<br><br>£1£<br><br>This action cannot be undone!",
 	FileExplorer_are_you_sure_copy_paste: "Are you sure you want to copy/paste £1£ file(s) to £2£?",
 	FileExplorer_are_you_sure_load: "Are you sure you want to load £1£?",
@@ -36,7 +37,7 @@ ve.registry.localisation = {
 	FileExplorer_specified_file_path_already_exists: "The specified path already exists as a file! Delete it first before creating a new file with the same name.",
 	FileExplorer_successfully_saved_file_as: "Successfully saved file as: £1£",
 	
-	//FileExplorer (File Operations) EN-GB
+	//FileExplorer (File Operations)
 	FileExplorer_copying_files_to: "Copying £1£ file(s) to £2£",
 	FileExplorer_copying_to: "Copying £1£ to £2£",
 	FileExplorer_deleting_files: "Deleting £1£ file(s)",
@@ -50,10 +51,10 @@ ve.registry.localisation = {
 	FileExplorer_rename_file: "Rename File",
 	FileExplorer_rename_file_to: "Rename file £1£ to:",
 	
-	//Hierarchy EN-GB
+	//Hierarchy
 	Hierarchy_search_for_item: "Search for item ...",
 	
-	//ScriptManager EN-GB
+	//ScriptManager
 	ScriptManager_are_you_sure_clear_console: "Are you sure you want to clear the current console?",
 	ScriptManager_clear_blockly_on_error: "Clear Blockly on error",
 	ScriptManager_clear_console: "Clear Console",
@@ -90,19 +91,20 @@ ve.registry.localisation = {
 	ScriptManager_view: "View",
 	ScriptManager_view_file_explorer: "View File Explorer",
 	
-	//Button EN-GB
+	//Button
 	Button_confirm: "Confirm",
 	
-	//DateLength EN-GB
+	//DateLength
 	DateLength_days: "Days",
 	DateLength_months: "Months",
 	DateLength_years: "Years",
 	
-	//File EN-GB
+	//File
 	File_already_exists: "File already exists. Do you want to overwrite it?",
 	File_can_only_select_files: "You can only select files.",
 	File_can_only_select_folders: "You can only select folders.",
 	File_can_only_select_one_file: "You can only select 1 file/folder path.",
+	File_cancel: "Cancel",
 	File_confirm: "Confirm",
 	File_error_saving_file: "Error Saving File",
 	File_error_saving_file_desc: "Error saving file: £1£",
@@ -117,10 +119,10 @@ ve.registry.localisation = {
 	File_selected_files: "Selected £1£ file(s).",
 	File_successfully_saved_file: "Successfully saved file in: £1£",
 	
-	//Interface EN-GB
+	//Interface
 	Interface_folder: "Folder",
 	
-	//List EN-GB
+	//List
 	List_delete_item: "Delete Item",
 	List_error_max_items_reached: "The length of the current list cannot exceed £1£ element(s).",
 	List_error_min_items_reached: "The length of the current list cannot go below £1£ element(s).",
@@ -131,7 +133,7 @@ ve.registry.localisation = {
 	List_shift_left: "Shift Left",
 	List_shift_right: "Shift Right",
 	
-	//UndoRedo EN-GB
+	//UndoRedo
 	UndoRedo_actions_map: "Actions Map",
 	UndoRedo_branch_at_node: "Branch At Node",
 	UndoRedo_coords_display: "X: £1£, Y: £2£ | Scale: £3£",
@@ -154,5 +156,405 @@ ve.registry.localisation = {
 	UndoRedo_chronological_descending: "Chronological (Descending)",
 	UndoRedo_last_modified: "Last Modified",
 	UndoRedo_least_actions: "Least Actions",
-	UndoRedo_most_actions: "Most Actions"
+	UndoRedo_most_actions: "Most Actions",
+	
+	//WYSIWYG
+	WYSIWYG_align_centre: "Align Centre",
+	WYSIWYG_align_left: "Align Left",
+	WYSIWYG_align_right: "Align Right",
+	WYSIWYG_bold: "Bold",
+	WYSIWYG_done: "Done",
+	WYSIWYG_indent: "Indent",
+	WYSIWYG_insert_link: "Insert Link",
+	WYSIWYG_insert_ordered_list: "Insert ordered list",
+	WYSIWYG_insert_unordered_list: "Insert unordered list",
+	WYSIWYG_italic: "Italic",
+	WYSIWYG_justify: "Justify",
+	WYSIWYG_open_in_new_tab: "Open in New Tab?",
+	WYSIWYG_outdent: "Outdent",
+	WYSIWYG_redo: "Redo",
+	WYSIWYG_remove_format: "Remove format",
+	WYSIWYG_show_html_code: "Show HTML Code",
+	WYSIWYG_strikethrough: "Strikethrough",
+	WYSIWYG_underline: "Underline",
+	WYSIWYG_undo: "Undo",
+	WYSIWYG_unlink: "Unlink",
+	
+	//ve.Feature
+	//Confirm
+	Confirm_confirm: "Confirm",
+	Confirm_no: "No",
+	Confirm_yes: "Yes",
+	
+	//DE (German)
+	
+	//ve.Component
+	//FileExplorer
+	FileExplorer_are_you_sure_delete_de: "Sind Sie sicher, dass Sie die folgenden Dateien löschen wollen?<br><br>£1£<br><br>Diese Aktion kann nicht rückgängig gemacht werden!",
+	FileExplorer_are_you_sure_copy_paste_de: "Sind Sie sicher, dass Sie £1£ Datei(en) nach £2£ kopieren/einfügen wollen?",
+	FileExplorer_are_you_sure_load_de: "Sind Sie sicher, dass Sie £1£ laden wollen?",
+	FileExplorer_back_de: "Zurück",
+	FileExplorer_cannot_create_unnamed_folder_de: "Sie können keinen Ordner ohne Namen erstellen.",
+	FileExplorer_clear_clipboard_de: "Zwischenablage leeren",
+	FileExplorer_clipboard_de: "Zwischenablage",
+	FileExplorer_clipboard_is_empty_de: "Zwischenablage ist leer.",
+	FileExplorer_create_a_new_file_de: "Neue Datei erstellen:",
+	FileExplorer_create_new_file_de: "Neue Datei erstellen",
+	FileExplorer_create_new_folder_de: "Neuen Ordner erstellen",
+	FileExplorer_create_a_new_folder_de: "Neuen Ordner erstellen:",
+	FileExplorer_created_empty_text_file_de: "Leere Textdatei erstellt unter: £1£",
+	FileExplorer_cut_paste_files_de: "£1£ Dateien ausschneiden/einfügen",
+	FileExplorer_confirm_de: "Bestätigen",
+	FileExplorer_copied_elements_to_clipboard_de: "£1£ Elemente in die Zwischenablage kopiert.",
+	FileExplorer_copy_selected_de: "Ausgewählte kopieren",
+	FileExplorer_delete_files_de: "£1£ Dateien löschen",
+	FileExplorer_do_you_want_to_overwrite_file_de: "Datei existiert bereits. Möchten Sie sie überschreiben?",
+	FileExplorer_error_load_de: "Fehler beim Laden der Datei £1£: £2£",
+	FileExplorer_error_load_save_file_de: "Fehler beim Laden der Speicherdatei",
+	FileExplorer_load_save_file_de: "Speicherdatei laden",
+	FileExplorer_loaded_save_file_de: "Speicherdatei £1£ geladen",
+	FileExplorer_move_files_de: "£1£ Dateien verschieben",
+	FileExplorer_paste_clipboard_de: "Zwischenablage einfügen",
+	FileExplorer_paste_files_de: "£1£ Dateien einfügen",
+	FileExplorer_rename_de: "Umbenennen",
+	FileExplorer_save_file_de: "Datei speichern",
+	FileExplorer_save_file_as_de: "Datei speichern unter:",
+	FileExplorer_select_de: "Auswählen",
+	FileExplorer_specified_file_path_already_exists_de: "Der angegebene Pfad existiert bereits als Datei! Löschen Sie sie zuerst, bevor Sie eine neue Datei mit demselben Namen erstellen.",
+	FileExplorer_successfully_saved_file_as_de: "Datei erfolgreich gespeichert unter: £1£",
+	
+	//FileExplorer (File Operations)
+	FileExplorer_copying_files_to_de: "Kopiere £1£ Datei(en) nach £2£",
+	FileExplorer_copying_to_de: "Kopiere £1£ nach £2£",
+	FileExplorer_deleting_files_de: "Lösche £1£ Datei(en)",
+	FileExplorer_deleting_path_de: "Lösche £1£",
+	FileExplorer_done_de: "Fertig",
+	FileExplorer_error_could_not_be_renamed_de: "FEHLER: £1£ konnte nicht umbenannt werden: £2£",
+	FileExplorer_eta_remaining_de: "£1£% - £2£ verbleibend",
+	FileExplorer_finished_moving_files_de: "Verschieben der Dateien abgeschlossen",
+	FileExplorer_of_progress_de: "(£1£ von £2£)",
+	FileExplorer_moved_files_de: "Verschieben von £1£ Datei(en) nach £2£ abgeschlossen",
+	FileExplorer_rename_file_de: "Datei umbenennen",
+	FileExplorer_rename_file_to_de: "Datei £1£ umbenennen in:",
+	
+	//Hierarchy
+	Hierarchy_search_for_item_de: "Suche nach Element ...",
+	
+	//ScriptManager
+	ScriptManager_are_you_sure_clear_console_de: "Sind Sie sicher, dass Sie die aktuelle Konsole leeren wollen?",
+	ScriptManager_clear_blockly_on_error_de: "Blockly bei Fehler leeren",
+	ScriptManager_clear_console_de: "Konsole leeren",
+	ScriptManager_codemirror_theme_de: "Codemirror-Theme",
+	ScriptManager_console_de: "Konsole",
+	ScriptManager_could_not_load_settings_de: "Nicht-ScriptManager-Einstellungen konnten nicht geladen werden.",
+	ScriptManager_display_load_errors_de: "Ladefehler anzeigen",
+	ScriptManager_editor_theme_de: "Editor-Theme",
+	ScriptManager_enter_console_command_de: "Konsolenbefehl eingeben ...",
+	ScriptManager_error_compatibility_de: "Sind Sie sicher, dass diese Datei £1£-kompatibel ist? Blockly wurde deaktiviert und die Datei ist nur über CodeMirror bearbeitbar.",
+	ScriptManager_error_loading_settings_de: "Fehler beim Laden der Einstellungen",
+	ScriptManager_error_reading_file_de: "Fehler beim Lesen der Datei",
+	ScriptManager_help_de: "Hilfe",
+	ScriptManager_help_menu_de: "Hilfemenü:",
+	ScriptManager_hide_blockly_de: "Blockly verbergen",
+	ScriptManager_hide_show_blockly_de: "Blockly-Arbeitsbereich bei Fehler verbergen/anzeigen",
+	ScriptManager_load_settings_de: "Einstellungen laden",
+	ScriptManager_none_de: "Keine",
+	ScriptManager_note_de: "Hinweis:",
+	ScriptManager_keybinds_de: "Tastenbelegungen",
+	ScriptManager_prints_help_information_de: "Gibt Hilfeinformationen aus.",
+	ScriptManager_run_de: "Ausführen",
+	ScriptManager_run_current_file_de: "Aktuelle Datei ausführen",
+	ScriptManager_run_settings_de: "Ausführungseinstellungen:",
+	ScriptManager_save_settings_de: "Einstellungen speichern",
+	ScriptManager_saved_settings_de: "Einstellungen in £1£ gespeichert!",
+	ScriptManager_send_de: "Senden",
+	ScriptManager_settings_de: "Einstellungen",
+	ScriptManager_show_blockly_de: "Blockly anzeigen",
+	ScriptManager_stack_trace_de: "Stack Trace:",
+	ScriptManager_theme_default_de: "Standard",
+	ScriptManager_theme_light_de: "Hell",
+	ScriptManager_trust_warning_de: "Stellen Sie sicher, dass Sie dem Code vertrauen, bevor Sie ihn ausführen.",
+	ScriptManager_view_de: "Ansicht",
+	ScriptManager_view_file_explorer_de: "Dateimanager anzeigen",
+	
+	//Button
+	Button_confirm_de: "Bestätigen",
+	
+	//DateLength
+	DateLength_days_de: "Tage",
+	DateLength_months_de: "Monate",
+	DateLength_years_de: "Jahre",
+	
+	//File
+	File_already_exists_de: "Datei existiert bereits. Möchten Sie sie überschreiben?",
+	File_can_only_select_files_de: "Sie können nur Dateien auswählen.",
+	File_can_only_select_folders_de: "Sie können nur Ordner auswählen.",
+	File_can_only_select_one_file_de: "Sie können nur 1 Datei/Ordnerpfad auswählen.",
+	File_cancel_de: "Abbrechen",
+	File_confirm_de: "Bestätigen",
+	File_error_saving_file_de: "Fehler beim Speichern der Datei",
+	File_error_saving_file_desc_de: "Fehler beim Speichern der Datei: £1£",
+	File_must_select_valid_path_de: "Sie müssen einen gültigen Datei-/Ordnerpfad auswählen.",
+	File_open_file_de: "Datei öffnen",
+	File_open_files_de: "Dateien öffnen",
+	File_open_folder_de: "Ordner öffnen",
+	File_open_folders_de: "Ordner öffnen",
+	File_save_file_de: "Datei speichern",
+	File_save_file_as_de: "Datei speichern unter ...",
+	File_select_file_de: "Datei auswählen",
+	File_selected_files_de: "£1£ Datei(en) ausgewählt.",
+	File_successfully_saved_file_de: "Datei erfolgreich gespeichert in: £1£",
+	
+	//Interface
+	Interface_folder_de: "Ordner",
+	
+	//List
+	List_delete_item_de: "Element löschen",
+	List_error_max_items_reached_de: "Die Länge der aktuellen Liste darf £1£ Element(e) nicht überschreiten.",
+	List_error_min_items_reached_de: "Die Länge der aktuellen Liste darf £1£ Element(e) nicht unterschreiten.",
+	List_info_edit_item_de: "Element bearbeiten",
+	List_insert_item_after_de: "Element danach einfügen",
+	List_insert_item_before_de: "Element davor einfügen",
+	List_shift_de: "Verschieben",
+	List_shift_left_de: "Nach links verschieben",
+	List_shift_right_de: "Nach rechts verschieben",
+	
+	//UndoRedo
+	UndoRedo_actions_map_de: "Aktionskarte",
+	UndoRedo_branch_at_node_de: "Bei Knoten verzweigen",
+	UndoRedo_coords_display_de: "X: £1£, Y: £2£ | Skalierung: £3£",
+	UndoRedo_initialisation_de: "S. Init",
+	UndoRedo_jump_to_de: "Springe zu",
+	UndoRedo_name_de: "Name:",
+	UndoRedo_split_from_timeline_de: "Von Zeitlinie abspalten",
+	UndoRedo_timeline_de: "Zeitlinie",
+	UndoRedo_timeline_view_de: "Zeitlinienansicht",
+	UndoRedo_unlisted_de: "Ungelistet",
+	
+	//Sort filter
+	UndoRedo_sorting_filter_de: "Sortierfilter",
+	UndoRedo_sort_timelines_de: "Zeitlinien sortieren:",
+	
+	//Sort filters
+	UndoRedo_alphabetical_ascending_de: "Alphabetisch (A-Z)",
+	UndoRedo_alphabetical_descending_de: "Alphabetisch (Z-A)",
+	UndoRedo_chronological_ascending_de: "Chronologisch (Aufsteigend)",
+	UndoRedo_chronological_descending_de: "Chronologisch (Absteigend)",
+	UndoRedo_last_modified_de: "Zuletzt geändert",
+	UndoRedo_least_actions_de: "Wenigste Aktionen",
+	UndoRedo_most_actions_de: "Meiste Aktionen",
+	
+	//WYSIWYG
+	WYSIWYG_align_centre_de: "Zentriert ausrichten",
+	WYSIWYG_align_left_de: "Linksbündig ausrichten",
+	WYSIWYG_align_right_de: "Rechtsbündig ausrichten",
+	WYSIWYG_bold_de: "Fett",
+	WYSIWYG_done_de: "Fertig",
+	WYSIWYG_indent_de: "Einrücken",
+	WYSIWYG_insert_link_de: "Link einfügen",
+	WYSIWYG_insert_ordered_list_de: "Nummerierte Liste einfügen",
+	WYSIWYG_insert_unordered_list_de: "Aufzählung einfügen",
+	WYSIWYG_italic_de: "Kursiv",
+	WYSIWYG_justify_de: "Blocksatz",
+	WYSIWYG_open_in_new_tab_de: "In neuem Tab öffnen?",
+	WYSIWYG_outdent_de: "Ausrücken",
+	WYSIWYG_redo_de: "Wiederholen",
+	WYSIWYG_remove_format_de: "Formatierung entfernen",
+	WYSIWYG_show_html_code_de: "HTML-Code anzeigen",
+	WYSIWYG_strikethrough_de: "Durchgestrichen",
+	WYSIWYG_underline_de: "Unterstrichen",
+	WYSIWYG_undo_de: "Rückgängig",
+	WYSIWYG_unlink_de: "Link entfernen",
+	
+	//ve.Feature
+	//Confirm
+	Confirm_confirm_de: "Bestätigen",
+	Confirm_no_de: "Nein",
+	Confirm_yes_de: "Ja",
+	
+	//FR (French)
+	
+	//ve.Component
+	//FileExplorer
+	FileExplorer_are_you_sure_delete_fr: "Êtes-vous sûr de vouloir supprimer les fichiers suivants ?<br><br>£1£<br><br>Cette action est irréversible !",
+	FileExplorer_are_you_sure_copy_paste_fr: "Êtes-vous sûr de vouloir copier/coller £1£ fichier(s) vers £2£ ?",
+	FileExplorer_are_you_sure_load_fr: "Êtes-vous sûr de vouloir charger £1£ ?",
+	FileExplorer_back_fr: "Retour",
+	FileExplorer_cannot_create_unnamed_folder_fr: "Vous ne pouvez pas créer un dossier sans nom.",
+	FileExplorer_clear_clipboard_fr: "Vider le presse-papiers",
+	FileExplorer_clipboard_fr: "Presse-papiers",
+	FileExplorer_clipboard_is_empty_fr: "Le presse-papiers est vide.",
+	FileExplorer_create_a_new_file_fr: "Créer un nouveau fichier :",
+	FileExplorer_create_new_file_fr: "Créer un nouveau fichier",
+	FileExplorer_create_new_folder_fr: "Créer un nouveau dossier",
+	FileExplorer_create_a_new_folder_fr: "Créer un nouveau dossier :",
+	FileExplorer_created_empty_text_file_fr: "Fichier texte vide créé à : £1£",
+	FileExplorer_cut_paste_files_fr: "Couper/Coller £1£ fichiers",
+	FileExplorer_confirm_fr: "Confirmer",
+	FileExplorer_copied_elements_to_clipboard_fr: "£1£ éléments copiés dans le presse-papiers.",
+	FileExplorer_copy_selected_fr: "Copier la sélection",
+	FileExplorer_delete_files_fr: "Supprimer £1£ fichiers",
+	FileExplorer_do_you_want_to_overwrite_file_fr: "Le fichier existe déjà. Voulez-vous l'écraser ?",
+	FileExplorer_error_load_fr: "Erreur lors du chargement du fichier £1£ : £2£",
+	FileExplorer_error_load_save_file_fr: "Erreur de chargement de la sauvegarde",
+	FileExplorer_load_save_file_fr: "Charger une sauvegarde",
+	FileExplorer_loaded_save_file_fr: "Sauvegarde £1£ chargée",
+	FileExplorer_move_files_fr: "Déplacer £1£ fichiers",
+	FileExplorer_paste_clipboard_fr: "Coller le presse-papiers",
+	FileExplorer_paste_files_fr: "Coller £1£ fichiers",
+	FileExplorer_rename_fr: "Renommer",
+	FileExplorer_save_file_fr: "Enregistrer le fichier",
+	FileExplorer_save_file_as_fr: "Enregistrer sous :",
+	FileExplorer_select_fr: "Sélectionner",
+	FileExplorer_specified_file_path_already_exists_fr: "Le chemin spécifié existe déjà ! Supprimez-le avant de créer un nouveau fichier avec le même nom.",
+	FileExplorer_successfully_saved_file_as_fr: "Fichier enregistré avec succès sous : £1£",
+	
+	//FileExplorer (File Operations)
+	FileExplorer_copying_files_to_fr: "Copie de £1£ fichier(s) vers £2£",
+	FileExplorer_copying_to_fr: "Copie de £1£ vers £2£",
+	FileExplorer_deleting_files_fr: "Suppression de £1£ fichier(s)",
+	FileExplorer_deleting_path_fr: "Suppression de £1£",
+	FileExplorer_done_fr: "Terminé",
+	FileExplorer_error_could_not_be_renamed_fr: "ERREUR : £1£ n'a pas pu être renommé : £2£",
+	FileExplorer_eta_remaining_fr: "£1£% - £2£ restants",
+	FileExplorer_finished_moving_files_fr: "Déplacement des fichiers terminé",
+	FileExplorer_of_progress_fr: "(£1£ sur £2£)",
+	FileExplorer_moved_files_fr: "Déplacement de £1£ fichier(s) vers £2£ terminé",
+	FileExplorer_rename_file_fr: "Renommer le fichier",
+	FileExplorer_rename_file_to_fr: "Renommer le fichier £1£ en :",
+	
+	//Hierarchy
+	Hierarchy_search_for_item_fr: "Rechercher un élément...",
+	
+	//ScriptManager
+	ScriptManager_are_you_sure_clear_console_fr: "Êtes-vous sûr de vouloir effacer la console actuelle ?",
+	ScriptManager_clear_blockly_on_error_fr: "Effacer Blockly en cas d'erreur",
+	ScriptManager_clear_console_fr: "Effacer la console",
+	ScriptManager_codemirror_theme_fr: "Thème Codemirror",
+	ScriptManager_console_fr: "Console",
+	ScriptManager_could_not_load_settings_fr: "Impossible de charger les paramètres non liés au ScriptManager.",
+	ScriptManager_display_load_errors_fr: "Afficher les erreurs de chargement",
+	ScriptManager_editor_theme_fr: "Thème de l'éditeur",
+	ScriptManager_enter_console_command_fr: "Entrer une commande...",
+	ScriptManager_error_compatibility_fr: "Êtes-vous sûr que ce fichier est compatible £1£ ? Blockly a été désactivé et le fichier n'est modifiable que via CodeMirror.",
+	ScriptManager_error_loading_settings_fr: "Erreur de chargement des paramètres",
+	ScriptManager_error_reading_file_fr: "Erreur de lecture du fichier",
+	ScriptManager_help_fr: "Aide",
+	ScriptManager_help_menu_fr: "Menu d'aide :",
+	ScriptManager_hide_blockly_fr: "Masquer Blockly",
+	ScriptManager_hide_show_blockly_fr: "Masquer/Afficher l'espace Blockly en cas d'erreur",
+	ScriptManager_load_settings_fr: "Charger les paramètres",
+	ScriptManager_none_fr: "Aucun",
+	ScriptManager_note_fr: "Note :",
+	ScriptManager_keybinds_fr: "Raccourcis clavier",
+	ScriptManager_prints_help_information_fr: "Affiche les informations d'aide.",
+	ScriptManager_run_fr: "Exécuter",
+	ScriptManager_run_current_file_fr: "Exécuter le fichier actuel",
+	ScriptManager_run_settings_fr: "Paramètres d'exécution :",
+	ScriptManager_save_settings_fr: "Enregistrer les paramètres",
+	ScriptManager_saved_settings_fr: "Paramètres enregistrés dans £1£ !",
+	ScriptManager_send_fr: "Envoyer",
+	ScriptManager_settings_fr: "Paramètres",
+	ScriptManager_show_blockly_fr: "Afficher Blockly",
+	ScriptManager_stack_trace_fr: "Trace de la pile :",
+	ScriptManager_theme_default_fr: "Défaut",
+	ScriptManager_theme_light_fr: "Clair",
+	ScriptManager_trust_warning_fr: "Assurez-vous de faire confiance au code que vous allez exécuter.",
+	ScriptManager_view_fr: "Vue",
+	ScriptManager_view_file_explorer_fr: "Voir l'explorateur de fichiers",
+	
+	//Button
+	Button_confirm_fr: "Confirmer",
+	
+	//DateLength
+	DateLength_days_fr: "Jours",
+	DateLength_months_fr: "Mois",
+	DateLength_years_fr: "Années",
+	
+	//File
+	File_already_exists_fr: "Le fichier existe déjà. Voulez-vous l'écraser ?",
+	File_can_only_select_files_fr: "Vous ne pouvez sélectionner que des fichiers.",
+	File_can_only_select_folders_fr: "Vous ne pouvez sélectionner que des dossiers.",
+	File_can_only_select_one_file_fr: "Vous ne pouvez sélectionner qu'un seul chemin de fichier/dossier.",
+	File_cancel_fr: "Annuler",
+	File_confirm_fr: "Confirmer",
+	File_error_saving_file_fr: "Erreur d'enregistrement du fichier",
+	File_error_saving_file_desc_fr: "Erreur lors de l'enregistrement du fichier : £1£",
+	File_must_select_valid_path_fr: "Vous devez sélectionner un chemin de fichier/dossier valide.",
+	File_open_file_fr: "Ouvrir un fichier",
+	File_open_files_fr: "Ouvrir des fichiers",
+	File_open_folder_fr: "Ouvrir un dossier",
+	File_open_folders_fr: "Ouvrir des dossiers",
+	File_save_file_fr: "Enregistrer le fichier",
+	File_save_file_as_fr: "Enregistrer sous...",
+	File_select_file_fr: "Sélectionner un fichier",
+	File_selected_files_fr: "£1£ fichier(s) sélectionné(s).",
+	File_successfully_saved_file_fr: "Fichier enregistré avec succès dans : £1£",
+	
+	//Interface
+	Interface_folder_fr: "Dossier",
+	
+	//List
+	List_delete_item_fr: "Supprimer l'élément",
+	List_error_max_items_reached_fr: "La longueur de la liste actuelle ne peut pas dépasser £1£ élément(s).",
+	List_error_min_items_reached_fr: "La longueur de la liste actuelle ne peut pas être inférieure à £1£ élément(s).",
+	List_info_edit_item_fr: "Modifier l'élément",
+	List_insert_item_after_fr: "Insérer après",
+	List_insert_item_before_fr: "Insérer avant",
+	List_shift_fr: "Décaler",
+	List_shift_left_fr: "Décaler à gauche",
+	List_shift_right_fr: "Décaler à droite",
+	
+	//UndoRedo
+	UndoRedo_actions_map_fr: "Carte des actions",
+	UndoRedo_branch_at_node_fr: "Brancher au nœud",
+	UndoRedo_coords_display_fr: "X: £1£, Y: £2£ | Échelle: £3£",
+	UndoRedo_initialisation_fr: "S. Init",
+	UndoRedo_jump_to_fr: "Aller à",
+	UndoRedo_name_fr: "Nom :",
+	UndoRedo_split_from_timeline_fr: "Séparer de la timeline",
+	UndoRedo_timeline_fr: "Timeline",
+	UndoRedo_timeline_view_fr: "Vue chronologique",
+	UndoRedo_unlisted_fr: "Non listé",
+	
+	//Sort filter
+	UndoRedo_sorting_filter_fr: "Filtre de tri",
+	UndoRedo_sort_timelines_fr: "Trier les timelines :",
+	
+	//Sort filters
+	UndoRedo_alphabetical_ascending_fr: "Alphabétique (A-Z)",
+	UndoRedo_alphabetical_descending_fr: "Alphabétique (Z-A)",
+	UndoRedo_chronological_ascending_fr: "Chronologique (Croissant)",
+	UndoRedo_chronological_descending_fr: "Chronologique (Décroissant)",
+	UndoRedo_last_modified_fr: "Dernière modification",
+	UndoRedo_least_actions_fr: "Moins d'actions",
+	UndoRedo_most_actions_fr: "Plus d'actions",
+	
+	//WYSIWYG
+	WYSIWYG_align_centre_fr: "Centrer",
+	WYSIWYG_align_left_fr: "Aligner à gauche",
+	WYSIWYG_align_right_fr: "Aligner à droite",
+	WYSIWYG_bold_fr: "Gras",
+	WYSIWYG_done_fr: "Terminé",
+	WYSIWYG_indent_fr: "Indenter",
+	WYSIWYG_insert_link_fr: "Insérer un lien",
+	WYSIWYG_insert_ordered_list_fr: "Insérer liste ordonnée",
+	WYSIWYG_insert_unordered_list_fr: "Insérer liste à puces",
+	WYSIWYG_italic_fr: "Italique",
+	WYSIWYG_justify_fr: "Justifier",
+	WYSIWYG_open_in_new_tab_fr: "Ouvrir dans un nouvel onglet ?",
+	WYSIWYG_outdent_fr: "Désindenter",
+	WYSIWYG_redo_fr: "Rétablir",
+	WYSIWYG_remove_format_fr: "Effacer le formatage",
+	WYSIWYG_show_html_code_fr: "Afficher le code HTML",
+	WYSIWYG_strikethrough_fr: "Barré",
+	WYSIWYG_underline_fr: "Souligné",
+	WYSIWYG_undo_fr: "Annuler",
+	WYSIWYG_unlink_fr: "Supprimer le lien",
+	
+	//ve.Feature
+	//Confirm
+	Confirm_confirm_fr: "Confirmer",
+	Confirm_no_fr: "Non",
+	Confirm_yes_fr: "Oui",
 };

@@ -173,7 +173,7 @@ ve.File = class extends ve.Component {
 								}
 							}
 						}, { name: loc("ve.registry.localisation.File_confirm") }),
-						cancel_button: new ve.Button(() => this.file_explorer_modal.close(), { name: "Cancel" })
+						cancel_button: new ve.Button(() => this.file_explorer_modal.close(), { name: loc("ve.registry.localisation.File_cancel") })
 					}, {
 						can_rename: false,
 						name: " ",

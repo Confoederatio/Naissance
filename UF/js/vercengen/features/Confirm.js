@@ -45,13 +45,13 @@ ve.Confirm = class extends ve.Feature {
 						if (!this.options.do_not_close)
 							this.close();
 					}
-				}, { name: "Yes" }),
-				no_button: new ve.Button(() => this.close(), { name: "No" })
+				}, { name: loc("ve.registry.localisation.Confirm_yes") }),
+				no_button: new ve.Button(() => this.close(), { name: loc("ve.registry.localisation.Confirm_no") })
 			}, { name: " ", style: { display: "flex" } })
 		};
 		
 		this.modal = new ve.Modal(this.components_obj, {
-			name: "Confirm",
+			name: loc("ve.registry.localisation.Confirm_confirm"),
 			draggable: true,
 			resizable: true,
 			width: "24rem",

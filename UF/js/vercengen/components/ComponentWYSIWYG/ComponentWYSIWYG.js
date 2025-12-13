@@ -69,13 +69,13 @@ ve.WYSIWYG = class extends ve.Component {
 					//First box: Bold, Italic, Underline, Strikethrough
 					html_string.push(`<div class = "box">`);
 						//Bold
-						html_string.push(`<span class = "editor-button icon small" data-action = "bold" data-tag-name = "b" title = "Bold"><icon>format_bold</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "bold" data-tag-name = "b" title = "${loc("ve.registry.localisation.WYSIWYG_bold")}"><icon>format_bold</icon></span>`);
 						//Italic
-						html_string.push(`<span class = "editor-button icon small" data-action = "italic" data-tag-name = "i" title = "Italic"><icon>format_italic</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "italic" data-tag-name = "i" title = "${loc("ve.registry.localisation.WYSIWYG_italic")}"><icon>format_italic</icon></span>`);
 						//Underline
-						html_string.push(`<span class = "editor-button icon small" data-action = "underline" data-tag-name = "u" title = "Underline"><icon>format_underlined</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "underline" data-tag-name = "u" title = "${loc("ve.registry.localisation.WYSIWYG_underline")}"><icon>format_underlined</icon></span>`);
 						//Strikethrough
-						html_string.push(`<span class = "editor-button icon small" data-action = "strikeThrough" data-tag-name = "strike" title = "Strikethrough"><icon>strikethrough_s</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "strikeThrough" data-tag-name = "strike" title = "${loc("ve.registry.localisation.WYSIWYG_strikethrough")}"><icon>strikethrough_s</icon></span>`);
 					html_string.push(`</div>`);
 
 					//Second box: Alignment, Lists, Indents, Hr
@@ -87,24 +87,24 @@ ve.WYSIWYG = class extends ve.Component {
 							//1. Submenu
 							html_string.push(`<div class = "submenu">`);
 								//Align left
-								html_string.push(`<span class = "editor-button icon" data-action = "justifyLeft" data-style = "textAlign:left" title = "Align Left"><icon>format_align_left</icon></span>`);
+								html_string.push(`<span class = "editor-button icon" data-action = "justifyLeft" data-style = "textAlign:left" title = "${loc("ve.registry.localisation.WYSIWYG_align_left")}"><icon>format_align_left</icon></span>`);
 								//Align centre
-								html_string.push(`<span class = "editor-button icon" data-action = "justifyCenter" data-style = "textAlign:center" title = "Align Centre"><icon>format_align_center</icon></span>`);
+								html_string.push(`<span class = "editor-button icon" data-action = "justifyCenter" data-style = "textAlign:center" title = "${loc("ve.registry.localisation.WYSIWYG_align_centre")}"><icon>format_align_center</icon></span>`);
 								//Align right
-								html_string.push(`<span class = "editor-button icon" data-action = "justifyRight" data-style = "textAlign:right" title = "Align Right"><icon>format_align_right</icon></span>`);
+								html_string.push(`<span class = "editor-button icon" data-action = "justifyRight" data-style = "textAlign:right" title = "${loc("ve.registry.localisation.WYSIWYG_align_right")}"><icon>format_align_right</icon></span>`);
 								//Align justify
-								html_string.push(`<span class = "editor-button icon" data-action = "formatBlock" data-style = "textAlign:justify" title = "Justify"><icon>format_align_justify</icon></span>`);
+								html_string.push(`<span class = "editor-button icon" data-action = "formatBlock" data-style = "textAlign:justify" title = "${loc("ve.registry.localisation.WYSIWYG_justify")}"><icon>format_align_justify</icon></span>`);
 							html_string.push(`</div>`);
 						html_string.push(`</span>`);
 
 						//Insert ordered list
-						html_string.push(`<span class = "editor-button icon" data-action = "insertOrderedList" data-tag-name = "ol" title = "Insert ordered list"><icon>format_list_numbered</icon></span>`);
+						html_string.push(`<span class = "editor-button icon" data-action = "insertOrderedList" data-tag-name = "ol" title = "${loc("ve.registry.localisation.WYSIWYG_insert_ordered_list")}"><icon>format_list_numbered</icon></span>`);
 						//Insert unordered list
-						html_string.push(`<span class = "editor-button icon" data-action = "insertUnorderedList" data-tag-name = "ul" title = "Insert unordered list"><icon>format_list_bulleted</icon></span>`);
+						html_string.push(`<span class = "editor-button icon" data-action = "insertUnorderedList" data-tag-name = "ul" title = "${loc("ve.registry.localisation.WYSIWYG_insert_unordered_list")}"><icon>format_list_bulleted</icon></span>`);
 						//Indent
-						html_string.push(`<span class = "editor-button icon" data-action = "indent" title = "Indent"><icon>format_indent_increase</icon></span>`);
+						html_string.push(`<span class = "editor-button icon" data-action = "indent" title = "${loc("ve.registry.localisation.WYSIWYG_indent")}"><icon>format_indent_increase</icon></span>`);
 						//Outdent
-						html_string.push(`<span class = "editor-button icon" data-action = "outdent" title = "Outdent" data-required-tag = "li"><icon>format_indent_decrease</icon></span>`);
+						html_string.push(`<span class = "editor-button icon" data-action = "outdent" title = "${loc("ve.registry.localisation.WYSIWYG_outdent")}" data-required-tag = "li"><icon>format_indent_decrease</icon></span>`);
 					html_string.push(`</div>`);
 
 				html_string.push(`</div>`);
@@ -115,23 +115,23 @@ ve.WYSIWYG = class extends ve.Component {
 					//Third box: Undo, clear formatting
 					html_string.push(`<div class = "box">`);
 						//Undo
-						html_string.push(`<span class = "editor-button icon small" data-action = "undo" title = "Undo"><icon>undo</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "undo" title = "${loc("ve.registry.localisation.WYSIWYG_undo")}"><icon>undo</icon></span>`);
 						//Remove formatting
-						html_string.push(`<span class = "editor-button icon small" data-action = "removeFormat" title = "Remove format"><icon>format_clear</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "removeFormat" title = "${loc("ve.registry.localisation.WYSIWYG_remove_format")}"><icon>format_clear</icon></span>`);
 					html_string.push(`</div>`);
 
 					//Fourth box: Add link, remove link
 					html_string.push(`<div class = "box">`);
 						//Insert Link
-						html_string.push(`<span class = "editor-button icon small" data-action = "createLink" title = "Insert Link"><icon>add_link</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "createLink" title = "${loc("ve.registry.localisation.WYSIWYG_insert_link")}"><icon>add_link</icon></span>`);
 						//Unlink
-						html_string.push(`<span class = "editor-button icon small" data-action = "unlink" data-tag-name = "a" title = "Unlink"><icon>link_off</icon></span>`);
+						html_string.push(`<span class = "editor-button icon small" data-action = "unlink" data-tag-name = "a" title = "${loc("ve.registry.localisation.WYSIWYG_unlink")}"><icon>link_off</icon></span>`);
 					html_string.push(`</div>`);
 
 					//Fifth box: Show HTML
 					html_string.push(`<div class = "box">`);
 						//Show HTML code
-						html_string.push(`<icon class = "editor-button icon" data-action = "toggle-view" title = "Show HTML Code"><icon>code</icon></span>`);
+						html_string.push(`<icon class = "editor-button icon" data-action = "toggle-view" title = "${loc("ve.registry.localisation.WYSIWYG_show_html_code")}"><icon>code</icon></span>`);
 					html_string.push(`</div>`);
 				html_string.push(`</div>`);
 			html_string.push(`</div>`);
@@ -149,13 +149,13 @@ ve.WYSIWYG = class extends ve.Component {
 				html_string.push(`<div class = "modal-wrapper">`);
 					html_string.push(`<div class = "close">x</div>`);
 					html_string.push(`<div class = "modal-content" id = "modal-create-link">`);
-						html_string.push(`<h3>Insert Link</h3>`);
+						html_string.push(`<h3>${loc("ve.registry.localisation.WYSIWYG_insert_link")}</h3>`);
 						html_string.push(`<input type = "text" id = "link-value" placeholder = "Link (example: https://google.com/)">`);
 						html_string.push(`<div class = "row">`);
 							html_string.push(`<input type = "checkbox" id = "new-tab"`);
-							html_string.push(`<label for = "new-tab">Open in New Tab?</label>`);
+							html_string.push(`<label for = "new-tab">${loc("ve.registry.localisation.WYSIWYG_open_in_new_tab")}</label>`);
 						html_string.push(`</div>`);
-						html_string.push(`<button class = "done">Done</button>`);
+						html_string.push(`<button class = "done">${loc("ve.registry.localisation.WYSIWYG_done")}</button>`);
 					html_string.push(`</div>`);
 				html_string.push(`</div>`);
 			html_string.push(`</div>`);
