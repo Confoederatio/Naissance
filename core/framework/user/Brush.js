@@ -141,10 +141,10 @@ naissance.Brush = class extends ve.Class {
 				binding: "this.simplify",
 				name: "Simplify", x: 0, y: 0
 			}),
-			simplify_applies_to_brush: veCheckbox(false, {
-				to_binding: "this.simplify_applies_to_brush",
-				name: "Applies to Brush",
-				tooltip: "Whether the simplification should apply to the brush only instead of the selected polygon.",
+			simplify_applies_to_polygon: veCheckbox(false, {
+				to_binding: "this.simplify_applies_to_polygon",
+				name: "Applies to Polygon",
+				tooltip: "Whether the simplification should apply to the polygon as well as the brush.",
 				x: 1, y: 0
 			})
 		}, { name: "Brush Optimisation:", open: true });
@@ -386,7 +386,7 @@ naissance.Brush = class extends ve.Class {
 								
 								geometry_id: this._selected_geometry.id,
 								add_to_polygon: { geometry: processed_geometry.toJSON() },
-								simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_brush) ?
+								simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_polygon) ?
 									main.brush.simplify : undefined
 							}]
 						});

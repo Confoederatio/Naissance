@@ -238,7 +238,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					
 					geometry_id: this.id,
 					add_to_polygon: { geometry: e.geometry.toJSON() },
-					simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_brush) ?
+					simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_polygon) ?
 						main.brush.simplify : undefined
 				}]
 			});

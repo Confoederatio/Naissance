@@ -289,7 +289,7 @@ ve.ScriptManager = class extends ve.Component {
 										if (display_error)
 											veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon> ${loc("ve.registry.localisation.ScriptManager_could_not_load_settings")}</span>`, { 
 												can_rename: false, 
-												name: loc("ve.registry.ScriptManager_error_loading_settings"), 
+												name: loc("ve.registry.localisation.ScriptManager_error_loading_settings"), 
 												width: "20rem" 
 											});
 									},
@@ -313,14 +313,14 @@ ve.ScriptManager = class extends ve.Component {
 											}
 											
 											fs.writeFileSync(scriptmanager_settings.save_file, this.saveSettings());
-											veToast(loc("ve.registry.ScriptManager_saved_settings", scriptmanager_settings.save_file));
+											veToast(loc("ve.registry.localisation.ScriptManager_saved_settings", scriptmanager_settings.save_file));
 										});
 									}, {
 										name: loc("ve.registry.localisation.ScriptManager_save_settings")
 									})
 							}, { name: " ", style: { alignItems: "center", display: "flex" } })
-						}, { can_rename: false, name: loc("ve.registry.ScriptManager_settings"), width: "24rem" })
-					}, { name: loc("ve.registry.ScriptManager_settings") }),
+						}, { can_rename: false, name: loc("ve.registry.localisation.ScriptManager_settings"), width: "24rem" })
+					}, { name: loc("ve.registry.localisation.ScriptManager_settings") }),
 					view: new ve.Button(() => {
 						//Populate themes_obj
 						let themes_obj = {};

@@ -59,7 +59,11 @@ ve.FileExplorer = class extends ve.Component {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>check_box</icon>`,
 				onchange: (v, e) => this.fireSelectToggle(v, e),
-				tooltip: loc("ve.registry.localisation.FileExplorer_select")
+				tooltip: loc("ve.registry.localisation.FileExplorer_select"),
+				
+				style: {
+					zIndex: 99
+				},
 			})
 		};
 		options.file_icon = (options.file_icon) ? options.file_icon : "<icon>description</icon>";
@@ -69,7 +73,11 @@ ve.FileExplorer = class extends ve.Component {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>indeterminate_check_box</icon>`,
 				onchange: (v, e) => this.fireSelectToggle(v, e),
-				tooltip: loc("ve.registry.localisation.FileExplorer_select")
+				tooltip: loc("ve.registry.localisation.FileExplorer_select"),
+				
+				style: {
+					zIndex: 99
+				},
 			})
 		};
 		options.folder_icon = (options.folder_icon) ? options.folder_icon : "<icon>folder</icon>";
