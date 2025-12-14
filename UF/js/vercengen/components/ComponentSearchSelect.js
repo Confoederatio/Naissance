@@ -8,6 +8,7 @@
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}> - The individual items to append to the current search select field.
  * - `arg1_options`: {@link Object}
  *   - `.display="inline"`: {@link string}
+ *   - `.header_components_obj`: {@link Object}>{@link ve.Component}
  *   - `.filter_names`: {@link Object}
  *     - `<attribute_key>`: {@link string}
  *     
@@ -147,10 +148,12 @@ ve.SearchSelect = class extends ve.Component {
 				})
 			}, { 
 				name: "<icon>filter_alt</icon>",
+				tooltip: loc("ve.registry.localisation.SearchSelect_search_filter"),
 				style: {
 					marginLeft: "auto"
 				}
-			})
+			}),
+			...this.options.header_components_obj
 		}, {
 			name: " ",
 			style: {
@@ -204,7 +207,7 @@ ve.SearchSelect = class extends ve.Component {
 						show_element = true;
 				}
 				
-				if (show_element) {
+				if (show_element || all_search_select_els[i]?.instance?.options?.disabled === true) {
 					all_search_select_els[i].style.display = (this.options.display) ? this.options.display : "inline";
 				} else {
 					all_search_select_els[i].style.display = "none";

@@ -24,11 +24,27 @@ global.UI_Mapmodes = class extends ve.Class {
 					tooltip: "Default Keyframes"
 				})
 			}, {
+				header_components_obj: {
+					add_new_mapmode: veButton(() => {
+						
+					}, {
+						name: "<icon>add_circle</icon>",
+						tooltip: "Add New Mapmode",
+						style: { marginLeft: "var(--cell-padding)" }
+					}),
+					mapmode_settings: veButton(() => {
+						
+					}, {
+						name: "<icon>settings</icon>",
+						tooltip: "Mapmode Settings",
+						style: { marginLeft: "var(--cell-padding)" }
+					})
+				},
 				filter_names: {
 					"data-default": "Default"
 				}
 			})
-		}, { 
+		}, {
 			is_folder: false,
 			style: {
 				padding: 0
