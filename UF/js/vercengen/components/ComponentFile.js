@@ -70,7 +70,7 @@ ve.File = class extends ve.Component {
 						window_name = loc("ve.registry.localisation.File_save_file");
 				
 				this.file_explorer_modal = new ve.Window({
-					file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : __dirname, { 
+					file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : process.cwd(), { 
 						name: " ",
 						style: {
 							width: "24rem"

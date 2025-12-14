@@ -8,7 +8,7 @@ global.UI_Leftbar = class extends ve.Class {
 			file_explorer: {
 				name: "File",
 				components_obj: {
-					file_explorer: veFileExplorer(path.join(__dirname, "saves"), { 
+					file_explorer: veFileExplorer(path.join(process.cwd(), "saves"), { 
 						name: " ",
 						navigation_only: true,
 						

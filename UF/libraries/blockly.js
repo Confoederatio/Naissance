@@ -8,19 +8,19 @@ try {
 		Blockly = require("node-blockly/_blockly.js");
 	}
 	
-	const biBlocks = require(path.join(__dirname, "UF/libraries/bi_blockly/blocks/bi_blockly.js"));
+	const biBlocks = require(path.join(process.cwd(), "UF/libraries/bi_blockly/blocks/bi_blockly.js"));
 	biBlocks(Blockly);
 	
 	const blocklyJS = require("node-blockly/lib/javascript_compressed");
 	blocklyJS(Blockly);
 	
 	const biBlocksJS = require(path.join(
-		__dirname,
+		process.cwd(),
 		"UF/libraries/bi_blockly/generators/javascript/bi_blockly.js"
 	));
 	biBlocksJS(Blockly);
 	
-	const js2blocks = require(path.join(__dirname, "UF/libraries/js2blocks.mjs"));
+	const js2blocks = require(path.join(process.cwd(), "UF/libraries/js2blocks.mjs"));
 	
 	console.log("Blockly loaded successfully");
 	module.exports = Blockly;

@@ -23,7 +23,7 @@ let win;
         webSecurity: false
       },
 
-      icon: path.join(__dirname, `gfx/logo.png`)
+      icon: path.join(process.cwd(), `gfx/logo.png`)
     });
 
     //Load file; open Inspect Element

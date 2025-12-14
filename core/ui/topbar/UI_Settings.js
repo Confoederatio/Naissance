@@ -11,7 +11,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 				components_obj: {
 					autoload_file_container: veRawInterface({
 						autoload_file_label: veHTML(`<b>Autoload File</b>`, { style: { display: "inline" } }),
-						autoload_file: veFile((main.settings.autoload_file) ? main.settings.autoload_file : path.join(__dirname, "saves/autosave.naissance"), {
+						autoload_file: veFile((main.settings.autoload_file) ? main.settings.autoload_file : path.join(process.cwd(), "saves/autosave.naissance"), {
 							name: "Change Save",
 							tooltip: "Loads file whenever available.",
 							

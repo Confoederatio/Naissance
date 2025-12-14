@@ -11,7 +11,7 @@
  * - `arg0_value`: {@link string} - The code to load into the present ve.ScriptManager.
  * - `arg1_options`: {@link Object}
  *   - `.do_not_display_file_name=false`: {@link boolean}
- *   - `.folder_path=__dirname`: {@link string}
+ *   - `.folder_path=process.cwd()`: {@link string}
  *   - `.save_extension=[".*"]`: {@link Array}<{@link string}>
  * 	 - `.settings`: {@link Object}
  * 	   - `.clear_blockly_workspace_on_error=true`: {@link boolean}
@@ -186,7 +186,7 @@ ve.ScriptManager = class extends ve.Component {
 			
 			this.leftbar_el = document.createElement("div");
 			this.leftbar_el.id = "leftbar";
-				this.leftbar_file_explorer = new ve.FileExplorer((this.options.folder_path) ? this.options.folder_path : __dirname, {
+				this.leftbar_file_explorer = new ve.FileExplorer((this.options.folder_path) ? this.options.folder_path : process.cwd(), {
 					load_function: (arg0_data, arg1_file_path) => {
 						let local_data = arg0_data;
 						let file_path = arg1_file_path;
