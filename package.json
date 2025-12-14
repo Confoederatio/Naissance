@@ -1,11 +1,43 @@
 {
   "name": "naissance-hgis",
-  "version": "1.6",
+  "version": "1.6.0",
   "description": "Historical GIS project for 3D map editing, geoprocessing, visualisation, and simulation over the long run.",
   "main": "main.js",
   "scripts": {
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "confoederatio.naissance",
+    "productName": "Naissance HGIS",
+    "asar": true,
+    "directories": {
+      "output": "./_dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "package.json"
+    ],
+
+    "win": {
+      "target": "nsis",
+      "icon": "icons/app-icon.ico"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.utilities",
+      "icon": "icons/app-icon.icns"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "icons/",
+      "category": "Utility"
+    }
   },
   "repository": {
     "type": "git",
@@ -26,7 +58,8 @@
     "acorn-dynamic-import": "^2.0.2",
     "acorn-jsx-walk": "^1.0.1",
     "better-docs": "^2.7.3",
-    "electron": "^38.1.2",
+    "electron": "^38.7.2",
+    "electron-builder": "^26.0.12",
     "file-saver": "^1.3.3",
     "imports-loader": "^0.7.1",
     "jsdoc": "^4.0.5",

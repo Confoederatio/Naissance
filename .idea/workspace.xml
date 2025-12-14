@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/autobuild.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSearchSelect.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSearchSelect.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_Mapmodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_Mapmodes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +75,7 @@
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
       <workItem from="1765094029123" duration="81362000" />
-      <workItem from="1765536946194" duration="26285000" />
+      <workItem from="1765536946194" duration="27892000" />
     </task>
     <servers />
   </component>
