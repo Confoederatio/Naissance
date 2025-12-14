@@ -1,5 +1,7 @@
 @echo off
 title Naissance (Binary Builder)
+echo [Naissance HGIS] Generating .ico files ..
+call electron-icon-maker --input=./gfx/logo.png --output=./gfx/
 echo [Naissance HGIS] Binary is being compiled for Windows ..
 call npm run build:win -- --config.directories.output="./_dist/windows" > _dist/output_windows.txt
 echo [Naissance HGIS] Binary is being compiled for MacOS ..

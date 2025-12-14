@@ -7,6 +7,11 @@ global.path = require("path");
 //Initialise functions
 {
   global.initialiseGlobal = function () {
+		//KEEP AT TOP! Make sure file paths exist
+		{
+			if (!fs.existsSync("./saves/")) fs.mkdirSync("./saves/");
+		}
+		
 		//Initialise global.scene
 		global.scene = new ve.Scene({
 			map_component: new ve.Map()
@@ -57,6 +62,7 @@ global.path = require("path");
 			settings: {},
 			user: {}
     };
+		
 		if (!global.naissance) global.naissance = {};
 			main.map.settings = {
 				autoload_last_date: true
