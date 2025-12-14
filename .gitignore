@@ -1,6 +1,7 @@
 archives
 _dist
 
+# DEFAULT GITHUB .gitignore
 # Logs
 logs
 *.log
