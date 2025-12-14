@@ -39,9 +39,8 @@ ve.Hierarchy = class extends ve.Component {
 		//Declare local instance variables
 		this.element = document.createElement("div");
 		this.element.setAttribute("component", "ve-hierarchy");
-		Object.iterate(options.attributes, (local_key, local_value) => {
-			this.element.setAttribute(local_key, local_value.toString());
-		});
+		Object.iterate(options.attributes, (local_key, local_value) =>
+			this.element.setAttribute(local_key, local_value.toString()));
 		this.options = options;
 		
 		//Append components_obj to this.element
@@ -102,15 +101,7 @@ ve.Hierarchy = class extends ve.Component {
 			}, { 
 				name: " ",
 				style: {
-					alignItems: "center", 
-					backgroundColor: `var(--bg-secondary-colour)`,
-					border: `1px solid var(--bg-primary-colour)`,
-					borderRadius: "3px",
-					display: "flex",
-					overflow: "hidden",
-					marginBottom: "calc(var(--cell-padding)*1.25)",
-					padding: "0 0.5rem 0 0",
-					width: "20rem",
+					...ve.registry.themes["ve-searchbar"],
 					...this.options.searchbar_style
 				} 
 			});

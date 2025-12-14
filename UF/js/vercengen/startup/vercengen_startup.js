@@ -343,6 +343,7 @@ global.path = require("path");
 		console.log(`[VERCENGEN] Importing ${load_files.length} files.`);
 		
 		//1. Handle browser <link>/<script> tags
+		
 		if (options.is_browser) { //[WIP] - Refactor at a later date
 			// Build up the full HTML snippet for all files in order
 			let html_concat = "";
@@ -397,6 +398,7 @@ global.path = require("path");
 		//Initialise ve after import
 		global.initialise_ve_loop = setInterval(function(){
 			try {
+				ve.initialiseThemes();
 				ve.initialise();
 				clearInterval(global.initialise_ve_loop);
 				

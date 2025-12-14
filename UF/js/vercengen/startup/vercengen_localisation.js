@@ -91,6 +91,7 @@ ve.registry.localisation = {
 	ScriptManager_trust_warning: "Make sure you trust the code you are about to run before executing it.",
 	ScriptManager_view: "View",
 	ScriptManager_view_file_explorer: "View File Explorer",
+	ScriptManager_view_settings: "View Settings:",
 	
 	//Button
 	Button_confirm: "Confirm",
@@ -133,6 +134,10 @@ ve.registry.localisation = {
 	List_shift: "Shift",
 	List_shift_left: "Shift Left",
 	List_shift_right: "Shift Right",
+	
+	//SearchSelect
+	SearchSelect_no_elements_found: "No elements available to search for.",
+	SearchSelect_search_filter: "Search Filter",
 	
 	//UndoRedo
 	UndoRedo_actions_map: "Actions Map",
@@ -278,6 +283,11 @@ ve.registry.localisation = {
 	ScriptManager_trust_warning_de: "Stellen Sie sicher, dass Sie dem Code vertrauen, bevor Sie ihn ausführen.",
 	ScriptManager_view_de: "Ansicht",
 	ScriptManager_view_file_explorer_de: "Dateimanager anzeigen",
+	ScriptManager_view_settings_de: "Ansichtseinstellungen",
+	
+	//SearchSelect
+	SearchSelect_no_elements_found_de: "Keine Elemente zum Suchen verfügbar.",
+	SearchSelect_search_filter_de: "Suchfilter",
 	
 	//Button
 	Button_confirm_de: "Bestätigen",
@@ -465,6 +475,11 @@ ve.registry.localisation = {
 	ScriptManager_trust_warning_fr: "Assurez-vous de faire confiance au code que vous allez exécuter.",
 	ScriptManager_view_fr: "Vue",
 	ScriptManager_view_file_explorer_fr: "Voir l'explorateur de fichiers",
+	ScriptManager_view_settings_fr: "Paramètres d'affichage",
+	
+	//SearchSelect
+	SearchSelect_no_elements_found_fr: "Aucun élément disponible à rechercher.",
+	SearchSelect_search_filter_fr: "Filtre de recherche",
 	
 	//Button
 	Button_confirm_fr: "Confirmer",

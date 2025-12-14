@@ -28,6 +28,7 @@ global.path = require("path");
 				edit_geometry_point: new UI_EditGeometryPoint(),
 				edit_geometry_polygon: new UI_EditGeometryPolygon(),
 				edit_selected_geometries_ui: new UI_EditSelectedGeometries(),
+				mapmodes_ui: new UI_Mapmodes(),
 				
 				//Topbar
 				date_ui: new UI_DateMenu(),

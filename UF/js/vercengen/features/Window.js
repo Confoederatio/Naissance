@@ -10,8 +10,8 @@
  *   - `.anchor="top_left"` - Either 'bottom_left'/'bottom_right'/'top_left'/'top_right'.
  *   - `.height="auto"`: {@link number}
  *   - `.width="12rem"`: {@link number}
- *   - `.x=HTML.mouse_x`: {@link number}
- *   - `.y=HTML.mouse_y`: {@link number}
+ *   - `.x=HTML.mouse_x`: {@link function}|{@link number} - If the type is a function, it must return a number.
+ *   - `.y=HTML.mouse_y`: {@link function}|{@link number} - If the type is a function, it must return a number.
  *   -
  *   - `.do_not_wrap=false`: {@link boolean} - Whether to disable wrapping in an always open ve.Interface.
  *   - `.id`: {@link string}
@@ -143,7 +143,24 @@ ve.Window = class extends ve.Feature {
 		//Adjust height/width, position
 		{
 			setTimeout(() => {
-				this.setCoords(this.x, this.y);
+				if (typeof this.x === "function") {
+					this.x_position_logic_loop = setInterval(() => {
+						this._x = this.x();
+						this.setCoords(this._x, this._y);
+					})
+				} else {
+					this._x = this.x;
+				}
+				if (typeof this.y === "function") {
+					this.y_position_logic_loop = setInterval(() => {
+						this._y = this.y();
+						this.setCoords(this._x, this._y);
+					})
+				} else {
+					this._y = this.y;
+				}
+					
+				this.setCoords(this._x, this._y);
 				this.setSize(options.width, options.height);
 				
 				if (this.options.theme)

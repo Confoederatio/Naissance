@@ -330,7 +330,7 @@ ve.ScriptManager = class extends ve.Component {
 						});
 						
 						let local_context_menu = new ve.ContextMenu({
-							view_header: new ve.HTML(`<b>View Settings:</b><br><br>`, { x: 0, y: 0 }),
+							view_header: new ve.HTML(`<b>${loc("ve.registry.localisation.ScriptManager_view_settings")}</b><br><br>`, { x: 0, y: 0 }),
 							
 							editor_theme: new ve.Select({
 								"theme-default": {
