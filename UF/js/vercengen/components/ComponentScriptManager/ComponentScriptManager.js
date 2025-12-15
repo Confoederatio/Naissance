@@ -366,10 +366,10 @@ ve.ScriptManager = class extends ve.Component {
 							}),
 							
 							hide_blockly: new ve.Button(() => {
-								this.scene_blockly.hide();
+								this.loadSettings({ hide_blockly: true });
 							}, { name: loc("ve.registry.localisation.ScriptManager_hide_blockly"), limit: () => !this.scene_blockly._hidden, x: 0, y: 3 }),
 							show_blockly: new ve.Button(() => {
-								this.scene_blockly.show();
+								this.loadSettings({ hide_blockly: false });
 								this.v = this.v;
 							}, { name: loc("ve.registry.localisation.ScriptManager_show_blockly"), limit: () => this.scene_blockly._hidden, x: 0, y: 3 }),
 							
@@ -564,12 +564,16 @@ ve.ScriptManager = class extends ve.Component {
 	 * @param {Object} [arg0_settings]
 	 *  @param {string} [arg0_settings.codemirror_theme] - One of the default CodeMirror themes. [View CodeMirror theming list](https://codemirror.net/5/demo/theme.html)
 	 *  @param {string} [arg0_settings.keybinds] - Either 'emacs'/'sublime'/'vim'
+	 *  @param {boolean} [arg0_settings.hide_blockly]
 	 *  @param {theme} [arg0_settings.theme] - Either 'theme-default'/'theme-light'
 	 *  @param {boolean} [arg0_settings.view_file_explorer] - Whether to show the file explorer.
 	 */
-	loadSettings (arg0_settings) {
+	loadSettings (arg0_settings, arg1_loaded) {
 		//Convert from parameters
 		let settings_obj = arg0_settings;
+		let loaded = (arg1_loaded) ? arg1_loaded : [];
+		
+		if (loaded.includes(this.id)) return; //Internal guard clause if this instance has already been loaded this call
 		
 		//Declare local instance variables; parse settings
 		let scriptmanager_settings = ve.registry.settings.ScriptManager;
@@ -579,6 +583,11 @@ ve.ScriptManager = class extends ve.Component {
 					this.setCodeEditorTheme(settings_obj.codemirror_theme);
 				if (settings_obj.keybinds)
 					this.scene_codemirror.codemirror.setOption("keyMap", settings_obj.keybinds);
+				if (settings_obj.hide_blockly === true) {
+					this.scene_blockly.hide();
+				} else {
+					this.scene_blockly.show();
+				}
 				if (settings_obj.theme)
 					this.setTheme(settings_obj.theme);
 				if (settings_obj.view_file_explorer !== undefined)
@@ -592,12 +601,13 @@ ve.ScriptManager = class extends ve.Component {
 			...this._settings,
 			...settings_obj
 		};
+		loaded.push(this.id);
 		
 		//Apply this._settings to all other instances if shared
 		if (scriptmanager_settings.share_settings_across_instances)
 			for (let i = 0; i < ve.ScriptManager.instances.length; i++)
 				if (ve.ScriptManager.instances[i].id !== this.id)
-					ve.ScriptManager.instances[i].loadSettings(this._settings);
+					ve.ScriptManager.instances[i].loadSettings(this._settings, loaded);
 	}
 	
 	/**

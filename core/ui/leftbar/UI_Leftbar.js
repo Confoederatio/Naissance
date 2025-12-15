@@ -42,7 +42,8 @@ global.UI_Leftbar = class extends ve.Class {
 							this.script_manager_window = veWindow(veScriptManager(), {
 								can_rename: false,
 								name: "ScriptManager",
-								height: "40rem"
+								height: "80vh",
+								width: "80vw"
 							});
 						}, {
 							name: `<icon>code</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">Script Manager</span>`,
