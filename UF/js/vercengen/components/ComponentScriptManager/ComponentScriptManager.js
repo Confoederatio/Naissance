@@ -202,10 +202,13 @@ ve.ScriptManager = class extends ve.Component {
 						//Return statement
 						return this.scene_codemirror.v;
 					},
-					style: { 
+					style: {
+						marginRight: "calc(var(--cell-padding)*2)",
+						maxHeight: "80dvh",
 						overflow: "auto",
 						paddingBottom: 0,
 						paddingTop: 0,
+						paddingRight: 0,
 						width: "20rem"
 					}
 				});
