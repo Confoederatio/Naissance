@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +70,8 @@
       <workItem from="1764176738442" duration="80471000" />
       <workItem from="1765081367837" duration="4479000" />
       <workItem from="1765094029123" duration="81362000" />
-      <workItem from="1765536946194" duration="33262000" />
+      <workItem from="1765536946194" duration="34206000" />
+      <workItem from="1765787488070" duration="2597000" />
     </task>
     <servers />
   </component>
