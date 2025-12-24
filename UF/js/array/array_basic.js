@@ -9,19 +9,35 @@
 		global.Array = {};
 	
 	/**
-	 * Returns a list/{@link Array} from a given input value.
+	 * Converts an spreadsheet cell string (e.g. 'A1', 'ZZ15') into 1-based coordinates.
 	 * 
-	 * @param {any|any[]} arg0_value
+	 * @param {string} arg0_cell_string
 	 * 
-	 * @returns {any[]}
+	 * @returns {number[]}
 	 */
-	Array.toArray = function (arg0_value) {
+	Array.fromSpreadsheetCell = function (arg0_cell_string) {
 		//Convert from parameters
-		let value = arg0_value;
+		let cell_string = (arg0_cell_string) ? arg0_cell_string : "";
+		
+		if (cell_string.length === 0) return [0, 0]; //Internal guard clause if no cell_string is provided
+		
+		//Declare local instance variables
+		let match = cell_string.match(/^([A-Z]+)(\d+)$/i);
+			if (!match) return [0, 0]; //Internal guard clause if no match is found
+		
+		let column_number = 0;
+		let column_string = match[1].toUpperCase();
+		let row_number = parseInt(match[2], 10);
+		
+		//Iterate over column_string
+		for (let i = 0; i < column_string.length; i++) {
+			//Convert character to value (A1-Z26)
+			let char_value = column_string.charCodeAt(i) - 64;
+				column_number = column_number*26 + char_value;
+		}
 		
 		//Return statement
-		if (Array.isArray(value)) return value; //Internal guard clause if value is already an array
-		return [value];
+		return [column_number, row_number];
 	};
 	
 	/**
@@ -50,5 +66,21 @@
 		
 		//Return statement
 		return array;
+	};
+	
+	/**
+	 * Returns a list/{@link Array} from a given input value.
+	 *
+	 * @param {any|any[]} arg0_value
+	 *
+	 * @returns {any[]}
+	 */
+	Array.toArray = function (arg0_value) {
+		//Convert from parameters
+		let value = arg0_value;
+		
+		//Return statement
+		if (Array.isArray(value)) return value; //Internal guard clause if value is already an array
+		return [value];
 	};
 }

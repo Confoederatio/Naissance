@@ -282,6 +282,7 @@
 			let e = (arg0_e || window.event);
 			
 			if (document.querySelectorAll(`
+				.maptalks-wrapper:hover,
 				input:focus, 
 				[contenteditable]:not(#window-name):focus,
 				#scene:hover,

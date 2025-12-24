@@ -10,6 +10,7 @@
  * - `arg0_value`: {@link string} - The code to load into the present component.
  * - `arg1_options`: {@link Object}
  *   - `.codemirror_options`: {@link Object} - Any codemirror options to use upon instantiation.
+ *   - `.script_manager`: {@link ve.ScriptManager}
  * 
  * ##### Instance:
  * - `.codemirror`: {@link CodeMirror}
@@ -69,6 +70,7 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 						
 						blockly_obj.to_binding_fire_silently = true;
 						blockly_obj.v = e.doc.getValue();
+						this.autosave();
 						this.fireToBinding();
 					}
 				} catch (e) { console.warn(e); }
@@ -104,8 +106,26 @@ ve.ScriptManagerCodemirror = class extends ve.Component {
 		let value = arg0_value;
 		
 		//Set codemirror value
+		this.autosave();
 		this.codemirror.setValue(value);
 		this.fireFromBinding();
+	}
+	
+	/**
+	 * Automatically saves the current CodeMirror component value.
+	 * - Method of: {@link ve.ScriptManagerCodemirror}
+	 * 
+	 * @alias v
+	 * @memberof ve.Component.ve.ScriptManagerCodemirror
+	 */
+	autosave () {
+		if (this.options.script_manager) {
+			let script_manager = this.options.script_manager;
+			
+			if (script_manager._settings.autosave_folder && script_manager._settings.autosave_folder !== "none")
+				if (script_manager._file_path && File.containsPath(script_manager._file_path, script_manager._settings.autosave_folder))
+					fs.writeFileSync(script_manager._file_path, this.v);
+		}
 	}
 };
 

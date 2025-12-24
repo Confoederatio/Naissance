@@ -9,6 +9,7 @@
  * - `arg1_options`: {@link Object}
  *   - `.display="inline"`: {@link string}
  *   - `.header_components_obj`: {@link Object}>{@link ve.Component}
+ *   - `.hide_filter=false`: {@link boolean} - Whether to hide the filter tool.
  *   - `.filter_names`: {@link Object}
  *     - `<attribute_key>`: {@link string}
  *     
@@ -83,6 +84,7 @@ ve.SearchSelect = class extends ve.Component {
 		//Reset element; re-append all components in components_obj to element as though it were a ve.RawInterface
 		this.components_obj = components_obj;
 		this.element.innerHTML = "";
+		
 		let searchbar_interface = new ve.RawInterface({
 			searchbar_icon: new ve.HTML("<icon>search</icon>", { style: { padding: `var(--cell-padding)` } }),
 			searchbar_input: new ve.Datalist({}, {
@@ -150,6 +152,7 @@ ve.SearchSelect = class extends ve.Component {
 				name: "<icon>filter_alt</icon>",
 				tooltip: loc("ve.registry.localisation.SearchSelect_search_filter"),
 				style: {
+					display: (this.options.hide_filter) ? "none" : "block",
 					marginLeft: "auto"
 				}
 			}),

@@ -10,6 +10,7 @@
 	
 	/**
 	 * Alphabetises a given number into a string (a0-j9).
+	 * @memberof Math
 	 * 
 	 * @param {number} arg0_string
 	 * 
@@ -37,6 +38,7 @@
 	
 	/**
 	 * Numerises a given string back into a number (a0-j9).
+	 * @memberof Math
 	 * 
 	 * @param {string} arg0_string
 	 * 
@@ -64,6 +66,7 @@
 	
 	/**
 	 * Generates a random number between [arg0_min, arg1_max].
+	 * @memberof Math
 	 *
 	 * @param {number} arg0_min
 	 * @param {number} arg1_max
@@ -89,6 +92,7 @@
 	
 	/**
 	 * Returns a safe number from a given variable.
+	 * @memberof Math
 	 * 
 	 * @param {any} arg0_number
 	 * @param {number} [arg1_default=0]
@@ -105,6 +109,7 @@
 	
 	/**
 	 * Rounds a number to a specific number of places.
+	 * @memberof Math
 	 * 
 	 * @param arg0_number
 	 * @param arg1_places

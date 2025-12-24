@@ -15,6 +15,9 @@
  * ##### Instance:
  * - `.v`: {@link string}
  * 
+ * ##### Methods:
+ * - <span color=00ffff>{@link ve.FileExplorer.openModal|openModal}</span>()
+ * 
  * @augments ve.Component
  * @memberof ve.Component
  * @type {ve.File}
@@ -56,137 +59,7 @@ ve.File = class extends ve.Component {
 				style: { padding: 0 }
 			}),
 			select_file_button: new veButton(() => {
-				if (this.file_explorer_modal) this.file_explorer_modal.close();
-				
-				let window_name = loc("ve.registry.localisation.File_open_file");
-					if (this.options.multifile && !this.options.is_folder) {
-						window_name = loc("ve.registry.localisation.File_open_files");
-					} else if (this.options.multifile && this.options.is_folder) {
-						window_name = loc("ve.registry.localisation.File_open_folders");
-					} else if (this.options.is_folder) {
-						window_name = loc("ve.registry.localisation.File_open_folder");
-					}
-					if (this.options.save_function)
-						window_name = loc("ve.registry.localisation.File_save_file");
-				
-				this.file_explorer_modal = new ve.Window({
-					file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : process.cwd(), { 
-						name: " ",
-						style: {
-							width: "24rem"
-						}
-					}),
-					actions_bar: new ve.RawInterface({
-						save_name: new ve.Text("", {
-							attributes: { placeholder: loc("ve.registry.localisation.File_save_file_as") },
-							limit: () => this.options.save_function
-						}),
-						confirm_button: new ve.Button(() => {
-							if (!this.options.save_function) {
-								let selected_paths = this.file_explorer_modal.file_explorer.selected;
-								
-								//Internal guard clauses - Error handling
-								{
-									if (selected_paths.length === 0) {
-										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_must_select_valid_path")}`);
-										return;
-									}
-									if (!this.options.multifile && selected_paths.length > 1) {
-										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_one_file")}`);
-										return;
-									}
-									if (this.options.is_folder) {
-										let has_file = false;
-										
-										//Iterate over all files to ensure validity
-										for (let i = 0; i < selected_paths.length; i++)
-											if (!fs.statSync(selected_paths[i]).isDirectory()) {
-												has_file = true;
-												
-												veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_folders")}`);
-												return;
-											}
-									} else {
-										let has_folder = false;
-										
-										//Iterate over all files to ensure validity
-										for (let i = 0; i < selected_paths.length; i++)
-											if (fs.statSync(selected_paths[i]).isDirectory()) {
-												has_folder = true;
-												
-												veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_files")}`);
-												return;
-											}
-									}
-								}
-								
-								//Set selected paths
-								this.v = selected_paths;
-								this.fireToBinding();
-								veToast(loc("ve.registry.localisation.File_selected_files", String.formatNumber(selected_paths.length)));
-								this.file_explorer_modal.close();
-							} else {
-								let save_name = this.file_explorer_modal.actions_bar.save_name.v;
-								
-								//Internal guard clauses - Error handling
-								{
-									if (save_name.length === 0) {
-										veToast(`<icon>warning</icon> Save files must have a name.`);
-										return;
-									}
-								}
-								
-								//Execute save function to directory name
-								let full_save_path = path.join(this.file_explorer_modal.file_explorer.v, save_name);
-								
-								try {
-									let save_data = this.options.save_function();
-									
-									if (typeof save_data === "object") {
-										save_data = JSON.styringify(save_data);
-									} else {
-										save_data = save_data.toString();
-									}
-									
-									//Check if file already exists, if so send a confirmation prompt
-									let save_function = () => {
-										fs.writeFile(full_save_path, save_data, () => {
-											veToast(loc("ve.registry.localisation.File_successfully_saved_file", full_save_path));
-											this.file_explorer_modal.close();
-										})
-										this.v = [full_save_path];
-										this.fireToBinding();
-									};
-									
-									(!fs.existsSync(full_save_path)) ?
-										save_function() :
-										veConfirm(loc("ve.registry.localisation.File_already_exists"), {
-											special_function: () => save_function()
-										});
-								} catch (e) {
-									console.error(e);
-									veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon><span style = "margin-left: var(--padding)">${loc("ve.registry.localisation.File_error_saving_file_desc", e)}</span></span>`, { 
-										can_rename: false, 
-										name: loc("ve.registry.localisation.File_error_saving_file"), 
-										width: "20rem" 
-									});
-								}
-							}
-						}, { name: loc("ve.registry.localisation.File_confirm") }),
-						cancel_button: new ve.Button(() => this.file_explorer_modal.close(), { name: loc("ve.registry.localisation.File_cancel") })
-					}, {
-						can_rename: false,
-						name: " ",
-						style: {
-							alignItems: "center",
-							display: "flex"
-						}
-					})
-				}, { 
-					can_rename: false, 
-					name: window_name,
-					width: "26rem" 
-				});
+				this.openModal();
 			}, {
 				name: (this.options.name) ? this.options.name : loc("ve.registry.localisation.File_select_file"),
 				style: {
@@ -236,6 +109,149 @@ ve.File = class extends ve.Component {
 		//Declare local instance variables
 		this.value = value;
 		this.fireFromBinding();
+	}
+	
+	/**
+	 * Opens the file explorer modal.
+	 * - Method of: {@link ve.File}
+	 * 
+	 * @alias openModal
+	 * @memberof ve.Component.ve.File
+	 */
+	openModal () {
+		//Close window if already opened
+		if (this.file_explorer_modal) this.file_explorer_modal.close();
+		
+		//Declare local instance variables
+		let window_name = loc("ve.registry.localisation.File_open_file");
+		if (this.options.multifile && !this.options.is_folder) {
+			window_name = loc("ve.registry.localisation.File_open_files");
+		} else if (this.options.multifile && this.options.is_folder) {
+			window_name = loc("ve.registry.localisation.File_open_folders");
+		} else if (this.options.is_folder) {
+			window_name = loc("ve.registry.localisation.File_open_folder");
+		}
+		if (this.options.save_function)
+			window_name = loc("ve.registry.localisation.File_save_file");
+		
+		this.file_explorer_modal = new ve.Window({
+			file_explorer: new ve.FileExplorer((this.value[0]) ? path.dirname(this.value[0]) : process.cwd(), {
+				name: " ",
+				style: {
+					width: "24rem"
+				}
+			}),
+			actions_bar: new ve.RawInterface({
+				save_name: new ve.Text("", {
+					attributes: { placeholder: loc("ve.registry.localisation.File_save_file_as") },
+					limit: () => this.options.save_function
+				}),
+				confirm_button: new ve.Button(() => {
+					if (!this.options.save_function) {
+						let selected_paths = this.file_explorer_modal.file_explorer.selected;
+						
+						//Internal guard clauses - Error handling
+						{
+							if (selected_paths.length === 0) {
+								veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_must_select_valid_path")}`);
+								return;
+							}
+							if (!this.options.multifile && selected_paths.length > 1) {
+								veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_one_file")}`);
+								return;
+							}
+							if (this.options.is_folder) {
+								let has_file = false;
+								
+								//Iterate over all files to ensure validity
+								for (let i = 0; i < selected_paths.length; i++)
+									if (!fs.statSync(selected_paths[i]).isDirectory()) {
+										has_file = true;
+										
+										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_folders")}`);
+										return;
+									}
+							} else {
+								let has_folder = false;
+								
+								//Iterate over all files to ensure validity
+								for (let i = 0; i < selected_paths.length; i++)
+									if (fs.statSync(selected_paths[i]).isDirectory()) {
+										has_folder = true;
+										
+										veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.File_can_only_select_files")}`);
+										return;
+									}
+							}
+						}
+						
+						//Set selected paths
+						this.v = selected_paths;
+						this.fireToBinding();
+						veToast(loc("ve.registry.localisation.File_selected_files", String.formatNumber(selected_paths.length)));
+						this.file_explorer_modal.close();
+					} else {
+						let save_name = this.file_explorer_modal.actions_bar.save_name.v;
+						
+						//Internal guard clauses - Error handling
+						{
+							if (save_name.length === 0) {
+								veToast(`<icon>warning</icon> Save files must have a name.`);
+								return;
+							}
+						}
+						
+						//Execute save function to directory name
+						let full_save_path = path.join(this.file_explorer_modal.file_explorer.v, save_name);
+						
+						try {
+							let save_data = this.options.save_function();
+							
+							if (typeof save_data === "object") {
+								save_data = JSON.stringify(save_data);
+							} else {
+								save_data = save_data.toString();
+							}
+							
+							//Check if file already exists, if so send a confirmation prompt
+							let save_function = () => {
+								fs.writeFile(full_save_path, save_data, () => {
+									veToast(loc("ve.registry.localisation.File_successfully_saved_file", full_save_path));
+									this.file_explorer_modal.close();
+								})
+								this.v = [full_save_path];
+								this.fireToBinding();
+							};
+							
+							(!fs.existsSync(full_save_path)) ?
+								save_function() :
+								veConfirm(loc("ve.registry.localisation.File_already_exists"), {
+									special_function: () => save_function()
+								});
+						} catch (e) {
+							console.error(e);
+							veWindow(`<span style = "align-items: center; display: flex"><icon>warning</icon><span style = "margin-left: var(--padding)">${loc("ve.registry.localisation.File_error_saving_file_desc", e)}</span></span>`, {
+								can_rename: false,
+								name: loc("ve.registry.localisation.File_error_saving_file"),
+								width: "20rem"
+							});
+						}
+					}
+				}, { name: loc("ve.registry.localisation.File_confirm") }),
+				cancel_button: new ve.Button(() => this.file_explorer_modal.close(), { name: loc("ve.registry.localisation.File_cancel") })
+			}, {
+				can_rename: false,
+				name: " ",
+				style: {
+					alignItems: "center",
+					display: "flex"
+				}
+			})
+		}, {
+			can_rename: false,
+			name: window_name,
+			width: "26rem"
+		});
 	}
 };
 

@@ -34,6 +34,9 @@
  *     - `.onchange`: {@link function}(this:{@link ve.PageMenu})
  *     - `.style`: {@link Object}
  *       - `<style_key>`: {@link string}
+ *       
+ * ##### Methods:
+ * - <span color=00ffff>{@link ve.PageMenuWindow.close|close}</span>()
  *
  * @augments ve.Feature
  * @memberof ve.Feature
@@ -52,6 +55,14 @@ ve.PageMenuWindow = class extends ve.Feature {
 		//Declare local instance variables
 		this.page_menu = new ve.PageMenu(page_obj, options.page_menu_options);
 		this.window = new ve.Window({ page_menu_obj: this.page_menu }, options);
+	}
+	
+	/**
+	 * Closes the present window.
+	 * - Method of: {@link ve.PageMenuWindow}
+	 */
+	close () {
+		this.window.close();
 	}
 };
 

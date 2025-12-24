@@ -95,6 +95,29 @@
 	};
 	
 	/**
+	 * Returns an escaped string in HTML terms such that it renders properly.
+	 * 
+	 * @param {any|string} arg0_string
+	 * 
+	 * @returns {string}
+	 */
+	HTML.getEscapedString = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+			try { if (typeof string !== "string") string = string.toString(); } catch (e) {}
+			if (typeof string !== "string") string = "";
+		
+		//Return statement
+		return string.replace(/[&<>"']/g, (local_match) => ({
+			"&": "&amp;",
+			"<": "&lt;",
+			">": "&gt;", 
+			'"': "&quot;", 
+			"'": "&#039;"
+		})[local_match]);
+	};
+	
+	/**
 	 * Returns the actual `.innerText` content of a given element.
 	 * 
 	 * @param {HTMLElement} arg0_el

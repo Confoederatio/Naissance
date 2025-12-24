@@ -1,3 +1,11 @@
+/* ---------- Fira Code ---------- */
+@font-face {
+    font-family: "Fira Code";
+    src: url("../../UF/gfx/fonts/Fira_Code.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
 /* -- Karla -- */
 /* latin-ext */
 @font-face {

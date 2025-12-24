@@ -82,4 +82,41 @@
 		//Return statement
 		return feature_pieces;
 	};
+	
+	/**
+	 * Translates a point by X, Y in metres.
+	 * 
+	 * @param {maptalks.Coordinate|number[]}arg0_coords
+	 * @param {number} arg1_x
+	 * @param {number} arg2_y
+	 * 
+	 * @returns {{x: number, y: number}}
+	 */
+	Geospatiale.translatePoint = function (arg0_coords, arg1_x, arg2_y) {
+		//Convert from parameters
+		let coords = arg0_coords;
+			if (!Array.isArray(coords) && typeof coords === "object")
+				coords = [coords.x, coords.y];
+		let x_offset = arg1_x; //arg1_x;
+		let y_offset = arg2_y; //arg2_y;
+		
+		//Declare local instance variables
+		let point = turf.point(coords);
+		let translated = point;
+		
+		//X translation (E/W)
+		if (x_offset !== 0)
+			translated = turf.transformTranslate(translated, Math.abs(x_offset), (x_offset > 0) ? 90 : 270, {
+				units: "meters",
+			});
+		//Y translation (N/S)
+		if (y_offset !== 0)
+			translated = turf.transformTranslate(translated, Math.abs(y_offset), (y_offset > 0) ? 0 : 180, {
+				units: "meters",
+			});
+		
+		translated = translated.geometry.coordinates;
+		
+		return { x: translated[0], y: translated[1] };
+	};
 }

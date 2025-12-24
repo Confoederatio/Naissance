@@ -9,6 +9,25 @@
 		global.File = {};
 	
 	/**
+	 * Whether a file is inside a folder path.
+	 * 
+	 * @param {string} arg0_file_path
+	 * @param {string} arg1_folder_path
+	 * 
+	 * @returns {boolean}
+	 */
+	File.containsPath = function (arg0_file_path, arg1_folder_path) {
+		const resolvedFile = path.resolve(arg0_file_path);
+		const resolvedFolder = path.resolve(arg1_folder_path);
+		
+		//Return statement
+		return (
+			resolvedFile === resolvedFolder ||
+			resolvedFile.startsWith(resolvedFolder + path.sep)
+		);
+	};
+	
+	/**
 	 * Returns all drives in the current operating system.
 	 * 
 	 * @returns {string[]}

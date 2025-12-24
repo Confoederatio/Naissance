@@ -45,6 +45,32 @@
 		window.parent.ve.Table.fireToBinding(window.table_id);
 	});
 	
+	//HELPER FUNCTIONS START
+	function numberToExcelColumn(n) {
+		let column = "";
+		
+		while (n > 0) {
+			n--; // Excel is 1-based
+			column = String.fromCharCode(65 + (n % 26)) + column;
+			n = Math.floor(n / 26);
+		}
+		
+		return column;
+	}
+  //HELPER FUNCTIONS END
+	
+	function coordsToCell (arg0_x, arg1_y) {
+		//Convert from parameters
+    let x_coord = parseInt(arg0_x);
+		let y_coord = parseInt(arg1_y);
+		
+		//Declare local instance variables
+    let column = numberToExcelColumn(x_coord);
+		
+		//Return statement
+    return `${column}${y_coord}`;
+  }
+	
 	function getArrayData () {
 		let all_worksheets = univerAPI.getActiveWorkbook().getSheets();
 		let data_obj = [];
@@ -89,6 +115,30 @@
 		//Return statement
 		return data_obj;
 	}
+	
+	function getCellData (arg0_sheet_index, arg1_x, arg2_y) {
+		//Convert from parameters
+    let sheet_index = arg0_sheet_index;
+      if (typeof sheet_index === "string")
+        sheet_index = getSheetFromName(sheet_index);
+		let x_coord = parseInt(arg1_x);
+		let y_coord = parseInt(arg2_y);
+		
+		//Declare local instance variables
+    let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+		if (all_sheets[sheet_index]) {
+			let local_data_obj = all_sheets[sheet_index]._worksheet._cellData._matrix;
+			
+			//Return cell data
+      try {
+				return local_data_obj[y_coord - 1][x_coord - 1];
+      } catch (e) {
+				window.parent.console.warn(e);
+				return undefined;
+      }
+    }
+  }
   
   function getData () {
 		let all_worksheets = univerAPI.getActiveWorkbook().getSheets();
@@ -110,6 +160,109 @@
 		//Return statement
     return data_obj;
 	}
+	
+	function getSelectedRange () {
+		//Declare local instance variables
+    let selected_range = univerAPI.getActiveWorkbook()
+      .getActiveSheet()
+      .getSelection()
+      .getActiveRange();
+		
+		//Return statement
+		if (selected_range) {
+			selected_range = selected_range._range;
+			
+			return [
+				[getSelectedSheet(), selected_range.startColumn + 1, selected_range.startRow + 1],
+				[getSelectedSheet(), selected_range.endColumn + 1, selected_range.endRow + 1]
+			];
+    }
+  }
+	
+	function getSelectedSheet () {
+		//Declare local instance variables
+    let active_sheet_obj = univerAPI.getActiveWorkbook().getActiveSheet()._worksheet._snapshot;
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+		//Iterate over all_sheets and fetch by ID
+		for (let i = 0; i < all_sheets.length; i++)
+			if (all_sheets[i]._worksheet._sheetId === active_sheet_obj.id)
+				//Return statement
+				return i;
+		return -1;
+	}
+	
+	function getSheetFromName (arg0_sheet_name) {
+		//Convert from parameters
+    let sheet_name = arg0_sheet_name;
+		
+		//Iterate over all_sheets
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+		for (let i = 0; i < all_sheets.length; i++) {
+			let local_sheet_data = all_sheets[i]._worksheet._snapshot;
+			
+			//Return statement
+			if (local_sheet_data.name === sheet_name)
+				return i;
+    }
+  }
+	
+	function getSheetNames () {
+		//Declare local instance variables
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		let all_sheet_names = [];
+		
+		//Iterate over all_sheets
+		for (let i = 0; i < all_sheets.length; i++) {
+			let local_sheet_data = all_sheets[i]._worksheet._snapshot;
+			
+			all_sheet_names.push(local_sheet_data.name);
+    }
+		
+		//Return statement
+    return all_sheet_names;
+  }
+	
+	function setActiveSheet (arg0_sheet_index) {
+		//Convert from parameters
+    let sheet_index = arg0_sheet_index;
+		
+		//Declare local instance variables
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		let all_sheet_ids = [];
+    
+		//Iterate over all_sheets; populate all_sheet_ids
+		for (let i = 0; i < all_sheets.length; i++)
+			all_sheet_ids.push(all_sheets[i]._worksheet._sheetId);
+		univerAPI.getActiveWorkbook().setActiveSheet(all_sheet_ids[sheet_index]);
+  }
+	
+	function setCellData (arg0_sheet_index, arg1_x, arg2_y, arg2_value) {
+		//Convert from parameters
+		let sheet_index = arg0_sheet_index;
+      if (typeof sheet_index === "string")
+        sheet_index = getSheetFromName(sheet_index);
+		let x_coord = parseInt(arg1_x);
+		let y_coord = parseInt(arg2_y);
+    let value = arg2_value;
+		  if (typeof value !== "object") value = { v: value };
+		
+		//Declare local instance variables
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+    
+		if (all_sheets[sheet_index]) {
+			let local_data_obj = all_sheets[sheet_index]._worksheet._cellData._matrix;
+			
+			//Set cell data
+      try {
+				if (!local_data_obj[y_coord - 1]) local_data_obj[y_coord - 1] = {};
+				  local_data_obj[y_coord - 1][x_coord - 1] = value;
+				
+				all_sheets[sheet_index].refreshCanvas();
+      } catch (e) {}
+    }
+  }
 	
 	function setData (arg0_data_obj) {
 		//Convert from parameters
@@ -147,6 +300,25 @@
 		
 		//Set window.table_id
 		window.table_id = id;
+  }
+	
+	function setSelectedRange (arg0_sheet_index, arg1_start_coords, arg2_end_coords) {
+		//Convert from parameters
+		let sheet_index = arg0_sheet_index;
+      if (typeof sheet_index === "string")
+        sheet_index = getSheetFromName(sheet_index);
+    let start_coords = arg1_start_coords;
+		let end_coords = arg2_end_coords;
+		
+		if (sheet_index === undefined) return; //Internal guard clause if sheet_index is undefined
+		
+		//Declare local instance variables
+		let all_sheets = univerAPI.getActiveWorkbook().getSheets();
+		
+		if (all_sheets[sheet_index]) {
+			let range = all_sheets[sheet_index].getRange(`${coordsToCell(...start_coords)}:${coordsToCell(...end_coords)}`);
+			  range.activate();
+    }
   }
 	
 	function toggleDarkMode (arg0_value) {

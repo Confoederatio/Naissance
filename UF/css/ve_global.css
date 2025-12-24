@@ -42,7 +42,7 @@ b { font-weight: 700; }
     --header-font-size: 1rem;
     --header-font-weight: 700;
     --image-filter: brightness(100);
-    --monospace-font-family: "Fira Sans";
+    --monospace-font-family: "Fira Code";
 
     --body-colour: white;
     --body-font-family: "Karla";

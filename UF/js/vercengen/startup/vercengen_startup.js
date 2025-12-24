@@ -67,6 +67,14 @@ global.path = require("path");
 						global: []
 					},
 					
+					NodeEditor: {
+						/**
+						 * Any window that is currently open to define a script type.
+						 * @type {ve.Window|undefined}
+						 */
+						script_window: undefined
+					},
+					
 					/**
 					 * Component settings for {@link ve.ScriptManager}.
 					 */

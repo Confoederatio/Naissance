@@ -18,7 +18,7 @@
  *   - 
  *   - `.load_function`: {@link function}(arg0_data:{@link string}, arg1_file_path:{@link string}) - Automatically loads the text content of a valid extension into this function.
  *   - `.save_extension`: {@link Array}<{@link string}>|{@link string} - The save dot extension that files can be loaded from. `.*` refers to all file extensions.
- *   - `.save_function`: {@link function} - Returns the value of the current savedata state.
+ *   - `.save_function`: {@link function}(arg0_save_file_name:{@link string}) - Returns the value of the current savedata state.
  *   
  * ##### Instance:
  * - `.clipboard`: {@link Array}<{@link string}> - The list of full file paths currently stored in the clipboard.
@@ -403,7 +403,7 @@ ve.FileExplorer = class extends ve.Component {
 						if (this.options.save_function)
 							try {
 								let save_string;
-								let save_value = this.options.save_function();
+								let save_value = this.options.save_function(save_file_name);
 								
 								if (typeof save_value === "object") {
 									save_string = JSON.stringify(save_value);

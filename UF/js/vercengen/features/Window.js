@@ -29,6 +29,8 @@
  *     - `arg0_v`: {@link Object}
  *       - `.close`: {@link boolean} - Whether the change is a close event.
  *       - `.name`: {@link string}
+ *     - `arg1_e`: {@link Object}
+ *       - `.instance`: {@link ve.Window}
  *   
  * ##### Instance:
  * - `.v`: {@link Object}<{@link ve.Component}>
@@ -183,6 +185,7 @@ ve.Window = class extends ve.Feature {
 		let window_name_el = this.element.querySelector(`#window-name`);
 		if (window_name_el)
 			window_name_el.addEventListener("focusout", (e) => {
+				e.instance = this;
 				if (this.options.onuserchange)
 					this.options.onuserchange({ name: window_name_el.innerHTML }, e);
 			});
@@ -195,6 +198,7 @@ ve.Window = class extends ve.Feature {
 			this.element.querySelector(`#feature-header`).appendChild(close_button);
 			
 			close_button.onclick = (e) => {
+				e.instance = this;
 				if (this.options.onuserchange)
 					this.options.onuserchange({ close: true }, e);
 				this.remove();
@@ -302,7 +306,8 @@ ve.Window = class extends ve.Feature {
 				name: " ",
 				
 				style: {
-					padding: 0
+					padding: 0,
+					width: "100%"
 				}
 			});
 			this._interface.element.setAttribute("class", "ve-disable-nesting");

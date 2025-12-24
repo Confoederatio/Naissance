@@ -142,6 +142,7 @@
     summary:hover {
         cursor: pointer;
     }
+    > table { width: 100%; }
     > table:has([component="ve-script-manager"]),
     > table:has([component="ve-table"]),
     > table:has([component="ve-wysiwyg"]) {
@@ -168,6 +169,63 @@
     }
     table tbody tr td {
         padding-inline-start: 0 !important;
+    }
+}
+
+/* -- ve.ObjectInspector -- */
+[component="ve-object-inspector"], .ve-object-inspector {
+    /* -- Formatting -- */
+    .code, .view-source-function-code, .view-source-function-code pre {
+        color: var(--body-colour);
+        font-family: var(--monospace-font-family), monospace;
+    }
+    .error-circular-reference, .error-depth-limit {
+        color: rgb(133, 133, 133);
+    }
+    .indent {
+        border-left: 1px solid var(--body-colour);
+        margin-left: var(--padding);
+        padding-left: var(--padding);
+    }
+    .label-key {
+        color: rgb(124, 172, 248);
+        font-weight: 700;
+    }
+    .label-type {
+        color: var(--body-colour);
+        opacity: 0.85;
+    }
+    .view-source {
+        color: rgb(133, 133, 133);
+    }
+    .view-source:after {
+        content: "]";
+    }
+    .view-source:before {
+        content: "[";
+    }
+    .view-source-function {
+        color: rgb(254, 141, 89);
+        font-family: var(--monospace-font-family), monospace;
+        font-style: italic;
+        margin-right: var(--cell-padding);
+    }
+    .view-source-function-code, .view-source-function-code pre {
+        font-size: calc(var(--body-font-size)*0.80);
+    }
+    
+    /* -- Types -- */
+    .boolean, .null, .number {
+        color: rgb(153, 128, 255);
+    }
+    .string {
+        color: rgb(92, 213, 251);
+    }
+    .string:after, .string:before {
+        content: '"';
+    }
+    .undefined {
+        color: rgb(107, 107, 107);
     }
 }
 
