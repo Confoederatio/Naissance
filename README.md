@@ -2,21 +2,21 @@
 
 <table>
   <tr>
-    <td width = "50%" style = "vertical-align:top">
+    <td width = "50%" valign = "top">
       <img src = "https://i.postimg.cc/dq7HLyrV/naissance-01.png">
       <div align = "center">Collation/Livemap with ORBATs, events, and naval data.<br>(World/Ukraine/MidEast) 25 March 2026.</div>
     </td>
-    <td style = "vertical-align:top">
+    <td valign = "top">
       <img src = "https://i.postimg.cc/Sm11Sr2Q/naissance-02.png">
       <div align = "center">Spreadsheet/keyframes for Naissance geometries.<br>(Atlas) 1 January 164BC.</div>
     </td>
   </tr>
   <tr>
-    <td width = "50%" style = "vertical-align:top">
+    <td width = "50%" valign = "top">
       <img src = "https://i.postimg.cc/Mz336DMc/naissance-03.png">
       <div align = "center">Visual scripting between Nodes <-> Blocks <-> Code.<br>All 3 are transpiled by Naissance's IDE.</div> 
     </td>
-    <td style = "vertical-align:top">
+    <td valign = "top">
       <img src = "https://i.postimg.cc/qpDDJLhK/naissance-04.png">
       <div align = "center">City populations in Austria-Hungary.<br>(Stadestér/Velkscala) 31 December 1900.</div>
     </td>
