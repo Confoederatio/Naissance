@@ -18,7 +18,7 @@
     </td>
     <td>
       <img src = "https://i.postimg.cc/qpDDJLhK/naissance-04.png">
-      <div align = "center">Thousands of urban population estimates in Austria-Hungary.<br>(Stadestér/Velkscala) 31 December 1900.</div>
+      <div align = "center">City populations in Austria-Hungary.<br>(Stadestér/Velkscala) 31 December 1900.</div>
     </td>
   </tr>
 </table>
