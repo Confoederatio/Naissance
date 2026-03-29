@@ -8,7 +8,7 @@
     </td>
     <td>
       <img src = "https://i.postimg.cc/Sm11Sr2Q/naissance-02.png">
-      <div align = "center">Spreadsheet/keyframe editing for Naissance geometries.<br>(Atlas) 1 January 164BC.</div>
+      <div align = "center">Spreadsheet/keyframes for Naissance geometries.<br>(Atlas) 1 January 164BC.</div>
     </td>
   </tr>
   <tr>
