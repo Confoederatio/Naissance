@@ -567,6 +567,7 @@ naissance.Geometry = class extends ve.Class {
 						
 						if (current_keyframe.value[2] && current_keyframe.value[2].name)
 							geometry_obj.instance_window.setName(current_keyframe.value[2].name);
+						geometry_obj.draw();
 					}
 				}
 			}
