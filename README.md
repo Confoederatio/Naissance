@@ -60,8 +60,9 @@ These libraries and utils can also be used in the visual script editor (alongsid
 For ready-made data analysis, you may find it useful to use Confoederatio histmaps/livemaps instead. We typically divide such datasets as follows, along with corresponding metadata.
 
 <div align = "center">
-  <img src = "https://i.postimg.cc/c17HNhmc/2-stadester.png" width = "50%"><br><br>
-  Selected population, urban growth, and sampling data from Stadestér/Velkscala, alongside testing and validation benchmarks.
+  <img src = "https://i.postimg.cc/wjLr09mJ/stadester-eoscala.png" width = "100%"><br><br>
+  Left: Selected population, urban growth, and sampling data from Stadestér/Velkscala, alongside testing and validation benchmarks.<br>
+  Right: Estimated GDP PPP data from Eoscala (3000BC-2020AD)
 </div>
 
 #### Histmap:
