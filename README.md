@@ -19,15 +19,22 @@
   </tr>
 </table>
 
+<div align = "center">
 <img src = "https://i.postimg.cc/3ND2B1zL/crd-coat-of-arms-logo.png" height = "48"> &nbsp; <img src = "https://i.postimg.cc/ZZk34WkC/vercengen-logo.png" height = "48">
 
 [![Join our community!](https://img.shields.io/discord/548994743925997570?label=Discord&style=for-the-badge)](https://discord.gg/89kQY2KFQz) ![](https://img.shields.io/github/languages/code-size/Australis-0/Naissance?style=for-the-badge) ![](https://img.shields.io/github/downloads/Australis-0/Naissance/total?style=for-the-badge)
+
+</div>
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
 
 ### Abstract.
 
-**Naissance HGIS** is a 3D map editor for geospatial data over the long run with a focus on ease-of-use and capability. History is managed via keyframes, and a ground up Undo/Redo Tree system allows for branching timelines and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
+> [!NOTE]
+> Test
+
+**Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branching timelines and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
+
 
 This project is still in **beta**, and may need to be combined with our other projects (such as [Constele Red](https://github.com/Confoederatio/Constele-Red)) for intensive geoprocessing/scripting tasks, such as those requiring distributed compute. In its current state, Naissance HGIS is mainly intended for historical geometry data, whilst Constele Red is intended for heavy-duty data processing.
 
