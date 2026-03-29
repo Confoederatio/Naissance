@@ -4,17 +4,21 @@
   <tr>
     <td width = "50%">
       <img src = "https://i.postimg.cc/dq7HLyrV/naissance-01.png">
+      <div align = "center">Collation/Livemap with ORBATs, events, and naval data<br>(World/Ukraine/MidEast) 25 March 2026.</div>
     </td>
     <td>
       <img src = "https://i.postimg.cc/Sm11Sr2Q/naissance-02.png">
+      <div align = "center">Spreadsheet and keyframe editing for Naissance geometries.<br>(Atlas) 1 January 164BC.</div>
     </td>
   </tr>
   <tr>
     <td width = "50%">
       <img src = "https://i.postimg.cc/Mz336DMc/naissance-03.png">
+      <div align = "center">Visual scripting between Nodes <-> Blocks <-> Code.<br>All 3 are transpiled by Naissance's IDE.</div> 
     </td>
     <td>
       <img src = "https://i.postimg.cc/qpDDJLhK/naissance-04.png">
+      <div align = "center">Thousands of urban population estimates in Austria-Hungary.<br>(Stadestér/Velkscala) 31 December 1900.</div>
     </td>
   </tr>
 </table>
@@ -24,6 +28,8 @@
 [![Join our community!](https://img.shields.io/discord/548994743925997570?label=Discord&style=for-the-badge)](https://discord.gg/89kQY2KFQz) ![](https://img.shields.io/github/languages/code-size/Australis-0/Naissance?style=for-the-badge)
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
+- Documentation (Naissance): [confoederatiodocs.info](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance+HGIS/Naissance+HGIS)
+- Documentation (Vercengen): [confoederatio.org/Vercengen](https://confoederatio.org/Vercengen/)
 
 ### Abstract.
 
@@ -32,7 +38,7 @@
 
 **Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branching timelines and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
 
-To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://confoederatio.org/Vercengen/).
+To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen).
 
 ---
 
