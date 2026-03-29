@@ -52,8 +52,8 @@ Maps are saved as `.naissance` files, or in the case of Livemaps, as mapmodes wi
 For ready-made data analysis, you may find it useful to use Confoederatio histmaps/livemaps instead. We typically divide such datasets as follows, along with corresponding metadata.
 
 <div align = "center">
-  <img src = "https://i.postimg.cc/c17HNhmc/2-stadester.png" width = "50%"><br>
-  Selected population, urban extent, and sampling data (Stadestér/Velkscala).
+  <img src = "https://i.postimg.cc/c17HNhmc/2-stadester.png" width = "50%"><br><br>
+  Selected population, urban growth, and sampling data from Stadestér/Velkscala, alongside testing and validation benchmarks.
 </div>
 
 #### Histmap:
