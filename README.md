@@ -36,7 +36,7 @@
 > [!NOTE]
 > This repository contains **production** builds for Naissance HGIS. If you require leading capabilities, including pre-packaged Livemap/Histmap scripts, consider using [Naissance SVEA](https://github.com/Confoederatio/SVEA) instead.
 
-**Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branching timelines and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
+**Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branches, merges, and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
 
 To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen).
 
