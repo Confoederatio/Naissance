@@ -41,8 +41,8 @@ To get the most out of Naissance's built-in visual scripting and custom UI capab
 
 Maps are saved as `.naissance` files, or in the case of Livemaps, as mapmodes with associated Workers. As such, they are denoted as either being:
 
-- <u>Livemaps</u>, which produce Ontology streams from Blacktraffic Workers, with built-in scraping and processing APIs, and are used for **real-time data**.
-- <u>Histmaps</u>, which are **historical to near-real time data** that do not require live processes. They typically rely on local save files and the built-in keyframe system.
+- <ins>Livemaps</ins>, which produce Ontology streams from Blacktraffic Workers, with built-in scraping and processing APIs, and are used for **real-time data**.
+- <ins>Histmaps</ins>, which are **historical to near-real time data** that do not require live processes. They typically rely on local save files and the built-in keyframe system.
 
 ### Pre-made Datasets.
 
