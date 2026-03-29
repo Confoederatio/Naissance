@@ -1,0 +1,6 @@
+/* -- ve.Spreadsheet -- */
+[component="ve-spreadsheet"] {
+    iframe {
+        border: 0;
+    }
+}

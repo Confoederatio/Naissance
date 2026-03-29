@@ -1,17 +1,19 @@
 /**
  * Refer to <span color = "yellow">{@link ve.Component}</span> for methods or fields inherited from this Component's parent such as `.options.attributes` or `.element`.
  * 
- * Search select/filter component used as a raw interface pool with a searchbar in which users can look up matching items with selected 'data-' attributes.
+ * Search select/filter component used as a raw interface pool with a searchbar in which users can look up matching items with selected 'data-' attributes. Elements with the attribute `ve-display=true` will always be shown.
  * - Functional binding: <span color=00ffff>veSearchSelect</span>().
  * 
  * ##### Constructor:
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}> - The individual items to append to the current search select field.
  * - `arg1_options`: {@link Object}
  *   - `.display="inline"`: {@link string}
- *   - `.header_components_obj`: {@link Object}>{@link ve.Component}
+ *   - `.header_components_obj`: {@link Object}<{@link ve.Component}>
  *   - `.hide_filter=false`: {@link boolean} - Whether to hide the filter tool.
- *   - `.filter_names`: {@link Object}
+ *   - `.filter_names`: {@link function}(arg0_attribute_key:{@link string})|{@link Object}
  *     - `<attribute_key>`: {@link string}
+ *   - `.search_select_els`: {@link function} | {@link Array}<{@link HTMLElement}> - The function that returns the search select elements in question, usually `document.querySelectorAll`.  
+ *   - `.search_keys=["name"]`: {@link Array}<{@link string}>
  *     
  * ##### Instance:
  * - `.components_obj`: {@link Object}<{@link ve.Component}>
@@ -21,6 +23,7 @@
  * - `.v`: {@link this.components_obj} - Accessor. The current components_obj mounted to ve.SearchSelect.
  * 
  * ##### Methods:
+ * - <span color=00ffff>{@link ve.SearchSelect.getComponentElements|getComponentElements}</span>() | {@link Array}<{@link HTMLElement}>
  * - <span color=00ffff>{@link ve.SearchSelect.updateSearchFilter|updateSearchFilter}</span>()
  * 
  * @augments ve.Component
@@ -38,6 +41,7 @@ ve.SearchSelect = class extends ve.Component {
 			
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
+		options.search_keys = (options.search_keys) ? options.search_keys : ["name"];
 		options.style = {
 			padding: 0,
 			...options.style
@@ -103,16 +107,18 @@ ve.SearchSelect = class extends ve.Component {
 				let all_unique_attributes = [];
 				
 				//Add checkbox context menu based on data- attributes
-				Object.iterate(this.components_obj, (local_key, local_value) => {
+				let all_component_els = this.getComponentElements();
+				
+				//Iterate over all_component_els
+				for (let i = 0; i < all_component_els.length; i++)
 					//Iterate over all local_value.element.attributes
-					for (let i = 0; i < local_value.element.attributes.length; i++) {
-						let local_attribute = local_value.element.attributes[i].nodeName;
+					for (let x = 0; x < all_component_els[i].attributes.length; x++) {
+						let local_attribute = all_component_els[i].attributes[x].nodeName;
 						
 						if (local_attribute.startsWith("data-"))
 							if (!all_unique_attributes.includes(local_attribute))
 								all_unique_attributes.push(local_attribute);
 					}
-				});
 				all_unique_attributes.sort();
 				
 				//Iterate over all_unique_attributes, add to filter context menu
@@ -121,8 +127,11 @@ ve.SearchSelect = class extends ve.Component {
 				for (let i = 0; i < all_unique_attributes.length; i++) {
 					let local_name = all_unique_attributes[i];
 						if (this.options?.filter_names)
-							if (this.options.filter_names[all_unique_attributes[i]])
+							if (typeof this.options.filter_names === "function") { 
+								local_name = this.options.filter_names(local_name);
+							} else {
 								local_name = this.options.filter_names[all_unique_attributes[i]];
+							}
 					
 					checkbox_components_obj[all_unique_attributes[i]] = new ve.Checkbox(this.filters[all_unique_attributes[i]], {
 						name: local_name,
@@ -159,16 +168,39 @@ ve.SearchSelect = class extends ve.Component {
 			...this.options.header_components_obj
 		}, {
 			name: " ",
-			style: {
-				...ve.registry.themes["ve-searchbar"],
-				...this.options.searchbar_style
-			}
+			attributes: {
+				"ve-searchbar": "true"
+			},
+			style: this.options.searchbar_style
 		});
 		searchbar_interface.bind(this.element);
 		
+		//Populate this.element from this.components_obj
 		Object.iterate(this.components_obj, (local_key, local_value) =>
 			this.element.appendChild(local_value.element));
 		this.fireFromBinding();
+	}
+	
+	/**
+	 * Returns all actual component elements.
+	 * - Method of: {@link ve.SearchSelect}
+	 * 
+	 * @alias getComponentElements
+	 * @memberof ve.Component.ve.SearchSelect
+	 * 
+	 * @returns {HTMLElement[]}
+	 */
+	getComponentElements () {
+		//Internal guard clause if this.options.search_select_els is defined
+		if (this.options.search_select_els) return this.options.search_select_els();
+		
+		//Declare local instance variables
+		let all_search_select_els = [];
+			Object.iterate(this.components_obj, (local_key, local_value) =>
+				all_search_select_els.push(local_value.element));
+		
+		//Return statement
+		return all_search_select_els;
 	}
 	
 	/**
@@ -180,20 +212,31 @@ ve.SearchSelect = class extends ve.Component {
 	 */
 	updateSearchFilter () {
 		//Declare local instance variables
-		let all_search_select_els = [];
-			Object.iterate(this.components_obj, (local_key, local_value) =>
-				all_search_select_els.push(local_value.element));
+		let all_search_select_els = this.getComponentElements();
 		
 		//If name and filters are nothing, restore visibility to all hidden results
 		if (this.search_value.length === 0 && Object.keys(this.filters).length === 0) {
 			for (let i = 0; i < all_search_select_els.length; i++)
-				all_search_select_els[i].style.display = (this.options.display) ? this.options.display : "inline";
+				all_search_select_els[i].style.display = (this.options.display) ? this.options.display : "inherit";
 		} else {
-			
+			//Iterate over all search_select_els
 			for (let i = 0; i < all_search_select_els.length; i++) {
+				let has_valid_substring = false;
 				let show_element = false;
 				
-				if (all_search_select_els[i].instance.name.toLowerCase().trim().indexOf(this.search_value.toLowerCase().trim()) !== -1) {
+				//Iterate over all this.options.search_keys to assess has_valid_substring
+				for (let x = 0; x < this.options.search_keys.length; x++)
+					if (all_search_select_els[i].instance) try {
+						if (all_search_select_els[i].instance[this.options.search_keys[x]].toLowerCase().trim().indexOf(this.search_value.toLowerCase().trim()) !== -1) {
+							has_valid_substring = true;
+							break;
+						}
+					} catch (e) {
+						console.error(`Could not find ${this.options.search_keys[x]}, Instance:`, all_search_select_els[i].instance, e);
+					}
+				
+				//If it has a valid substring, look for valid attributes
+				if (has_valid_substring) {
 					//Check if element has data- attribute in filters
 					let has_valid_attribute = false;
 					
@@ -209,6 +252,8 @@ ve.SearchSelect = class extends ve.Component {
 					if (has_valid_attribute)
 						show_element = true;
 				}
+				if (all_search_select_els[i].getAttribute("ve-display"))
+					show_element = true;
 				
 				if (show_element || all_search_select_els[i]?.instance?.options?.disabled === true) {
 					all_search_select_els[i].style.display = (this.options.display) ? this.options.display : "inline";

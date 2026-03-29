@@ -4,6 +4,7 @@
 	
 	/**
 	 * Initialises HTML related fields and functions.
+	 * @alias HTML.initialise
 	 */
 	HTML.initialise = function () {
 		//Add event listeners

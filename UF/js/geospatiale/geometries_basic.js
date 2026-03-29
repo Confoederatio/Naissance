@@ -32,7 +32,7 @@
 	 * 
 	 * @returns {Feature[]}
 	 */
-	Geospatiale.splitFeature = function (arg0_feature, arg1_divisor_layer) { //[WIP] - Untested function
+	Geospatiale.splitFeature = function (arg0_feature, arg1_divisor_layer) {
 		//Convert from parameters
 		let feature = arg0_feature;
 		let divisor_layer = arg1_divisor_layer;

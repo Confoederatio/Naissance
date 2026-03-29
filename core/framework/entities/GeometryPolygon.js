@@ -37,6 +37,13 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				onuserchange: (v) => this.selected = v,
 				x: 1, y: 1
 			}),
+			debug: veButton(() => {
+				console.log(`$geometry - naissance.GeometryPolygon (ID: ${this.id}):`, this);
+				window.$geometry = this;
+			}, {
+				name: "Debug",
+				x: 2, y: 1
+			})
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
 			edit_fill: main.interfaces.edit_geometry_polygon.draw({ _id: () => this.id, name: "Fill" }),
@@ -158,7 +165,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			
 			//5. Add bindings
 			if (this.geometry) {
-				this.keyframes_ui.v = this.history.interface.v;
 				this.geometry.addEventListener("click", (e) => {
 					if (!["fill_tool", "node", "node_override"].includes(main.brush.mode))
 						super.open("instance", { name: this.name, ...this.window_options });
@@ -174,15 +180,25 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					this.label_geometries[i].remove();
 			if (this.selected_geometry) this.selected_geometry.remove();
 		}
+		
+		//7. Render keyframes
+		try { this.keyframes_ui.v = this.history.interface.v; } catch (e) {}
 	}
 	
 	drawHierarchyDatatype () {
 		//Declare local instance variables
 		let current_keyframe = this.history.getKeyframe();
+			this._current_keyframe = current_keyframe;
 		let current_symbol = current_keyframe.value[1];
+		let is_visible = false;
+		
+		try {
+			if (current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length)
+				is_visible = true;
+		} catch (e) {}
 		
 		//Return statement
-		return new ve.HierarchyDatatype({
+		let hierarchy_datatype = new ve.HierarchyDatatype({
 			icon: veHTML(`<icon style = "${
 				(current_symbol?.polygonFill) ? `color: ${current_symbol?.polygonFill};` : ""
 			}">pentagon</icon>`, {
@@ -193,15 +209,16 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				this.history.draw();
 				super.open("instance", { name: this.name, ...this.window_options });
 			}, {
+				attributes: { class: "order-101" },
 				name: "<icon>more_vert</icon>",
-				tooltip: "More Actions",
-				style: { cursor: "padding", order: 101, padding: 0 }
+				tooltip: "More Actions"
 			})
 		},  {
 			attributes: {
 				"data-is-selected": this.selected,
-				"data-is-visible": (current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length) ? "true" : "false",
+				"data-is-visible": (is_visible) ? "true" : "false",
 				"data-selected-geometry": (main.brush.selected_geometry?.id === this.id),
+				"data-type": "GeometryPolygon"
 			},
 			instance: this,
 			name: this.name,
@@ -212,16 +229,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				onuserchange: (v) => {
 					this.name = v;
 				}
-			},
-			style: {
-				".nst-content": {
-					paddingRight: 0
-				},
-				"[component='ve-button'] > button": {
-					border: 0
-				}
 			}
 		});
+		delete this._current_keyframe;
+		return hierarchy_datatype;
 	}
 	
 	handleNodeEditorEnd (arg0_e) {
@@ -273,8 +284,12 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	 * - #### Internal Commands:
 	 * - `.add_to_polygon`: {@link Object}
 	 *   - `.geometry`: {@link string}
+	 * - `.hide_polygon`: {@link boolean}
 	 * - `.remove_from_polygon`: {@link Object}
 	 *   - `.geometry`: {@link string}
+	 * - `.set_polygon`: {@link Object}
+	 *   - `.geometry`: {@link Object}|{@link string}
+	 * - `.show_polygon`: {@link boolean}
 	 * - `.simplify_polygon`: {@link number} - The amount to simplify the Polygon by.
 	 */
 	static parseAction (arg0_json) { //[WIP] - Add .set_history
@@ -333,6 +348,15 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					polygon_obj.addKeyframe(main.date, (turf_difference) ? 
 						Geospatiale.convertTurfToMaptalks(turf_difference).toJSON() : null);
 				}
+			}
+			
+			//set_polygon
+			if (json.set_polygon && json.set_polygon.geometry) {
+				let new_geometry = json.set_polygon.geometry;
+				
+				if (typeof new_geometry === "string")
+					new_geometry = JSON.parse(new_geometry);
+				polygon_obj.addKeyframe(main.date, new_geometry);
 			}
 			
 			//simplify_polygon

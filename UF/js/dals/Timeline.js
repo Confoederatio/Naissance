@@ -268,7 +268,7 @@ DALS.Timeline = class {
 		
 		//2. Produce graph at this layer only for the current timeline and all .child_timelines connected to it, then call recursively
 		if (timeline_obj.child_timelines)
-			for (let i = 0; i < timeline_obj.child_timelines.length; i++) { //[WIP] - local_x_offset is not reflective of the actual branch domain
+			for (let i = 0; i < timeline_obj.child_timelines.length; i++) {
 				let branch_group = 0;
 				let local_child_timeline = DALS.Timeline.getTimeline(this.child_timelines[i]);
 					//Iterate over all timeline_groups; determine branch_group

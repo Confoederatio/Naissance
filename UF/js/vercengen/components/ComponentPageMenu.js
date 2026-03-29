@@ -11,6 +11,7 @@
  *     - `.options`: {@link Object} - Same as the `.options` in {@link ve.Interface}.
  *     - `.components_obj`: {@link Object}<{@link ve.Component}>
  * - `arg1_options`: {@link Object}
+ *   - `.do_not_wrap=false`: {@link boolean} - Whether to wrap the component in a ve.RawInterface instead.
  *   - `.starting_page=Object.keys(page_obj)[0]`
  * 
  * ##### Instance:
@@ -81,7 +82,9 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 				if (!local_value.options) local_value.options = {};
 					if (local_value.options.is_folder !== true) local_value.options.is_folder = false;
 					
-				this.interfaces_obj[local_key] = new ve.Interface(local_value.components_obj, local_value.options);
+				this.interfaces_obj[local_key] = (!options.do_not_wrap) ? 
+					new ve.Interface(local_value.components_obj, local_value.options) :
+					new ve.RawInterface(local_value.components_obj, local_value.options);
 			});
 			this.underline_el = document.createElement("span");
 			this.underline_el.classList.add("underline");

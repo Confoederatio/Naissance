@@ -1,0 +1,11 @@
+[component="ve-script-manager-monaco"] {
+    height: 100%;
+    padding: 0;
+    position: relative;
+    width: 100%;
+}
+.monaco-editor {
+    font-family: var(--body-font-family) !important;
+    position: absolute;
+}
+.monaco-editor-background { background-color: transparent !important; }

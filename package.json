@@ -1,6 +1,6 @@
 {
   "name": "naissance-hgis",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Historical GIS project for 3D map editing, geoprocessing, visualisation, and simulation over the long run.",
   "main": "main.js",
   "scripts": {
@@ -23,7 +23,6 @@
     "Electron",
     "Node"
   ],
-  
   "build": {
     "appId": "confoederatio.naissance",
     "productName": "Naissance HGIS",
@@ -43,23 +42,27 @@
       "css/**/*",
       "gfx/**/*",
       "UF/**/*",
-      
       "main.js",
       "index.html",
       "package.json"
     ],
-
     "win": {
       "target": "nsis",
       "icon": "gfx/icons/win.ico"
     },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "category": "public.app-category.utilities",
       "icon": "icons/app-icon.icns"
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "icon": "gfx/",
       "category": "Utility"
     }
@@ -83,11 +86,21 @@
     "acorn-dynamic-import": "^2.0.2",
     "acorn-jsx-walk": "^1.0.1",
     "better-docs": "^2.7.3",
+    "cubic-spline": "^3.0.3",
     "file-saver": "^1.3.3",
     "imports-loader": "^0.7.1",
     "jsdoc": "^4.0.5",
+    "jsdom": "^28.0.0",
+    "json5": "^2.2.3",
+    "mathjs": "^15.1.0",
     "minami": "^1.2.3",
+    "ml-matrix": "^6.12.1",
+    "netcdfjs": "^3.0.0",
     "node-blockly": "https://github.com/JC-Orozco/node-blockly.git",
+    "pngjs": "^7.0.0",
+    "polylabel": "^2.0.1",
+    "puppeteer": "^24.37.5",
+    "selenium-webdriver": "^4.41.0",
     "shell": "^0.12.0",
     "snapsvg": "^0.5.1",
     "taffydb": "^2.7.3"

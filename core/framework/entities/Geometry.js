@@ -135,12 +135,23 @@ naissance.Geometry = class extends ve.Class {
 	
 	get name () {
 		//Declare local instance variables
-		let current_keyframe = this.history.getKeyframe();
+		let current_keyframe = (this._current_keyframe) ? 
+			this._current_keyframe : this.history.getKeyframe();
 		let current_value = current_keyframe.value;
 		
+		let current_name;
+			if (current_value[2] && current_value[2].name) current_name = current_value[2].name;
+			if (!current_name)
+				Object.iterate(this.history.keyframes, (local_key, local_value) => {
+					if (local_value?.value[2] && local_value?.value[2].name) {
+						current_name = local_value.value[2].name;
+						return "break"; //Break if possible
+					}
+				});
+		
 		//Return statement
-		return (current_value[2] && current_value[2].name) ? 
-			current_value[2].name : `New ${(this.class_name) ? this.class_name : "Geometry"}`;
+		return (current_name) ? 
+			current_name : `New ${(this.class_name) ? this.class_name : "Geometry"}`;
 	}
 	
 	set name (arg0_value) {
@@ -196,6 +207,10 @@ naissance.Geometry = class extends ve.Class {
 	 * @returns {Object}
 	 */
 	drawHierarchyDatatypeGenerics () {
+		//Declare local instance variables
+		let current_keyframe = (this._current_keyframe) ? 
+			this._current_keyframe : this.current_keyframe;
+		
 		//Return statement
 		return {
 			multitag: veButton(() => {
@@ -218,10 +233,8 @@ naissance.Geometry = class extends ve.Class {
 					}
 				})
 			}, {
-				name: "<icon>new_label</icon>", tooltip: "Manage Tags",
-				style: {
-					marginLeft: "auto", order: 99, padding: 0
-				}
+				attributes: { class: "order-99" },
+				name: "<icon>new_label</icon>", tooltip: "Manage Tags"
 			}),
 			hide_geometry: veButton(() => {
 				DALS.Timeline.parseAction({
@@ -229,10 +242,10 @@ naissance.Geometry = class extends ve.Class {
 					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: true } }]
 				});
 			}, {
+				attributes: { class: "order-100" },
 				name: `<icon>visibility</icon>`,
-				limit: () => !this.current_keyframe.value[2]?.hidden,
-				tooltip: "Hide Geometry",
-				style: { order: 100, padding: 0 }
+				limit: () => !current_keyframe.value[2]?.hidden,
+				tooltip: "Hide Geometry"
 			}),
 			show_geometry: veButton(() => {
 				DALS.Timeline.parseAction({
@@ -240,10 +253,10 @@ naissance.Geometry = class extends ve.Class {
 					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: false } }]
 				});
 			}, {
+				attributes: { class: "order-100" },
 				name: "<icon>visibility_off</icon>",
-				limit: () =>  this.current_keyframe.value[2]?.hidden,
-				tooltip: "Show Geometry",
-				style: { order: 100, padding: 0 }
+				limit: () => current_keyframe.value[2]?.hidden,
+				tooltip: "Show Geometry"
 			}),
 			delete_button: veButton(() => {
 				DALS.Timeline.parseAction({
@@ -251,9 +264,9 @@ naissance.Geometry = class extends ve.Class {
 					value: [{ type: "Geometry", geometry_id: this.id, delete_geometry: true }]
 				});
 			}, {
+				attributes: { class: "order-101" },
 				name: "<icon>delete</icon>",
-				tooltip: "Delete Geometry",
-				style: { order: 101, padding: 0 }
+				tooltip: "Delete Geometry"
 			})
 		};
 	}
@@ -264,76 +277,94 @@ naissance.Geometry = class extends ve.Class {
 	drawVariablesEditor () {
 		//Declare local instance variables
 		this.variables_ui = veInterface({
-			open_variables_editor: veButton(() => {
-				if (this.variables_editor) this.variables_editor.close();
-				this.variables_editor = veWindow({
-					table_editor: veTable(this.metadata.variables, {
-						dark_mode: true,
-						onuserchange: (v, e) => { //[WIP] - Finish function body
-							let array_values = e.convertToArray();
-							this.history.do_not_draw = true;
-							
-							//1. Reset all [2].variables from all keyframes
-							Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
-								let local_value = local_keyframe.value;
+			geometry_description: veWordProcessor(undefined, { //Loaded after 1 tick
+				onuserchange: (v) => this.metadata.description = v
+			}),
+			actions_bar: veRawInterface({
+				open_variables_editor: veButton(() => {
+					if (this.variables_editor) this.variables_editor.close();
+					this.variables_editor = veWindow({
+						table_editor: veSpreadsheet(this.metadata.variables, {
+							dark_mode: true,
+							onuserchange: (v, e) => { //[WIP] - Finish function body
+								let array_values = e.convertToArray();
+								this.history.do_not_draw = true;
 								
-								if (local_value[2] && local_value[2].variables)
-									if (Object.keys(local_value[2]).length === 1) {
-										delete this.history.keyframes[local_key];
-									} else {
-										delete local_value[2].variables;
-									}
-							});
-							
-							//2. Reconstruct .variables for all valid keyframes
-							for (let i = 0; i < array_values.length; i++)
-								for (let x = 0; x < array_values[i].length; x++) //Iterate over all rows in spreadsheets
-									if (array_values[i][x][0]) {
-										let local_date = Date.convertStringToDate(array_values[i][x][0].toString());
-										let local_variables_obj = {};
-										
-										//If local_date is defined, iterate over all values in row and append them to local_variables_obj
-										if (local_date && array_values[i][x].length > 1) {
-											for (let y = 1; y < array_values[i][x].length; y++) {
-												let local_cell_variable_name = y;
-												if (array_values[i][0][y])
-													local_cell_variable_name = array_values[i][0][y];
-												
-												local_variables_obj[local_cell_variable_name] = array_values[i][x][y];
-											}
-											
-											this.history.addKeyframe(local_date, undefined, undefined, {
-												variables: local_variables_obj
-											});
+								//1. Reset all [2].variables from all keyframes
+								Object.iterate(this.history.keyframes, (local_key, local_keyframe) => {
+									let local_value = local_keyframe.value;
+									
+									if (local_value[2] && local_value[2].variables)
+										if (Object.keys(local_value[2]).length === 1) {
+											delete this.history.keyframes[local_key];
+										} else {
+											delete local_value[2].variables;
 										}
-									}
+								});
+								
+								//2. Reconstruct .variables for all valid keyframes
+								for (let i = 0; i < array_values.length; i++)
+									for (let x = 0; x < array_values[i].length; x++) //Iterate over all rows in spreadsheets
+										if (array_values[i][x][0]) {
+											let local_date = Date.convertStringToDate(array_values[i][x][0].toString());
+											let local_variables_obj = {};
+											
+											//If local_date is defined, iterate over all values in row and append them to local_variables_obj
+											if (local_date && array_values[i][x].length > 1) {
+												for (let y = 1; y < array_values[i][x].length; y++) {
+													let local_cell_variable_name = y;
+													if (array_values[i][0][y])
+														local_cell_variable_name = array_values[i][0][y];
+													
+													local_variables_obj[local_cell_variable_name] = array_values[i][x][y];
+												}
+												
+												this.history.addKeyframe(local_date, undefined, undefined, {
+													variables: local_variables_obj
+												});
+											}
+										}
+								
+								this.metadata.variables = e.toJSON();
+								delete this.history.do_not_draw;
+								this.history.draw();
+								this.keyframes_ui.v = this.history.interface.v;
+							}
+						})
+					}, {
+						name: `Variables Editor (${this.name})`,
+						can_rename: false,
+						height: "20rem",
+						width: "30rem",
+						
+						onuserchange: (v, e) => {
+							//Declare local instance variables
+							let table_editor = e?.instance?.table_editor;
+								if (table_editor) this.metadata.variables = table_editor.toJSON();
 							
-							this.metadata.variables = v;
-							delete this.history.do_not_draw;
-							this.history.draw();
-							this.keyframes_ui.v = this.history.interface.v;
+							//Call DALS.Timeline.parseAction() .set_history 
+							if (v.close)
+								DALS.Timeline.parseAction({
+									options: { name: "Edit Geometry History", key: "edit_geometry_history" },
+									value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
+								});
 						}
-					})
-				}, {
-					name: `Variables Editor (${this.name})`,
-					can_rename: false,
-					height: "20rem",
-					width: "30rem",
+					});
+				}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 1 }),
+				open_help_menu: veButton(() => {
 					
-					onuserchange: (v) => {
-						//Call DALS.Timeline.parseAction() .set_history 
-						if (v.close)
-							DALS.Timeline.parseAction({
-								options: { name: "Edit Geometry History", key: "edit_geometry_history" },
-								value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
-							});
-					}
-				});
-			}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 0 }),
-			open_help_menu: veButton(() => {
-				
-			}, { name: "<icon>info</icon> Help Menu", x: 1, y: 0 })
+				}, { name: "<icon>info</icon> Help Menu", x: 1, y: 1 })
+			}, {
+				style: {
+					"[component='ve-button']": { marginRight: `var(--padding)` }
+				}
+			})
 		}, { name: "Variables", open: true });
+		
+		//Wait a tick for metadata to load
+		setTimeout(() => {
+			if (this.metadata.description) this.variables_ui.geometry_description.v = this.metadata.description;
+		});
 	}
 	
 	/**
@@ -477,15 +508,17 @@ naissance.Geometry = class extends ve.Class {
 			
 			//move_keyframe
 			if (json.move_keyframe) {
-				console.log(geometry_obj.history.moveKeyframe);
 				geometry_obj.history.moveKeyframe(json.move_keyframe.date, json.move_keyframe.ot_date);
 				geometry_obj.history.draw();
 				geometry_obj.keyframes_ui.v = geometry_obj.history.interface.v;
 			}
 			
 			//remove_keyframe
-			if (json.remove_keyframe)
+			if (json.remove_keyframe) {
 				geometry_obj.removeKeyframe(json.remove_keyframe);
+				geometry_obj.history.draw();
+				geometry_obj.keyframes_ui.v = geometry_obj.history.interface.v;
+			}
 			
 			//set_geometry
 			if (json.set_geometry) {
@@ -512,22 +545,29 @@ naissance.Geometry = class extends ve.Class {
 			
 			//set_name
 			if (json.set_name) {
-				if (typeof json.set_name === "object") {
-					let date = (json.set_name.date) ? json.set_name.date : main.date;
-					let new_name = json.set_name.name;
-					geometry_obj.history.addKeyframe(date, undefined, undefined, { name: new_name });
-					geometry_obj.draw();
-				} else if (typeof json.set_name === "string") {
-					geometry_obj.history.addKeyframe(main.date, undefined, undefined, { name: json.set_name });
-					geometry_obj.draw();
-				}
-				
-				//Refresh .instance_window .name if visible
-				if (geometry_obj.instance_window) {
-					let current_keyframe = geometry_obj.history.getKeyframe();
+				let date = main.date;
+					if (typeof json.set_name === "object" && json.set_name.date !== undefined)
+						date = json.set_name.date;
+				let old_name = geometry_obj.name;
+					if (old_name) old_name = old_name.trim();
+				let new_name;
+					if (typeof json.set_name === "object") {
+						new_name = json.set_name.name;
+					} else if (typeof json.set_name === "string") {
+						new_name = json.set_name;
+					}
+					if (new_name) new_name = new_name.trim();
 					
-					if (current_keyframe.value[2] && current_keyframe.value[2].name)
-						geometry_obj.instance_window.setName(current_keyframe.value[2].name);
+				if (new_name !== old_name) {
+					geometry_obj.history.addKeyframe(date, undefined, undefined, { name: new_name });
+					
+					//Refresh .instance_window .name if visible
+					if (geometry_obj.instance_window) {
+						let current_keyframe = geometry_obj.history.getKeyframe();
+						
+						if (current_keyframe.value[2] && current_keyframe.value[2].name)
+							geometry_obj.instance_window.setName(current_keyframe.value[2].name);
+					}
 				}
 			}
 			

@@ -14,6 +14,7 @@ if (!global.DALS) global.DALS = {};
  * ##### Instance:
  * - `.id=Class.generateRandomID(DALS.Action)`: {@link string}
  * - `.options`: {@link Object} - Reference variable to `json.options`.
+ * - `.key`: {@link string}
  * - `.name="New Action"`: {@link string} - Reference variable to `json.options.name`.
  * - `.timeline`: {@link string}
  * - `.value`: {@link Object} - The parsed JSON object contained within the object.
@@ -43,9 +44,15 @@ DALS.Action = class {
 		if (typeof json === "string") json = JSON.parse(json);
 		
 		//Declare local instance variables
+		let settings_obj = ve.registry.settings.UndoRedo;
+		
+		//Guard clause for manual commits with no value with type: "global", load_save
+		if (ve.registry.settings.UndoRedo.manual_commits && !(json?.value?.load_save && json?.value?.type === "global"))
+			return;
+		
 		this.id = Class.generateRandomID(DALS.Action);
 		this.options = (json.options) ? json.options : {};
-			this.name = (json.options.name) ? json.options.name : "New Action";
+			this.name = (this.options.name) ? this.options.name : "New Action";
 		this.timeline = undefined; //Populated upon .addAction()
 		this.value = json;
 		

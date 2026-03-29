@@ -46,8 +46,8 @@
     }
 }
 
-/* -- ve.BIUF -- */
-[component="ve-biuf"] {
+/* -- ve.RichText -- */
+[component="ve-rich-text"] {
     position: relative;
     
     #biuf-toolbar {
@@ -95,7 +95,13 @@
 
 /* -- ve.Colour -- */
 [component="ve-colour"] {
-    input {
+    [component="ve-range"] {
+        margin-left: var(--padding);
+        
+        #value-label { min-width: auto; }
+    }
+    
+    input[type="color"] {
         border: 1px solid var(--body-colour);
         outline: none;
 
@@ -104,6 +110,9 @@
         margin-left: 0.2rem;
         vertical-align: middle;
         width: 1rem;
+    }
+    input[type="range"] {
+        width: calc(var(--default-width)/3);
     }
     input::-webkit-color-swatch {
         border: none;
@@ -115,8 +124,9 @@
 }
 
 /* -- ve.Datalist -- */
-[component="ve-datalist"] input {
-    min-width: calc(var(--default-width)/2);
+[component="ve-datalist"] {
+    input { min-width: calc(var(--default-width)/2); }
+    input[list] { margin-left: var(--padding); }
 }
 
 /* -- ve.Date -- */
@@ -132,20 +142,98 @@
     }
 }
 
+/* -- ve.FlexInterface -- */
+[component="ve-flex-interface"] {
+    height: 100%;
+    width: 100%;
+    
+    > flex {
+        height: 100%;
+        width: 100%;
+    }
+    flex {
+        display: flex;
+        overflow: hidden;
+
+        > flex-resizer {
+            background-color: var(--hover-colour);
+            flex: 0 0 var(--cell-padding);
+            position: relative;
+
+            /* The icon is placed in a pseudo-element to allow separate coloring via masks */
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-color: var(--body-colour);
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-position: center;
+                mask-repeat: no-repeat;
+                mask-position: center;
+            }
+        }
+    }
+    flex flex-resizer:first-child {
+        display: none;
+    }
+
+    flex.horizontal {
+        flex-direction: row;
+
+        > flex-resizer {
+            cursor: ew-resize;
+
+            &::after {
+                -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M5 0v30' stroke='black' stroke-width='1'/></svg>");
+                mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M5 0v30' stroke='black' stroke-width='1'/></svg>");
+            }
+        }
+    }
+
+    flex.vertical {
+        flex-direction: column;
+
+        > flex-resizer {
+            cursor: ns-resize;
+
+            &::after {
+                -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='10'><path d='M0 5h30' stroke='black' stroke-width='1'/></svg>");
+                mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='10'><path d='M0 5h30' stroke='black' stroke-width='1'/></svg>");
+            }
+        }
+    }
+
+    flex-item {
+        overflow: auto;
+        scrollbar-color: var(--body-colour) transparent;
+        scrollbar-width: thin;
+    }
+}
+
+/* -- ve.Graph -- */
+[component="ve-graph"] > div {
+    height: 100%;
+    width: 100%;
+}
+
 /* -- ve.Interface -- */
 [component="ve-interface"] {
-    height: 100%;
-    
+    > details > table, > table {
+        height: 100%;
+        width: 100%;
+    }
     summary#name {
         padding-bottom: calc(var(--padding)*0.5);
     }
     summary:hover {
         cursor: pointer;
     }
-    > table { width: 100%; }
+    > table:not(:has(td[colspan], :has(td[rowspan]))) {
+        table-layout: fixed;
+    }
     > table:has([component="ve-script-manager"]),
-    > table:has([component="ve-table"]),
-    > table:has([component="ve-wysiwyg"]) {
+    > table:has([component="ve-spreadsheet"]),
+    > table:has([component="ve-word-processor"]) {
         height: 100%;
         width: 100%;
     }
@@ -168,7 +256,73 @@
         padding: 0;
     }
     table tbody tr td {
-        padding-inline-start: 0 !important;
+        padding-inline-start: 0;
+    }
+}
+
+/* -- ve.List -- */
+[component="ve-horizontal-list"] {
+    > #name {
+        margin-right: var(--padding);
+    }
+}
+
+/* -- ve.Log -- */
+table:has([component="ve-log"]) { table-layout: fixed; }
+[component="ve-log"] {
+    height: 100%;
+    padding: 0;
+    
+    #console {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        
+        .log-element { 
+            flex: 1; 
+            overflow: auto;
+            scrollbar-color: var(--body-colour) transparent;
+            scrollbar-width: thin;
+            width: 100%;
+            
+            .log-part {
+                word-break: break-all;
+            }
+        }
+    }
+    [log-button="true"] {
+        background: none;
+        border-radius: 0;
+        border: 0;
+        display: block;
+        padding: var(--padding);
+        text-align: left;
+        width: 100%;
+        
+        transition: all 0.5s ease;
+    }
+    [log-button="true"].active {
+        background-color: var(--body-colour);
+        color: var(--bg-primary-colour);
+    }
+    
+    pre { white-space: break-spaces; }
+}
+
+/* -- ve.Number -- */
+[component="ve-number"] {
+    [component="ve-horizontal-list"] { padding: 0; }
+}
+
+/* -- ve.ObjectEditor -- */
+[component="ve-object-editor"] {
+    [component="ve-hierarchy-datatype"]:not(.actions-bar) .nst-content {
+        [component="ve-button"]:nth-child(1 of [component="ve-button"]:not([data-is-type="true"])) {
+            margin-left: auto;
+        }
+        [component="ve-text"]:nth-child(1 of [component="ve-text"]) {
+            display: none;
+        }
     }
 }
 
@@ -292,9 +446,6 @@
     > [component="ve-button"] {
       padding: 0;
     }
-    [component="ve-button"]:has(button #name icon):not(:nth-child(-n + 2)) {
-        icon { justify-content: space-around; }
-    }
 }
 
 /* -- ve.Select -- */
@@ -304,9 +455,30 @@
     }
 }
 
+/* -- ve.Table -- */
+[component="ve-table"] {
+    .label-current-page {
+        margin-right: var(--cell-padding);
+    }
+    .pagination-controls {
+        text-align: center;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    td, th {
+        border: 1px solid var(--hover-colour);
+        padding: var(--padding);
+        padding-inline-start: var(--padding) !important;
+        text-align: left;
+    }
+}
+
 /* -- ve.Text -- */
-[component="ve-text"] input {
-    min-width: calc(var(--default-width)/2);
+[component="ve-text"] {
+    [component="ve-horizontal-list"] { padding: 0; }
+    input { min-width: calc(var(--default-width)/2); }
 }
 
 /* -- ve.Time -- */

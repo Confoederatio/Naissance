@@ -81,9 +81,10 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		});
 		
 		try {
-			map.removeLayer(this.layer);
+			main.layers.group_tile_layers.addTo(map);
+			main.layers.group_tile_layers.removeLayer(this.layer);
 			if (this._is_visible)
-				map.addLayer(this.layer);
+				main.layers.group_tile_layers.addLayer(this.layer);management
 		} catch (e) {}
 	}
 	
@@ -107,7 +108,7 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 			edit_tile_layer: veButton(() => {
 				if (this.tile_layer_window) this.tile_layer_window.close();
 				this.tile_layer_window = veWindow({
-					opacity: veRange(0, {
+					opacity: veRange(Math.returnSafeNumber(this.layer?.options?.opacity, 0), {
 						name: "Opacity",
 						onuserchange: (v) => this._DALS_addOptions({ opacity: v })
 					}),
@@ -189,7 +190,6 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 	}
 	
 	fromJSON (arg0_json) {
-		//Convert from parameters
 		let json = (typeof arg0_json !== "object") ? JSON.parse(arg0_json) : arg0_json;
 		
 		this.id = json.id;
@@ -197,11 +197,21 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		this._name = json.name;
 		this.options = json.options;
 		
-		//Draw call, draw hierarchy datatype
+		// Re-sync the maptalks layer object with the loaded options
+		if (this.layer) {
+			this.layer._setOptions(this.options);
+			this.layer.setId(this.id);
+		} else {
+			this.layer = new maptalks.TileLayer(this.id, this.options);
+		}
+		
 		this.draw();
-		this.drawHierarchyDatatype();
-		if (this.is_base_layer)
-			this._DALS_applyAsBaseLayer(true);
+		if (this.is_base_layer) {
+			// Delay slightly or ensure map exists before applying base layer
+			setTimeout(() => {
+				if (global.map) this._DALS_applyAsBaseLayer(true);
+			}, 0);
+		}
 	}
 	
 	hide () {
@@ -220,16 +230,13 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 	}
 	
 	toJSON () {
-		//Declare local instance variables
-		let json_obj = {
+		return JSON.stringify({
 			id: this.id,
 			is_base_layer: this.is_base_layer,
-			name: this._name,
-			options: this.options
-		};
-		
-		//Return statement
-		return JSON.stringify(json_obj);
+			name: this._name, // Consistently use _name
+			options: this.options,
+			class_name: this.class_name
+		});
 	}
 	
 	/**

@@ -10,6 +10,7 @@
 	
 	/**
 	 * Checks for strict equality between two values.
+	 * @alias Boolean.strictEquality
 	 * 
 	 * @param {any} arg0_variable
 	 * @param {any} arg1_variable

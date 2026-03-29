@@ -211,26 +211,35 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		this._name = (json.name) ? json.name : "New Layer";
 		this.options = json.options;
 		
-		//Iterate over json.entities and restore them
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
-			let local_feature = naissance.Feature.instances[i];
+		//Iterate over json.entities IN SAVED ORDER to restore them
+		for (let x = 0; x < json.entities.length; x++) {
+			let entity_def = json.entities[x];
 			
-			for (let x = 0; x < json.entities.length; x++)
+			//Check naissance.Feature.instances
+			for (let i = 0; i < naissance.Feature.instances.length; i++) {
+				let local_feature = naissance.Feature.instances[i];
+				
 				if (
-					json.entities[x].class_name === local_feature.class_name &&
-					json.entities[x].id === local_feature.id
-				)
+					entity_def.class_name === local_feature.class_name &&
+					entity_def.id === local_feature.id
+				) {
 					this.addEntity(local_feature, true);
-		}
-		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-			let local_geometry = naissance.Geometry.instances[i];
+					break;
+				}
+			}
 			
-			for (let x = 0; x < json.entities.length; x++)
+			//Check naissance.Geometry.instances
+			for (let i = 0; i < naissance.Geometry.instances.length; i++) {
+				let local_geometry = naissance.Geometry.instances[i];
+				
 				if (
-					json.entities[x].class_name === local_geometry.class_name &&
-					json.entities[x].id === local_geometry.id
-				)
+					entity_def.class_name === local_geometry.class_name &&
+					entity_def.id === local_geometry.id
+				) {
 					this.addEntity(local_geometry, true);
+					break;
+				}
+			}
 		}
 		
 		//Draw HierarchyDatatype if possible; switch type at bottom

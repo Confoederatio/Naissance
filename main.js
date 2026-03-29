@@ -1,11 +1,13 @@
 //Import libraries
-let { app, BrowserWindow, dialog, ipcMain, session } = require("electron");
+let { app, BrowserWindow, dialog, ipcMain, session, shell } = require("electron");
+let fs = require("fs");
 let path = require("path");
+let readline = require("readline");
 let { performance } = require("perf_hooks");
 
 //Metadata - Title
 let latest_fps = 0;
-let naissance_version = "1.6b Falkland";
+let naissance_version = "1.7b Chukchi";
 let title_update_interval;
 let win;
 
@@ -47,6 +49,21 @@ let win;
 
       win.setTitle(title_string);
     }, 1000);
+    
+    //<a href> handling
+    //Intercept link clicks that would navigate the current window
+    win.webContents.on("will-navigate", (event, url) => {
+      if (url !== win.webContents.getURL()) {
+        event.preventDefault();
+        shell.openExternal(url);
+      }
+    });
+    
+    //Intercept target="_blank" or window.open()
+    win.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: "deny" };
+    });
 
     //Get the default session
     try {
@@ -71,9 +88,11 @@ let win;
 
 //App handling
 {
+  app.commandLine.appendSwitch("enable-features", "SharedArrayBuffer");
+  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=32128 --expose-gc');
+  
   //Launch app when ready
   app.whenReady().then(() => {
-
     //Create the window and instantiate it
     createWindow();
 
@@ -89,4 +108,10 @@ let win;
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
   });
+}
+
+//IPC handling
+{
+  let ve = require("./UF/js/vercengen/startup/vercengen_electron");
+  ve.initialiseIPC();
 }

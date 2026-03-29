@@ -79,8 +79,8 @@ ve.Date = class extends ve.Component {
 	 */
 	get v () {
 		//Determine if #year-type needs a flip for this.value
-		if (this.element.querySelector(`#year-type`).innerHTML === "BC")
-			if (this.value.year > 0) this.value.year *= -1;
+		/*if (this.element.querySelector(`#year-type`).innerHTML === "BC")
+			if (this.value.year > 0) this.value.year *= -1;*/
 		
 		//Return statement
 		return Date.convertTimestampToDate(this.value);
@@ -105,7 +105,6 @@ ve.Date = class extends ve.Component {
 		//Set #year-type first
 		if (value.year < 0) {
 			year_type_el.innerHTML = "BC";
-			value.year = Math.abs(value.year);
 		} else {
 			year_type_el.innerHTML = "AD";
 		}
@@ -137,7 +136,7 @@ ve.Date = class extends ve.Component {
 			
 			if (!isNaN(actual_value)) {
 				if (actual_value < 0) {
-					actual_value = Math.abs(actual_value);
+					//actual_value = Math.abs(actual_value);
 					year_type_el.innerHTML = "BC";
 				} else if (actual_value === 0) {
 					actual_value = 1;

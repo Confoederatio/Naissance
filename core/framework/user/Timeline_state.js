@@ -99,6 +99,7 @@
 		//4. Force all UI_LeftbarHierarchy instances to .refresh()
 		setTimeout(() => {
 			UI_LeftbarHierarchy.refresh();
+			main.renderer.update(); //Update renderer
 		}, 100);
 		
 		//Reload cursor

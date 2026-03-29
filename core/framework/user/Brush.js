@@ -151,7 +151,7 @@ naissance.Brush = class extends ve.Class {
 		this.information_display = veHTML(() => {
 			let cursor_coordinates = this.cursor.getCoordinates();
 			
-			return `X: ${String.formatNumber(cursor_coordinates.x, 2)}; Y: ${String.formatNumber(cursor_coordinates.y, 2)} | Size: ${String.formatNumber(this.radius/1000, 2)}km`;
+			return `Lng (X): ${String.formatNumber(cursor_coordinates.x, 2)}; Lat (Y): ${String.formatNumber(cursor_coordinates.y, 2)} | Size: ${String.formatNumber(this.radius/1000, 2)}km`;
 		});
 		
 		super.open("instance", {
@@ -242,7 +242,19 @@ naissance.Brush = class extends ve.Class {
 					
 					for (let i = 0; i < all_layer_geometries.length; i++)
 						if (all_layer_geometries[i].id !== this._selected_geometry.id && all_layer_geometries[i].geometry) try {
-							if (!["override", "node_override"].includes(this.mode))
+							let is_visible = false;
+							try {
+								let current_keyframe = all_layer_geometries[i].history.getKeyframe();
+								
+								if (current_keyframe) {
+									if (current_keyframe.value[0] && Object.keys(current_keyframe.value[0]).length)
+										is_visible = true;
+									if (current_keyframe.value[2] !== undefined && current_keyframe.value[2].hidden)
+										is_visible = false;
+								}
+							} catch (e) { console.warn(e); }
+							
+							if (!["override", "node_override"].includes(this.mode) && is_visible)
 								turf_geometry = turf.difference(turf.featureCollection([
 									turf_geometry,
 									turf.buffer(Geospatiale.convertMaptalksToTurf(all_layer_geometries[i].geometry), 0.001, { units: "kilometers"})
@@ -285,6 +297,8 @@ naissance.Brush = class extends ve.Class {
 			textSize: Math.returnSafeNumber(main.settings.default_label_font_size, 14)
 		};
 	}
+	
+	getCoordinates () { return this.cursor.getCoordinates(); }
 	
 	getRemovePolygon (arg0_geometry) {
 		//Convert from parameters

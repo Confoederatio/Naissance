@@ -3,7 +3,7 @@
     border: 1px solid black;
     border-radius: var(--cell-padding);
     --bg-primary-colour: rgba(255, 255, 255, 0.7);
-    --bg-secondary-colour: rgb(235, 235, 235);
+    --bg-secondary-colour: rgb(215, 215, 215);
     --body-colour: rgba(0, 0, 0, 0.83);
     --header-colour: rgba(0, 0, 0, 0.83);
     
@@ -22,6 +22,13 @@
         .message:before {
             content: "[INFO] "
         }
+        .user-command:before {
+            content: "> "
+        }
+        .user-command {
+            font-style: oblique;
+            opacity: 0.8;
+        }
     }
 
 /* -- ve.ScriptManagerBlockly -- */
@@ -34,6 +41,8 @@
 .blocklyToolboxDiv {
     background-color: var(--bg-primary-colour);
     color: var(--body-colour);
+    padding-bottom: var(--cell-padding);
+    transform: translateY(calc(var(--padding)*-1));
     
     .blocklyTreeLabel {
         font-family: var(--body-font-family);
@@ -45,7 +54,139 @@
 .blocklyTreeRow:not(.blocklyTreeSelected):hover {
     background-color: var(--accent-primary-colour);
 }
+[component="ve-script-manager"] {
+    --ve-script-manager-bg-opacity: 0;
+    
+    #container {
+        display: flex;
+        flex-direction: row;
+    }
+    #leftbar {
+        padding-top: var(--cell-padding);
+        
+        [component="ve-file-explorer"] {
+            margin-right: calc(var(--cell-padding));
+            max-height: 80dvh;
+            overflow: auto;
+            padding-bottom: 0;
+            padding-right: 0;
+            padding-top: 0;
+            width: 20rem;
+        }
+        #file-explorer-body [component="ve-hierarchy"] {
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+    }
+    #scene {
+        display: flex;
+        flex-direction: row;
+        padding-top: var(--cell-padding);
+        width: 100%;
+        
+        [component="ve-flex-interface"] {
+            flex: 1;
+            padding: 0;
+        }
+        flex-item:has([component="ve-script-manager-blockly"].disabled) {
+            display: none;
+        }
+        flex-item:has([component="ve-script-manager-blockly"].disabled) + flex-resizer {
+            display: none;
+        }
+    }
+    #scene [component="ve-script-manager-blockly"], #scene [component="ve-script-manager-monaco"] {
+        box-sizing: border-box;
+    }
+    #scene[data-selected-view="blockly"] [component="ve-script-manager-blockly"] {
+        border: var(--cell-padding) solid var(--accent-tertiary-colour);
+        border-left: 0 solid transparent;
+        border-top: 0 solid transparent;
+    }
+    #scene[data-selected-view="monaco"] [component="ve-script-manager-monaco"] {
+        border: var(--cell-padding) solid var(--accent-tertiary-colour);
+    }
+    #scene[data-blockly-change="true"] [component="ve-script-manager-monaco"] {
+        border: var(--cell-padding) solid rgba(255, 255, 0, 0.5);
+    }
+    #scene[data-monaco-change="true"] [component="ve-script-manager-blockly"] {
+        border: var(--cell-padding) solid rgba(255, 255, 0, 0.5);
+    }
+    
+    #scene-monaco {
+        height: 100%;
+    }
+    #topbar [component="ve-raw-interface"] {
+        align-items: center;
+        display: flex;
+        padding: 0;
+        
+        [component="ve-button"] {
+            margin-right: calc(var(--cell-padding)*2);
+        }
+        #file-name {
+          overflow-wrap: anywhere;
+        }
+        #file-name[data-is-saved="false"] {
+            font-style: oblique;
+        }
+        #file-name[data-is-saved="false"]:after {
+            content: "*";
+        }
+    }
+}
+[component="ve-script-manager"][data-background-image] .monaco-editor {
+    --vscode-editor-background: color-mix(in srgb, var(--ve-sm-background-colour), transparent calc(100% - var(--ve-sm-background-opacity))) !important;
+    --vscode-editorGutter-background: color-mix(in srgb, 
+        var(--ve-sm-background-colour), 
+        transparent calc(100% - var(--ve-sm-background-opacity)*1.5)
+    ) !important;
+    
+    .decorationsOverviewRuler { opacity: 0.9; }
+    .minimap { opacity: 0.8 !important; }
+    .view-overlays .current-line {
+        background-color: var(--hover-colour);
+    }
+}
+[component="ve-script-manager"][data-background-image] .blocklyWorkspace rect.blocklyMainBackground {
+    fill-opacity: 0;
+}
+[component="ve-script-manager"][data-background-image]:before {
+    content: " ";
+    height: 100%;
+    left: 0;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+    
+    background: var(--ve-sm-background-image);
+    background-size: cover !important;
+}
+[component="ve-script-manager"]:has(#file-name[data-is-saved="false"])
+    [component="ve-script-manager-monaco"] {
+        border-left: var(--cell-padding) solid rgba(240, 60, 60, 0.5);   
+    }
+[component="ve-script-manager"]:has(#file-name[data-is-saved="true"])
+    [component="ve-script-manager-monaco"] {
+        border-left: var(--cell-padding) solid rgba(60, 240, 60, 0.5);
+    }
 [component="ve-script-manager-blockly"] {
+    display: block;
+    height: 100%;
+    left: 0;
+    overflow: clip;
+    padding: 0;
+    position: relative;
+    width: 100%; /* -- Updated to 100% to fill the flex item -- */
+
+    .blocklySvg {
+        background-color: color-mix(in srgb, var(--ve-sm-background-colour), transparent calc(100% - var(--ve-sm-background-opacity)));
+    }
+    .blocklyToolboxDiv {
+        padding-bottom: var(--padding);
+    }
     svg {
         .blocklyTrash, .blocklyZoom {
             filter: brightness(100);
@@ -62,4 +203,84 @@
 }
 text.blocklyText {
     font-family: var(--body-font-family);
+}
+
+/* -- Bottombar -- */
+[component="ve-script-manager"] #bottombar {
+    display: flex;
+    
+    [component="ve-horizontal-list"] #component-body {
+        flex-wrap: wrap;
+    }
+    [component="ve-html"]:has([data-file-path]) {
+        flex: 0 0 auto;
+        padding-top: 0;
+    }
+    [data-is-selected="true"] {
+        border-top: var(--cell-padding) solid var(--accent-primary-colour);
+        font-weight: 700;
+        padding-top: 1px;
+    }
+    #bottombar-status {
+        margin-top: var(--padding);
+        min-width: calc(20rem + var(--padding));
+
+        .refresh-button {
+          margin-left: var(--padding);
+        }
+    }
+    #ui-bottombar {
+        margin-left: var(--cell-padding);
+    }
+}
+
+/* -- File Explorer -- */
+[component="ve-script-manager"] [component="ve-file-explorer"] {
+    [component="ve-hierarchy-datatype"][data-mode="excluded"]
+        .nst-content > [component="ve-html"] > icon:first-child {
+            color: orange;
+        }
+}
+
+/* -- Find and Replace -- */
+#status-label kbd {
+    font-family: var(--monospace-font-family);
+}
+#ve-script-manager-find-and-replace {
+    #matches-details {
+        box-sizing: border-box;
+        max-height: 35dvh;
+        max-width: calc(30rem - var(--padding)*2 - var(--cell-padding)*2);
+        overflow-y: auto;
+        padding-right: var(--padding);
+        scrollbar-color: white transparent;
+        scrollbar-width: thin;
+        word-wrap: break-word;
+    }
+    
+    #file-submatches:has(.match-entry.selected) {
+        background-color: var(--hover-colour);
+    }
+    .line {
+        opacity: 0.5;
+    }
+    .match-entry:first-child {
+        margin-left: var(--padding);
+    }
+    .match-entry:not(:first-child):before {
+        content: ", ";
+    }
+    .match-entry:not(.selected):hover {
+        cursor: pointer;
+    }
+    .match-entry.selected .line {
+        background-color: var(--accent-primary-colour);
+        opacity: 1;
+    }
+    .match-entry.selected:before {
+        background-color: transparent;
+    }
+    .match-file {
+        overflow-wrap: break-word;
+    }
 }

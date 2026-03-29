@@ -4,8 +4,6 @@
  * Represents a multi tag input with unique metadata attributes for keywording.
  * - Functional binding: <span color=00ffff>veMultiTag</span>().
  * 
- * [WIP] - Arrays appear to be 1-indexed when shifting or deleting. This behaviour should be changed.
- * 
  * ##### Constructor:
  * - `arg0_value`: {@link Array}<{@link string}>
  * - `arg1_options`: {@link Object}
@@ -159,24 +157,37 @@ ve.MultiTag = class extends ve.Component {
 		
 		//Create this.components_obj.list if ill-defined
 		if (!this.components_obj.list) {
+			this._initialising = true;
 			let element_options = {
 				onuserchange: (v, e) => {
-					if (this.local_tags)
-						if (!this.local_tags.includes(v)) {
-							this.local_tags.push(v);
-							if (!this.registry_array.includes(v))
-								this.registry_array.push(v);
-							this.notifyAllInstances();
-							this.fireToBinding();
-						} else {
+					if (this._initialising) return;
+					if (this.local_tags) {
+						//Count how many times v already appears in the list excluding the current input
+						let duplicate_count = 0;
+						
+						for (let i = 0; i < this.components_obj.list.v.length; i++) {
+							let item = this.components_obj.list.v[i];
+							if (item.element !== e.element && item.v === v)
+								duplicate_count++;
+						}
+						
+						if (duplicate_count > 0) {
 							veToast(`<icon>warning</icon> This tag is a duplicate of a previous tag, and will not be registered.`);
 							e.v = "";
+						} else {
+							if (!this.registry_array.includes(v))
+								this.registry_array.push(v);
+							this.updateLocalTags();
+							this.notifyAllInstances();
+							this.fireToBinding();
 						}
+					}
 				}
 			};
 			this.components_obj.datalist.options = element_options;
 			this.components_obj.list = new ve.List([this.components_obj.datalist], {
 				onuserchange: (v, e) => {
+					if (this._initialising) return;
 					this.updateLocalTags();
 					this.notifyAllInstances();
 					this.fireToBinding();
@@ -194,6 +205,7 @@ ve.MultiTag = class extends ve.Component {
 					this.components_obj.list.addItem();
 			for (let i = 0; i < this.local_tags.length; i++)
 				this.components_obj.list.v[i].v = this.local_tags[i];
+			this._initialising = false;
 		} else {
 			//Update suggestions on all datalist items in the list
 			this.components_obj.datalist.v = this.datalist_options;

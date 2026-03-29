@@ -9,8 +9,114 @@
 		global.String = {};
 	
 	/**
+	 * Capitalises all the words in a string.
+	 * @alias String.capitalise
+	 * 
+	 * @param {string} arg0_string
+	 *
+	 * @returns {string}
+	 */
+	String.capitalise = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let separate_words = string.split(" ");
+		
+		//Iterate over separate_words to capitalise them
+		for (let i = 0; i < separate_words.length; i++) {
+			separate_words[i] = separate_words[i].charAt(0).toUpperCase();
+			separate_words[i].substring(1);
+		}
+		
+		//Return statement
+		return separate_words.join(" ");
+	};
+		
+	/**
+	 * Cleans an input object to be compatible with JSON.stringify().
+	 * @alias String.cleanStringify
+	 * 
+	 * @param {Object} arg0_input_object
+	 * 
+	 * @returns {string}
+	 */
+	String.cleanStringify = function (arg0_input_object) {
+		//Convert from parameters
+		let input_object = arg0_input_object;
+		
+		//Copy without circular references
+		if (input_object && typeof input_object == "object")
+			input_object = copyWithoutCircularReferences([object], object);
+		
+		//Return statement
+		return JSON.stringify(input_object);
+		
+		//Declare sub-function
+		function copyWithoutCircularReferences (arg0_references, arg1_object) {
+			//Convert from parameters
+			let references = arg0_references;
+			let object = arg1_object;
+			
+			//Declare local instance variables
+			let clean_object = {};
+			
+			Object.keys(object).forEach(function (key) {
+				let value = object[key];
+				
+				if (value && typeof value === 'object') {
+					if (references.indexOf(value) < 0) {
+						references.push(value);
+						clean_object[key] = copyWithoutCircularReferences(references, value);
+						references.pop();
+					} else {
+						clean_object[key] = '###_Circular_###';
+					}
+				} else if (typeof value !== 'function') {
+					clean_object[key] = value;
+				}
+			});
+			
+			//Sub-return statement
+			return clean_object;
+		}
+	};
+	
+	/**
+	 * Compares two strings, ignoring their case. Returns a boolean.
+	 * @alias String.equalsIgnoreCase
+	 *
+	 * @param {string} arg0_string - The string to compare with.
+	 * @param {string} arg1_string - The other string to compare with.
+	 *
+	 * @returns {boolean}
+	 */
+	String.equalsIgnoreCase = function (arg0_string, arg1_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		let ot_string = arg1_string;
+		
+		//Return statement
+		return (string.toLowerCase() === ot_string.toLowerCase());
+	};
+	
+	/**
+	 * Formalises a debug string into human-readable text. Returns a string.
+	 * @alias String.formalise
+	 *
+	 * @returns {string}
+	 */
+	String.formalise = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Return statement
+		return string.replace(/_/g, " ").replace(/(^\w{1})|(\s{1}\w{1})/g, (match) => match.toUpperCase());
+	};
+	
+	/**
 	 * Formats an array into a string.
-	 * @memberof String
+	 * @alias String.formatArray
 	 * 
 	 * @param {Array} arg0_array
 	 * 
@@ -39,16 +145,33 @@
 	};
 	
 	/**
-	 * Formats a Date object into a default string.
-	 * @memberof String
+	 * Returns a human-readable version of a boolean.
+	 * @alias String.formatBoolean
 	 * 
-	 * @param {Object} arg0_date
+	 * @param {boolean} arg0_input_boolean
+	 * 
+	 * @returns {string}
+	 */
+	String.formatBoolean = function (arg0_input_boolean) {
+		//Convert from parameters
+		let input_boolean = arg0_input_boolean;
+		
+		//Return statement
+		return (input_boolean) ? `Yes` : `No`;
+	};
+	
+	/**
+	 * Formats a Date object into a default string.
+	 * @alias String.formatDate
+	 * 
+	 * @param {Object} [arg0_date]
 	 * 
 	 * @returns {string}
 	 */
 	String.formatDate = function (arg0_date) {
 		//Convert from parameters
 		let date = (arg0_date) ? arg0_date : Date.getCurrentDate();
+		if (typeof date === "number") date = Date.convertTimestampToDate(date);
 		
 		//Declare local instance variables
 		let day_name = String.ordinalise(date.day);
@@ -62,7 +185,7 @@
 	
 	/**
 	 * Formats a date length into a string given a number of seconds.
-	 * @memberof String
+	 * @alias String.formatDateLength
 	 * 
 	 * @param {number} arg0_seconds
 	 * 
@@ -86,7 +209,7 @@
 	
 	/**
 	 * Formats an object as a given string.
-	 * @memberof String
+	 * @alias String.formatObject
 	 * 
 	 * @param {Object} arg0_object
 	 * 
@@ -117,7 +240,7 @@
 	
 	/**
 	 * Formats a number based off of the selected locale, rounding it to the specified number of places.
-	 * @memberof String
+	 * @alias String.formatNumber
 	 * 
 	 * @param {number} arg0_number
 	 * @param {number} [arg1_places=0]
@@ -138,7 +261,7 @@
 	
 	/**
 	 * Formats the type name of a given value based off its actual JS type.
-	 * @memberof String
+	 * @alias String.formatTypeName
 	 * 
 	 * @param {any} arg0_value
 	 * 
@@ -162,8 +285,61 @@
 	};
 	
 	/**
+	 * Returns a string timestamp of a contemporary date.
+	 * @alias String.prototype.getDate
+	 *
+	 * @param {string} arg0_string
+	 *
+	 * @returns {Date}
+	 */
+	String.getDate = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Return statement
+		return Date.parse(string);
+	};
+	
+	/**
+	 * Fetches the amount of nesting embedded within the current string.
+	 * @alias String.prototype.getNesting
+	 *
+	 * @param {string} arg0_string
+	 *
+	 * @returns {number}
+	 */
+	String.getNesting = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let first_character = "";
+		let nesting = 0;
+		let spaces_until_first_character = 0;
+		
+		//Iterate over string to count the number of spaces to the next character
+		for (let i = 0; i < string.length; i++) {
+			if (string[i] === " ") {
+				spaces_until_first_character++;
+			} else {
+				if (first_character === "")
+					first_character = string[i];
+			}
+			
+			//Break once non-space is found
+			if (first_character !== "") break;
+		}
+		
+		if (first_character === "-")
+			nesting = Math.ceil(spaces_until_first_character/2);
+		
+		//Return statement
+		return nesting;
+	};
+	
+	/**
 	 * Returns spreadsheet formatted coords (i.e. 'A1', 'ZZ15') given a numeric coords pair (1-indexed).
-	 * @memberof String
+	 * @alias String.getSpreadsheetCell
 	 * 
 	 * @param {number} arg0_x
 	 * @param {number} arg1_y
@@ -184,7 +360,7 @@
 	
 	/**
 	 * Returns the spreadsheet column (i.e. 'A', 'ZZ') given an X coordinate number.
-	 * @memberof String
+	 * @alias String.getSpreadsheetColumn
 	 * 
 	 * @param {number} arg0_x
 	 * 
@@ -208,8 +384,68 @@
 	};
 	
 	/**
+	 * Hashes a string for later checks whether a string is equivalent to another.
+	 * @alias String.hash
+	 * 
+	 * @param {string} arg0_string
+	 * 
+	 * @returns {string}
+	 */
+	String.hash = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let hash = 0;
+		
+		for (let i = 0; i < string.length; i++) {
+			let char = string.charCodeAt(i);
+			
+			//Set hash
+			hash = (hash << 5) - hash + char;
+			hash |= 0;
+		}
+		
+		//Return statement
+		return Math.abs(hash).toString(16);
+	};
+	
+	/**
+	 * Checks if the given link is that of a compatible image.
+	 * @alias String.isImage
+	 *
+	 * @returns {boolean}
+	 */
+	String.isImage = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Return statement
+		return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(string);
+	};
+	
+	/**
+	 * Checks whether a given string is loosely a valid URL.
+	 * @alias String.isURL
+	 *
+	 * @returns {boolean}
+	 */
+	String.isURL = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Return statement
+		try {
+			new URL(string);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	};
+	
+	/**
 	 * Ordinalises a given number and returns it as a string.
-	 * @memberof String
+	 * @alias String.ordinalise
 	 * 
 	 * @param {number} arg0_number
 	 * 
@@ -235,18 +471,125 @@
 	};
 	
 	/**
-	 * Checks whether a given string is loosely a valid URL.
-	 * @memberof String
+	 * Parses a European number string to a number.
+	 * @alias String.parseEuropeanNumber
 	 * 
-	 * @returns {boolean}
+	 * @param {string} arg0_string
+	 *
+	 * @returns {number|string}
 	 */
-	String.prototype.isURL = function () {
-		//Return statement
-		try {
-			new URL(this);
-			return true;
-		} catch (e) {
-			return false;
+	String.parseEuropeanNumber = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Guard clause if number is not a string
+		if (typeof string !== "string") return string;
+		
+		//Remove all non-numeric characters except . and ,
+		let normalised_input = string.trim().replace(/[^0-9.,-]/g, "");
+		
+		//Remove all dots (thousands separators)
+		normalised_input = normalised_input.replace(/\./g, "");
+		
+		//Replace the last comma with a dot (decimal separator)
+		let lastCommaIndex = normalised_input.lastIndexOf(",");
+		if (lastCommaIndex !== -1) {
+			normalised_input =
+				normalised_input.substring(0, lastCommaIndex) +
+				"." +
+				normalised_input.substring(lastCommaIndex + 1);
 		}
+		
+		//Return statement
+		return parseFloat(normalised_input);
+	};
+	
+	/**
+	 * Parses a list into human-readable form.
+	 * @alias String.parseList
+	 * 
+	 * @param {string[]} arg0_input_list
+	 * 
+	 * @returns {string}
+	 */
+	String.parseList = function (arg0_input_list) {
+		//Convert from parameters
+		let name_array = arg0_input_list;
+		
+		//Declare local instance variables
+		let name_string = "";
+		
+		//Modify ending
+		if (name_array.length > 2) {
+			name_array[name_array.length - 1] = `and ${name_array[name_array.length-1]}`;
+			name_string = name_array.join(", ");
+		} else if (name_array.length === 2) {
+			name_array[name_array.length - 1] = `and ${name_array[name_array.length-1]}`;
+			name_string = name_array.join(" ");
+		} else {
+			name_string = name_array[0];
+		}
+		
+		//Return statement
+		return name_string;
+	};
+	
+	/**
+	 * Fetches the current ordinal present in a numeric string.
+	 * @alias String.processOrdinal
+	 *
+	 * @returns {string}
+	 */
+	String.processOrdinal = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let current_string = string.toString().trim();
+		let trim_patterns = [
+			[/  /gm, " "],
+			[" . ", ". "],
+			[/^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}) [a-z]*/gm]
+		];
+		let alphabet = "abcdefghijklmnopqrstuvwxyz";
+		for (let i = 0; i < alphabet.split("").length; i++) {
+			trim_patterns.push([` ${alphabet.split("")[i]} `, `${alphabet.split("")[i]} `]);
+		}
+		
+		//Trim out, well, trim patterns
+		for (let i = 0; i < trim_patterns.length; i++)
+			if (trim_patterns[i].length > 1) {
+				current_string = current_string.replace(trim_patterns[i][0], trim_patterns[i][1]);
+			} else {
+				let current_roman_array = current_string.match(trim_patterns[i][0]);
+				if (current_roman_array !== null) {
+					current_string = current_string.replace(current_roman_array[0], current_roman_array[0].split(" ").join(" "));
+				}
+			}
+		
+		//Return statement
+		return current_string;
+	};
+	
+	/**
+	 * Truncates a string to a given length, appending the ellipsis afterwards.
+	 * @alias String.truncate
+	 *
+	 * @param {string} arg0_string
+	 * @param {number} arg1_number
+	 * @param {string} [arg2_ellipsis=" ..."]
+	 *
+	 * @returns {string}
+	 */
+	String.truncate = function (arg0_string, arg1_number, arg2_ellipsis) {
+		//Convert from parameters
+		let string = arg0_string;
+		let number = Math.returnSafeNumber(arg1_number, 120);
+		let ellipsis = (arg2_ellipsis) ? arg2_ellipsis : " ...";
+		
+		//Return statement
+		if (string.length > number)
+			return `${string.substring(0, number)}${ellipsis}`;
+		return string;
 	};
 }

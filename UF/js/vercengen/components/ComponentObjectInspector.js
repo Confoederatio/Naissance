@@ -26,7 +26,7 @@ ve.ObjectInspector = class extends ve.Component {
 			
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
-		options.key_name = (options.key_name) ? options.key_name : "Object";
+		options.key_name = (options.key_name) ? options.key_name : loc("ve.registry.localisation.ObjectInspector_root_name");
 		options.max_depth = Math.returnSafeNumber(options.max_depth, 15);
 			
 		//Declare local instance variables
@@ -93,7 +93,7 @@ ve.ObjectInspector = class extends ve.Component {
 	static generateHTMLRecursively (arg0_object, arg1_object_key, arg2_options) {
 		//Convert from parameters
 		let object = arg0_object;
-		let path = (arg1_object_key) ? arg1_object_key : "Object";
+		let path = (arg1_object_key) ? arg1_object_key : loc("ve.registry.localisation.ObjectInspector_root_name");
 		let options = (arg2_options) ? arg2_options : {};
 		
 		//Initialise options
@@ -104,12 +104,12 @@ ve.ObjectInspector = class extends ve.Component {
 		//Internal guard clause for Circular References
 		if (object !== null && (typeof object === "object" || typeof object === "function")) {
 			if (options.seen.has(object))
-				return `<span class = "error-circular-reference">[Circular Reference]</span>`;
+				return `<span class = "error-circular-reference">${loc("ve.registry.localisation.ObjectInspector_error_circular_reference")}</span>`;
 			options.seen.add(object);
 		}
 		//Internal guard clause if options.current_depth exceeds options.max_depth
 		if (options.current_depth > options.max_depth)
-			return `<span class = "error-depth-limit" title = "Depth limit reached">... (Max Depth)</span>`;
+			return `<span class = "error-depth-limit" title = "${loc("ve.registry.localisation.ObjectInspector_error_depth_limit_title")}">${loc("ve.registry.localisation.ObjectInspector_error_depth_limit_text")}</span>`;
 		
 		//1. Primitive handling
 		if (object === null || (typeof object !== "object" && typeof object !== "function")) {
@@ -183,12 +183,12 @@ ve.ObjectInspector = class extends ve.Component {
 		if (is_function) {
 			let function_code = object.toString();
 			if (function_code.length > 500) 
-				function_code = `${function_code.substring(0, 500)}... (${function_code.length - 500} more characters)`;
+				function_code = loc("ve.registry.localisation.ObjectInspector_more_characters", function_code.substring(0, 500), function_code.length - 500);
 			
 			inner_html += `
         <details class = "indent">
 					<summary class = "view-source" style = "cursor: pointer;">
-						<span class = "view-source-function">f</span> View Source
+						<span class = "view-source-function">f</span> ${loc("ve.registry.localisation.ObjectInspector_view_source")}
 					</summary>
 					<div class = "view-source-function-code" style = "overflow-x: auto;">
 						<pre>${HTML.getEscapedString(function_code)}</pre>

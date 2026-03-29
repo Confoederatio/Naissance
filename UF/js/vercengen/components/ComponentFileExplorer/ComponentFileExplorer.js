@@ -7,6 +7,7 @@
  * ##### Constructor:
  * - `arg0_value`: {@link string} - The file path in which the FileExplorer should be initialised.
  * - `arg1_options`: {@link Object}
+ *   - `.actions_components_obj`: {@link Object}<{@link ve.Component}> - Appended components in the topbar action meny, usually at the end.
  *   - `.file_components_obj={select: ...}`: {@link Object}<{@link ve.Component}>
  *   - `.file_icon="<icon>description</icon>"`: {@link string}
  *   - `.file_options`: {@link Object}
@@ -15,6 +16,7 @@
  *   - `.folder_options`: {@link Object}
  *   - `.name`: {@link string}
  *   - `.navigation_only=false`: {@link boolean}
+ *   - `.onrefresh`: {@link function}(v:{@link ve.FileExplorer.v}, arg1_e:{@link ve.FileExplorer})
  *   - 
  *   - `.load_function`: {@link function}(arg0_data:{@link string}, arg1_file_path:{@link string}) - Automatically loads the text content of a valid extension into this function.
  *   - `.save_extension`: {@link Array}<{@link string}>|{@link string} - The save dot extension that files can be loaded from. `.*` refers to all file extensions.
@@ -49,12 +51,13 @@ ve.FileExplorer = class extends ve.Component {
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
 		let value = (arg0_value) ? arg0_value : process.cwd();
+			if (!fs.existsSync(value)) value = process.cwd();
 		let options = (arg1_options) ? arg1_options : {};
 			super(options);
 			
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
-		options.file_components_obj = (options.file_components_obj) ? options.file_components_obj : {
+		options.file_components_obj = {
 			select: new ve.Toggle(false, {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>check_box</icon>`,
@@ -64,11 +67,12 @@ ve.FileExplorer = class extends ve.Component {
 				style: {
 					zIndex: 99
 				},
-			})
+			}),
+			...options.file_components_obj
 		};
 		options.file_icon = (options.file_icon) ? options.file_icon : "<icon>description</icon>";
 		options.file_options = (options.file_options) ? options.file_options : {};
-		options.folder_components_obj = (options.folder_components_obj) ? options.folder_components_obj : {
+		options.folder_components_obj = {
 			select: new ve.Toggle(false, {
 				off_name: `<icon>check_box_outline_blank</icon>`,
 				on_name: `<icon>indeterminate_check_box</icon>`,
@@ -78,7 +82,8 @@ ve.FileExplorer = class extends ve.Component {
 				style: {
 					zIndex: 99
 				},
-			})
+			}),
+			...options.folder_components_obj
 		};
 		options.folder_icon = (options.folder_icon) ? options.folder_icon : "<icon>folder</icon>";
 		options.folder_options = (options.folder_options) ? options.folder_options : {};
@@ -93,7 +98,7 @@ ve.FileExplorer = class extends ve.Component {
 				disable_actions: true,
 				file_components_obj: {},
 				folder_components_obj: {},
-				onload: (e) => e.name = ""
+				onload: (v, e) => e.name = ""
 			};
 		
 		//Declare local instance variables
@@ -130,6 +135,18 @@ ve.FileExplorer = class extends ve.Component {
 		this.name = this.options.name;
 		this.value = value;
 		this.refresh();
+		
+		this.logic_loop = setInterval(() => {
+			let current_files = fs.readdirSync(this.v).join("");
+			
+			if (this._checksum === undefined) {
+				this._checksum = current_files;
+			} else if (current_files !== this._checksum) {
+				this.refresh();
+				this._checksum = current_files;
+				this.fireFromBinding();
+			}
+		}, 100);
 	}
 	
 	/**
@@ -259,15 +276,23 @@ ve.FileExplorer = class extends ve.Component {
 		let hierarchy_obj = {};
 		
 		//Add item button to move up one folder at the top
+		let actions_components_obj = (this.options.actions_components_obj) ? 
+			this.options.actions_components_obj : {};
 		let previous_folder_path = path.join(this.value, "..");
 		
 		hierarchy_obj.file_path = new ve.HierarchyDatatype({
-			information: new ve.HTML(() => this.v)
+			information: new ve.HTML(() => this.v, {
+				style: {
+					whiteSpace: "break-spaces",
+					wordBreak: "break-all",
+					width: "100%"
+				}
+			})
 		}, { disabled: true });
 		if (!this.options.disable_actions)
 			hierarchy_obj.selection = new ve.HierarchyDatatype({
 				information: new ve.HTML((e) => `${(this.clipboard.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_clipboard")} (${String.formatNumber(this.clipboard.length)})` : loc("ve.registry.localisation.FileExplorer_clipboard_is_empty")} &nbsp; | &nbsp; ${(this.selected.length > 0) ? `${loc("ve.registry.localisation.FileExplorer_elements_selected", String.formatNumber(this.selected.length))}` : ""}
-				`, { style: { marginRight: "auto", padding: 0 }}), //[WIP] - Fix localisation
+				`, { style: { marginRight: "auto", padding: 0 }}),
 				actions_menu: new ve.RawInterface({
 					copy_button: new ve.Button((e) => {
 						if (this.selected.length === 0) return; //Internal guard clause if nothing is selected
@@ -294,7 +319,7 @@ ve.FileExplorer = class extends ve.Component {
 							resizeable: true, 
 							width: "24rem" 
 						});
-					}, { name: "<icon>cut</icon>", limit: () => this.selected.length, tooltip: "Cut Selected" }),
+					}, { name: "<icon>cut</icon>", limit: () => this.selected.length, tooltip: loc("ve.registry.localisation.FileExplorer_cut_selected") }),
 					paste_button: new ve.Button((e) => {
 						let confirm = new ve.Confirm(loc("ve.registry.localisation.FileExplorer_are_you_sure_copy_paste", String.formatNumber(this.clipboard.length), this.v), {
 							name: loc("ve.registry.localisation.FileExplorer_paste_files", String.formatNumber(this.clipboard.length)),
@@ -327,7 +352,7 @@ ve.FileExplorer = class extends ve.Component {
 							resizeable: true, 
 							width: "24rem"
 						});
-					}, { name: "<icon>arrow_forward</icon>", limit: () => this.selected.length, tooltip: "Move Selected" }),
+					}, { name: "<icon>arrow_forward</icon>", limit: () => this.selected.length, tooltip: loc("ve.registry.localisation.move_selected") }),
 					delete_button: new ve.Button((e) => {
 						let confirm = new ve.Confirm(loc("ve.registry.localisation.FileExplorer_are_you_sure_delete", this.selected.join(", ")), {
 							name: loc("ve.registry.localisation.FileExplorer_delete_files", String.formatNumber(this.selected.length)),
@@ -336,7 +361,7 @@ ve.FileExplorer = class extends ve.Component {
 								ve.FileExplorer.delete(this.selected, () => this.refresh());
 							}
 						});
-					}, { name: "<icon>delete</icon>", limit: () => this.selected.length, tooltip: "Delete Selected" }),
+					}, { name: "<icon>delete</icon>", limit: () => this.selected.length, tooltip: loc("ve.registry.localisation.FileExplorer_delete_selected") }),
 					
 					new_folder_button: new ve.Button((e) => {
 						let local_modal = new ve.Window({
@@ -370,7 +395,8 @@ ve.FileExplorer = class extends ve.Component {
 								}
 							})
 						}, { can_rename: false, name: loc("ve.registry.localisation.FileExplorer_create_new_file") });
-					}, { name: "<icon>note_add</icon>", tooltip: loc("ve.registry.localisation.FileExplorer_create_new_file") } )
+					}, { name: "<icon>note_add</icon>", tooltip: loc("ve.registry.localisation.FileExplorer_create_new_file") } ),
+					...actions_components_obj
 				}, {
 					style: { marginLeft: "auto", order: 99, marginTop: "var(--cell-padding)", padding: 0 }
 				}),
@@ -396,7 +422,7 @@ ve.FileExplorer = class extends ve.Component {
 			hierarchy_obj.save_button.element.onclick = () => {
 				let local_modal = new ve.Window({
 					html: new ve.HTML(loc("ve.registry.localisation.FileExplorer_save_file_as")),
-					new_file_name: new ve.Text(`autosave${(this.options.save_extension[0]) ? this.options.save_extension[0] : ""}`, { name: " " }),
+					new_file_name: new ve.Text(`autosave${(this.options?.save_extension?.[0]) ? this.options.save_extension[0] : ""}`, { name: " " }),
 					confirm_button: new ve.Button((e) => {
 						let save_file_name = path.join(this.v, local_modal.new_file_name.v);
 						
@@ -481,6 +507,9 @@ ve.FileExplorer = class extends ve.Component {
 				hierarchy_obj[local_full_path] = new ve.HierarchyDatatype(
 					{
 						folder_icon: new ve.HTML(this.options.folder_icon, {
+							attributes: {
+								"data-folder-icon": true
+							},
 							tooltip: `/${all_files_in_directory[i].name}/`
 						}),
 						actions_menu: new ve.RawInterface({
@@ -537,6 +566,9 @@ ve.FileExplorer = class extends ve.Component {
 				hierarchy_obj[local_full_path] = new ve.HierarchyDatatype(
 					{
 						file_icon: new ve.HTML(this.options.file_icon, {
+							attributes: {
+								"data-file-icon": true
+							},
 							style: { opacity: 0.6 },
 							tooltip: all_files_in_directory[i].name
 						}),
@@ -545,7 +577,7 @@ ve.FileExplorer = class extends ve.Component {
 								ve.FileExplorer.rename(local_full_path, () => this.refresh());
 							}, {
 								name: `<icon>drive_file_rename_outline</icon>`,
-								limit: () => (this.options.navigation_only && this.options?.save_extension.includes(path.extname(local_full_path))) || !this.options.navigation_only,
+								limit: () => (this.options.navigation_only && this.options?.save_extension?.includes(path.extname(local_full_path))) || !this.options.navigation_only,
 								tooltip: loc("ve.registry.localisation.FileExplorer_rename"),
 								style: { padding: `var(--cell-padding)` }
 							}),
@@ -572,7 +604,13 @@ ve.FileExplorer = class extends ve.Component {
 								name: `<icon>sync_arrow_down</icon>`,
 								tooltip: loc("ve.registry.localisation.FileExplorer_load_save_file"),
 								limit: () => this.options.load_function && (this.options.save_extension === undefined || this.options.save_extension.includes(path.extname(local_full_path)) || this.options.save_extension.includes(".*")),
-								style: { padding: `var(--cell-padding)` }
+								style: {
+									"#name icon": { 
+										justifyContent: "normal",
+										transform: "translateX(0.25rem)"
+									},
+									padding: `var(--cell-padding)` 
+								}
 							}),
 							...Object.fromEntries(
 								Object.entries(this.options.file_components_obj).map(([local_key, local_component]) => {
@@ -605,11 +643,11 @@ ve.FileExplorer = class extends ve.Component {
 		file_explorer_el.innerHTML = "";
 		file_explorer_el.appendChild(this.hierarchy.element);
 		
-		//[WIP] - Set .name.options.onuserchange listener for all this.hierarchy.components_obj
-		
 		setTimeout(() => {
 			this.hierarchy.setOwner(this.owner, [this.owner]);
 		});
+		if (this.options.onrefresh)
+			this.options.onrefresh(this.v, this);
 	}
 	
 	/**

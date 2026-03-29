@@ -4,6 +4,7 @@
 	
 	/**
 	 * Creates a foldable element that can be minimised/expanded.
+	 * @alias HTML.createSection
 	 *
 	 * @param {Object} [arg0_options]
 	 *  @param {String} [arg0_options.expand_class="uf-expanded"] - The class to add when the section is expanded.
@@ -12,6 +13,11 @@
 	 *  @param {String} [arg0_options.selector_class="uf-chevron minimise"] - The class to add to the chevron controller.
 	 *  @param {String} [arg0_options.src="./UF/gfx/chevron_icon.png"] - The source of the chevron image.
 	 *  @param {Boolean} [arg0_options.is_collapsed=false] - Whether the section should start in a collapsed state.
+	 *  
+	 *  @param {HTMLElement[]} [arg0_options.bottom_elements]
+	 *  @param {HTMLElement[]} [arg0_options.left_elements]
+	 *  @param {HTMLElement[]} [arg0_options.right_elements]
+	 *  @param {HTMLElement[]} [arg0_options.top_elements]
 	 *  
 	 * @returns {HTMLElement}
 	 */
@@ -53,7 +59,7 @@
 		}
 		
 		//Add click handler to toggle section
-		chevron_btn.addEventListener("click", function(e) {
+		chevron_btn.addEventListener("click", function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			
@@ -85,11 +91,13 @@
 	
 	/**
 	 * Provides a Window interface without CSS styling for an element. .header refers to the draggable header at the top.
+	 * @alias HTML.elementDragHandler
 	 *
 	 * @param {HTMLElement} arg0_el
 	 * @param {Object} [arg1_options]
 	 *  @param {boolean} [arg1_options.allow_overflow=false]
 	 *  @param {boolean} [arg1_options.draggable=true]
+	 *  @param {Object} [arg1_options.instance] - Any instance to begin binding events to. 
 	 *  @param {boolean} [arg1_options.is_resizable=false]
 	 *  @param {boolean} [arg1_options.unbounded=false]
 	 *
@@ -125,26 +133,26 @@
 			
 			//Define handle positions and cursors
 			let handle_config = {
-				'n': { top: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 'n-resize' },
-				'e': { top: '0', right: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'e-resize' },
-				's': { bottom: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 's-resize' },
-				'w': { top: '0', left: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'w-resize' },
-				'ne': { top: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'ne-resize' },
-				'nw': { top: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'nw-resize' },
-				'se': { bottom: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'se-resize' },
-				'sw': { bottom: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'sw-resize' }
+				"n": { top: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 'n-resize' },
+				"e": { top: '0', right: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'e-resize' },
+				"s": { bottom: '0', left: '0', right: '0', height: resize_threshold + 'px', cursor: 's-resize' },
+				"w": { top: '0', left: '0', bottom: '0', width: resize_threshold + 'px', cursor: 'w-resize' },
+				"ne": { top: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'ne-resize' },
+				"nw": { top: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'nw-resize' },
+				"se": { bottom: '0', right: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'se-resize' },
+				"sw": { bottom: '0', left: '0', width: resize_threshold*2 + 'px', height: resize_threshold*2 + 'px', cursor: 'sw-resize' }
 			};
 			
 			//Add resize handles
-			let handles = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'];
+			let handles = ["n", "e", "s", "w", "ne", "nw", "se", "sw"];
 			
 			for (let i = 0; i < handles.length; i++)
 				(function (edge) {
 					let handle = document.createElement('div');
 					
-					handle.className = 'resize-handle resize-' + edge;
-					handle.style.position = 'absolute';
-					handle.style.zIndex = '1000';
+					handle.className = `resize-handle resize-${edge}`;
+					handle.style.position = "absolute";
+					handle.style.zIndex = "1000";
 					
 					//Apply handle configuration
 					let config = handle_config[edge];
@@ -156,7 +164,7 @@
 					handle.onmousedown = function (e) {
 						e.stopPropagation();
 						is_resizing = true;
-						resize_edge = edge; // This 'edge' is correctly scoped thanks to the IIFE.
+						resize_edge = edge; //This 'edge' is correctly scoped thanks to the IIFE.
 						
 						//Store initial dimensions
 						let rect = el.getBoundingClientRect();
@@ -193,9 +201,29 @@
 			//Declare local instance variables
 			let e = (arg0_e || window.event);
 			let min_height = 50;
+			let min_left = 0;
 			let min_width = 50;
+			let min_top = 0;
 			let viewport_height = window.innerHeight;
 			let viewport_width = window.innerWidth;
+			
+			//Handle options.subtract_height_elements
+			if (options.bottom_elements)
+				for (let i = 0; i < options.bottom_elements.length; i++)
+					if (options.bottom_elements[i])
+						viewport_height -= options.bottom_elements[i].offsetHeight;
+			if (options.left_elements)
+				for (let i = 0; i < options.left_elements.length; i++)
+					if (options.left_elements[i])
+						min_left += options.left_elements[i].offsetWidth;
+			if (options.right_elements)
+				for (let i = 0; i < options.right_elements.length; i++)
+					if (options.right_elements[i])
+						viewport_width -= options.right_elements[i].offsetWidth;
+			if (options.top_elements)
+				for (let i = 0; i < options.top_elements.length; i++)
+					if (options.top_elements[i])
+						min_top += options.top_elements[i].offsetHeight;
 			
 			e.preventDefault();
 			
@@ -205,27 +233,13 @@
 				
 				//Define resize operations
 				let resize_ops = {
-					'e': function() {
+					"e": function () {
 						let new_width = initial_width + delta_x;
 						// Constrain width to not exceed viewport boundary
 						new_width = (options.unbounded) ? new_width : Math.min(new_width, viewport_width - initial_left);
 						el.style.width = Math.max(min_width, new_width) + 'px';
 					},
-					'w': function() {
-						let new_width = initial_width - delta_x;
-						// Constrain width so the left edge doesn't go past 0
-						new_width = (options.unbounded) ? new_width : Math.min(new_width, initial_left + initial_width);
-						new_width = (options.unbounded) ? new_width : Math.max(min_width, new_width);
-						el.style.width = new_width + 'px';
-						el.style.left = (initial_left + initial_width - new_width) + 'px';
-					},
-					's': function() {
-						let new_height = initial_height + delta_y;
-						// Constrain height to not exceed viewport boundary
-						new_height = (options.unbounded) ? new_height : Math.min(new_height, viewport_height - initial_top);
-						el.style.height = Math.max(min_height, new_height) + 'px';
-					},
-					'n': function() {
+					"n": function () {
 						let new_height = initial_height - delta_y;
 						// Constrain height so the top edge doesn't go past 0
 						new_height = (options.unbounded) ? new_height : Math.min(new_height, initial_top + initial_height);
@@ -233,27 +247,44 @@
 						el.style.height = new_height + 'px';
 						el.style.top = (initial_top + initial_height - new_height) + 'px';
 					},
-					'se': function() {
-						resize_ops.s();
-						resize_ops.e();
+					"s": function () {
+						let new_height = initial_height + delta_y;
+						// Constrain height to not exceed viewport boundary
+						new_height = (options.unbounded) ? new_height : Math.min(new_height, viewport_height - initial_top);
+						el.style.height = Math.max(min_height, new_height) + 'px';
 					},
-					'sw': function() {
-						resize_ops.s();
-						resize_ops.w();
+					"w": function () {
+						let new_width = initial_width - delta_x;
+						// Constrain width so the left edge doesn't go past 0
+						new_width = (options.unbounded) ? new_width : Math.min(new_width, initial_left + initial_width);
+						new_width = (options.unbounded) ? new_width : Math.max(min_width, new_width);
+						el.style.width = new_width + 'px';
+						el.style.left = (initial_left + initial_width - new_width) + 'px';
 					},
-					'ne': function() {
+					
+					"ne": function () {
 						resize_ops.n();
 						resize_ops.e();
 					},
-					'nw': function() {
+					"nw": function () {
 						resize_ops.n();
 						resize_ops.w();
-					}
+					},
+					"se": function () {
+						resize_ops.s();
+						resize_ops.e();
+					},
+					"sw": function () {
+						resize_ops.s();
+						resize_ops.w();
+					},
 				};
 				
 				//Execute resize operation
 				if (resize_ops[resize_edge]) {
 					resize_ops[resize_edge]();
+					if (options.instance)
+						options.instance._onresize = true;
 				}
 			} else {
 				if (options.draggable === false) return;
@@ -268,8 +299,8 @@
 				let new_left = el.offsetLeft - position_one;
 				let new_top = el.offsetTop - position_two;
 				
-				new_top = Math.max(0, Math.min(new_top, viewport_height - el_height));
-				new_left = Math.max(0, Math.min(new_left, viewport_width - el_width));
+				new_top = Math.max(min_top, Math.min(new_top, viewport_height - el_height));
+				new_left = Math.max(min_left, Math.min(new_left, viewport_width - el_width));
 				
 				//Set element position
 				el.style.top = `${new_top}px`;
@@ -282,9 +313,10 @@
 			let e = (arg0_e || window.event);
 			
 			if (document.querySelectorAll(`
+				[contenteditable]:not(#window-name):focus,
+				flex-resizer:hover,
 				.maptalks-wrapper:hover,
 				input:focus, 
-				[contenteditable]:not(#window-name):focus,
 				#scene:hover,
 				.wysiwyg-editor-container:hover,
 				.ve-drag-disabled:hover
@@ -299,20 +331,20 @@
 		
 		//Tidy up dimensional constraints later on
 		setTimeout(() => {
-			const vw = window.innerWidth;
-			const vh = window.innerHeight;
+			let vw = window.innerWidth;
+			let vh = window.innerHeight;
 			
-			const rect = el.getBoundingClientRect(); // includes left/top offsets
-			const el_left = rect.left;
-			const el_top = rect.top;
+			let rect = el.getBoundingClientRect(); // includes left/top offsets
+			let el_left = rect.left;
+			let el_top = rect.top;
 			let el_width = rect.width;
 			let el_height = rect.height;
 			
-			// Determine remaining visible space from current offset
-			const available_w = vw - el_left;
-			const available_h = vh - el_top;
+			//Determine remaining visible space from current offset
+			let available_w = vw - el_left;
+			let available_h = vh - el_top;
 			
-			// Clamp width/height so element never exceeds remaining viewport
+			//Clamp width/height so element never exceeds remaining viewport
 			if (el_width > available_w) {
 				el_width = available_w;
 				el.style.width = el_width + "px";
@@ -324,12 +356,10 @@
 			}
 			
 			// (optional) allow scroll if internally larger content
-			if (el.scrollHeight > el_height) {
+			if (el.scrollHeight > el_height)
 				el.style.overflowY = "auto";
-			}
-			if (el.scrollWidth > el_width) {
+			if (el.scrollWidth > el_width)
 				el.style.overflowX = "auto";
-			}
 		}, 150);
 		
 		//Return statement

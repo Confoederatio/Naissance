@@ -13,6 +13,8 @@
  * ##### Methods:
  * - <span color=00ffff>{@link ve.UndoRedo.draw|draw}</span>() - Redraws both HTML/canvas-side elements.
  * - <span color=00ffff>{@link ve.UndoRedo.handleEvents|handleEvents}</span>() - Handles events for zooming/panning around canvas.
+ * - <span color=00ffff>{@link ve.UndoRedo.loadSettings|loadSettings}</span>() - Loads settings from registry file.
+ * - <span color-00ffff>{@link ve.UndoRedo.saveSettings|saveSettings}</span>() - Saves settings to registry file.
  * 
  * @augments ve.Component
  * @memberof ve.Component
@@ -46,14 +48,70 @@ ve.UndoRedo = class extends ve.Component {
 			this.canvas_container_el.id = `canvas-container`;
 			this.canvas_container_el.appendChild(this.canvas_el);
 		this.html_list_el = document.createElement("div");
+		this.loadSettings(); //Load settings upon initialisation
 		
 		//Create a ve.PageMenu with this.html_list_el, this.canvas_container_el, and mount it to this.element
+		let settings_obj = ve.registry.settings.UndoRedo;
+		
 		let actions_bar = () => new ve.RawInterface({
-			undo_button: new ve.Button(() => DALS.Timeline.undo(), {
-				name: "<icon>undo</icon>", tooltip: "Undo" }),
-			redo_button: new ve.Button(() => DALS.Timeline.redo(), {
-				name: "<icon>redo</icon>", tooltip: "Redo" })
-		}, { name: " " });
+			row_one: new ve.RawInterface({
+				commit_name: new ve.Text(settings_obj.manual_commit_name, {
+					name: "Commit Name",
+					onuserchange: (v) => {
+						settings_obj.manual_commit_name = v;
+						this.saveSettings();
+					}
+				}),
+				save_commit: new ve.Button(() => {
+					try {
+						let state_obj = DALS.Timeline.saveState();
+						
+						//Add new DALS Action under load_save
+						new DALS.Action({
+							options: { 
+								name: `Save Commit ${(settings_obj.manual_commit_name?.length > 0) ? `(${settings_obj.manual_commit_name})` : ""}<br>${String.formatDate()}`, 
+								key: `save_commit_${Date.now()}` 
+							},
+							value: {
+								type: "global",
+								load_save: state_obj
+							}
+						});
+					} catch (e) { console.warn(e); }
+				}, { 
+					name: "Save Commit",
+					style: { marginLeft: `var(--padding)` }
+				})
+			}, {
+				limit: () => (settings_obj.manual_commits)
+			}),
+			row_two: new ve.RawInterface({
+				undo_button: new ve.Button(() => DALS.Timeline.undo(), {
+					name: "<icon>undo</icon>", tooltip: "Undo" }),
+				redo_button: new ve.Button(() => DALS.Timeline.redo(), {
+					name: "<icon>redo</icon>", tooltip: "Redo" }),
+				manual_commits: new ve.Toggle(settings_obj.manual_commits, {
+					name: "Manual Commits",
+					onuserchange: (v) => {
+						settings_obj.manual_commits = v;
+						this.saveSettings();
+					},
+					style: {
+						marginLeft: `var(--padding)`
+					},
+					tooltip: "Whether to enable manual commits."
+				})
+			})
+		}, { 
+			name: " ",
+			style: {
+				'[component="ve-raw-interface"]': {
+					alignItems: "anchor-center",
+					display: "flex",
+					marginBottom: "var(--padding)"
+				}
+			}
+		});
 		
 		this.page_menu = new ve.PageMenu({
 			current_timeline: {
@@ -79,6 +137,9 @@ ve.UndoRedo = class extends ve.Component {
 		}, { 
 			name: this.options.name,
 			onchange: (v, e) => {
+				//Reinstantiate actions_bar
+				try { this.page_menu.interfaces_obj[v].actions_bar.v = actions_bar().v; } catch (e) {}
+				
 				if (v === "current_timeline") {
 					this.from_binding_fire_silently = true;
 					this.v = DALS.Timeline.current_timeline;
@@ -137,7 +198,7 @@ ve.UndoRedo = class extends ve.Component {
 	
 	/**
 	 * Redraws the current interface.
-	 * - Method of: {@link ve.Interface}
+	 * - Method of: {@link ve.UndoRedo}
 	 *
 	 * @alias draw
 	 * @memberof ve.Component.ve.UndoRedo
@@ -523,7 +584,7 @@ ve.UndoRedo = class extends ve.Component {
 	
 	/**
 	 * Handles events for {@link this.canvas_container_el}.
-	 * - Method of: {@link ve.Interface}
+	 * - Method of: {@link ve.UndoRedo}
 	 *
 	 * @alias handleEvents
 	 * @memberof ve.Component.ve.UndoRedo
@@ -580,6 +641,40 @@ ve.UndoRedo = class extends ve.Component {
 		let internalHelperUndoRedoUITransform = () => {
 			this.canvas_container_el.style.transform = `translate(${this.translate_x}px, ${this.translate_y}px) scale(${this.scale})`;
 		}
+	}
+	
+	/**
+	 * Saves settings to registry file.
+	 * - Method of: {@link ve.UndoRedo}
+	 *
+	 * @alias loadSettings
+	 * @memberof ve.Component.ve.UndoRedo
+	 */
+	loadSettings () {
+		//Declare local instance variables
+		let settings_obj = ve.registry.settings.UndoRedo;
+		
+		if (typeof settings_obj.save_file === "string")
+			try {
+				if (fs.existsSync(settings_obj.save_file))
+					ve.registry.settings.UndoRedo = JSON.parse(fs.readFileSync(settings_obj.save_file, "utf8"));
+			} catch (e) {}
+	}
+	
+	/**
+	 * Saves settings to registry file.
+	 * - Method of: {@link ve.UndoRedo}
+	 * 
+	 * @alias saveSettings
+	 * @memberof ve.Component.ve.UndoRedo
+	 */
+	saveSettings () {
+		//Declare local instance variables
+		let settings_obj = ve.registry.settings.UndoRedo;
+		
+		//Write to file
+		if (typeof settings_obj.save_file === "string")
+			fs.writeFileSync(settings_obj.save_file, JSON.stringify(settings_obj), "utf8");
 	}
 };
 

@@ -94,8 +94,7 @@ li > .nst-list {
     }
     ol, ul {
         box-sizing: border-box;
-        margin-left: 1rem;
-        padding: 0;
+        padding-left: 1rem;
         width: 100%;
 
         li {
@@ -103,10 +102,10 @@ li > .nst-list {
         }
     }
 
-    > [data-nestable-disabled="dragging"]:first-child .nst-handle {
+    > [data-nestable-disabled="disabled"]:first-child .nst-handle {
         display: none;
     }
-    [data-nestable-disabled="dragging"] .nst-handle { 
+    [data-nestable-disabled="disabled"] .nst-handle { 
         visibility: hidden; 
     }
 }

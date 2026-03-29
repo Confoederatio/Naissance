@@ -17,6 +17,38 @@
 .uf-expanded, .uf-expanded * {
     animation: uf-expand ease 0.5s forwards;
 }
+.uf-log-line {
+    align-items: flex-start;
+    display: flex;
+    font-family: var(--monospace-font-family);
+}
+.uf-log-line:before {
+    margin-right: calc(var(--padding)*0.5);
+}
+.uf-log-line.user-command:before {
+    content: "> ";
+}
+.uf-log-line.user-command {
+    font-style: oblique;
+    opacity: 0.8;
+}
+.uf-log-line.error:before {
+    content: "[ERROR] ";
+    color: rgb(240, 60, 60);
+}
+.uf-log-line.error .log-part pre {
+    font-family: inherit;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.uf-log-line.log:before {
+    content: "[INFO] ";
+    color: rgb(60, 240, 200);
+}
+.uf-log-line.warn:before {
+    content: "[WARN] ";
+    color: rgb(224, 224, 78);
+}
 .uf-minimised, .uf-minimised * {
     animation: uf-minimise ease 0.5s forwards;
 }

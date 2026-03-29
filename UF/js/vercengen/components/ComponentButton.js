@@ -37,7 +37,7 @@ ve.Button = class extends ve.Component {
 		
 		//Format HTML string
 		let html_string = [];
-		html_string.push(`<button ${HTML.objectToAttributes(options.attributes)}>`);
+		html_string.push(`<button>`);
 			if (options.icon) html_string.push(`<img src = "${options.icon}">`);
 			html_string.push(` <span id = "name" style = "align-items: center; display: flex;"></span>`)
 		html_string.push(`</button>`);

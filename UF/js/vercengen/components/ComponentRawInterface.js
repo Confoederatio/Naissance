@@ -80,13 +80,20 @@ ve.RawInterface = class extends ve.Component {
 		//Set this.components_obj; reset this.element by removing all selectors with [component] attributes
 		all_component_els.forEach((local_element) => local_element.remove());
 		Object.iterate(components_obj, (local_key, local_value) => {
-			if (!this.reserved_keys.includes(local_key)) {
-				this[local_key] = local_value;
-			} else {
-				console.warn(`ve.RawInterface: ${local_key} is a reserved key. It can therefore not be set to:`, local_value);
+			if (typeof local_value === "object") {
+				if (!this.reserved_keys.includes(local_key)) {
+					this[local_key] = local_value;
+				} else {
+					console.warn(`ve.RawInterface: ${local_key} is a reserved key. It can therefore not be set to:`, local_value);
+				}
+				
+				if (local_value.element) {
+					this.element.appendChild(local_value.element);
+				} else {
+					console.warn(`ve.RawInterface: No local_value.element could be detected for the following ve.Component:`, local_value, `Are you sure you are not destructuring a ve.Component?`);
+				}
+				local_value.parent_el = this.element;
 			}
-			
-			this.element.appendChild(local_value.element);
 		});
 		if (this.options.onchange) this.options.onchange(this);
 	}

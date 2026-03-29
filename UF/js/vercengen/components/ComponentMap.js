@@ -7,6 +7,7 @@
  * ##### Constructor:
  * - `arg0_value`: {@link Object} - The {@link maptalks.Map} `.options` that determines the projection and base layer.
  * - `arg1_options`: {@link Object}
+ *   - `.base_layer_options`: {@link Object}
  * 
  * ##### Instance:
  * - `.map`: {@link maptalks.Map}
@@ -128,7 +129,8 @@ ve.Map = class extends ve.Component {
 		return new maptalks.TileLayer("base", {
 			urlTemplate: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
 			subdomains: ["a", "b", "c"],
-			repeatWorld: false
+			repeatWorld: false,
+			...this.options.base_layer_options
 		});
 	}
 	

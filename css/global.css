@@ -14,6 +14,16 @@ html, head, body {
   top: 0px;
 }
 
+/* -- Generic classes -- */
+a { color: var(--accent-secondary-colour); }
+.fullbright { opacity: 1 !important; }
+
+/* -- Map -- */
+.maptalks-attribution { display: none !important; }
+.maptalks-msgBox {
+  font-family: var(--body-font-family);
+}
+
 /* -- Scrollbar styling -- */
 ::-webkit-scrollbar {
   width: 0.25rem;
@@ -27,19 +37,6 @@ html, head, body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: white;
-}
-
-/* -- Tooltip styling -- */
-.tippy-box {
-  background-color: rgba(0, 0, 0, 0.85);
-  border-radius: 0px;
-  bottom: 0.25vh;
-  padding: 0.25vh;
-
-  color: white;
-  font-family: "Raleway";
-  font-weight: 300;
-  font-size: 1vh;
 }
 
 /* -- Root constants -- */

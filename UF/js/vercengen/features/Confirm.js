@@ -34,7 +34,7 @@ ve.Confirm = class extends ve.Feature {
 		
 		if (typeof this.components_obj === "function" || typeof this.components_obj === "string")
 			this.components_obj = {
-				html: new ve.HTML(this.components_obj)
+				html: new ve.HTML(this.components_obj, { style: { overflowWrap: "anywhere" } })
 			};
 		this.components_obj = { 
 			...this.components_obj,

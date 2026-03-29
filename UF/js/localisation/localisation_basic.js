@@ -2,6 +2,7 @@
 {
 	/**
 	 * Performs a localisation replacement for the text in question.
+	 * @alias loc
 	 * 
 	 * @memberof global
 	 * @param {string} arg0_localisation_key - Starts from the `global` root {@link Object}.
@@ -30,7 +31,8 @@
 		//Iterate over all remaining arguments now that we have the template string, and replace £ delimited numbers with it
 		if (arguments.length > 1)
 			for (let i = 1; i < arguments.length; i++)
-				localisation_string = localisation_string.replaceAll(`£${i}£`, arguments[i]);
+        if (typeof localisation_string === "string")
+				  localisation_string = localisation_string.replaceAll(`£${i}£`, arguments[i]);
 		
 		//Return statement
 		return localisation_string;

@@ -2,6 +2,13 @@
 {
 	if (!global.HTML) global.HTML = {};
 	
+	/**
+	 * Attaches a UF event listener to an {@link HTMLElement}.
+	 * @alias HTMLElement.prototype.addUFEventListener
+	 * 
+	 * @param {string} arg0_event_key
+	 * @param {function} arg1_function
+	 */
 	HTMLElement.prototype.addUFEventListener = function (arg0_event_key, arg1_function) {
 		//Convert from parameters
 		let event_key = arg0_event_key;

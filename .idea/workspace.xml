@@ -6,6 +6,90 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/material_icons.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/material_icons.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/uf_components.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/uf_components.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/ve_components.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/ve_components.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/ve_features.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/ve_features.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/css/ve_global.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/css/ve_global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/array/array_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/array/array_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/boolean/boolean_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/boolean/boolean_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/colour/colour_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/colour/colour_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/dals/Action.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/dals/Action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/dals/Timeline.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/dals/Timeline.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/date/date_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/date/date_conversion.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_conversion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/file/file_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/file/file_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/geospatiale/geometries_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/geospatiale/geometries_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_initialise.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_initialise.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_input.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_input.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/localisation/localisation_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/localisation/localisation_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/number/number_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/number/number_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/object/object_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/object/object_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/string/string_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/string/string_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentColour.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentColour.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDatalist.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDatalist.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDatavisSuite/ComponentDatavisSuite.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDatavisSuite/ComponentDatavisSuite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDate.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentDate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/ComponentFileExplorer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentGraph/ComponentGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentGraph/ComponentGraph.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/Nestable/ve_nestable.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/Nestable/ve_nestable.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMultiTag.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentMultiTag.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditorDatatype.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditorDatatype.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNumber.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentNumber.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentObjectInspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentObjectInspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentPageMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentPageMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRange.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRange.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerBlockly.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ComponentScriptManagerBlockly.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ve_script_manager.css" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentScriptManager/ve_script_manager.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSearchSelect.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSearchSelect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentText.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentText.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentURL.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentURL.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentUndoRedo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/telestyle/vercengen_telestyle.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/telestyle/vercengen_telestyle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Confirm.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Confirm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/ContextMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/ContextMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Tooltip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_themes.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_themes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/.config_backend.js" beforeDir="false" afterPath="$PROJECT_DIR$/common/.config_backend.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/defines/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/common/defines/map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Feature.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Feature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Brush.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_Leftbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.css" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/map/UI_MapContextMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/map/UI_MapContextMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/rightbar/UI_Mapmodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/rightbar/UI_Mapmodes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_DateMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_DateMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gfx/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/gfx/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings/ScriptManager_settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings/ScriptManager_settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +126,7 @@
     "augment.onboarding.workspace.first.indexed.D:/Project 1706 - Naissance Electron": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Project 1706 - Naissance Electron",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,8 +147,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -91,6 +176,7 @@
       <workItem from="1766789162716" duration="1070000" />
       <workItem from="1768421458119" duration="603000" />
       <workItem from="1769908876275" duration="7749000" />
+      <workItem from="1774772315308" duration="102000" />
     </task>
     <servers />
   </component>

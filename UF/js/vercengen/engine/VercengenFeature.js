@@ -19,6 +19,8 @@ if (!global.ve) global.ve = {};
  * - `.id`: {@link string}
  * - `.is_vercengen_feature=true`: {@link boolean} - Whether to mark this ve.Feature as a Vercengen feature.
  * - `.options`: {@link Object}
+ *   - `.style`: {@link Object} - Telestyle CSS to apply to the given ve.Feature.
+ *   - `.theme`: {@link string} - The Telestyle theme to use.
  * 
  * ##### Methods:
  * - <span color=00ffff>{@link ve.Feature.addComponents|addComponents}</span>(arg0_components_obj:{@link Object}<{@link ve.Component}>) - Appends new components to the present ve.Feature.
@@ -65,17 +67,18 @@ ve.Feature = class {
 		this.class_name = this.constructor.class_name;
 		this.id = Class.generateRandomID(ve.Feature);
 		this.is_vercengen_feature = true;
-		if (typeof components_obj === "function" || typeof components_obj === "string") {
-			this.components_obj = {
-				html: new ve.HTML(components_obj)
-			};
-		} else if (components_obj.is_vercengen_component) {
-			this.components_obj = {
-				component: components_obj
-			};
-		} else {
-			this.components_obj = components_obj;
-		}
+		if (components_obj !== undefined)
+			if (typeof components_obj === "function" || typeof components_obj === "string") {
+				this.components_obj = {
+					html: new ve.HTML(components_obj)
+				};
+			} else if (components_obj.is_vercengen_component) {
+				this.components_obj = {
+					component: components_obj
+				};
+			} else {
+				this.components_obj = components_obj;
+			}
 		this.options = (options) ? options : {};
 		
 		//Destructure this.components_obj into available variables
@@ -86,6 +89,15 @@ ve.Feature = class {
 			});
 		} catch (e) { console.error(e); }
 		ve.Feature.instances.push(this);
+		
+		//setTimeout() is necessary here to tick a frame until ve.Feature child class's constructor populates
+		setTimeout(() => {
+			if (this.element) {
+				HTML.applyTelestyle(this.element, this.options.style);
+				if (this.options.theme)
+					HTML.applyTelestyle(this.element, ve.registry.themes[this.options.theme]);
+			}
+		});
 	}
 	
 	/**

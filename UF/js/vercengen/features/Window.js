@@ -13,10 +13,12 @@
  *   - `.x=HTML.mouse_x`: {@link function}|{@link number} - If the type is a function, it must return a number.
  *   - `.y=HTML.mouse_y`: {@link function}|{@link number} - If the type is a function, it must return a number.
  *   -
- *   - `.do_not_wrap=false`: {@link boolean} - Whether to disable wrapping in an always open ve.Interface.
+ *   - `.do_not_wrap=false`: {@link boolean} - Whether to disable wrapping in an always open {@link ve.Interface}.
+ *   - `.element`: {@link HTMLElement}
  *   - `.id`: {@link string}
  *   - `.mode="window"`: {@link string} - Either 'static_ui'/'static_window'/'window'.
- *   - `.name=""`: {@link string} - Auto-resolves to 'Window' instead if `.can_rename=true`.
+ *   - `.name=""`: {@link string} - Auto-resolves to 'Window' instead if `.can_rename=true`.#
+ *   - `.name_class=""`: {@link string}
  *   - `.theme`: {@link string} - The CSS theme to apply to the Feature.
  *   -
  *   - `.can_close`: {@link boolean}
@@ -24,6 +26,11 @@
  *   - `.draggable`: {@link boolean}
  *   - `.headless`: {@link boolean}
  *   - `.resizeable`: {@link boolean}
+ *   - 
+ *   - `.bottom_elements`: {@link Array}<{@link HTMLElement}> - Determines margin from bottom.
+ *   - `.left_elements`: {@link Array}<{@link HTMLElement}> - Determines margin from left.
+ *   - `.right_elements`: {@link Array}<{@link HTMLElement}> - Determines margin from right.
+ *   - `.top_elements`: {@link Array}<{@link HTMLElement}> - Determines margin from top.
  *   - 
  *   - `.onuserchange`: {@link function}(arg0_v:{@link Object}, arg1_e:{@link Event}) - Fires upon user changes to the window. Changes are discrete, and the set of Object keys may vary.
  *     - `arg0_v`: {@link Object}
@@ -149,7 +156,7 @@ ve.Window = class extends ve.Feature {
 					this.x_position_logic_loop = setInterval(() => {
 						this._x = this.x();
 						this.setCoords(this._x, this._y);
-					})
+					}, 100);
 				} else {
 					this._x = this.x;
 				}
@@ -157,13 +164,14 @@ ve.Window = class extends ve.Feature {
 					this.y_position_logic_loop = setInterval(() => {
 						this._y = this.y();
 						this.setCoords(this._x, this._y);
-					})
+					}, 100);
 				} else {
 					this._y = this.y;
 				}
 					
 				this.setCoords(this._x, this._y);
 				this.setSize(options.width, options.height);
+				this.updateOwner();
 				
 				if (this.options.theme)
 					HTML.applyTelestyle(this.element, ve.registry.themes[this.options.theme]);
@@ -176,7 +184,7 @@ ve.Window = class extends ve.Feature {
 		this.element.id = this.id;
 		this.element.innerHTML = `
 			${(!options.headless) ? `<div id = "feature-header" class = "feature-header">
-				<span id = "window-name"${(this.options.can_rename) ? ` contenteditable = "plaintext-only"` : ""}>${this.name}</span>
+				<span id = "window-name"${(this.options.can_rename) ? ` contenteditable = "plaintext-only"` : ""} class = "${(this.options.name_class) ? this.options.name_class : ""}">${this.name}</span>
 			</div>` : ""}
 			<div id = "feature-body" class = "feature-body"></div>
 		`;
@@ -211,7 +219,14 @@ ve.Window = class extends ve.Feature {
 		if (this.options.draggable) {
 			this.element.classList.add("draggable");
 			HTML.elementDragHandler(this.element, {
-				is_resizable: (this.options.resizeable)
+				instance: this,
+				is_resizable: (this.options.resizeable),
+				
+				bottom_elements: this.options.bottom_elements,
+				left_elements: this.options.left_elements,
+				right_elements: this.options.right_elements,
+				top_elements: (this.options.top_elements) ? 
+					this.options.top_elements : [document.querySelector(".ve.navbar")]
 			});
 		}
 		
@@ -233,6 +248,23 @@ ve.Window = class extends ve.Feature {
 		ve.window_overlay_el.appendChild(this.element);
 		ve.Window.instances.push(this);
 		this.select();
+	}
+	
+	/**
+	 * Whether an onresize event has been fired.
+	 * - Private accessor of: {@link ve.Window}
+	 * 
+	 * @param {boolean} arg0_value
+	 * @private
+	 */
+	set _onresize (arg0_value) {
+		//Convert from parameters
+		let value = arg0_value;
+		
+		//If an onresize pulse is sent, execute an onuserchange event for it
+		if (value === true)
+			if (this.options.onuserchange)
+				this.options.onuserchange({ resize: true }, { instance: this });
 	}
 	
 	/**
@@ -322,7 +354,7 @@ ve.Window = class extends ve.Feature {
 					local_value.element.id = local_key;
 					feature_body_el.appendChild(local_value.element);
 				}
-				if (local_value.name === undefined || local_value.name === "")
+				if (ve.registry.automatic_naming && (local_value.name === undefined || local_value.name === ""))
 					local_value.name = local_key;
 			});
 		}
@@ -356,18 +388,22 @@ ve.Window = class extends ve.Feature {
 	 */
 	setCoords (arg0_x, arg1_y) {
 		//Convert from parameters
-		let x = parseInt(arg0_x);
-		let y = parseInt(arg1_y);
+		let x = arg0_x;
+		let y = arg1_y;
 		
-		//Set element X, Y position
+		let coords_obj = HTML.getCSSPosition(this.options.anchor, x, y);
+		
+		//Set element X, Y position; reset position first
 		this.element.style.position = "absolute";
 		this.element.style.bottom = "";
 		this.element.style.left = "";
 		this.element.style.right = "";
 		this.element.style.top = "";
-		HTML.applyTelestyle(this.element, {
-			...HTML.getCSSPosition(this.options.anchor, x, y)
-		});
+		
+		if (coords_obj.bottom) this.element.style.bottom = coords_obj?.bottom;
+		if (coords_obj.left) this.element.style.left = coords_obj?.left;
+		if (coords_obj.right) this.element.style.right = coords_obj?.right;
+		if (coords_obj.top) this.element.style.top = coords_obj?.top;
 	}
 	
 	/**

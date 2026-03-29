@@ -2,6 +2,7 @@
 {
 	/**
 	 * Converts a given string to a Date object if possible.
+	 * @alias Date.convertStringToDate
 	 * 
 	 * @param {string} arg0_date_string
 	 * @param [arg1_delimiter="."]
@@ -34,88 +35,67 @@
 	
 	/**
 	 * Converts a timestamp to a Date object.
+	 * @alias Date.convertTimestampToDate
 	 * 
 	 * @param {number|string} arg0_timestamp
 	 * 
 	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}|*}
 	 */
 	Date.convertTimestampToDate = function (arg0_timestamp) {
-		// Convert from parameters
 		let timestamp = arg0_timestamp;
 		
-		// Guard: if already a date object, return it
 		if (typeof timestamp === "object") return timestamp;
 		
-		// Force numeric
 		timestamp = parseInt(timestamp);
 		if (isNaN(timestamp)) return Date.getBlankDate();
 		
-		// Epoch: Year 1, Month 1, Day 1 => timestamp 0
 		let date_obj = Date.getBlankDate();
 		let minutes = timestamp;
 		
 		// --- Handle BCE (negative timestamps) ---
-		// If minutes < 0, we will reduce year instead of increasing it.
-		// We count *backwards* in complete years before year 1.
 		if (minutes < 0) {
+			// Walk backwards through years until the remaining magnitude
+			// fits within one year.
 			while (true) {
-				const prev_year = date_obj.year - 1;
-				const year_minutes =
+				let prev_year = date_obj.year - 1;
+				let year_minutes =
 					(Date.isLeapYear(prev_year) ? 366 : 365) * 24 * 60;
 				
-				// See if remaining negative minutes fit within this previous year
-				if (minutes + year_minutes >= 0) break;
+				if (-minutes <= year_minutes) break;
 				minutes += year_minutes;
 				date_obj.year--;
 			}
 			
-			// Now minutes is within that previous year: move month/day from start
-			date_obj.year--; // Adjust because loop stops one step early
+			// We're now inside (date_obj.year - 1). Enter that year.
+			date_obj.year--;
 			
-			let all_months = Object.keys(Date.months);
-			for (let i = 0; i < all_months.length; i++) {
-				const m = Date.months[all_months[i]];
-				const dim = Date.isLeapYear(date_obj.year)
-					? m.leap_year_days || m.days
-					: m.days;
-				const m_minutes = dim * 24 * 60;
-				
-				if (Math.abs(minutes) < m_minutes) {
-					date_obj.month = i + 1;
-					break;
-				}
-				minutes += m_minutes;
+			// Convert negative remainder into a positive offset from the
+			// START of this year.  Total minutes in this year:
+			let total_year_minutes =
+				(Date.isLeapYear(date_obj.year) ? 366 : 365) * 24 * 60;
+			minutes = total_year_minutes + minutes; // minutes is negative, so this is (total - |minutes|)
+			
+			// Fall through to the same month/day/hour/minute decomposition
+			// as the CE path below, using the now-positive `minutes`.
+		} else {
+			// --- CE (positive or zero timestamp) ---
+			while (true) {
+				let y_minutes =
+					(Date.isLeapYear(date_obj.year) ? 366 : 365) * 24 * 60;
+				if (minutes < y_minutes) break;
+				minutes -= y_minutes;
+				date_obj.year++;
 			}
-			
-			date_obj.day = Math.floor(Math.abs(minutes) / (24 * 60)) + 1;
-			minutes += (date_obj.day - 1) * 24 * 60;
-			date_obj.hour = Math.floor(Math.abs(minutes) / 60);
-			date_obj.minute = Math.abs(minutes) % 60;
-			
-			if (date_obj.year < 0) date_obj.year++; //Fix 1AD offset
-			
-			return date_obj;
 		}
 		
-		// --- CE (positive timestamp) ---
-		// Step 1: Increase years
-		while (true) {
-			const y_minutes = (Date.isLeapYear(date_obj.year)
-				? 366
-				: 365) * 24 * 60;
-			if (minutes < y_minutes) break;
-			minutes -= y_minutes;
-			date_obj.year++;
-		}
-		
-		// Step 2: Increase months
-		const all_months = Object.keys(Date.months);
+		// Decompose remaining minutes into month/day/hour/minute
+		let all_months = Object.keys(Date.months);
 		for (let i = 0; i < all_months.length; i++) {
-			const m = Date.months[all_months[i]];
-			const dim = Date.isLeapYear(date_obj.year)
+			let m = Date.months[all_months[i]];
+			let dim = Date.isLeapYear(date_obj.year)
 				? m.leap_year_days || m.days
 				: m.days;
-			const m_minutes = dim * 24 * 60;
+			let m_minutes = dim * 24 * 60;
 			if (minutes < m_minutes) {
 				date_obj.month = i + 1;
 				break;
@@ -123,11 +103,9 @@
 			minutes -= m_minutes;
 		}
 		
-		// Step 3: Days
 		date_obj.day = Math.floor(minutes / (24 * 60)) + 1;
 		minutes -= (date_obj.day - 1) * 24 * 60;
 		
-		// Step 4: Hours + Minutes
 		date_obj.hour = Math.floor(minutes / 60);
 		date_obj.minute = minutes % 60;
 		
@@ -136,6 +114,7 @@
 	
 	/**
 	 * Converts a timestamp to an integer if possible.
+	 * @alias Date.convertTimestampToInt
 	 * 
 	 * @param {number|string} arg0_timestamp
 	 * 

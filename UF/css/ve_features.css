@@ -15,6 +15,10 @@
         background-color: var(--hover-colour);
         cursor: pointer;
     }
+    #feature-body > [component] {
+        padding-bottom: var(--cell-padding);
+        padding-top: var(--cell-padding);
+    }
 }
 
 /* -- ve.Modal -- */
@@ -213,6 +217,17 @@
 .tippy-arrow {
     display: none;
 }
+.tippy-box {
+    background-color: color-mix(in srgb, var(--bg-primary-colour), transparent 50%);
+    backdrop-filter: blur(8px);
+    border-radius: 0;
+    box-shadow: 0 0 0.5rem black;
+    bottom: var(--cell-padding);
+    color: var(--body-colour);
+    font-weight: var(--body-font-weight);
+    font-size: var(--body-font-size);
+    padding: var(--cell-padding);
+}
 .tippy-content {
     font-family: var(--body-font-family);
     padding: var(--cell-padding);
@@ -272,6 +287,7 @@
 
         transition: all 0.5s ease;
     }
+    #window-name::spelling-error { text-decoration: none; }
     #window-name:before {
         content: "\200b"; /* Zero width space */
     }
@@ -304,5 +320,10 @@
         overflow: auto;
         scrollbar-color: white transparent;
         scrollbar-width: thin;
+        
+        /* -- ve.Interface handling: if the only component has a height of 100%, it should occupy the Window -- */
+        [component="ve-interface"]:has(table > tbody > tr > td > [style*="height: 100%"]) {
+            height: 100%;
+        }
     }
 }

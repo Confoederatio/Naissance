@@ -1,19 +1,20 @@
 /**
  * Refer to <span color = "yellow">{@link ve.Component}</span> for methods or fields inherited from this Component's parent such as `.options.attributes` or `.element`.
- * 
+ *
  * Represents a {@link Blockly} sub-component used as a visual editor for {@link ve.ComponentScriptManager}.
- * 
+ *
  * **Note.** Declaring duplicate {@link ve.ScriptManager} components will reset the main Blockly workspace for each new instance.
  * - Functional binding: <span color=00ffff>veScriptManagerBlockly</span>().
- * 
+ *
  * ##### Constructor:
  * - `arg0_value`: {@link string} - The code to input into the present Blockly viewer.
  * - `arg1_options`: {@link Object}
- * 
+ *   - `.script_manager`: {@link ve.ScriptManager}
+ *
  * ##### Instance:
  * - `.workspace`: {@link Blockly.Workspace}
  * - `.v`: {@link string}
- * 
+ *
  * ##### Methods:
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.disable|disable}</span>()
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.enable|enable}</span>()
@@ -23,7 +24,7 @@
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.interceptBlocklyTransforms|interceptBlocklyTransforms}</span>()
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.setTheme|setTheme}</span>(arg0_theme:{@link string}) - Either 'theme_default'/'theme_light'.
  * - <span color=00ffff>{@link ve.ScriptManagerBlockly.show|show}</span>()
- * 
+ *
  * @augments ve.Component
  * @memberof ve.Component
  * @type {ve.ScriptManagerBlockly}
@@ -35,8 +36,8 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		//Convert from parameters
 		let value = arg0_value;
 		let options = (arg1_options) ? arg1_options : {};
-			super(options);
-			
+		super(options);
+		
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
 		
@@ -46,12 +47,7 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		this.element = document.createElement("div");
 			this.element.instance = this;
 			this.element.setAttribute("component", "ve-script-manager-blockly");
-			this.element.style.width = "35%";
-			this.element.style.position = "relative"; 
-			if (options.attributes)
-				Object.iterate(options.attributes, (local_key, local_value) => {
-					this.element.setAttribute(local_key, local_value.toString());
-				});
+			HTML.setAttributesObject(this.element, options.attributes);
 		this.options = options;
 		this.value = value;
 		
@@ -77,25 +73,10 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		
 		//Call after Blockly initialization
 		this.interceptBlocklyTransforms();
-		this.workspace.addChangeListener((e) => {
-			let blockly_value = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
-			
-			if (!this.to_binding_fire_silently)
-				try {
-					let codemirror_obj = this.element.parentElement.querySelector(`[component="ve-script-manager-codemirror"]`).instance;
-					
-					codemirror_obj.to_binding_fire_silently = true;
-					codemirror_obj.v = blockly_value;
-					delete codemirror_obj.to_binding_fire_silently;
-					
-					this.fireToBinding();
-				} catch (e) { console.error(e); }
+		this.workspace.addChangeListener(() => {
+			this._exportToMonaco();
+			this.fireToBinding(); 
 		});
-		
-		//Initialise onresize, flyout scaling fixes
-		this.element.style.left = '0px' // x + 'px';
-		this.element.style.width = "100%"
-		this.element.style.height = "100%";
 		
 		this.fixBlocklyScaling();
 		this.handleCSS();
@@ -122,7 +103,7 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.ScriptManagerBlockly
-	 * 
+	 *
 	 * @param {string} arg0_value
 	 */
 	set v (arg0_value) {
@@ -136,6 +117,39 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		js2blocks.parseCode(value);
 		setTimeout(() => delete this.to_binding_fire_silently, 100);
 		this.fireFromBinding();
+	}
+	
+	_exportToMonaco (arg0_force_export) {
+		//Convert from parameters
+		let force_export = arg0_force_export;
+		
+		try {
+			//Declare local instance variables
+			let blockly_value = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
+			let should_export = false;
+			if (this.options.script_manager && !this.options.script_manager._settings.manual_synchronisation)
+				should_export = true;
+			if (force_export) should_export = true;
+			
+			//Only export if should_export is true
+			if (should_export)
+				if (!this.to_binding_fire_silently)
+					try {
+						//Traverse up to the ScriptManager container, then search down for Monaco
+						let manager_el = this.element.closest(`[component="ve-script-manager"]`);
+						let monaco_el = (manager_el) ?
+							manager_el.querySelector(`[component="ve-script-manager-monaco"]`) :
+							undefined;
+						
+						if (monaco_el && monaco_el.instance) {
+							let monaco_obj = monaco_el.instance;
+							
+							monaco_obj.to_binding_fire_silently = true;
+							monaco_obj.v = blockly_value;
+							delete monaco_obj.to_binding_fire_silently;
+						}
+					} catch (e) { console.error(e); }
+		} catch (e) {}
 	}
 	
 	/**
@@ -153,10 +167,12 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		delete window.workspace;
 		this.element.classList.add("disabled");
 		
-		this.blockly_tooltip_parent_el = this.blockly_tooltip_el.parentElement;
-		this.blockly_tooltip_el.parentElement.removeChild(this.blockly_tooltip_el);
-		this.blockly_widget_parent_el = this.blockly_widget_el.parentElement;
-		this.blockly_widget_el.parentElement.removeChild(this.blockly_widget_el);
+		try {
+			this.blockly_tooltip_parent_el = this.blockly_tooltip_el.parentElement;
+			this.blockly_tooltip_el.parentElement.removeChild(this.blockly_tooltip_el);
+			this.blockly_widget_parent_el = this.blockly_widget_el.parentElement;
+			this.blockly_widget_el.parentElement.removeChild(this.blockly_widget_el);
+		} catch (e) {}
 	}
 	
 	/**
@@ -214,50 +230,59 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	 */
 	handleCSS () {
 		//Declare local instance variables
+		let blockly_raf;
 		this.blockly_toolbox_mode = "canvas"; //Either 'body'/'canvas'
-		this.element.style.width = "auto";
-		
-		//Handle blockly_toolbox_el
-		this.blockly_toolbox_loop = setInterval(() => {
-			if (this._hidden) return;
-			if (this._disabled) { //Internal guard clause if this._disabled
-				if (this.blockly_toolbox_el.parentElement)
-					this.blockly_toolbox_el.parentElement.removeChild(this.blockly_toolbox_el);
+		let runToolboxUpdate = () => {
+			if (this._hidden) {
+				blockly_raf = requestAnimationFrame(runToolboxUpdate);
 				return;
 			}
+			
+			if (this._disabled) {
+				if (this.blockly_toolbox_el.parentElement)
+					this.blockly_toolbox_el.parentElement.removeChild(this.blockly_toolbox_el);
+				blockly_raf = requestAnimationFrame(runToolboxUpdate);
+				return;
+			}
+			
 			this.svg_el = this.element.querySelector("svg");
+				this.svg_el.setAttribute("width", "100%");
+				this.svg_el.setAttribute("height", "100%");
 			this.svg_rect = this.svg_el.getBoundingClientRect();
 			
-			this.max_height = this.svg_rect.height;
-			this.max_width = this.svg_rect.width;
-			this.svg_el.style.maxHeight = `${this.max_height}px`;
-			this.svg_el.style.maxWidth = `${this.max_width}px`;
-			
-			//Change anchor for this.blockly_toolbox_el
 			let rect = this.element.getBoundingClientRect();
-			this.blockly_toolbox_mode = (this.element.querySelector(".blocklyFlyout:hover") ||
+			this.blockly_toolbox_mode =
+				this.element.querySelector(".blocklyFlyout:hover") ||
 				this.blockly_toolbox_el.querySelector(":hover") ||
 				document.querySelector(".blocklyDraggable:hover")
-			) ? 
-				"body" : "canvas";
+					? "body"
+					: "canvas";
 			
 			if (this.blockly_toolbox_mode === "body") {
-				if (!document.querySelector("body > .blocklyToolboxDiv"))
+				if (!document.querySelector("body > .blocklyToolboxDiv")) {
 					document.body.appendChild(this.blockly_toolbox_el);
-				this.blockly_toolbox_el.style.height = `${this.svg_rect.height}px`;
+				}
+				this.blockly_toolbox_el.style.height = `${this.toolbox_height}px`;
 				this.blockly_toolbox_el.style.left = `${rect.x}px`;
 				this.blockly_toolbox_el.style.top = `calc(${rect.y}px + var(--cell-padding))`;
-				this.blockly_toolbox_el.style.zIndex = 2;
-			}
-			if (this.blockly_toolbox_mode === "canvas") {
-				if (!this.element.contains(this.blockly_toolbox_el))
+				this.blockly_toolbox_el.style.zIndex = "2";
+			} else {
+				// canvas mode
+				if (!this.element.contains(this.blockly_toolbox_el)) {
 					this.element.appendChild(this.blockly_toolbox_el);
+				}
 				this.blockly_toolbox_el.style.height = `${this.svg_rect.height}px`;
 				this.blockly_toolbox_el.style.left = "0px";
 				this.blockly_toolbox_el.style.top = `calc(var(--cell-padding))`;
-				this.blockly_toolbox_el.style.zIndex = 0;
+				this.blockly_toolbox_el.style.zIndex = "0";
+				this.toolbox_height = HTML.getElementDimensions(this.blockly_toolbox_el).height;
 			}
-		});
+			
+			blockly_raf = requestAnimationFrame(runToolboxUpdate);
+		};
+		
+		//Start RAF to handle CSS
+		blockly_raf = requestAnimationFrame(runToolboxUpdate);
 	}
 	
 	/**
@@ -272,9 +297,6 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		
 		//Declare local instance variables
 		this._hidden = true;
-		this._preserved_height = this.svg_el.style.maxHeight;
-		this._preserved_width = this.svg_el.style.maxWidth;
-		
 		this.element.style.display = "none";
 	}
 	
@@ -298,7 +320,7 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 			
 			if (local_element) {
 				// Override setAttribute to intercept transform changes
-				const originalSetAttribute = local_element.setAttribute;
+				let originalSetAttribute = local_element.setAttribute;
 				local_element.setAttribute = function (name, value) {
 					if (name === 'transform' && value.includes('scale(')) {
 						// Preserve translate, force scale(1)
@@ -316,7 +338,7 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 	 *
 	 * @alias setTheme
 	 * @memberof ve.Component.ve.ScriptManagerBlockly
-	 * 
+	 *
 	 * @param {string} arg0_theme_class
 	 */
 	setTheme (arg0_theme_class) {
@@ -345,11 +367,6 @@ ve.ScriptManagerBlockly = class extends ve.Component {
 		//Declare local instance variables
 		delete this._hidden;
 		this.element.style.display = "block";
-		this.svg_el.style.maxHeight = `${this._preserved_height}px`;
-		this.svg_el.style.maxWidth = `${this._preserved_width}px`;
-		
-		delete this._preserved_height;
-		delete this._preserved_width;
 	}
 };
 

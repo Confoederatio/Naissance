@@ -1,4 +1,4 @@
-[component="ve-hierarchy"] {
+[component="ve-hierarchy"].ui-leftbar-hierarchy {
     [data-is-selected="true"] > .nst-content {
         border: 3px dashed var(--geometry-selection-colour);
     }
@@ -16,10 +16,57 @@
         > .nst-content {
             border: 3px solid var(--accent-secondary-colour);
         }
+        > ol {
+            border-left: dashed 3px var(--accent-secondary-colour);
+        }
 
         [component="ve-hierarchy-datatype"] > .nst-content {
             box-shadow: 0 0 0 1px solid var(--bg-primary-colour);
-            outline: dashed 3px var(--accent-secondary-colour);
         }
+    }
+
+    /* -- naissance.Feature -- */
+    .order-99 {
+        margin-left: auto;
+        order: 99;
+        padding: 0;
+    }
+    .order-100 { order: 100; padding: 0; }
+    .order-101 { order: 101; padding: 0; }
+
+    /* -- naissance.FeatureGroup -- */
+    [data-type="FeatureGroup"] {
+        [component="ve-button"] > button { border: 0; }
+        .nst-content { padding-right: 0; }
+    }
+    /* -- naissance.GeometryPolygon -- */
+    [data-type="GeometryPolygon"] {
+        [component="ve-button"] > button { border: 0; }
+        .nst-content { padding-right: 0; }
+    }
+}
+
+#feature-body:has([naissance-ui="LeftbarHierarchy"]) {
+    padding-bottom: 0;
+    padding-right: 0; 
+}
+[naissance-ui="LeftbarHierarchy"] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    
+    .actions-bar .nst-content {
+        padding: 0;
+    }
+    .topbar {
+        margin-top: calc(var(--cell-padding)*1.25);
+        margin-bottom: calc(var(--cell-padding)*1.25);
+    }
+    .ui-leftbar-hierarchy {
+        flex-grow: 1;
+        overflow: auto;
+        scrollbar-color: white transparent;
+        scrollbar-width: thin;
     }
 }

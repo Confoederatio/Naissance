@@ -7,6 +7,7 @@
  * ##### Constructor:
  * - `arg0_value`: {@link number}
  * - `arg1_options`: {@link Object}
+ *   - `.disable_number_input=false`: {@link boolean}
  *   - `.disabled=false`: {@link boolean}
  *   - `.max=1`: {@link number}
  *   - `.min=0`: {@link number}
@@ -46,7 +47,6 @@ ve.Range = class extends ve.Component {
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-range");
 			this.element.instance = this;
-		
 		this.options = options;
 		this.value = value;
 		
@@ -54,13 +54,20 @@ ve.Range = class extends ve.Component {
 		let html_string = [];
 		html_string.push(`<span id = "name"></span>`);
 		html_string.push(`<input type = "range"${HTML.objectToAttributes(attributes)}>`);
-		html_string.push(`<span id = "value-label">${this.value}</span>`);
+		html_string.push(`<input id = "value-label" ${(this.options.disable_number_input) ? "disabled" : ""} type = "number" max = "${attributes.max}" min = "${attributes.min}" value = "${this.value}" style = "">`);
 		
 		//Populate element and initialise handlers
 		this.element.innerHTML = html_string.join("");
 		
-		let input_el = this.element.querySelector("input");
+		let input_el = this.element.querySelector("input[type='range']");
+		let value_input_el = this.element.querySelector("input[type='number']");
 		input_el.addEventListener("input", (e) => {
+			this.from_binding_fire_silently = true;
+			this.v = global.Number(e.target.value);
+			delete this.from_binding_fire_silently;
+			this.fireToBinding();
+		});
+		value_input_el.addEventListener("input", (e) => {
 			this.from_binding_fire_silently = true;
 			this.v = global.Number(e.target.value);
 			delete this.from_binding_fire_silently;
@@ -99,7 +106,7 @@ ve.Range = class extends ve.Component {
 		//Set value and update UI
 		this.value = value;
 		this.element.querySelector("input").value = this.value;
-		this.element.querySelector("#value-label").innerHTML = `${this.value}`;
+		this.element.querySelector("#value-label").value = this.value;
 		this.fireFromBinding();
 	}
 	

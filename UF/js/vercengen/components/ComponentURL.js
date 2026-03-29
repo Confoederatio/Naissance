@@ -57,7 +57,7 @@ ve.URL = class extends ve.Component {
 			this.fireToBinding();
 		});
 		this.element.querySelector("#open-link").addEventListener("click", (e) => {
-			if (this.value.isURL())
+			if (String.isURL(this.value))
 				require("electron").shell.openExternal(this.value);
 		});
 		this.v = this.value;
@@ -92,7 +92,7 @@ ve.URL = class extends ve.Component {
 		//Set value and update UI
 		this.value = value;
 		this.element.querySelector("input").value = this.value;
-		this.element.querySelector(`#open-link`).setAttribute("valid-url", value.isURL());
+		this.element.querySelector(`#open-link`).setAttribute("valid-url", String.isURL(value));
 		this.fireFromBinding();
 	}
 };

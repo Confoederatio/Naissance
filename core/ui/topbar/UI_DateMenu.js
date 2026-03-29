@@ -7,10 +7,10 @@ global.UI_DateMenu = class extends ve.Class {
 		this.date = veDate(undefined, {
 			binding: "main.date",
 			name: " ",
+			tooltip: "<b>Note.</b> BC are currently shown as negative numbers for technical clarity.",
 			
 			//Split up directional flows to prevent accessor race conditions
 			onprogramchange: (v) => {
-				//console.trace("date, onprogramchange");
 				DALS.Timeline.parseAction({
 					options: { name: "Refresh Date", key: "load_date" },
 					value: [{ type: "global", refresh_date: true }]
@@ -24,6 +24,7 @@ global.UI_DateMenu = class extends ve.Class {
 						{ type: "global", refresh_date: true }
 					]
 				});
+				naissance.Mapmode.draw();
 			}
 		});
 		

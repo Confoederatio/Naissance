@@ -59,6 +59,40 @@ global.path = require("path");
 					
 					//Component-wide settings
 					
+					Blacktraffic: {
+						/**
+						 * The folder path in which Ontology databases are stored.
+						 * @type {string}
+						 */
+						ontology_saves_folder: "settings/Blacktraffic_ontology/",
+						/**
+						 * The folder path where worker statuses are stored.
+						 * @type {string}
+						 */
+						worker_saves_folder: "settings/Blacktraffic_workers/"
+					},
+					
+					Channel: {
+						/**
+						 * The default background colour for consoles.
+						 * @type {string}
+						 */
+						default_bg_colour: "#2196f3",
+						/**
+						 * The default text colour for consoles. Either 'auto' or on actual colour.
+						 * @type {string}
+						 */
+						default_text_colour: "auto"
+					},
+					
+					Log: {
+						/**
+						 * Determines the default console height.
+						 * @type {string}
+						 */
+						default_console_height: "40vh"
+					},
+					
 					/**
 					 * Component settings for {@link ve.MultiTag}.
 					 * @type {{"<registry_key>": string[]}}
@@ -72,7 +106,12 @@ global.path = require("path");
 						 * Any window that is currently open to define a script type.
 						 * @type {ve.Window|undefined}
 						 */
-						script_window: undefined
+						script_window: undefined,
+						/**
+						 * Either false if no automatic save file is declared, or the file path to save settings in.
+						 * @type {boolean|string}
+						 */
+						save_file: "settings/NodeEditor_settings.json"
 					},
 					
 					/**
@@ -89,6 +128,28 @@ global.path = require("path");
 						 * @type {boolean}
 						 */
 						share_settings_across_instances: true
+					},
+					
+					/**
+					 * Component settings for {@link ve.UndoRedo}.
+					 */
+					UndoRedo: {
+						/**
+						 * Either false if no automatic save file is declared, or the file path to save settings in.
+						 * @type {boolean|string}
+						 */
+						save_file: "settings/UndoRedo_settings.json",
+						
+						/**
+						 * Whether manual commits are toggled on by default.
+						 * @type {boolean}
+						 */
+						manual_commits: false,
+						/**
+						 * The default name for manual commits.
+						 * @type {string} 
+						 */
+						manual_commit_name: ""
 					}
 				}
 			}
@@ -164,9 +225,9 @@ global.path = require("path");
 	 * @returns {Array<string>} The final, ordered list of file paths.
 	 */
 	ve.getImportFiles = function (patterns) { //[WIP] - Refactor from AI
-		const base = process.cwd();
-		const finalFiles = [];
-		const handledPaths = new Set(); // Tracks files that have already been placed.
+		let base = process.cwd();
+		let finalFiles = [];
+		let handledPaths = new Set(); // Tracks files that have already been placed.
 		const excludedPaths = new Set(); // Tracks files explicitly excluded by `!`.
 		
 		// Process patterns in reverse order (from last to first).
@@ -182,7 +243,7 @@ global.path = require("path");
 			if (pattern.includes("*")) {
 				files = ve.getWildcardsInFolder(base, pattern);
 			} else {
-				const absolutePath = path.resolve(base, pattern);
+				let absolutePath = path.resolve(base, pattern);
 				if (fs.existsSync(absolutePath)) {
 					// Use your original, RECURSIVE function for directories.
 					if (fs.statSync(absolutePath).isDirectory()) {
@@ -297,6 +358,7 @@ global.path = require("path");
 	 * - `.load_files`: {@link Array}<{@link string}> - The sequence of files to load. `!` should be used as an exclusion prefix, whilst `*` functions as a wildcard pattern.
 	 * - `.is_browser=true`: {@link boolean} - Whether the imports are for the Browser/Electron. Imports are assumed to be eval/Node.js otherwise.
 	 * - `.is_node=false`: {@link boolean} - Whether the imports are for Node.js. Overridden by `.is_browser`. Inputs are assumed to be for eval if false.
+	 * - `.ontology_function`: {@link function}(arg0_ontologies:{@link Array}<{@link Ontology}>) - The function to execute once Ontology instances are loaded from DBs.
 	 * - `.special_function`: {@link function} - The function to execute upon startup and Vercengen initialisation.
 	 *
 	 * @returns Array<string>
@@ -323,6 +385,12 @@ global.path = require("path");
 			"UF/libraries/mapbox-gl.js",
 			"UF/libraries/mapbox-gl.css",
 			"UF/libraries/maptalks.mapboxgl.min.js",
+			"UF/libraries/maptalks.formats.js",
+			
+			//Leaflet
+			"UF/libraries/leaflet.css",
+			"UF/libraries/leaflet.js",
+			"UF/libraries/leaflet_kmz.js",
 			
 			//Univer
 			"UF/libraries/univer/react.production.min.js",
@@ -338,11 +406,25 @@ global.path = require("path");
 			"UF/js/vercengen/engine",
 			"UF/js/vercengen/engine/Demo.js",
 			"UF/js/vercengen/components",
+			//ve.DatavisSuite
+			"UF/js/vercengen/components/ComponentDatavisSuite/ComponentDatavisSuite.js",
+			"UF/js/vercengen/components/ComponentDatavisSuite/framework",
+			"UF/js/vercengen/components/ComponentDatavisSuite/ui",
+			//ve.FileExplorer
 			"UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js",
+			//ve.NodeEditor
+			"UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditor.js",
+			"UF/js/vercengen/components/ComponentNodeEditor/",
+			//ve.ScriptManager
+			"!UF/libraries/monaco/",
+			"UF/js/vercengen/components/ComponentScriptManager/blockly/blockly_toolbox.js",
+			"UF/js/vercengen/components/ComponentScriptManager/core",
+			"UF/js/vercengen/components/ComponentScriptManager/monaco/monaco_startup.js",
+			
 			"UF/js/vercengen/features",
 			
 			//Localisation
-			"UF/js/vercengen/vercengen_localisation.js"
+			"UF/js/vercengen/vercengen_localisation.js",
 		] : [];
 			load_patterns = load_patterns.concat(options.load_files);
 		
@@ -408,6 +490,17 @@ global.path = require("path");
 			try {
 				ve.initialiseThemes();
 				ve.initialise();
+				
+				//Load ontologies
+				Ontology.fromDatabase().then(() => {
+					if (options.ontology_function)
+						options.ontology_function(Ontology.instances);
+				});
+				global.ve_gc_loop = setInterval(() => {
+					//Perform GC
+					if (ve?.Tooltip?.refresh) ve.Tooltip.refresh();
+				}, 1000);
+				
 				clearInterval(global.initialise_ve_loop);
 				
 				if (options.special_function)
@@ -421,7 +514,7 @@ global.path = require("path");
 }
 
 //[WIP] - Refactor later
-function injectConcatenatedHTML(htmlMarkup) {
+function injectConcatenatedHTML (htmlMarkup) {
 	const tempContainer = document.createElement("div");
 	tempContainer.innerHTML = htmlMarkup;
 	

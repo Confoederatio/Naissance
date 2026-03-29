@@ -8,6 +8,7 @@
  * - `arg0_value`: {@link Object}<{@link string}> - Read-only names are values, internal IDs are keys.
  * - `arg1_options`: {@link Object}
  *   - `.disabled=false`: {@link boolean}
+ *   - `.selected`: {@link string} - The name of the selected value.
  * 
  * ##### Instance:
  * - `.v`: {@link string} - The current ID selected by the datalist. If no valid ID is found, the raw `.value` of the datalist element is returned.
@@ -68,6 +69,14 @@ ve.Datalist = class extends ve.Component {
 			delete this.from_binding_fire_silently;
 			this.fireToBinding();
 		});
+		
+		//Set options.selected if available
+		if (options.selected) {
+			this.from_binding_fire_silently = true;
+			input_el.value = options.selected;
+			delete this.from_binding_fire_silently;
+		}
+		
 		this.name = options.name;
 		this.v = this.value;
 	}

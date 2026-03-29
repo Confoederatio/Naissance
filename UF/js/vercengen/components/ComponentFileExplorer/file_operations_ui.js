@@ -31,13 +31,13 @@ global.stream_promises = require("stream/promises");
 				//Limit: currently_resolved === false
 				overwrite_button: new ve.Button((e) => {
 					overwrite = true;
-				}, { name: "Overwrite" }),
+				}, { name: loc("ve.registry.localisation.FileExplorer_overwrite") }),
 				skip_button: new ve.Button((e) => {
 					skip = true;
-				}, { name: "Skip" }),
+				}, { name: loc("ve.registry.localisation.FileExplorer_skip") }),
 				overwrite_all_button: new ve.Button((e) => {
 					overwrite_all = true;
-				}, { name: "Overwrite All" })
+				}, { name: loc("ve.registry.localisation.FileExplorer_overwrite_all") })
 			}, { name: " ", limit: () => (currently_resolved === false), style: { display: "flex" } })
 		}, { 
 			attributes: { class: "file-explorer-modal" }, 
@@ -105,7 +105,7 @@ global.stream_promises = require("stream/promises");
 				}
 			} catch (e) {
 				let local_error_div = document.createElement("div");
-					local_error_div.innerHTML = `<div class = "error">ERROR: ${e}</div>`;
+					local_error_div.innerHTML = `<div class = "error">${loc("ve.registry.localisation.FileExplorer_error", e.stack)}</div>`;
 				dialog_window.html.element.appendChild(local_error_div);
 			}
 			
@@ -261,7 +261,7 @@ global.stream_promises = require("stream/promises");
 				}
 			} catch (e) {
 				let local_error_div = document.createElement("div");
-					local_error_div.innerHTML = `<div class = "error">ERROR: ${e}</div>`;
+					local_error_div.innerHTML = `<div class = "error">ERROR: ${e.stack}</div>`;
 				dialog_window.html.element.appendChild(local_error_div);
 			}
 			

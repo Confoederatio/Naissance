@@ -23,7 +23,11 @@
  *     - `<css_property>`: {@link function}|{@link string}
  *
  * ##### DOM:
- * - `.instance`: this:{@link ve.Component}
+ * - Attributes:
+ *   - `data-debug-add-component`: {@link boolean}
+ *   - `data-debug-limit`: {@link boolean}
+ * - Fields:
+ *   - `.instance`: this:{@link ve.Component}
  *
  * ##### Instance:
  * - `.child_class=this.constructor`: {@link ve.Component} - The constructor object of the child class.
@@ -49,6 +53,7 @@
  * - <span color=00ffff>{@link ve.Component.fireToBinding|fireToBinding}</span>() - Pseudo-setter to binding. Fires only upon user-driven changes to `.v`.
  * - <span color=00ffff>{@link ve.Component.remove|remove}</span>() - Removes the component/element from the DOM.
  * - <span color=00ffff>{@link ve.Component.removeComponent|removeComponent}</span>() - Unmounts the current component from its parent_el.
+ * - <span color=00ffff>{@link ve.Component.setValueFromObject|setValueFromObject}</span>(arg0_object:{@link Object}, arg1_object:{@link Object}) - 
  * - <span color=00ffff>{@link ve.Component.setOwner|setOwner}</span>(arg0_value:{@link Object}, arg1_owner_array=[]:{@link Array}<{@link Object}>) - Used by the reflection engine in {@link ve.Class} to set the owner hierarchy automatically.
  * 
  * ##### Static Methods:
@@ -58,13 +63,18 @@
  * Types are annotated by both their constructor function and what they return after the pipe separator (`.v`). 
  * 
  * \* indicates a recursive Object of that type.
+ * - {@link ve.Component.ve.DatavisSuite|veDatavisSuite}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link Object}
  * - {@link ve.Component.ve.FileExplorer|veFileExplorer}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The file path the File Explorer is currently navigating.
  * - {@link ve.Component.ve.Hierarchy|veHierarchy}(arg0_value:{@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}> - Note. It is recommended to use {@link ve.HierarchyDatatype} as the specific {@link ve.Component} for `arg0_value`. Tree/scene inspector.
  *   - {@link ve.Component.ve.HierarchyDatatype|veHierarchyDatatype}({@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}> - Represents individual items in a hierarchy.
  * - {@link ve.Component.ve.NodeEditor|veNodeEditor}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link Object} - Visual node-based DAG editor with async processing.
  *   - {@link ve.Component.ve.NodeEditorDatatype|veNodeEditorDatatype}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link Object}
+ * - {@link ve.Component.ve.ScriptManager|veScriptManager}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ *   - {@link ve.Component.ve.ScriptManagerBlockly|veScriptManagerBlockly}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ *   - {@link ve.Component.ve.ScriptManagerMonaco|ScriptManagerMonaco}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ * - {@link ve.Component.ve.Spreadsheet|veSpreadsheet}(arg0_value:{@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object}, arg1_options:{@link Object}) | {@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object} - Spreadsheet editor with formulas. Can be converted to {@link ve.Table} on demand.
+ * - {@link ve.Component.ve.WordProcessor|WordProcessor}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - Word processor.
  * 
- * - {@link ve.Component.ve.BIUF|veBIUF}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - Single-line rich text input. `.v` is an HTML string.
  * - {@link ve.Component.ve.Button|veButton}(arg0_value:{@link function}, arg1_options:{@link Object}) | {@link function}
  * - {@link ve.Component.ve.Checkbox|veCheckbox}(arg0_value:{@link boolean}|{@link Object}<{@link boolean}>\*, arg1_options: {@link Object}) | {@link boolean}|{@link Object}<{@link boolean}>\* - A recursive list of checkboxes, or a single toggleable input.
  * - {@link ve.Component.ve.Colour|veColour}(arg0_value:{@link Array}<{@link number}, {@link number}, {@link number}|{@link string}, arg1_options: {@link Object}>) | {@link Array}<{@link number}, {@link number}, {@link number}> - RGB colour selector.
@@ -72,31 +82,32 @@
  * - {@link ve.Component.ve.Date|veDate}(arg0_value:{@link UF.Date}, arg1_options: {@link Object}) | {@link UF.Date}
  * - {@link ve.Component.ve.DateLength|veDateLength}(arg0_value:{@link UF.Date}, arg1_options: {@link Object}) | {@link UF.Date}
  * - {@link ve.Component.ve.File|veFile}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The file/folder path selected by the user.
+ * - {@link ve.Component.ve.FlexInterface|veFlexInterface}(arg0_value:{@link Object}<{@link Object}|{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link Object}|{@link ve.Component}>
+ * - {@link ve.Component.ve.Graph|veGraph}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link Object}
  * - {@link ve.Component.ve.HTML|veHTML}(arg0_value:{@link function}|{@link HTMLElement}|{@link string}, arg1_options: {@link Object}) | {@link string}
  * - {@link ve.Component.ve.Interface|veInterface}(arg0_value:{@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}>
+ * - {@link ve.Component.ve.Log|veLog}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.List|veList}(arg0_value:{@link Array}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Array}<{@link ve.Component}>
  * - {@link ve.Component.ve.Map|veMap}(arg0_value:{@link maptalks.Map}, arg1_options:{@link Object}) | {@link maptalks.Map}
  * - {@link ve.Component.ve.MultiTag|veMultiTag}(arg0_value:{@link Array}<{@link string}>, arg1_options:{@link Object}) | {@link Array}<{@link string}>
  * - {@link ve.Component.ve.Number|veNumber}(arg0_value:{@link number}, arg1_options:{@link Object}) | {@link number}
+ * - {@link ve.Component.ve.ObjectEditor|veObjectEditor}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link Object} - Any valid JSON object.
  * - {@link ve.Component.ve.ObjectInspector|veObjectInspector}(arg0_value:{@link any}, arg1_options:{@link Object}) | {@link any}
  * - {@link ve.Component.ve.PageMenu|vePageMenu}(arg0_value:{@link Object}, arg1_options:{@link Object}) | {@link string} - The `.page` key currently displayed.
  * - {@link ve.Component.ve.Password|vePassword}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Radio|veRadio}(arg0_value:{@link Object}<{@link boolean}>\* | {@link Object}<{@link boolean}>\*
  * - {@link ve.Component.ve.Range|veRange}(arg0_value:{@link number}, arg1_options: {@link Object}) | {@link number}
  * - {@link ve.Component.ve.RawInterface|veRawInterface}(arg0_components_obj:{@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}>
+ * - {@link ve.Component.ve.RichText|veRichText}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - Single-line rich text input. `.v` is an HTML string.
  * - {@link ve.Component.ve.SearchSelect|veSearchSelect}(arg0_components_obj:{@link Object}<{@link ve.Component}>, arg1_options:{@link Object}) | {@link Object}<{@link ve.Component}>
- * - {@link ve.Component.ve.ScriptManager|veScriptManager}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
- *   - {@link ve.Component.ve.ScriptManagerBlockly|veScriptManagerBlockly}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
- *   - {@link ve.Component.ve.ScriptManagerCodemirror|veScriptManagerCodemirror}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Select|veSelect}(arg0_value:{@link ve.Object}<{@link string}>, arg1_options:{@link Object}) | {@link string} - The key of the selected option.
- * - {@link ve.Component.ve.Table|veTable}(arg0_value:{@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object}, arg1_options:{@link Object}) | {@link Array}<{@link Array}<{@link Array}<{@link any}>>>|{@link Object} - Spreadsheet editor with formulas.
+ * - {@link ve.Component.ve.Table|veTable}(arg0_value:{@link Array}<{@link Array}<{@link any}>>, arg1_options:{@link Object}) | {@link Array}<{@link Array}<{@link any}>> - Paginated lazy-loaded table. Can be converted to {@link ve.Spreadsheet} on demand.
  * - {@link ve.Component.ve.Telephone|veTelephone}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Text|veText}(arg0_value:{@link string}, arg1_options: {@link Object}) | {@link string}
  * - {@link ve.Component.ve.Time|veTime}(arg0_value:{hour:{@link number}, minute:{@link number}}, arg1_options:{@link Object}) | {hour:{@link number}, minute:{@link number}}
  * - {@link ve.Component.ve.Toggle|veToggle}(arg0_value:{@link boolean}, arg1_options:{@link Object}) | {@link boolean}
  * - {@link ve.Component.ve.UndoRedo|veUndoRedo}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The {@link DALS.Timeline} ID that the UndoRedo component is currently navigating.
  * - {@link ve.Component.ve.URL|veURL}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
- * - {@link ve.Component.ve.WYSIWYG|WYSIWYG}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - Word processor.
  * 
  * @class
  * @memberof ve
@@ -144,7 +155,7 @@ ve.Component = class {
 			//.onload handler
 			if (this.options.onload)
 				setTimeout(() => {
-					this.options.onload(this);
+					this.options.onload(this.v, this);
 				}, 100);
 			
 			//KEEP AT BOTTOM! - Feature/UI handlers
@@ -155,12 +166,102 @@ ve.Component = class {
 				this.name = this.options.name;
 			
 			//.tooltip handler
-			if (this.options.tooltip)
-				this.tooltip = new ve.Tooltip(this.options.tooltip, { element: this.element });
+			if (this.options.tooltip) {
+				let createTooltip = () => this.tooltip = new ve.Tooltip(this.options.tooltip, { 
+					element: this.element });
+				
+				this.element.addEventListener("mouseover", (e) => {
+					if (Object.keys(this.tooltip).length === 0) createTooltip();
+				});
+				createTooltip();
+			}
 		});
 	}
 	
 	//ve.Component getters/setters
+	
+	/**
+	 * Internal `.from_binding` setter for handling .options.from_binding. Accepts a string literal that is then parsed to a variable reference.
+	 *
+	 * `.to_binding` counterparts are manually handled child-side.
+	 * - Accessor of: {@link ve.Component}
+	 *
+	 * @param {string} arg0_variable_string
+	 */
+	set from_binding (arg0_variable_string) {
+		//Convert from parameters
+		let variable_string = arg0_variable_string;
+		
+		//Declare local instance variables
+		let initial_object = global;
+		this.from_binding_string = variable_string;
+		
+		try {
+			//Parse this to this.owner; watch variable mutation using getter/setter, and set this.v to new value
+			if (variable_string.startsWith("this.")) {
+				variable_string = variable_string.replace("this.", "");
+				initial_object = this.owner;
+			} else if (variable_string.startsWith("window.")) {
+				variable_string = variable_string.replace("window.", "");
+				initial_object = window;
+			} else {
+				variable_string = variable_string.replace("global.", "");
+			}
+			
+			//Set init value if applicable
+			let from_value = Object.getValue(initial_object, variable_string);
+			if (this.options.binding && from_value === undefined)
+				Object.setValue(initial_object, variable_string, this.v);
+			from_value = Object.getValue(initial_object, variable_string);
+			
+			//Add getter/setter
+			Object.addGetterSetter(initial_object, variable_string, {
+				set_function: (arg0_value) => {
+					//Convert from parameters
+					let local_value = arg0_value;
+					if (this.from_binding_fire_silently) return;
+					
+					let is_same_value = Boolean.strictEquality(local_value, this.v);
+					if (is_same_value) return;
+					
+					//Declare local instance variables
+					this.from_binding_fire_silently = true;
+					this.v = local_value;
+					delete this.from_binding_fire_silently;
+					
+					//Traverse up the .owners tree and fire onchange/onprogramchange
+					if (this.owners)
+						for (let i = this.owners.length - 1; i >= 0; i--)
+							if (this.owners[i].options) {
+								let local_options = this.owners[i].options;
+								
+								if (typeof local_options.onchange === "function") //Fire onchange (bidirectional)
+									local_options.onchange(this.owners[i].v, this.owners[i]);
+								if (typeof local_options.onprogramchange === "function") //Fire onprogramchange (unidirectional)
+									local_options.onprogramchange(this.owners[i].v, this.owners[i]);
+							}
+					
+					if (typeof this.options.onchange === "function") //Fire onchange (bidirectional)
+						this.options.onchange(local_value, this);
+					if (typeof this.options.onprogramchange === "function") //Fire onprogramchange (unidirectional)
+						this.options.onprogramchange(local_value, this);
+					//this.v = local_value;
+				}
+			});
+			let temp = from_value;
+			this.from_binding_fire_silently = true;
+			Object.setValue(initial_object, variable_string, temp);
+			delete this.from_binding_fire_silently;
+		} catch (e) {
+			let error_array = [];
+			error_array.push(`ve.Component: ${this.child_class.prototype.constructor.name}: this.from_binding failed.`);
+			if (initial_object === undefined)
+				error_array.push(`- this.updateOwner() has not been called synchronously (check constructors and/or ve.Component updates).`);
+			if (this.options.binding && error_array.length <= 1) return; //Internal guard clause if this is a valid bidirectional binding
+			
+			console.error(`${error_array.join("\n")}\n- initial_object:`, initial_object, `variable_string:`, variable_string);
+		}
+	}
 	
 	/**
 	 * Tests the current {@link this.limit} by calling {@link this.limit_function}({@link this.v}, {@link this}). Otherwise resolves to true if no `.options.limit` is set.
@@ -170,7 +271,8 @@ ve.Component = class {
 	 */
 	get limit () {
 		//Return statement
-		return (this.limit_function) ? this.limit_function(this.v, this) : true;
+		return (this.limit_function !== undefined) ? 
+			this.limit_function(this.v, this) : true;
 	}
 	
 	/**
@@ -184,13 +286,20 @@ ve.Component = class {
 		this.limit_function = arg0_function;
 		
 		if (this.limit_function !== undefined) {
-			this.limit_logic_loop = setInterval(() => {
+			let evaluateLimit = () => {
 				if (!this.limit) {
-					this.removeComponent();
+					this.element.classList.add("ve-display-none");
+					if (this.element.getAttribute("data-debug-limit"))
+						console.log(`- .limit: Removing component:`, this);
 				} else {
-					this.addComponent();
+					this.element.classList.remove("ve-display-none");
+					if (this.element.getAttribute("data-debug-limit"))
+						console.log(`- .limit: Adding component:`, this);
 				}
-			}, 100);
+			};
+			
+			evaluateLimit(); //Evaluate once immediately to prevent flickering (i.e. waiting 100ms)
+			this.limit_logic_loop = setInterval(() => evaluateLimit(), 100);
 		} else {
 			delete this.limit_function;
 			clearInterval(this.limit_logic_loop);
@@ -241,7 +350,7 @@ ve.Component = class {
 			name_el.innerHTML = (value) ? value : "";
 	}
 	
-	//ve.Component directional flow functions - [WIP] - Reduce redundancy with parsing variablee_string
+	//ve.Component dataflow functions - [WIP] - Reduce redundancy with parsing variable_string
 	
 	/**
 	 * Pseudo-setter from binding. Fires only upon program-driven changes to .v directly, which means that this has to be monitored manually component-side in set v(). This should always come last in set v().
@@ -290,7 +399,7 @@ ve.Component = class {
 		let variable_string = this.to_binding;
 		
 		//Internal guard clause if this.do_not_fire_to_binding is active
-		if (this.do_not_fire_to_binding) return;
+		if (this.do_not_fire_to_binding || this.to_binding_fire_silently) return;
 		this.from_binding_fire_silently = true;
 		
 		//Internal guard clause if this.to_binding is not defined
@@ -338,90 +447,6 @@ ve.Component = class {
 	}
 	
 	/**
-	 * Internal `.from_binding` setter for handling .options.from_binding. Accepts a string literal that is then parsed to a variable reference. 
-	 * 
-	 * `.to_binding` counterparts are manually handled child-side.
-	 * - Accessor of: {@link ve.Component}
-	 * 
-	 * @param {string} arg0_variable_string
-	 */
-	set from_binding (arg0_variable_string) {
-		//Convert from parameters
-		let variable_string = arg0_variable_string;
-		
-		//Declare local instance variables
-		let initial_object = global;
-		this.from_binding_string = variable_string;
-		
-		try {
-			//Parse this to this.owner; watch variable mutation using getter/setter, and set this.v to new value
-			if (variable_string.startsWith("this.")) {
-				variable_string = variable_string.replace("this.", "");
-				initial_object = this.owner;
-			} else if (variable_string.startsWith("window.")) {
-				variable_string = variable_string.replace("window.", "");
-				initial_object = window;
-			} else {
-				variable_string = variable_string.replace("global.", "");
-			}
-			
-			//Set init value if applicable
-			let from_value = Object.getValue(initial_object, variable_string);
-			if (this.options.binding && from_value === undefined)
-				Object.setValue(initial_object, variable_string, this.v);
-			from_value = Object.getValue(initial_object, variable_string);
-			this.from_binding_fire_silently = true;
-			this.v = from_value;
-			delete this.from_binding_fire_silently;
-			
-			//Add getter/setter
-			Object.addGetterSetter(initial_object, variable_string, {
-				set_function: (arg0_value) => {
-					//Convert from parameters
-					let local_value = arg0_value;
-					if (this.from_binding_fire_silently) return;
-					
-					//Declare local instance variables
-					this.v = local_value;
-					
-					let is_same_value = Boolean.strictEquality(local_value, this.v);
-					if (is_same_value) return;
-					
-					//Traverse up the .owners tree and fire onchange/onprogramchange
-					if (this.owners)
-						for (let i = this.owners.length - 1; i >= 0; i--)
-							if (this.owners[i].options) {
-								let local_options = this.owners[i].options;
-								
-								if (typeof local_options.onchange === "function") //Fire onchange (bidirectional)
-									local_options.onchange(this.owners[i].v, this.owners[i]);
-								if (typeof local_options.onprogramchange === "function") //Fire onprogramchange (unidirectional)
-									local_options.onprogramchange(this.owners[i].v, this.owners[i]);
-							}
-					
-					if (typeof this.options.onchange === "function") //Fire onchange (bidirectional)
-						this.options.onchange(local_value, this);
-					if (typeof this.options.onprogramchange === "function") //Fire onprogramchange (unidirectional)
-						this.options.onprogramchange(local_value, this);
-					this.v = local_value;
-				}
-			});
-			let temp = from_value;
-			this.from_binding_fire_silently = true;
-			Object.setValue(initial_object, variable_string, temp);
-			delete this.from_binding_fire_silently;
-		} catch (e) {
-			let error_array = [];
-				error_array.push(`ve.Component: ${this.child_class.prototype.constructor.name}: this.from_binding failed.`);
-				if (initial_object === undefined)
-					error_array.push(`- this.updateOwner() has not been called synchronously (check constructors and/or ve.Component updates).`);
-			if (this.options.binding && error_array.length <= 1) return; //Internal guard clause if this is a valid bidirectional binding
-				
-			console.error(`${error_array.join("\n")}\n- initial_object:`, initial_object, `variable_string:`, variable_string);
-		}
-	}
-	
-	/**
 	 * Sets the root parent and ownership tree. Influences {@link this.parent_el}, {@link this.owner}, {@link this.owners}.
 	 * - Method of: {@link ve.Component}
 	 * 
@@ -442,7 +467,8 @@ ve.Component = class {
 			owner_array.push(this);
 			
 			Object.iterate(this.components_obj, (local_key, local_value) => {
-				local_value.setOwner(value, owner_array);
+				if (local_value.setOwner)
+					local_value.setOwner(value, owner_array);
 			});
 		}
 	}
@@ -455,8 +481,12 @@ ve.Component = class {
 	 */
 	addComponent () {
 		if (this.parent_el) try {
-			if (!this.parent_el.contains(this.element))
+			if (!this.parent_el.contains(this.element)) {
 				this.parent_el.appendChild(this.element);
+				
+				if (this.element.getAttribute("data-debug-add-component"))
+					console.log(`- addComponent() called for:`, this, `bound to`, this.parent_el);
+			}
 		} catch (e) { console.error(e); }
 	}
 	
@@ -485,9 +515,11 @@ ve.Component = class {
 		//Clear element first if available
 		if (typeof this.clear === "function")
 			this.clear();
+		if (this.logic_loop !== undefined)
+			clearInterval(this.logic_loop);
 		
-		//Iterate over l instances in child_class_obj.instances if available
-		if (child_class_obj.instances && this.id)
+		//Iterate over all instances in child_class_obj.instances if available
+		if (child_class_obj?.instances && this.id)
 			for (let i = 0; i < child_class_obj.instances.length; i++)
 				if (child_class_obj.instances[i].id === this.id) {
 					child_class_obj.instances.splice(i, 1);
@@ -510,6 +542,33 @@ ve.Component = class {
 				this.parent_el.removeChild(this.element);
 			}
 		} catch (e) { console.error(e); }
+	}
+	
+	/**
+	 * Destructures Object values and transfers them into the `.v` instance fields of each Vercengen component.
+	 * - Method of: {@link ve.Component}
+	 * 
+	 * @param {Object} arg0_object - The Vercengen object to transfer to.
+	 * @param {Object} arg1_object - The other object to transfer from.
+	 */
+	setValueFromObject (arg0_object, arg1_object) {
+		//Convert from parameters
+		let object = (arg0_object) ? arg0_object : {};
+		let ot_object = (arg1_object) ? arg1_object : {};
+		
+		//Iterate over ot_object
+		Object.iterate(ot_object, (local_key, local_value) => {
+			try {
+				if (object[local_key]?.v !== undefined) {
+					object[local_key].v = local_value;
+				} else if (
+					object[local_key] !== undefined && local_value !== undefined && 
+					typeof local_value === "object" && !local_value.is_vercengen_component
+				) {
+					this.setValueFromObject(object[local_key], local_value);
+				}
+			} catch (e) {}
+		});
 	}
 	
 	/**

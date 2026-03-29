@@ -1,7 +1,23 @@
 global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 	constructor () {
 		super();
+		
+		//Declare local instance variables
+		this.coordinates = main.brush.getCoordinates();
+		this.geometry = new maptalks.Marker(this.coordinates, {
+			symbol: {
+				textFill: "rgba(255, 255, 255, 1)",
+				textHaloFill: "black",
+				textHaloRadius: 2,
+				textName: "•",
+				textSize: 24,
+			}
+		});
+			this.geometry.addTo(main.layers.cursor_layer);
+		
 		this.interface = veContextMenu({
+			information: new ve.HTML(`${Math.roundNumber(this.coordinates.x, 6)},${Math.roundNumber(this.coordinates.y, 6)}`),
+			
 			//New Polygon/Line/Point
 			new_polygon: veButton(() => this._openNewGeometryUI("GeometryPolygon"), { name: "New Polygon" }),
 			new_line: veButton(() => this._openNewGeometryUI("GeometryLine"), { name: "New Line" }),
@@ -14,7 +30,14 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 				});
 				this.interface.close();
 			}, { name: "Clear Brush", limit: () => main.brush._selected_geometry })
-		}, { id: "ui_map_context_menu" })
+		}, { id: "ui_map_context_menu" });
+		
+		this.logic_loop = setInterval(() => {
+			if (!document.body.contains(this.interface.information.element)) {
+				this.geometry.remove();
+				clearInterval(this.logic_loop);
+			}
+		}, 100);
 	}
 	
 	_openNewGeometryUI (arg0_geometry_class, arg1_DALS_command) {

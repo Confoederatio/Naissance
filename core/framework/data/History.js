@@ -44,7 +44,7 @@ naissance.History = class extends ve.Class {
 		Object.iterate(this.keyframes, (local_key, local_value) => {
 			//Set components_obj
 			components_obj[`t_${local_key}`] = new ve.Interface({
-				date_info: new ve.HTML(String.formatDate(local_value.date), { 
+				date_info: new ve.HTML(String.formatDate(parseInt(local_key)), { 
 					tooltip: `Timestamp: ${local_value.timestamp}`,
 					x: 0, y: 0
 				}),
@@ -98,7 +98,7 @@ naissance.History = class extends ve.Class {
 							{ type: "Geometry", geometry_id: this.options._id(), remove_keyframe: local_key },
 							{ type: "global", refresh_date: true }
 						]
-					})
+					});
 				}, {
 					name: "<icon>delete</icon>",
 					tooltip: "Delete Keyframe",
@@ -106,7 +106,13 @@ naissance.History = class extends ve.Class {
 					x: 4, y: 0
 				})
 			}, {
-				is_folder: false
+				is_folder: false,
+				style: {
+					"> table > tbody > tr": {
+						"[id='0-0']": { width: "20%" },
+						"[id='1-0']": { width: "50%" }
+					}
+				}
 			});
 		}, { sort_mode: "date_descending" });
 		
@@ -149,10 +155,14 @@ naissance.History = class extends ve.Class {
 		
 		//1. If options.absolute_keyframe = true, iterate over all keyframes in this.keyframes, and return the most recent one
 		if (options.absolute_keyframe) {
-			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
-				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
-					return_keyframe = this.keyframes[local_key];
-			}, { sort_mode: "date_ascending" });
+			Object.iterate(
+				this.keyframes,
+				(local_key, local_keyframe) => {
+					if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
+						return_keyframe = this.keyframes[local_key];
+				},
+				{ sort_mode: "date_ascending" }
+			);
 			
 			//Return statement
 			return return_keyframe;
@@ -163,33 +173,37 @@ naissance.History = class extends ve.Class {
 			return_keyframe = {
 				date: options.date,
 				timestamp: timestamp,
-				value: []
+				value: [],
 			};
 			
 			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
 				//Parse localisation first, then concatenate
 				if (options.refresh_localisation)
-					local_keyframe.localisation = (this.options.localisation_function) ?
+					local_keyframe.localisation = (this.options.localisation_function) ? 
 						this.options.localisation_function(local_keyframe, return_keyframe) : "";
 				
 				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
 					for (let x = 0; x < local_keyframe.value.length; x++)
-						if (typeof local_keyframe.value[x] === "object") {
-							let old_variables = (return_keyframe.value[x]?.variables) ? return_keyframe.value[x].variables : {};
+						if (typeof local_keyframe.value[x] === "object" && local_keyframe.value[x] !== null) {
+							let old_variables = return_keyframe.value[x]?.variables
+								? return_keyframe.value[x].variables
+								: {};
 							
 							//Return keyframe
 							return_keyframe.value[x] = {
 								...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
-								...local_keyframe.value[x]
+								...local_keyframe.value[x],
 							};
 							
 							//Handle nested .variables
 							if (local_keyframe.value[x] && local_keyframe.value[x].variables)
 								return_keyframe.value[x].variables = {
 									...old_variables,
-									...local_keyframe.value[x].variables
+									...local_keyframe.value[x].variables,
 								};
 						} else if (local_keyframe.value[x] !== undefined) {
+							if (x !== 0 && local_keyframe.value[x] === null) continue; //Null should be overridden for [1] symbols, [2] properties
+							//If the value is null or a primitive, it overwrites the previous accumulated state
 							return_keyframe.value[x] = local_keyframe.value[x];
 						}
 			}, { sort_mode: "date_ascending" });

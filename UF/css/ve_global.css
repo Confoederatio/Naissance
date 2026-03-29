@@ -4,6 +4,9 @@ html, head, body {
     width: 100%;
 }
 b { font-weight: 700; }
+canvas, iframe { user-select: none; }
+
+.tippy-box { max-width: fit-content !important; }
 
 .ve.overlay {
     pointer-events: none;
@@ -27,12 +30,29 @@ b { font-weight: 700; }
     width: 100dvw;
 }
 
+/* -- Vercengen atomics -- */
+.ve-display-none { display: none !important; }
+[ve-searchbar="true"] {
+    align-items: center;
+    background-color: var(--bg-secondary-colour);
+    border: 1px solid var(--bg-primary-colour);
+    border-radius: 3px;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: calc(var(--cell-padding)*1.25);
+    padding: 0 var(--padding) 0 0;
+    width: 20rem;
+    
+    [component="ve-datalist"] { input { margin-left: 0 } }
+}
+
 /* -- Vercengen themes -- */
 :root {
     --navbar-height: 2rem;
     
     --accent-primary-colour: rgba(200, 40, 40);
     --accent-secondary-colour: rgba(240, 60, 60);
+    --accent-tertiary-colour: rgba(255, 255, 255, 0.15);
     --bg-primary-colour: rgba(0, 0, 0, 0.85);
     --bg-secondary-colour: rgba(35, 35, 35);
     --hover-colour: rgba(255, 255, 255, 0.3);

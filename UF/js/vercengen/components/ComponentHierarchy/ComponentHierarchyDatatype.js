@@ -64,7 +64,7 @@ ve.HierarchyDatatype = class extends ve.Component {
 		this.element = document.createElement("li");
 			this.element.classList.add(options.type, "nst-item");
 			if (options.disabled === true)
-				this.element.setAttribute("data-nestable-disabled", "dragging");
+				this.element.setAttribute("data-nestable-disabled", "disabled");
 			if (options.type === "item" && !options.disabled)
 				this.element.setAttribute("data-nestable-disabled", "nesting");
 			this.element.setAttribute("component", "ve-hierarchy-datatype");
@@ -170,6 +170,7 @@ ve.HierarchyDatatype = class extends ve.Component {
 		let has_subitems = false;
 		
 		//0. Append .nst-handle, .nst-button element
+		//console.log(`Is collapsed:`, this.element, this.options.is_collapsed)
 		this.element.innerHTML = [
 			`<div class = "nst-handle">⋯</div>`,
 			(this.type === "group" && this.options.no_folders !== true) ? `<button class = "nst-button" type = "button">${(this.options.is_collapsed) ? "+" : "-"}</button>` : ""
