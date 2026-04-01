@@ -78,6 +78,6 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 
 #### Livemap:
 
-- Collation (Vector) - ORBATs and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/SVEA).
+- Collation (Vector) - ORBATs and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/Collation).
 - Deprojector (Beta; Raster) - Arbitrary projection-to-projection georeferencing using ML. These scripts are currently a proof-of-concept and not recommended for production.
   - [[Tool (Github)]](https://github.com/Confoederatio/Deprojector) 
