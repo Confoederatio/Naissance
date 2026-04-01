@@ -55,9 +55,9 @@ These libraries and utils can also be used in the visual script editor (alongsid
 
 3D geometries beyond 2.5D rely on .gltf files and 3D Tiles (ideally via Blender), with full Three.js support.
 
-### Pre-made Datasets.
+### Collation Datasets.
 
-For ready-made data analysis, you may find it useful to use Confoederatio histmaps/livemaps instead. We typically divide such datasets as follows, along with corresponding metadata.
+For ready-made data analysis, you may find it useful to use Confoederatio histmaps/livemaps instead. We typically divide such Collation products as follows, along with corresponding metadata.
 
 <div align = "center">
   <img src = "https://i.postimg.cc/wjLr09mJ/stadester-eoscala.png" width = "100%"><br><br>
