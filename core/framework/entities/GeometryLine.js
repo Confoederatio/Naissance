@@ -154,7 +154,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 			this.keyframes_ui.v = this.history.interface.v;
 			
 			this.geometry.addEventListener("click", (e) => {
-				if (!["node", "node_override"].includes(main.brush.mode) && !HTML.ctrl_pressed)
+				if (!["node", "node_override", "node_transfer"].includes(main.brush.mode) && !HTML.ctrl_pressed)
 					super.open("instance", { name: this.name, ...this.window_options });
 				
 				if (

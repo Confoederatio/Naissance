@@ -31,7 +31,7 @@ naissance.BrushNodeEditor = class extends ve.Class {
 			
 			//Otherwise, handle node additions/subtractions as normal
 			if (main.brush.disabled) try { this.draw_tool.disable(); } catch (e) {}
-			if (main.brush._selected_geometry.handleNodeEditorEnd)
+			if (main.brush._selected_geometry?.handleNodeEditorEnd)
 				main.brush._selected_geometry.handleNodeEditorEnd(e);
 			e.geometry.remove();
 		});
@@ -52,7 +52,7 @@ naissance.BrushNodeEditor = class extends ve.Class {
 	}
 	
 	update () {
-		if (["node", "node_override"].includes(main.brush.mode)) {
+		if (["node", "node_override", "node_transfer"].includes(main.brush.mode)) {
 			if (main.brush._selected_geometry)
 				if (main.brush._selected_geometry.node_editor_mode)
 					this.draw_tool.setMode(main.brush._selected_geometry.node_editor_mode).enable();

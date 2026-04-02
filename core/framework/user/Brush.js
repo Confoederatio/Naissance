@@ -50,6 +50,9 @@ naissance.Brush = class extends ve.Class {
 				node_override: {
 					name: "Node Override"
 				},
+				node_transfer: {
+					name: "Node Transfer"
+				},
 				override: {
 					name: "Override"
 				}
@@ -126,6 +129,13 @@ naissance.Brush = class extends ve.Class {
 				style: { display: "inline" },
 				x: 1, y: 2
 			}),
+			from_geometry: new UI_GeometryDatalist(undefined, {
+				name: "From Geometry",
+				binding: "this.from_geometry_id",
+				limit: () => this.mode === "node_transfer",
+				width: 2,
+				x: 0, y: 3
+			}),
 			
 			properties: veButton(() => {
 				main.interfaces.edit_selected_geometries_ui.open();
@@ -133,7 +143,7 @@ naissance.Brush = class extends ve.Class {
 				name: "Edit Selected Geometries",
 				limit: () => this.hasSelectedGeometry(),
 				width: 2,
-				x: 0, y: 3
+				x: 0, y: 4
 			})
 		}, { name: "Brush Options:", open: true });
 		this.optimisation = veInterface({
@@ -254,7 +264,7 @@ naissance.Brush = class extends ve.Class {
 								}
 							} catch (e) { console.warn(e); }
 							
-							if (!["override", "node_override"].includes(this.mode) && is_visible)
+							if (!["override", "node_override", "node_transfer"].includes(this.mode) && is_visible)
 								turf_geometry = turf.difference(turf.featureCollection([
 									turf_geometry,
 									turf.buffer(Geospatiale.convertMaptalksToTurf(all_layer_geometries[i].geometry), 0.001, { units: "kilometers"})
@@ -363,7 +373,7 @@ naissance.Brush = class extends ve.Class {
 			setTimeout(() =>{
 				if (this.disabled) return;
 				if (HTML.left_click || HTML.right_click) map.config("draggable", false);
-				if (HTML.middle_click) this.node_editor.disable();
+				if (HTML.middle_click) this.node_editor.disable(); //[WIP] - This needs to be changed to allow for panning whilst still having this.node_editor active
 			});			
 		});
 		map.on("mouseup", (e) => {
@@ -381,7 +391,7 @@ naissance.Brush = class extends ve.Class {
 		//Cursor handler
 		map.on("mousemove", (e) => {
 			this.cursor.setCoordinates(e.coordinate);
-			if (this.disabled || ["fill_tool", "node", "node_override"].includes(main.brush.mode)) return;
+			if (this.disabled || ["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode)) return;
 			
 			if (this._selected_geometry instanceof naissance.GeometryPolygon && (HTML.left_click || HTML.right_click)) {
 				//Internal guard clause if in provinces layer

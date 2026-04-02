@@ -166,7 +166,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			//5. Add bindings
 			if (this.geometry) {
 				this.geometry.addEventListener("click", (e) => {
-					if (!["fill_tool", "node", "node_override"].includes(main.brush.mode))
+					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
 						super.open("instance", { name: this.name, ...this.window_options });
 				});
 			}
@@ -238,6 +238,60 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	handleNodeEditorEnd (arg0_e) {
 		//Convert from parameters
 		let e = arg0_e;
+		
+		//Transfer handler
+		if (main.brush.mode === "node_transfer") try {
+			let from_geometry_id = main.brush.from_geometry_id;
+			let from_geometry;
+				if (from_geometry_id)
+					for (let i = 0; i < naissance.Geometry.instances.length; i++)
+						if (naissance.Geometry.instances[i].id === from_geometry_id) {
+							from_geometry = naissance.Geometry.instances[i];
+							break;
+						}
+			
+			//Get the intersection of from_geometry and e.geometry
+			if (!(from_geometry?.geometry && e?.geometry)) return; //Internal guard clause if neither are presently defined
+			if (from_geometry?.id === this.id) return; //Internal guard clause for self-selection
+			
+			let cursor_turf_geometry = Geospatiale.convertMaptalksToTurf(e.geometry);
+			let ot_turf_geometry = Geospatiale.convertMaptalksToTurf(from_geometry.geometry);
+			let turf_geometry = (this.geometry) ? Geospatiale.convertMaptalksToTurf(this.geometry) : null;
+			
+			let turf_intersection = (main.brush.node_editor.mode === "add") ?
+				turf.intersect(turf.featureCollection([ot_turf_geometry, cursor_turf_geometry])) :
+				turf.intersect(turf.featureCollection([turf_geometry, cursor_turf_geometry]));
+			if (!turf_intersection) return; //Internal guard clause if nothing overlaps
+			turf_intersection = turf.buffer(turf_intersection, 0.001, { units: "kilometers" });
+			
+			//Transfer selected polygon
+			e.geometry = Geospatiale.convertTurfToMaptalks(turf_intersection);
+			
+			if (main.brush.node_editor.mode === "add") {
+				DALS.Timeline.parseAction({
+					options: { name: "Remove from Polygon", key: "remove_from_polygon" },
+					value: [{
+						type: "GeometryPolygon",
+						geometry_id: from_geometry.id,
+						remove_from_polygon: { geometry: e.geometry.toJSON() }
+					}]
+				});
+			} else if (main.brush.node_editor.mode === "remove") {
+				/*let debug_polygon = maptalks.Geometry.fromJSON(e.geometry.toJSON());
+					console.log(`Debug polygon:`, debug_polygon);
+					debug_polygon.addTo(main.layers.overlay_layer);*/
+				
+				DALS.Timeline.parseAction({
+					options: { name: "Add to Polygon", key: "add_to_polygon" },
+					value: [{
+						type: "GeometryPolygon",
+						geometry_id: from_geometry.id,
+						add_to_polygon: { geometry: e.geometry.toJSON() }
+					}]
+				});
+			}
+			
+		} catch (e) { console.error(e); }
 		
 		//Push action to timeline
 		if (main.brush.node_editor.mode === "add") {
