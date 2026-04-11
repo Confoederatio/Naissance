@@ -131,7 +131,10 @@ ve.ScriptManagerMonaco = class extends ve.Component {
 	 * @type {string}
 	 */
 	get v () {
-		if (!this.editor) return (this._pending_value) ? this._pending_value : "";
+		if (!this.editor) 
+			return (this._pending_value) ? this._pending_value : ""; //Internal guard clause if no editor is present
+		
+		//Return statement
 		return this.editor.getValue();
 	}
 	
@@ -146,19 +149,35 @@ ve.ScriptManagerMonaco = class extends ve.Component {
 	 */
 	set v (arg0_value) {
 		//Convert from parameters
-		let value = (arg0_value === null || arg0_value === undefined) ? "" : String(arg0_value);
+		let value = (arg0_value === null || arg0_value === undefined) ? 
+			"" : String(arg0_value);
 		
 		this.do_not_fire_to_binding = true;
 		if (!this.editor) {
 			this._pending_value = value;
 		} else {
-			//Prevent cursor jumping if value is same
-			if (this.editor.getValue() !== value) {
+			//Update text if it actually changed
+			if (this.editor.getValue() !== value)
 				this.editor.setValue(value);
+			
+			//Restore view state
+			let script_manager = this.options.script_manager;
+			
+			if (script_manager?._file_path) {
+				let saved_state = script_manager.config.files[script_manager._file_path]?.view_state;
+				
+				if (saved_state) {
+					//Use requestAnimationFrame to wait for Monaco to digest the new content before folding it
+					window.requestAnimationFrame(() => {
+						if (this.editor)
+							this.editor.restoreViewState(saved_state);
+					});
+				}
 			}
 		}
-		delete this.do_not_fire_to_binding;
 		
+		//Fire from binding
+		delete this.do_not_fire_to_binding;
 		this.fireFromBinding();
 	}
 	

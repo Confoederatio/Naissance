@@ -84,6 +84,40 @@
 	};
 	
 	/**
+	 * Sorts Maptalks geometries in order from bottom-top (Polygon, LineString, Point)
+	 * 
+	 * @param {maptalks.Geometry[]} arg0_geometries
+	 */
+	Geospatiale.sortGeometries = function (arg0_geometries) {
+		//Convert from parameters
+		let geometries = (arg0_geometries) ? arg0_geometries : [];
+		
+		//Declare local instance variables
+		let geometry_types = {
+			polygon: [],
+			line: [],
+			point: []
+		};
+		
+		//Iterate over all geometries and sort it
+		for (let i = 0; i < geometries.length; i++)
+			if (geometries[i] instanceof maptalks.Polygon) {
+				geometry_types.polygon.push(geometries[i]);
+			} else if (geometries[i] instanceof maptalks.LineString) {
+				geometry_types.line.push(geometries[i]);
+			} else {
+				geometry_types.point.push(geometries[i]);
+			}
+		
+		//Return statement
+		return [
+			...geometry_types.polygon,
+			...geometry_types.line,
+			...geometry_types.point
+		];
+	};
+	
+	/**
 	 * Translates a point by X, Y in metres.
 	 * 
 	 * @param {maptalks.Coordinate|number[]}arg0_coords

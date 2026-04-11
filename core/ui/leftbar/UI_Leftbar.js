@@ -41,7 +41,6 @@ global.UI_Leftbar = class extends ve.Class {
 						script_manager: veButton(() => {
 							if (this.script_manager_window) this.script_manager_window.close();
 							this.script_manager_window = veWindow(veScriptManager(), {
-								can_rename: false,
 								name: "ScriptManager",
 								height: "80vh",
 								width: "80vw"

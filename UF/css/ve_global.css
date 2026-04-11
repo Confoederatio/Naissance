@@ -5,6 +5,9 @@ html, head, body {
 }
 b { font-weight: 700; }
 canvas, iframe { user-select: none; }
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+    margin-left: var(--cell-padding);
+}
 
 .tippy-box { max-width: fit-content !important; }
 

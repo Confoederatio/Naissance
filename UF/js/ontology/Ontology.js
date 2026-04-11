@@ -124,11 +124,9 @@
 			
 			this._sortState();
 			
-			// If it's a new user-created instance (not clean), mark it dirty
-			if (!is_clean_load) {
+			//If it's a new user-created instance (not clean), mark it dirty
+			if (!is_clean_load)
 				Ontology.dirty_instances.add(this);
-			}
-			
 			Ontology.queue.push(this);
 		}
 		

@@ -347,7 +347,7 @@ ve.Component = class {
 		
 		//Return statement
 		if (name_el)
-			name_el.innerHTML = (value) ? value : "";
+			name_el.innerHTML = (value) ? value.trim() : "";
 	}
 	
 	//ve.Component dataflow functions - [WIP] - Reduce redundancy with parsing variable_string

@@ -145,7 +145,7 @@
     .decorationsOverviewRuler { opacity: 0.9; }
     .minimap { opacity: 0.8 !important; }
     .view-overlays .current-line {
-        background-color: var(--hover-colour);
+        background-color: color-mix(in srgb, var(--hover-colour), transparent 75%);
     }
 }
 [component="ve-script-manager"][data-background-image] .blocklyWorkspace rect.blocklyMainBackground {

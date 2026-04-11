@@ -77,6 +77,13 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										UI_LeftbarHierarchy.refresh();
 									}
 								}),
+								hierarchy_recommended_max_geometries_in_layer: new ve.Number(Math.returnSafeNumber(main.settings.hierarchy_recommended_max_geometries_in_layer, 100), {
+									name: "Hierarchy Recommended Max. Geometries in Layer",
+									onuserchange: (v) => {
+										main.settings.hierarchy_recommended_max_geometries_in_layer = v;
+										UI_Settings.saveSettings();
+									}
+								}),
 								locale: new ve.Select(config.localisation.locales, {
 									name: "Language",
 									tooltip: "The locale to change your UI to.",

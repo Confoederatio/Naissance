@@ -343,20 +343,24 @@ ve.ScriptManager.FindAndReplace = class {
 		this.is_searching = true;
 		this.cancel_search = false;
 		
-		//Initialise options
-		options.flags = (options.flags) ? options.flags : ["g"];
-		if (options.is_case_sensitive === undefined) options.is_case_sensitive = true;
-		if (options.is_regex === undefined) options.is_regex = false;
+		//Initialise options - Ensure fresh flags array to avoid mutation bugs
+		let flags = (options.flags) ? [...options.flags] : ["g"];
+		let is_case_sensitive = options.is_case_sensitive;
+		let is_regex = (options.is_regex === true);
 		
-		//Regex 'i' flag is for case-insensitivity; only add if is_case_sensitive is false
-		if (!options.is_case_sensitive) options.flags.push("i");
+		//Explicitly manage the 'i' flag based on the boolean toggle
+		if (!is_case_sensitive) {
+			if (!flags.includes("i")) flags.push("i");
+		} else {
+			flags = flags.filter((flag) => flag !== "i");
+		}
 		
 		//Declare local instance variables
 		let pattern;
 		try {
-			pattern = (options.is_regex) ?
-				new RegExp(search_string, options.flags.join("")) :
-				new RegExp(search_string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), options.flags.join(""));
+			pattern = (is_regex) ?
+				new RegExp(search_string, flags.join("")) :
+				new RegExp(search_string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), flags.join(""));
 		} catch (e) {
 			console.error(loc("ve.registry.localisation.FindAndReplace_error_invalid_regex", e));
 			this.is_searching = false;
@@ -425,12 +429,14 @@ ve.ScriptManager.FindAndReplace = class {
 		
 		//Internal helper to get current RegExp pattern based on UI settings
 		let local_get_pattern = () => {
-			let local_flags = ["g"];
-			if (!this._settings.far_is_case_sensitive) local_flags.push("i");
+			let flags = ["g"];
+			if (!this._settings.far_is_case_sensitive) flags.push("i");
+			
+			let search_text = (this._settings.far_find_text) ? this._settings.far_find_text : "";
 			
 			return (this._settings.far_is_regex) ?
-				new RegExp(this._settings.far_find_text, local_flags.join("")) :
-				new RegExp(this._settings.far_find_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), local_flags.join(""));
+				new RegExp(search_text, flags.join("")) :
+				new RegExp(search_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), flags.join(""));
 		};
 		let local_get_folder = () => {
 			current_folder = (this._settings.project_folder !== "none") ?
@@ -536,8 +542,7 @@ ve.ScriptManager.FindAndReplace = class {
 						if (local_far.selected_index >= local_far.matches.length)
 							local_far.selected_index = (local_far.matches.length > 0) ? 0 : -1;
 						
-						//Redraw list (Since we removed an item, we usually need to redraw the structure to fix indices/visuals)
-						//For optimization, we could just remove the DOM element, but redraw is safer here.
+						//Redraw list
 						local_far.draw(matches_el, [], true);
 						local_far.draw(matches_el, local_far.matches, false);
 					}
@@ -546,7 +551,6 @@ ve.ScriptManager.FindAndReplace = class {
 				}),
 				replace_all: new ve.Button(() => {
 					if (this._settings.far_find_text) {
-						//Confirmation dialog could go here
 						veConfirm(loc("ve.registry.localisation.FindAndReplace_confirm_replace_all", this._settings.far_find_text, current_folder), {
 							special_function: () => {
 								let local_far = this._find_and_replace_obj;

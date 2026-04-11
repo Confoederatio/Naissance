@@ -67,8 +67,8 @@ ve.File = class extends ve.Component {
 					whiteSpace: "nowrap"
 				}
 			})
-		}, { 
-			name: " ",
+		}, {
+      name: "&nbsp;",
 			style: {
 				alignItems: "center",
 				display: "flex",

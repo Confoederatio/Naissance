@@ -46,6 +46,7 @@ ve.Checkbox = class extends ve.Component {
 		//Declare local instance variables
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-checkbox");
+      HTML.setAttributesObject(this.element, options.attributes);
 			this.element.instance = this;
 		
 		this.options = options;

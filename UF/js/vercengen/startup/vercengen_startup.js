@@ -131,6 +131,17 @@ global.path = require("path");
 					},
 					
 					/**
+					 * Component settings for {@link ve.Table}.
+					 */
+					Table: {
+						/**
+						 * Determines max. items per page in dropdown
+						 * @type number[]
+						 */
+						page_sizes: [10, 20, 50, 100]
+					},
+					
+					/**
 					 * Component settings for {@link ve.UndoRedo}.
 					 */
 					UndoRedo: {

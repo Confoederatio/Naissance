@@ -55,7 +55,13 @@ global.UI_GeometryDatalist = class extends ve.Component {
 		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
 			let local_geometry = naissance.Geometry.instances[i];
 			let is_valid = true;
+
+      //Deal with options.filter_types
+      if (this.options.filter_types)
+        if (!this.options.filter_types.includes(local_geometry.class_name))
+          is_valid = false;
 			
+      //Append to map if valid geometry
 			if (is_valid)
 				geometry_map[local_geometry.id] = local_geometry.name;
 		}

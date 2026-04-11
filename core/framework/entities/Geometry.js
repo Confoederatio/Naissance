@@ -375,16 +375,27 @@ naissance.Geometry = class extends ve.Class {
 	}
 	
 	/**
-	 * Hides the present Geometry. Used by {@link naissance.Feature}, not internally used.
+	 * Returns the actions bar element with geometry generics.
+	 * 
+	 * @returns {HTMLElement}
 	 */
-	hide () {
-		this._is_visible = false;
-		this.draw();
+	getActionsBarElement () {
+		//Declare local instance variables
+		let actions_bar_el = document.createElement("div");
+			actions_bar_el.id = `actions-bar`;
+		let hierarchy_generics = this.drawHierarchyDatatypeGenerics();
+			
+		//Iterate over hierarchy_generics
+		Object.iterate(hierarchy_generics, (local_key, local_value) => 
+			local_value.bind(actions_bar_el));
+		
+		//Return statement
+		return actions_bar_el;
 	}
 	
 	/**
 	 * Fetches the layer that the current {@link naissance.Geometry} is appended to, if anything. Used for masking.
-	 * 
+	 *
 	 * @returns {naissance.FeatureLayer}
 	 */
 	getLayer () {
@@ -404,10 +415,11 @@ naissance.Geometry = class extends ve.Class {
 	}
 	
 	/**
-	 * Exports a {@link naissance.Geometry} class to JSON. Contract function.
+	 * Hides the present Geometry. Used by {@link naissance.Feature}, not internally used.
 	 */
-	toJSON () {
-		console.warn(`naissance.Geometry.toJSON() was called for: ${this.class_name}, but was not defined.`);
+	hide () {
+		this._is_visible = false;
+		this.draw();
 	}
 	
 	/**
@@ -430,7 +442,7 @@ naissance.Geometry = class extends ve.Class {
 		for (let i = 0; i < naissance.Geometry.instances.length; i++)
 			if (naissance.Geometry.instances[i].id === this.id)
 				naissance.Geometry.instances.splice(i, 1);
-			
+		
 		//Rerender deleted geometry and remove it from the map
 		this.history = new naissance.History();
 		this.draw();
@@ -438,7 +450,7 @@ naissance.Geometry = class extends ve.Class {
 	
 	/**
 	 * Alias for {@link naissance.History.removeKeyframe}.
-	 * 
+	 *
 	 * @param {Object} arg0_date
 	 */
 	removeKeyframe (arg0_date) {
@@ -457,6 +469,33 @@ naissance.Geometry = class extends ve.Class {
 	show () {
 		this._is_visible = true;
 		this.draw();
+	}
+	
+	/**
+	 * Exports a {@link naissance.Geometry} class to JSON. Contract function.
+	 */
+	toJSON () {
+		console.warn(`naissance.Geometry.toJSON() was called for: ${this.class_name}, but was not defined.`);
+	}
+	
+	/**
+	 * Returns a map of all `naissance.Geometry.instances`.
+	 * 
+	 * @returns {{"<geometry_id>": naissance.Geometry}}
+	 */
+	static getObject () {
+		//Declare local instance variables
+		let return_obj = {};
+		
+		//Iterate over all naissance.Geometry.instances
+		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
+			let local_geometry = naissance.Geometry.instances[i];
+			
+			return_obj[local_geometry.id] = local_geometry;
+		}
+		
+		//Return statement
+		return return_obj;
 	}
 	
 	/**

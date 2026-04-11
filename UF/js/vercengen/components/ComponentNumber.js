@@ -59,7 +59,7 @@ ve.Number = class extends ve.Component {
 		this.element.innerHTML = html_string.join("");
 		
 		let input_el = this.element.querySelector("input");
-		input_el.addEventListener("input", (e) => {
+		input_el.addEventListener("change", (e) => {
 			if (this.options.max && e.target.value > this.options.max)
 				e.target.value = this.options.max;
 			if (this.options.min && e.target.value < this.options.min)

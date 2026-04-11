@@ -58,12 +58,15 @@ ve.ScriptManager.UI_Bottombar = class extends ve.Component {
    * @alias v
 	 * @memberof ve.ScriptManager.UI_Bottombar
 	 *
-	 * @param {string} arg0_value
+	 * @param {string|string[]} arg0_value
    */
   set v (arg0_value) {
     //Convert from parameters
     let value = (arg0_value) ? arg0_value : [];
+    
+    //Internal guard clause if value is nothing
     if (value.length === 0) { 
+      this.value = [];
       this.element.innerHTML = "";
       return;
     }
@@ -83,7 +86,7 @@ ve.ScriptManager.UI_Bottombar = class extends ve.Component {
         //Load file upon click
         local_el.addEventListener("click", (e) => {
           if (this.options.script_manager)
-            if (this.options.script_manager._file_path !== value[i])
+            if (this.options.script_manager._file_path !== value[i] && value[i])
               this.options.script_manager.loadFile(value[i]);
         });
       let local_html_obj = new ve.HTML(local_el, {
@@ -98,82 +101,90 @@ ve.ScriptManager.UI_Bottombar = class extends ve.Component {
       components_array.push(local_html_obj);
     }
 
-    this.list_obj = new ve.List(components_array, {
-      do_not_allow_insertion: true,
-      do_not_display_info_button: true,
-      split_rows: false,
-      style: {
-        paddingTop: 0,
-        
-        "#component-body": { display: "flex" }
-      },
-
-      //Make sure that when a file is deleted from the bottombar, it updates the ScriptManager properly
-      ondelete: (v) => {
-        let local_el = v.element.querySelector("button[data-file-path]");
-
-        if (local_el)
-          //Wait 1 tick since the bottombar needs to be updated by .loadFile() first
-          setTimeout(() => {
-            let local_file_path = local_el.getAttribute("data-file-path");
-            let local_index = this.v.indexOf(local_file_path);
-            
-            if (this.options.script_manager && this.options.script_manager._file_path === local_file_path)
-              if (this.v[local_index - 1]) {
-                this.options.script_manager.loadFile(this.v[local_index - 1]);
-              } else if (this.v[local_index + 1]) {
-                this.options.script_manager.loadFile(this.v[local_index + 1]);
-              } else {
-                this.options.script_manager.v = "";
-              }
-              
-            //Update config if possible
-            this.value.splice(local_index, 1);
-            this.saveToConfig();
-          });
-      }
-    });
-    
-    let file_extensions_obj = ve.ScriptManager._getFileExtensions({ return_select_obj: true });
-    this.search_select_obj = new ve.SearchSelect({
-      list_obj: this.list_obj
-    }, {
-      filter_names: (v) => {
-        if (v.startsWith("data-file-extension-")) {
-          let local_file_extension = ve.ScriptManager._getFileExtension(v.replace("data-file-extension-", ""));
-          let local_file_extension_obj = file_extensions_obj[local_file_extension];
-          
-          //Return statement
-          if (local_file_extension_obj?.name) {
-            return local_file_extension_obj.name;
-          } else {
-            return local_file_extension;
-          }
-        } else {
-          //Return statement
-          return v;
-        }
-      },
-      search_select_els: () => this.list_obj.element.querySelectorAll(`[component="ve-html"]`),
-      search_keys: ["_name"],
-      style: {
-        alignItems: "flex-start",
-        display: "flex",
-        marginTop: "var(--padding)",
-        
-        '[component="ve-datalist"]': {
-          width: "100%",
-          
-          'input[list]': { width: "calc(100% - var(--padding))" }
-        }
-      }
-    });
-
-    //Refresh this.element
     this.value = value;
-    
-    this.element.innerHTML = "";
-    this.search_select_obj.bind(this.element);
+
+    //Initialise list_obj and search_select_obj only if they do not already exist
+    if (!this.list_obj) {
+      this.list_obj = new ve.List(components_array, {
+        do_not_allow_insertion: true,
+        do_not_display_info_button: true,
+        split_rows: false,
+        style: {
+          paddingTop: 0,
+          
+          "#component-body": { display: "flex" }
+        },
+
+        //Make sure that when a file is deleted from the bottombar, it updates the ScriptManager properly
+        ondelete: (v) => {
+          let local_el = v.element.querySelector("button[data-file-path]");
+
+          if (local_el)
+            //Wait 1 tick since the bottombar needs to be updated by .loadFile() first
+            setTimeout(() => {
+              let local_file_path = local_el.getAttribute("data-file-path");
+              let local_index = this.v.indexOf(local_file_path);
+              
+              if (this.options.script_manager && this.options.script_manager._file_path === local_file_path)
+                if (this.v[local_index - 1]) {
+                  this.options.script_manager.loadFile(this.v[local_index - 1]);
+                } else if (this.v[local_index + 1]) {
+                  this.options.script_manager.loadFile(this.v[local_index + 1]);
+                } else {
+                  this.options.script_manager.v = "";
+                }
+                
+              //Update config if possible
+              this.value.splice(local_index, 1);
+              this.saveToConfig();
+            });
+        }
+      });
+      
+      let file_extensions_obj = ve.ScriptManager._getFileExtensions({ return_select_obj: true });
+      
+      this.search_select_obj = new ve.SearchSelect({
+        list_obj: this.list_obj
+      }, {
+        filter_names: (v) => {
+          if (v.startsWith("data-file-extension-")) {
+            let local_file_extension = ve.ScriptManager._getFileExtension(v.replace("data-file-extension-", ""));
+            let local_file_extension_obj = file_extensions_obj[local_file_extension];
+            
+            //Return statement
+            if (local_file_extension_obj?.name) {
+              return local_file_extension_obj.name;
+            } else {
+              return local_file_extension;
+            }
+          } else {
+            //Return statement
+            return v;
+          }
+        },
+        search_select_els: () => this.list_obj.element.querySelectorAll(`[component="ve-html"]`),
+        search_keys: ["_name"],
+        style: {
+          alignItems: "flex-start",
+          display: "flex",
+          marginTop: "var(--padding)",
+          
+          '[component="ve-datalist"]': {
+            width: "100%",
+            
+            'input[list]': { width: "calc(100% - var(--padding))" }
+          }
+        }
+      });
+
+      //Refresh this.element
+      this.element.innerHTML = "";
+      this.search_select_obj.bind(this.element);
+    } else {
+      //Update the existing list object value to trigger a re-render within the existing DOM structure
+      this.list_obj.v = components_array;
+    }
+
     this.draw();
     
     //Set to ve.ScriptManager.config if possible

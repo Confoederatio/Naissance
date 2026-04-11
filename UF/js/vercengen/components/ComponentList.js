@@ -187,127 +187,147 @@ ve.List = class extends ve.Component { //[WIP] - Refactor at a later date
 	}
 	
 	/**
-	 * Redraws the present array.
-	 * - Method of: {@link ve.List}
-	 *
-	 * @alias draw
-	 * @memberof ve.Component.ve.List
-	 */
-	draw () {
-		//Draw .components_el from this.value
-		this.components_el.innerHTML = "";
-		
-		//Iterate over all components in this.value
-		for (let i = 0; i < this.value.length; i++) {
-			let current_component = this.value[i];
-			
-			//1. Bind to DOM
-			current_component.bind(this.components_el);
-			current_component.setOwner(this, [this]);
-			current_component.element.style.display = "inline";
-			
-			//2. Define context menu interfaces
-			let shift_bar_obj = new ve.RawInterface({
-				shift_left_button: new ve.Button(() => {
-					let shift_positions = this.shift_positions;
-					let new_index = Math.max(i - shift_positions, 0);
-					
-					this.value = Array.moveElement(this.value, i, new_index);
-					this.draw();
-					this.fireToBinding();
-					// No need to update 'i' as redraw resets loop
-				}, {
-					name: "<icon>chevron_left</icon>",
-					tooltip: loc("ve.registry.localisation.List_shift_left")
-				}),
-				shift_positions: new ve.Number(this.shift_positions, {
-					min: 1,
-					name: loc("ve.registry.localisation.List_shift"),
-					onuserchange: (v) => this.shift_positions = v,
-					style: {
-						marginLeft: `calc(var(--padding)*0.5)`,
-						marginRight: `calc(var(--padding)*0.5)`,
-						whiteSpace: "nowrap",
-						"input": { textAlign: "center" }
-					}
-				}),
-				shift_right_button: new ve.Button(() => {
-					let shift_positions = this.shift_positions;
-					let new_index = Math.min(i + shift_positions, this.value.length - 1);
-					
-					this.value = Array.moveElement(this.value, i, new_index);
-					this.draw();
-					this.fireToBinding();
-				}, {
-					name: "<icon>chevron_right</icon>",
-					tooltip: loc("ve.registry.localisation.List_shift_right")
-				})
-			}, { style: { alignItems: "center", display: "flex", justifyContent: "center" } });
-			
-			let actions_bar_obj = new ve.RawInterface({
-				insert_before_button: new ve.Button(() => {
-					if (this.options.max && this.value.length >= this.options.max) {
-						veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
-						return;
-					}
-					this.value.splice(i, 0, global[`ve${this.class_name}`](this.placeholder));
-					this.draw();
-					this.fireToBinding();
-				}, {
-					name: "<icon>first_page</icon>",
-					limit: () => (!this.options.do_not_allow_insertion),
-					tooltip: loc("ve.registry.localisation.List_insert_item_before")
-				}),
-				insert_after_button: new ve.Button(() => {
-					if (this.options.max && this.value.length >= this.options.max) {
-						veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
-						return;
-					}
-					this.value.splice(i + 1, 0, global[`ve${this.class_name}`](this.placeholder));
-					this.draw();
-					this.fireToBinding();
-				}, {
-					name: "<icon>last_page</icon>",
-					limit: () => (!this.options.do_not_allow_insertion),
-					tooltip: loc("ve.registry.localisation.List_insert_item_after")
-				}),
-				delete_button: new ve.Button(() => {
-					if (this.options.ondelete !== undefined)
-						this.options.ondelete(this.v[i]);
-					
-					this.deleteItem(i); // This 'i' is now strictly tied to the loop iteration
-					if (this.overlay_window) this.overlay_window.close();
-					this.fireToBinding();
-				}, { name: "<icon>delete</icon>", tooltip: loc("ve.registry.localisation.List_delete_item") }),
-			}, { style: { alignItems: "center", display: "flex", justifyContent: "center" } });
-			
-			let overlay_interface = (this.options.split_rows) ? new ve.Interface({
-				shift_bar_obj: shift_bar_obj,
-				actions_bar_obj: actions_bar_obj
-			}, { is_folder: false }) : new ve.Interface({
-				actions_bar_obj: new ve.RawInterface({
-					...shift_bar_obj.components_obj,
-					...actions_bar_obj.components_obj
-				}, { style: { display: "flex" } })
-			}, { is_folder: false });
-			
-			//3. Attach Event Listener Directly to the Component Element
-			current_component.element.addEventListener("contextmenu", (e) => {
-				e.preventDefault();
-				e.stopPropagation(); // Prevents nested lists from opening multiple menus
-				
-				if (this.overlay_window) this.overlay_window.close();
-				this.overlay_window = new ve.Window(overlay_interface, {
-					can_rename: false,
-					name: loc("ve.registry.localisation.List_edit_item"),
-					width: (this.options.split_row) ? "12rem" : "14rem",
-					y: (HTML.mouse_y < window.innerHeight/2) ?
-						HTML.mouse_y + current_component.element.offsetHeight :
-						HTML.mouse_y - current_component.element.offsetHeight
-				});
-			});
-		}
-	}
+   * Redraws the present array.
+   * - Method of: {@link ve.List}
+   *
+   * @alias draw
+   * @memberof ve.Component.ve.List
+   */
+  draw () {
+    //Reconcile DOM nodes; remove elements no longer in this.value
+    let current_elements = this.value.map((local_component) => local_component.element);
+    let existing_children = Array.from(this.components_el.children);
+
+    for (let i = 0; i < existing_children.length; i++)
+      if (!current_elements.includes(existing_children[i]))
+        existing_children[i].remove();
+
+    //Iterate over all components in this.value
+    for (let i = 0; i < this.value.length; i++) {
+      let current_component = this.value[i];
+      
+      //1. Bind to DOM if not already present
+      if (current_component.element.parentElement !== this.components_el)
+        current_component.bind(this.components_el);
+
+      //Ensure the element is in the correct order in the DOM tree
+      if (this.components_el.children[i] !== current_component.element)
+        this.components_el.insertBefore(current_component.element, this.components_el.children[i] || null);
+
+      current_component.setOwner(this, [this]);
+      current_component.element.style.display = "inline";
+      
+      //2. Define context menu interfaces (only if not already initialised)
+      if (!current_component._ve_list_init) {
+        current_component._ve_list_init = true;
+
+        current_component.element.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          e.stopPropagation(); // Prevents nested lists from opening multiple menus
+          
+          //Determine index dynamically at runtime
+          let get_current_idx = () => this.value.indexOf(current_component);
+
+          let shift_bar_obj = new ve.RawInterface({
+            shift_left_button: new ve.Button(() => {
+              let local_idx = get_current_idx();
+              let shift_positions = this.shift_positions;
+              let new_index = Math.max(local_idx - shift_positions, 0);
+              
+              this.value = Array.moveElement(this.value, local_idx, new_index);
+              this.draw();
+              this.fireToBinding();
+            }, {
+              name: "<icon>chevron_left</icon>",
+              tooltip: loc("ve.registry.localisation.List_shift_left")
+            }),
+            shift_positions: new ve.Number(this.shift_positions, {
+              min: 1,
+              name: loc("ve.registry.localisation.List_shift"),
+              onuserchange: (v) => this.shift_positions = v,
+              style: {
+                marginLeft: `calc(var(--padding)*0.5)`,
+                marginRight: `calc(var(--padding)*0.5)`,
+                whiteSpace: "nowrap",
+                "input": { textAlign: "center" }
+              }
+            }),
+            shift_right_button: new ve.Button(() => {
+              let local_idx = get_current_idx();
+              let shift_positions = this.shift_positions;
+              let new_index = Math.min(local_idx + shift_positions, this.value.length - 1);
+              
+              this.value = Array.moveElement(this.value, local_idx, new_index);
+              this.draw();
+              this.fireToBinding();
+            }, {
+              name: "<icon>chevron_right</icon>",
+              tooltip: loc("ve.registry.localisation.List_shift_right")
+            })
+          }, { style: { alignItems: "center", display: "flex", justifyContent: "center" } });
+          
+          let actions_bar_obj = new ve.RawInterface({
+            insert_before_button: new ve.Button(() => {
+              if (this.options.max && this.value.length >= this.options.max) {
+                veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
+                return;
+              }
+              this.value.splice(get_current_idx(), 0, global[`ve${this.class_name}`](this.placeholder));
+              this.draw();
+              this.fireToBinding();
+            }, {
+              name: "<icon>first_page</icon>",
+              limit: () => (!this.options.do_not_allow_insertion),
+              tooltip: loc("ve.registry.localisation.List_insert_item_before")
+            }),
+            insert_after_button: new ve.Button(() => {
+              if (this.options.max && this.value.length >= this.options.max) {
+                veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
+                return;
+              }
+              this.value.splice(get_current_idx() + 1, 0, global[`ve${this.class_name}`](this.placeholder));
+              this.draw();
+              this.fireToBinding();
+            }, {
+              name: "<icon>last_page</icon>",
+              limit: () => (!this.options.do_not_allow_insertion),
+              tooltip: loc("ve.registry.localisation.List_insert_item_after")
+            }),
+            delete_button: new ve.Button(() => {
+              let local_idx = get_current_idx();
+              if (this.options.ondelete !== undefined)
+                this.options.ondelete(this.v[local_idx]);
+              
+              this.deleteItem(local_idx);
+              if (this.overlay_window) this.overlay_window.close();
+              this.fireToBinding();
+            }, { name: "<icon>delete</icon>", tooltip: loc("ve.registry.localisation.List_delete_item") }),
+          }, { style: { alignItems: "center", display: "flex", justifyContent: "center" } });
+          
+          let overlay_interface = (this.options.split_rows) ? new ve.Interface({
+            shift_bar_obj: shift_bar_obj,
+            actions_bar_obj: actions_bar_obj
+          }, { is_folder: false }) : new ve.Interface({
+            actions_bar_obj: new ve.RawInterface({
+              ...shift_bar_obj.components_obj,
+              ...actions_bar_obj.components_obj
+            }, { style: { display: "flex" } })
+          }, { is_folder: false });
+          
+          //3. Attach Event Listener Directly to the Component Element
+          if (this.overlay_window) this.overlay_window.close();
+          this.overlay_window = new ve.Window(overlay_interface, {
+            can_rename: false,
+            name: loc("ve.registry.localisation.List_edit_item"),
+            width: (this.options.split_rows) ? "12rem" : "14rem",
+            y: (HTML.mouse_y < window.innerHeight/2) ?
+              HTML.mouse_y + current_component.element.offsetHeight :
+              HTML.mouse_y - current_component.element.offsetHeight
+          });
+        });
+      }
+    }
+  }
 };
 
 //Functional binding

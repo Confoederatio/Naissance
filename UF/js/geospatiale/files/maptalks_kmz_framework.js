@@ -19,14 +19,16 @@ Geospatiale.maptalks_GeoKMZ = class {
 		
 		//Load KMZ
 		this.geometries_obj = {};
-		this.layer = new maptalks.VectorLayer(kmz_file);
+		this.layer = new maptalks.VectorLayer(kmz_file, {
+			...this.options.layer_options
+		});
 		
 		//Populate this.kmz
 		if (kmz_file) this.loadKMZ(kmz_file, {
 			window_options: {
 				width: "25rem",
 			},
-			...options
+			...this.options
 		});
 	}
 	

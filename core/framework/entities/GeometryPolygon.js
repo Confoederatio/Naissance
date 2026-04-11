@@ -235,6 +235,24 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		return hierarchy_datatype;
 	}
 	
+	getActionsBarElement () {
+		//Declare local instance variables
+		let actions_bar_el = super.getActionsBarElement();
+		
+		let context_menu_button = veButton(() => {
+			this.history.draw();
+			super.open("instance", { name: this.name, ...this.window_options });
+		}, {
+			attributes: { class: "order-101" },
+			name: "<icon>more_vert</icon>",
+			tooltip: "More Actions"
+		});
+			context_menu_button.bind(actions_bar_el);
+		
+		//Return statement
+		return actions_bar_el;
+	}
+	
 	handleNodeEditorEnd (arg0_e) {
 		//Convert from parameters
 		let e = arg0_e;

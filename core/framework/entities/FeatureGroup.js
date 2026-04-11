@@ -211,9 +211,11 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		//Return statement
 		return JSON.stringify({
 			id: this.id,
-			is_collapsed: this.is_collapsed,
 			name: this._name,
+			
 			entities: entity_ids,
+			is_collapsed: this.is_collapsed,
+			metadata: this.metadata,
 			options: this.options
 		});
 	}

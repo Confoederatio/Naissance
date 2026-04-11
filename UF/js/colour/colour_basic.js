@@ -279,7 +279,7 @@
 	 * 
 	 * @returns {number[]|string}
 	 */
-	Colour.getBestTextColour = function (arg0_colour, arg1_options) { //[WIP] - Finish function body
+	Colour.getBestTextColour = function (arg0_colour, arg1_options) {
 		//Convert from parameters
 		let colour = Colour.getColour(arg0_colour);
 		let options = (arg1_options) ? arg1_options : {};
