@@ -55,7 +55,7 @@ These libraries and utils can also be used in the visual script editor (alongsid
 
 3D geometries beyond 2.5D rely on .gltf files and 3D Tiles (ideally via Blender), with full Three.js support.
 
-### Collation Datasets.
+### World Model Datasets.
 
 For ready-made data analysis, you may find it useful to use Confoederatio histmaps/livemaps instead. We typically divide such Collation products as follows, along with corresponding metadata.
 
