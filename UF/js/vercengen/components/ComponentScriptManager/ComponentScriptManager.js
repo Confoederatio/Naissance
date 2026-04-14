@@ -193,7 +193,7 @@ ve.ScriptManager = class extends ve.Component {
 					let new_folder_path = path.resolve(this.leftbar_file_explorer.v);
 					
 					this.config.project_folder = new_folder_path;
-          this._settings.project_folder = new_folder_path;
+					this._settings.project_folder = new_folder_path;
 					ve.ScriptManager._indexDocumentation.call(this, this.bottombar_status_el);
           ve.ScriptManager._saveConfig.call(this);
           ve.ScriptManager.saveSettings();
@@ -593,7 +593,7 @@ ve.ScriptManager = class extends ve.Component {
 			fs.existsSync(path.join(this.leftbar_file_explorer.v, ".ve-sm"))
 		) {
 			if (this.config.project_folder === "none") this.config.project_folder = this.leftbar_file_explorer.v;
-			ve.ScriptManager._loadConfig.call(this, this.options.folder_path);
+			ve.ScriptManager._loadConfig.call(this);
 		}
 		
 		ve.ScriptManager.instances.push(this);

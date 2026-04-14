@@ -44,6 +44,7 @@ ve.Range = class extends ve.Component {
 			step: (options.step !== undefined) ? options.step : 0.01,
 			...options.attributes
 		};
+		this.attributes = attributes;
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-range");
 			this.element.instance = this;
@@ -54,7 +55,7 @@ ve.Range = class extends ve.Component {
 		let html_string = [];
 		html_string.push(`<span id = "name"></span>`);
 		html_string.push(`<input type = "range"${HTML.objectToAttributes(attributes)}>`);
-		html_string.push(`<input id = "value-label" ${(this.options.disable_number_input) ? "disabled" : ""} type = "number" max = "${attributes.max}" min = "${attributes.min}" value = "${this.value}" style = "">`);
+		html_string.push(`<input id = "value-label" ${(this.options.disable_number_input) ? "disabled" : ""} type = "number" max = "${attributes.max}" min = "${attributes.min}" step = "${attributes.step}" value = "${this.value}" style = "">`);
 		
 		//Populate element and initialise handlers
 		this.element.innerHTML = html_string.join("");
@@ -102,6 +103,10 @@ ve.Range = class extends ve.Component {
 	set v (arg0_value) {
 		//Convert from parameters
 		let value = arg0_value;
+		
+		//this.attributes.max; this.attributes.min clamping
+		if (value > this.attributes.max) value = this.attributes.max;
+		if (value < this.attributes.min) value = this.attributes.min;
 		
 		//Set value and update UI
 		this.value = value;

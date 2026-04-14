@@ -11,7 +11,7 @@
  *   - `.do_not_display_info_button=false`: {@link boolean}
  *   - `.max`: {@link number} - The maximum number of elements in the array.
  *   - `.min=0`: {@link number} - The minimum number of elements in the array.
- *   - `.ondelete`: {@link function}(arg0_component_obj:{@link ve.Component})
+ *   - `.ondelete`: {@link function}(v:{@link ve.Component}, e:{@link ve.List})
  *   - `.options`: {@link Object} - The `.options` field to pass onto elements in the array.
  *   - `.placeholder`: {@link ve.Component} - An instance used as a template for new items. Required if initialising with an empty array.
  *   - `.split_rows=true`: {@link boolean} - Whether to split item rows onto separate lines.
@@ -296,7 +296,7 @@ ve.List = class extends ve.Component { //[WIP] - Refactor at a later date
             delete_button: new ve.Button(() => {
               let local_idx = get_current_idx();
               if (this.options.ondelete !== undefined)
-                this.options.ondelete(this.v[local_idx]);
+                this.options.ondelete(this.v[local_idx], this);
               
               this.deleteItem(local_idx);
               if (this.overlay_window) this.overlay_window.close();

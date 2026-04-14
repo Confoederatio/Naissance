@@ -7,11 +7,12 @@
  * ##### Constructor:
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}> - The individual items to append to the current search select field.
  * - `arg1_options`: {@link Object}
- *   - `.display="inline"`: {@link string}
+ *   - `.display="inherit"`: {@link string}
  *   - `.header_components_obj`: {@link Object}<{@link ve.Component}>
  *   - `.hide_filter=false`: {@link boolean} - Whether to hide the filter tool.
  *   - `.filter_names`: {@link function}(arg0_attribute_key:{@link string})|{@link Object}
  *     - `<attribute_key>`: {@link string}
+ *   - `.placeholder=loc("ve.registry.localisation.Hierarchy_search_for_item")`: {@link string}
  *   - `.search_select_els`: {@link function} | {@link Array}<{@link HTMLElement}> - The function that returns the search select elements in question, usually `document.querySelectorAll`.  
  *   - `.search_keys=["name"]`: {@link Array}<{@link string}>
  *     
@@ -93,7 +94,8 @@ ve.SearchSelect = class extends ve.Component {
 			searchbar_icon: new ve.HTML("<icon>search</icon>", { style: { padding: `var(--cell-padding)` } }),
 			searchbar_input: new ve.Datalist({}, {
 				attributes: {
-					placeholder: loc("ve.registry.localisation.Hierarchy_search_for_item")
+					placeholder: (this.options.placeholder) ? 
+						this.options.placeholder : loc("ve.registry.localisation.Hierarchy_search_for_item")
 				},
 				name: " ",
 				onuserchange: (v) => {

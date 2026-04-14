@@ -108,6 +108,16 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										initialiseGlobal();
 										setTimeout(() => DALS.Timeline.loadState(cached_state), 200);
 									}
+								}),
+								ui_scaling: new ve.Range(Math.returnSafeNumber(main.settings.ui_scaling, 1), {
+									min: 0.5,
+									max: 1.5,
+									name: "UI Scaling",
+									onuserchange: (v) => {
+										main.settings.ui_scaling = v;
+										UI_Settings.refresh();
+										UI_Settings.saveSettings();
+									}
 								})
 							}
 						},
@@ -226,6 +236,14 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		});
 	}
 	
+	static refresh () {
+		//Declare local instance variables
+		let html_el = document.querySelector("html");
+		
+		//Apply UI scaling changes (rem)
+		html_el.style.fontSize = `${16*Math.returnSafeNumber(main.settings.ui_scaling, 1)}px`;
+	}
+	
 	/**
 	 * Loads settings from `settings.json`.
 	 */
@@ -233,6 +251,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		//Load settings from settings.json if it exists
 		if (fs.existsSync("./settings.json")) try {
 			main.settings = JSON.parse(fs.readFileSync("./settings.json", "utf8"));
+			UI_Settings.refresh();
 		} catch (e) {
 			veWindow(`Error loading <kbd>./settings.json</kbd>: ${e}<br><br>If you have modified ./settings.json manually, please ensure that your syntax is correct.`, {
 				name: "Error Loading Settings"

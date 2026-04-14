@@ -506,6 +506,7 @@ naissance.Geometry = class extends ve.Class {
 	 * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
 	 * <br>
 	 * - #### Extraneous Commands:
+	 * - `.clean_keyframes`: {@link Array}<{@link string}> - Arguments: ["symbol"]. Whether to clean keyframes, including the default `main.brush.getBrushSymbol()` (if symbol is enabled), as well as any duplicates.
 	 * - `.delete_geometry`: {@link boolean}
 	 * - `.move_keyframe`: {@link number}
 	 *   - `.date`: {@link Object} - The date of the keyframe to move.
@@ -521,6 +522,8 @@ naissance.Geometry = class extends ve.Class {
 	 * - `.set_symbol`: {@link Object}
 	 *   - `._set_label_symbol`: {@link Object} - Private alias for `.set_label_symbol`.
 	 *   - `<symbol_key>`: {@link any}
+	 *   
+	 * @param {Object|string} arg0_json
 	 */
 	static parseAction (arg0_json) {
 		//Convert from parameters
@@ -539,6 +542,32 @@ naissance.Geometry = class extends ve.Class {
 						json.set_label_symbol = json.set_symbol._set_label_symbol;
 						delete json.set_symbol._set_label_symbol;
 					}
+			}
+			
+			//clean_keyframes
+			if (json.clean_keyframes) {
+				let current_brush_symbol = main.brush.getBrushSymbol();
+				
+				//Symbol cleaning
+				if (json.clean_keyframes.includes("symbol")) { //[WIP] - There should be a better heuristic for removing redundancy
+					let first_keyframe = geometry_obj.history.getFirstKeyframe();
+					
+					if (first_keyframe) {
+						let local_keyframe = JSON.parse(JSON.stringify(first_keyframe));
+						let local_symbol = local_keyframe.value[1];
+						
+						//Iterate over current_brush_symbol and clean duplicates
+						Object.iterate(current_brush_symbol, (local_key, local_value) => {
+							if (local_symbol && local_symbol[local_key] === local_value)
+								delete local_symbol[local_key];
+						});
+						geometry_obj.history.replaceKeyframe(first_keyframe, local_keyframe, { refresh_localisation: false });
+					}
+				}
+				
+				geometry_obj.history.cleanKeyframes();
+				geometry_obj.history.getKeyframe(); //Refresh localisation
+				geometry_obj.keyframes_ui.v = geometry_obj.history.interface.v;
 			}
 			
 			//delete_geometry

@@ -9,6 +9,7 @@
  * - `arg0_components_obj`: {@link function}|{@link Object}<{@link ve.Component}>|{@link string}|{@link ve.Component}
  * - `arg1_options`: {@link Object} - Superset of `.options` for {@link ve.Modal}.
  *   - `.do_not_close`: {@link boolean} - Whether to keep the confirmation prompt if `.special_function` is properly fired.
+ *   - `.onclose`: {@link function}(v:{@link function}, e:{@link ve.Button})
  *   - `.special_function`: {@link function}(v:{@link function}, e:{@link ve.Button})
  * 
  * ##### Methods::
@@ -46,7 +47,11 @@ ve.Confirm = class extends ve.Feature {
 							this.close();
 					}
 				}, { name: loc("ve.registry.localisation.Confirm_yes") }),
-				no_button: new ve.Button(() => this.close(), { name: loc("ve.registry.localisation.Confirm_no") })
+				no_button: new ve.Button((v, e) => {
+					if (this.options.onclose)
+						this.options.onclose(v, e);
+					this.close();
+				}, { name: loc("ve.registry.localisation.Confirm_no") })
 			}, { name: " ", style: { display: "flex" } })
 		};
 		

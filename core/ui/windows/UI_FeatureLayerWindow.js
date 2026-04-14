@@ -1,173 +1,150 @@
-global.UI_FeatureLayerWindow = class extends ve.Class { //[WIP] - Finish class body
+global.UI_FeatureLayerWindow = class extends ve.Class {
 	constructor (arg0_layer_obj) {
-		//Convert from parameters
+		// Convert from parameters
 		let layer_obj = arg0_layer_obj;
-			super();
-			
+		super();
+		
 		//Declare local instance variables
 		this.layer = layer_obj;
 	}
-
-  /**
-   * Returns an {@link Object}<{@link ve.Component}> representing the current UI_FeatureLayerWIndow element that can be bound; removes the previous `.interface` if present.
-	 * 
+	
+	/**
+	 * Returns an Object<ve.Component> representing the current UI_FeatureLayerWindow
+	 * element that can be bound; removes the previous .interface if present.
+	 *
 	 * @returns {ve.Interface}
-   */
-  draw () {
-    super.close("instance");
-
-    //Declare local instance variables
-    let geometry_table_array = this.getGeometryTable({ view_tags: true });
-
-    this.interface = veInterface({
-      searchbar: new ve.SearchSelect({}, {
-        hide_filter: true,
-        onuserchange: (v, e) => {
-          //Declare local instance variables
-          let search_value = e.search_value;
-        }
-      }),
-      geometry_table: new ve.Table(geometry_table_array, {
-        disable_hide_columns: [0]
-      })
-    }, { is_folder: false });
-
-    super.open("instance", { 
-      can_rename: false, //[WIP] - Should be able to rename layers from here in future
-      name: (this.layer.name) ? this.layer.name : "Layer"
-    });
-
-    //Return statement
-    return this.interface;
-  }
-	
-	filterGeometryTable (arg0_options) {
+	 */
+	draw () {
+		//Close the current instance
+		super.close("instance");
 		
-	}
-	
-  /**
-   * Returns a {@link naissance.Geometry} Table array that can be passed to {@link ve.Table}.
-   * - Method of: {@link UI_FeatureLayerWindow}
-   * 
-   * @param {Object} [arg0_options]
-   *  @param {boolean} [arg0_options.view_tags=false]
-   */
-	getGeometryTable (arg0_options) {
-    //Convert from parameters
-    let options = (arg0_options) ? arg0_options : {};
-
 		//Declare local instance variables
-    let _redrawSelections = () => {
-      Object.iterate(table_map, (local_key, local_value) => {
-        let is_selected = local_value.geometry?.selected;
-        let local_checkbox = local_value.row[0].instance;
-
-        local_checkbox.v = is_selected;
-        local_checkbox.element.setAttribute("data-value", is_selected);
-      });
-    };
-		let table_array = []; //[[select_button, index, geometry_type, geometry_name, actions_bar]];
-    let table_map = {}; //{ <geometry_id>: { geometry: naissance.Geometry, row: any[] } }
+		let all_geometries = this.layer.getAllGeometries();
 		
-		//Populate table_array from entities in this.layer
-		let all_entities = this.layer.getAllGeometries();
-		
-		//Initalise header
-    if (!options.view_tags) {
-		  table_array.push(["Selected", "Index", "Type", "Name", "Actions"]);
-    } else {
-      table_array.push(["Selected", "Index", "Type", "Name", "Tags", "Actions"]);
-    }
-		
-		//Iterate over all_entities and push it to table_array
-		for (let i = 0; i < all_entities.length; i++) {
-			let local_array = [];
-			let local_geometry = all_entities[i];
-			let local_geometry_name = local_geometry.name;
-				if (!local_geometry_name)
-					if (local_geometry.class_name) {
-						local_geometry_name = local_geometry.class_name;
-					} else {
-						local_geometry_name = `Geometry`;
+		this.CRUD = new ve.CRUD(all_geometries, {
+			do_not_draw: true,
+			header: ["Type", "Name", "Tags", "Actions"],
+			special_function: (local_geometry) => {
+				let local_array = [];
+				
+				//1. Type column
+				local_array.push((local_geometry.class_name) ? local_geometry.class_name : "Geometry");
+				
+				//2. Name column
+				let name_component = veText(local_geometry.name, {
+					attributes: {
+						"data-value": local_geometry.name,
+					},
+					onprogramchange: (v, e) => {
+						e.element.setAttribute("data-value", v);
+						e.v = v;
+					},
+					onuserchange: (v, e) => {
+						e.element.setAttribute("data-value", v);
+						local_geometry.name = v;
+					},
+				});
+				local_array.push(name_component.element);
+				
+				//3. Tags column
+				let local_geometry_tags = local_geometry?.metadata?.tags;
+				local_array.push((Array.isArray(local_geometry_tags)) ? local_geometry_tags.join(", ") : "");
+				
+				//4. Actions column
+				let actions_bar_el = local_geometry.getActionsBarElement();
+				let brush_button = veButton((v, e) => {
+					if (main.brush.selected_geometry?.id !== e.element.geometry?.id) {
+						main.brush.selected_geometry = e.element.geometry;
+						this.CRUD.redrawSelections();
 					}
-      let select_component;
+				}, {
+					name: "<icon>brush</icon>",
+					tooltip: "Move to Brush",
+				});
+				brush_button.element.geometry = local_geometry;
+				actions_bar_el.prepend(brush_button.element);
+				
+				local_array.push(actions_bar_el);
+				
+				//Return statement
+				return local_array;
+			},
 			
-			//Set local_array
-      //Select column
-      {
-        select_component = veCheckbox(local_geometry.selected, { //[WIP] - onprogramchange doesn't fire, no binding
-          attributes: {
-            "naissance-geometry-select": "true",
-            "data-value": String(local_geometry.selected)
-          },
-          onuserchange: (v, e) => {
-            e.element.setAttribute("data-value", String(v));
-            local_geometry.selected = v;
-          }
-        });
-        select_component.element.geometry = local_geometry;
-
-			  local_array.push(select_component.element);
-      }
-			local_array.push(i);
-			local_array.push((local_geometry.class_name) ? local_geometry.class_name : "Geometry");
-      //Name column
-      {
-        let name_component = veText(local_geometry_name, { //[WIP] - onprogramchange doesn't fire, no binding
-          attributes: { 
-            "data-value": local_geometry_name
-          },
-          onprogramchange: (v, e) => {
-            e.element.setAttribute("data-value", v);
-            e.v = v;
-          },
-          onuserchange: (v, e) => {
-            e.element.setAttribute("data-value", v);
-            local_geometry.name = v;
-          }
-        });
-
-        local_array.push(name_component.element);
-      }
-			
-      if (options.view_tags) {
-        let local_geometry_tags = local_geometry?.metadata?.tags;
-
-        if (local_geometry_tags && Array.isArray(local_geometry_tags)) {
-          local_array.push(local_geometry_tags.join(", "));
-        } else {
-          local_array.push("");
-        }
-      }
-
-      //Actions bar
-      {
-        let actions_bar_el = local_geometry.getActionsBarElement();
-        let brush_button = veButton((v, e) => {
-          if (main.brush.selected_geometry?.id !== e.element.geometry?.id) {
-            main.brush.selected_geometry = e.element.geometry;
-            select_component.v = true;
-            _redrawSelections();
-          }
-        }, {
-          name: "<icon>brush</icon>",
-          tooltip: "Move to Brush"
-        });
-          brush_button.element.geometry = local_geometry;
-          actions_bar_el.prepend(brush_button.element);
-
-			  local_array.push(actions_bar_el);
-      }
-			
-			//Push local_array to table_array
-			table_array.push(local_array);
-      table_map[local_geometry.id] = {
-        geometry: local_geometry,
-        row: local_array
-      };
-		}
+			onsearch: () => this.refresh(),
+			onselect: (v, e) => {
+				//Brush handling
+				if (v === false)
+					if (main.brush.selected_geometry?.id === e.value?.id)
+						main.brush.selected_geometry = undefined;
+				
+				//Select value
+				e.value.selected = v;
+			},
+			searchbar_header_components: {
+				refresh: veButton(() => this.refresh(), { 
+					name: "<icon>refresh</icon>",
+					tooltip: "Refresh",
+					style: {
+						marginLeft: "var(--padding)"
+					}
+				})
+			},
+			table_options: {
+				disable_hide_columns: [0],
+				page_size: 10
+			}
+		});
 		
-		//Return statement
-		return table_array;
+		this.interface = veInterface({ 
+			crud: this.CRUD, 
+		}, { 
+			is_folder: false 
+		});
+		
+		super.open("instance", {
+			can_rename: false,
+			name: this.layer.name ? this.layer.name : "Layer",
+			height: "45rem",
+			width: "60rem"
+		});
+		
+		// Return statement
+		return this.interface;
 	}
-}
+	
+	refresh (arg0_do_not_refresh) {
+		//Convert from parameters
+		let do_not_refresh = arg0_do_not_refresh;
+		
+		//Declare local instance variables
+		let all_geometries = this.layer.getAllGeometries();
+		
+		//Refresh this.CRUD
+		if (!this.CRUD || !this.isOpen("instance")) this.draw();
+		this.CRUD.value = all_geometries;
+		delete this.CRUD.options.do_not_draw; //do_not_draw flag to prevent double refresh
+		
+		if (!do_not_refresh) {
+			//Redraw this.CRUD completely
+			let filters_array = [];
+			let unique_classes = [];
+			
+			//Populate filters_array and pass it to this.CRUD.options.filters
+			for (let i = 0; i < all_geometries.length; i++)
+				if (all_geometries[i].class_name)
+					if (!unique_classes.includes(all_geometries[i].class_name))
+						unique_classes.push(all_geometries[i].class_name);
+			for (let i = 0; i < unique_classes.length; i++)
+				filters_array.push({
+					name: unique_classes[i],
+					special_function: (v) => (v.class_name === unique_classes[i])
+				});
+			
+			this.CRUD.options.filters = filters_array;
+			this.CRUD.getFilters();
+			this.CRUD.draw();
+		} else {
+			this.CRUD.getTable();
+		}
+	}
+};

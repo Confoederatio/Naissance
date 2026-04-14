@@ -388,7 +388,7 @@ naissance.Brush = class extends ve.Class {
 		
 		//Context menu handler
 		map.on("contextmenu", (e) => {
-			main.interfaces.ui_map_context_menu = new UI_MapContextMenu();
+      if (!this.disabled) main.interfaces.ui_map_context_menu = new UI_MapContextMenu();
 		});
 		
 		//Cursor handler

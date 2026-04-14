@@ -416,8 +416,8 @@ ve.ScriptManager.FindAndReplace = class {
 	 */
 	ve.ScriptManager.prototype._openFindAndReplace = function () {
 		//Declare local instance variables
-		let current_folder = (this._settings.project_folder !== "none") ?
-			this._settings.project_folder : this.leftbar_file_explorer.v;
+		let current_folder = (this.config.project_folder !== "none") ?
+			this.config.project_folder : this.leftbar_file_explorer.v;
 		
 		if (!this._find_and_replace_obj) {
 			this._find_and_replace_obj = new ve.ScriptManager.FindAndReplace();
@@ -439,8 +439,8 @@ ve.ScriptManager.FindAndReplace = class {
 				new RegExp(search_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), flags.join(""));
 		};
 		let local_get_folder = () => {
-			current_folder = (this._settings.project_folder !== "none") ?
-				this._settings.project_folder : this.leftbar_file_explorer.v;
+			current_folder = (this.config.project_folder !== "none") ?
+				this.config.project_folder : this.leftbar_file_explorer.v;
 		};
 		
 		//Open this.find_and_replace_window

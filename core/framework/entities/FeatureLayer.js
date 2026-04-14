@@ -17,36 +17,46 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Declare local instance variables
 		this._name = "New Layer";
 		this._type = "default"; //Either 'default'/'provinces'
+		this._ui = {};
 		
 		//Declare UI
 		this.interface = veInterface({
-			open_table: veButton(() => this.window.draw(), { name: "Edit Geometry Table", x: 0, y: 0 }),
-			show_scene_tree: veButton(() => {
-				let all_geometries = this.getAllGeometries();
-				let max_recommended = Math.returnSafeNumber(main.settings.hierarchy_recommended_max_geometries_in_layer, 100);
-				let showLayer = () => {
-					if (!this.metadata) this.metadata = {};
-					this.metadata.show_layer = true;
+			open_table: veButton(() => this.window.refresh(), { name: "View Geometries", x: 0, y: 0 }),
+			show_features: veToggle(this.metadata?.show_layer_features, {
+				name: "Show Layer Features",
+				onuserchange: (v) => {
+					if (v === false) {
+						if (this.metadata) delete this.metadata.show_layer_features;
+					} else {
+						if (!this.metadata) this.metadata = {};
+						this.metadata.show_layer_features = true;
+					}
 					UI_LeftbarHierarchy.refresh();
-				};
-				
-				if (all_geometries.length > max_recommended) {
-					veConfirm(`This Layer contains ${String.formatNumber(all_geometries.length)} geometries. Are you sure you want to view its scene tree? (Recommended: ${String.formatNumber(max_recommended)})`, {
-						special_function: () => showLayer()
-					})
-				} else { showLayer(); }
-			}, {
-				name: "Show Scene Tree",
-				limit: () => !this.metadata?.show_layer,
-				x: 1, y: 0
+				}
 			}),
-			hide_scene_tree: veButton(() => {
-				if (this.metadata) delete this.metadata.show_layer;
-				UI_LeftbarHierarchy.refresh();
-			}, {
-				name: "Hide Scene Tree",
-				limit: () => this.metadata?.show_layer,
-				x: 1, y: 0
+			show_geometries: veToggle(this.metadata?.show_layer_geometries, {
+				name: "Show Layer Geometries",
+				onuserchange: (v, e) => {
+					let all_geometries = this.getAllGeometries();
+					let max_recommended = Math.returnSafeNumber(main.settings.hierarchy_recommended_max_geometries_in_layer, 100);
+					let showLayerGeometries = () => {
+						if (!this.metadata) this.metadata = {};
+						this.metadata.show_layer_geometries = true;
+						UI_LeftbarHierarchy.refresh();
+					};
+					
+					if (v === false) {
+						if (this.metadata) delete this.metadata.show_layer_geometries;
+						UI_LeftbarHierarchy.refresh();
+					} else {
+						if (all_geometries.length > max_recommended) {
+							veConfirm(`This Layer contains ${String.formatNumber(all_geometries.length)} geometries. Are you sure you want to view its scene tree? (Recommended: ${String.formatNumber(max_recommended)})`, {
+								onclose: () => e.v = false,
+								special_function: () => showLayerGeometries()
+							})
+						} else { showLayerGeometries(); }
+					}
+				}
 			}),
 			
 			layer_type: veSelect({
@@ -68,7 +78,9 @@ naissance.FeatureLayer = class extends naissance.Feature {
 						set_layer_option: { key: "type", value: v } 
 					}]
 				})
-			})
+			}),
+			
+			actions: this.drawActionsPalette({ move_to_filters: ["FeatureLayer"] })
 		}, { is_folder: false });
 	}
 	
@@ -142,6 +154,8 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Declare local instance variables
 		let all_geometries = this.getAllGeometries();
 		let hierarchy_obj = {};
+		let show_layer_features = (this.metadata?.show_layer_features) ? true : false;
+		let show_layer_geometries = (this.metadata?.show_layer_geometries) ? true : false;
 		
 		//Delete any self-references; already assigned entities with other .parent
 		for (let i = this.entities.length - 1; i >= 0; i--)
@@ -153,15 +167,19 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			}
 		
 		//Iterate over this.entities, if naissance.FeatureGroup/naissance.FeatureLayer, call .draw() recursively
-		if (this.metadata?.show_layer)
-			for (let i = 0; i < this.entities.length; i++) {
-				let local_entity = this.entities[i];
-				let local_key = `${local_entity.class_name}-${local_entity.id}`;
-				
-				//naissance.FeatureGroup, naissance.FeatureLayer handling
+		for (let i = 0; i < this.entities.length; i++) {
+			let local_entity = this.entities[i];
+			let local_key = `${local_entity.class_name}-${local_entity.id}`;
+			
+			//naissance.FeatureGroup, naissance.FeatureLayer handling
+			if (show_layer_features || show_layer_geometries)
 				if (local_entity instanceof naissance.Feature && local_entity.drawHierarchyDatatype) {
 					//console.log(this, `is calling`, local_entity)
-					hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
+					if (!show_layer_features) continue;
+					hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype({
+						hide_features: (!show_layer_features),
+						hide_geometries: (!show_layer_geometries),
+					});
 				} else {
 					//naissance.Feature generic handling
 					if (local_entity instanceof naissance.Feature) {
@@ -170,7 +188,9 @@ naissance.FeatureLayer = class extends naissance.Feature {
 								tooltip: local_entity.class_name } )
 						}, { instance: local_entity });
 					}
+					
 					//naissance.Geometry generic handling
+					if (!show_layer_geometries) continue;
 					if (local_entity instanceof naissance.Geometry) {
 						if (local_entity.drawHierarchyDatatype) {
 							hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
@@ -193,7 +213,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 						}
 					}
 				}
-			}
+		}
 		
 		//Return statement
 		return new ve.HierarchyDatatype({
@@ -233,7 +253,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					border: 0
 				}
 			},
-			type: (this.metadata?.show_layer) ? "group" : "item"
+			type: "group"
 		});
 	}
 	
@@ -281,60 +301,6 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Draw HierarchyDatatype if possible; switch type at bottom
 		this.drawHierarchyDatatype();
 		this.type = (json.type) ? json.type : "default";
-	}
-	
-	/**
-	 * Returns an array of all {@link naissance.Geometry} instances housed in the FeatureLayer.
-	 *
-	 * @param {naissance.FeatureLayer} [arg0_object]
-	 * @param {Object} [arg1_options]
-	 *  @param {naissance.Feature[]} [arg1_options.owners]
-	 *
-	 * @returns {naissance.Geometry[]}
-	 */
-	getAllGeometries (arg0_object, arg1_options) {
-		//Convert from parameters
-		let object = (arg0_object) ? arg0_object : this;
-		let options = (arg1_options) ? arg1_options : {};
-		
-		//Initialise options
-		if (!options.owners) options.owners = [];
-		
-		//Declare local instance variables
-		let all_entities = [];
-		let owner_names = [];
-		
-		//Iterate over options.owners and fetch their .name
-		for (let i = 0; i < options.owners.length; i++) {
-			let local_name = options.owners[i]?.name;
-			
-			if (local_name) owner_names.push(local_name);
-		}
-		
-		//Iterate over all .entities and check if they have .entities
-		if (object.entities)
-			for (let i = 0; i < object.entities.length; i++)
-				if (object.entities[i] instanceof naissance.Geometry) {
-					let local_entity = object.entities[i];
-					
-					//Edit metadata
-					if (!local_entity.metadata) local_entity.metadata = {};
-					if (!local_entity.metadata.tags) local_entity.metadata.tags = [];
-					
-					//Iterate over all owner_names and ensure they inherit the proper tags if they don't exist, i.e. convert groups to tags
-					for (let x = 0; x < owner_names.length; x++)
-						if (!local_entity.metadata.tags.includes(owner_names[x]))
-							local_entity.metadata.tags.push(owner_names[x]);
-					
-					all_entities.push(object.entities[i]);
-				} else if (object.entities[i].entities) {
-					all_entities = all_entities.concat(this.getAllGeometries(object.entities[i], {
-						owners: options.owners.concat([object.entities[i]])
-					}));
-				}
-		
-		//Return statement
-		return all_entities;
 	}
 	
 	hasEntity (arg0_naissance_obj) {

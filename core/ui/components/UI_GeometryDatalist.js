@@ -4,7 +4,7 @@
  * - `arg1_options`: {@link Object}
  *   - `.filter_types`: {@link Array}<{@string}> - The list of `.class_name`s to filter, i.e. `["GeometryPolygon"]`.
  * 
- * ##### Instancee:
+ * ##### Instance:
  * - `.v`: {@link string}
  * 
  * @type {UI_GeometryDatalist}
@@ -38,6 +38,7 @@ global.UI_GeometryDatalist = class extends ve.Component {
 		//Convert from parameters
 		let value = arg0_value;
 		
+		this.value = value;
 		if (this.datalist) this.datalist.v = value;
 		this.fireFromBinding();
 	}
@@ -53,8 +54,8 @@ global.UI_GeometryDatalist = class extends ve.Component {
 		
 		//Fetch all current geometries and their names
 		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-			let local_geometry = naissance.Geometry.instances[i];
 			let is_valid = true;
+			let local_geometry = naissance.Geometry.instances[i];
 
       //Deal with options.filter_types
       if (this.options.filter_types)
@@ -71,7 +72,7 @@ global.UI_GeometryDatalist = class extends ve.Component {
 			name: (this.options.name) ? this.options.name : undefined,
 			onuserchange: (v) => {
 				this.value = v;
-				this.fireFromBinding();
+				this.fireToBinding();
 			},
 			selected: (geometry_map[current_value]) ? geometry_map[current_value] : undefined
 		});

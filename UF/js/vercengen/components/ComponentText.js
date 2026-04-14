@@ -44,7 +44,7 @@ ve.Text = class extends ve.Component {
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-text");
 			this.element.instance = this;
-		
+			HTML.setAttributesObject(this.element, options.attributes);
 		this.options = options;
 		this.value = value;
 		

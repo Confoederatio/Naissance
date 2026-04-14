@@ -22,11 +22,11 @@ icon, .ve-icon {
     
     display: inline-flex;
     align-items: center;
-    height: 24px;
+    height: 1.5rem;
     justify-content: center;
-    max-width: 24px;
+    max-width: 1.5rem;
     overflow: clip;
-    width: 24px;
+    width: 1.5rem;
     
     user-select: none;
 }

@@ -23,11 +23,14 @@
 	
 	ve.ScriptManager._loadConfig = function (arg0_vesm_folder) {
     //Convert from parameters
-    let vesm_folder = (arg0_vesm_folder) ? arg0_vesm_folder : process.cwd();
+    let vesm_folder = arg0_vesm_folder;
+			if (!vesm_folder) vesm_folder = (this._settings?.project_folder && this._settings.project_folder !== "none") ? 
+				this._settings.project_folder : process.cwd();
 
     //Try to load the local .ve-sm to determine the actual project path
 		if (fs.existsSync(".ve-sm")) try {
 			this.config = JSON.parse(fs.readFileSync(path.join(vesm_folder, ".ve-sm"), "utf8"));
+			//console.log(`ve.ScriptManager._loadConfig() fired:`, this.config);
     } catch (e) { console.error(e); }
 		if (this.config.project_folder === "none" || !this.config.project_folder) return; //Internal guard clause if project folder is not set
 		
@@ -75,7 +78,9 @@
 		let project_config_path = path.join(project_folder, ".ve-sm");
 		
 		//Save this.config to base project folder if possible
-		fs.writeFileSync(project_config_path, JSON.stringify(this.config));
+		//console.log(`ve.ScriptManager._saveConfig() fired:`, project_config_path, this.config);
+		
+		fs.writeFileSync(project_config_path, JSON.stringify(this.config), "utf8");
 		ve.ScriptManager._indexDocumentation.call(this, this.bottombar_status_el);
 	};
 	

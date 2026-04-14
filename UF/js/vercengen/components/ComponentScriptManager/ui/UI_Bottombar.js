@@ -118,7 +118,7 @@ ve.ScriptManager.UI_Bottombar = class extends ve.Component {
         //Make sure that when a file is deleted from the bottombar, it updates the ScriptManager properly
         ondelete: (v) => {
           let local_el = v.element.querySelector("button[data-file-path]");
-
+          
           if (local_el)
             //Wait 1 tick since the bottombar needs to be updated by .loadFile() first
             setTimeout(() => {

@@ -57,6 +57,7 @@
         position: absolute;
         transform: translateX(-50%);
     }
+    
     button {
         padding: 0;
     }
@@ -69,6 +70,7 @@
     button:has(icon) {
         padding: calc(var(--padding)*0.5);
     }
+    #name { align-items: center; display: flex; }
 }
 
 /* -- ve.Checkbox -- */
@@ -249,7 +251,7 @@
     }
 }
 [component="ve-interface"]:has(summary) td:has([component="ve-interface"]) {
-    padding-inline-start: 0.5rem;
+    /*padding-inline-start: 0.5rem;*/
 }
 .ve-disable-nesting {
     > table > tbody > tr > td {
@@ -446,6 +448,11 @@ table:has([component="ve-log"]) { table-layout: fixed; }
     > [component="ve-button"] {
       padding: 0;
     }
+}
+
+/* -- ve.SearchSelect -- */
+[component="ve-search-select"] {
+    [ve-searchbar="true"] > #name:not(:empty) { margin-left: var(--padding); }
 }
 
 /* -- ve.Select -- */

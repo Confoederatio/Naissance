@@ -16,7 +16,7 @@ naissance.History = class extends ve.Class {
 	
 	addKeyframe (arg0_date, ...argn_arguments) {
 		//Convert from parameters
-		let date = (arg0_date) ? Date.convertTimestampToDate(arg0_date) : main.date;
+		let date = (arg0_date !== undefined) ? Date.convertTimestampToDate(arg0_date) : main.date;
 		
 		//Declare local instance variables
 		let timestamp = Date.getTimestamp(date);
@@ -32,6 +32,105 @@ naissance.History = class extends ve.Class {
 		
 		//Return statement
 		return this.keyframes[timestamp];
+	}
+	
+	//[QUARANTINE]
+	cleanKeyframes () {
+		//Declare local instance variables
+		let all_timestamps = Object.keys(this.keyframes).sort((a, b) => {
+			return Date.convertTimestampToInt(a) - Date.convertTimestampToInt(b);
+		});
+		let running_state = []; //Tracks the accumulated values to find redundancies
+		
+		//Iterate over all_timestamps in the current history
+		for (let i = 0; i < all_timestamps.length; i++) {
+			let timestamp = all_timestamps[i];
+			let local_keyframe = this.keyframes[timestamp];
+			let has_meaningful_change = false;
+			
+			//Don't clean the very first keyframe, as it serves as the baseline
+			if (i === 0) {
+				//Update running state with the first keyframe's data
+				running_state = JSON.parse(JSON.stringify(local_keyframe.value));
+				continue;
+			}
+			
+			for (let x = 0; x < local_keyframe.value.length; x++) {
+				let current_val = local_keyframe.value[x];
+				let prev_val = running_state[x];
+				
+				//Skip only if undefined; null is treated as a meaningful value change
+				if (current_val === undefined) continue;
+				
+				if (typeof current_val === "object" && current_val !== null) {
+					// Handle object merging and variable delta checks
+					let is_redundant_obj = true;
+					let cleaned_obj = { ...current_val };
+					if (current_val.variables)
+						cleaned_obj.variables = { ...current_val.variables };
+					
+					// Check nested variables
+					if (current_val.variables && prev_val && prev_val.variables) {
+						for (let key in current_val.variables)
+							if (Boolean.isDeepEqual(current_val.variables[key], prev_val.variables[key])) {
+								delete cleaned_obj.variables[key];
+							} else {
+								is_redundant_obj = false;
+							}
+						//If variables becomes empty, remove the key
+						if (Object.keys(cleaned_obj.variables).length === 0) delete cleaned_obj.variables;
+					} else if (current_val.variables) {
+						is_redundant_obj = false;
+					}
+					
+					//Check other properties of the object (excluding variables which we just handled)
+					for (let key in current_val) {
+						if (key === "variables") continue;
+						if (prev_val && Boolean.isDeepEqual(current_val[key], prev_val[key])) {
+							delete cleaned_obj[key];
+						} else {
+							is_redundant_obj = false;
+						}
+					}
+					
+					if (is_redundant_obj) {
+						//Remove this index from keyframe if it changes nothing
+						local_keyframe.value[x] = undefined;
+					} else {
+						//Update the keyframe with cleaned object and update running state
+						local_keyframe.value[x] = cleaned_obj;
+						has_meaningful_change = true;
+						
+						//Update running state for next iteration; ensure state is an object if merging
+						if (typeof running_state[x] !== "object" || running_state[x] === null)
+							running_state[x] = { variables: {} };
+						
+						if (cleaned_obj.variables)
+							running_state[x].variables = {
+								...running_state[x].variables,
+								...cleaned_obj.variables
+							};
+						running_state[x] = { ...running_state[x], ...cleaned_obj };
+					}
+				} else {
+					//Handle primitive values and null
+					if (current_val === prev_val) {
+						local_keyframe.value[x] = undefined;
+					} else {
+						running_state[x] = current_val;
+						has_meaningful_change = true;
+					}
+				}
+			}
+			
+			//If the keyframe now contains no unique data, delete the keyframe entirely
+			let is_empty = local_keyframe.value.every(val => val === undefined);
+			if (is_empty || !has_meaningful_change) {
+				delete this.keyframes[timestamp];
+			}
+		}
+		
+		if (!this.do_not_draw) this.draw();
 	}
 	
 	draw () {
@@ -142,6 +241,22 @@ naissance.History = class extends ve.Class {
 		}
 	}
 	
+	getFirstKeyframe () {
+		//Declare local instance variables
+		let all_timestamps = this.getTimestamps();
+		
+		//Return statement
+		return (all_timestamps.length > 0) ? this.keyframes[all_timestamps[0]] : undefined;
+	}
+	
+	getLastKeyframe () {
+		//Declare local instance variables
+		let all_timestamps = this.getTimestamps();
+		
+		//Return statement
+		return (all_timestamps.length > 0) ? this.keyframes[all_timestamps.length - 1] : undefined;
+	}
+	
 	getKeyframe (arg0_options) {
 		//Convert from parameters
 		let options = (arg0_options) ? arg0_options : {};
@@ -213,6 +328,13 @@ naissance.History = class extends ve.Class {
 		}
 	}
 	
+	getTimestamps () {
+		//Return statement
+		return Object.keys(this.keyframes).sort((a, b) => {
+			return Date.convertTimestampToInt(a) - Date.convertTimestampToInt(b);
+		});
+	}
+	
 	moveKeyframe (arg0_date, arg1_date) {
 		//Convert from parameters
 		let date = Date.convertTimestampToDate(arg0_date);
@@ -240,13 +362,29 @@ naissance.History = class extends ve.Class {
 	
 	removeKeyframe (arg0_date) {
 		//Convert from parameters
-		let date = (arg0_date) ? Date.convertTimestampToDate(arg0_date) : main.date;
+		let date = (arg0_date !== undefined) ? Date.convertTimestampToDate(arg0_date) : main.date;
 		
 		//Declare local instance variables
 		let timestamp = Date.getTimestamp(date);
 		
 		//Delete target keyframe 
 		delete this.keyframes[timestamp];
+	}
+	
+	replaceKeyframe (arg0_keyframe, arg1_keyframe, arg2_options) {
+		//Convert from parameters
+		let keyframe = arg0_keyframe;
+		let ot_keyframe = arg1_keyframe;
+		let options = (arg2_options) ? arg2_options : {};
+		
+		//Declare local instance variables
+		let timestamp = JSON.parse(JSON.stringify(keyframe.timestamp));
+		
+		//Swap out keyframe; refresh localisation
+		this.removeKeyframe(timestamp);
+		this.addKeyframe(timestamp, ...ot_keyframe.value);
+		
+		if (options.refresh_localisation !== false) this.getKeyframe();
 	}
 	
 	toJSON () {

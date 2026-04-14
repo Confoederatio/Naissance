@@ -26,6 +26,9 @@ ve.Button = class extends ve.Component {
 		//Initialise options
 		options.attributes = (options.attributes) ? options.attributes : {};
 		if (options.name === undefined) options.name = loc("ve.registry.localisation.Button_confirm");
+		if (options.name.startsWith("<icon>") && !options.name.endsWith(">")) 
+			//Add default padding for text after <icon>
+			options.name += "&nbsp;&nbsp;";
 		
 		//Declare local instance variables
 		this.element = document.createElement("div");
@@ -36,27 +39,24 @@ ve.Button = class extends ve.Component {
 		this.value = value;
 		
 		//Format HTML string
-		let html_string = [];
-		html_string.push(`<button>`);
-			if (options.icon) html_string.push(`<img src = "${options.icon}">`);
-			html_string.push(` <span id = "name" style = "align-items: center; display: flex;"></span>`)
-		html_string.push(`</button>`);
+		this.button_el = document.createElement("button");
+			if (options.icon) {
+				this.icon_el = document.createElement("img");
+				this.icon_el.setAttribute("src", options.icon);
+				this.button_el.appendChild(this.icon_el);
+			}
+			this.name_el = document.createElement("span");
+				this.name_el.id = "name";
+				this.button_el.appendChild(this.name_el);
+			this.element.appendChild(this.button_el);
 		
-		//Populate element and initialise handlers
-		this.element.innerHTML = html_string.join("");
-		
-		let button_el = this.element.querySelector("button");
-		button_el.addEventListener("click", (e) => {
+		//Add click event listener
+		this.button_el.addEventListener("click", (e) => {
 			if (this.value) this.value(e, this);
 			this.fireToBinding();
 		});
 		this.name = options.name;
 		this.v = this.value;
-		
-		//Post-value styling
-		let name_el = this.element.querySelector(`#name`);
-		if (name_el && HTML.getInnerText(name_el).length > 0 && name_el.querySelector("icon"))
-			this.name += "&nbsp;&nbsp;";
 	}
 	
 	/**

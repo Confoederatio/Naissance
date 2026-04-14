@@ -314,7 +314,8 @@ ve.Table = class extends ve.Component {
 			nav_el.className = "pagination-controls";
 			nav_el.style.marginTop = "var(--cell-padding)";
 		let next_btn = new ve.Button(() => {
-			this.current_page++;
+			if (this.current_page < total_pages)
+				this.current_page++;
 			this.draw();
 		}, {
 			attributes: {
@@ -324,7 +325,8 @@ ve.Table = class extends ve.Component {
 			name: loc("ve.registry.localisation.Table_next")
 		});
 		let prev_btn = new ve.Button(() => {
-			this.current_page--;
+			if (this.current_page > 0)
+				this.current_page--;
 			this.draw();
 		}, {
 			attributes: {
@@ -430,6 +432,10 @@ ve.Table = class extends ve.Component {
 	
 	/**
 	 * Sets the view state from an existing view object.
+	 * - Method of: {@link ve.Table}
+	 * 
+	 * @alias setViewState
+	 * @memberof ve.Component.ve.Table
 	 * 
 	 * @param {Object} arg0_view_obj
 	 */

@@ -15,8 +15,10 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		this._name = "New Group";
 		
 		//Declare UI; attached to UI_LeftbarHierarchy
-		this.interface = undefined;
-		this.drawHierarchyDatatype(); //Declares this.interface
+		this.interface = veInterface({
+			actions: this.drawActionsPalette({ move_to_filters: ["FeatureGroup"] })
+		}, { is_folder: false });
+		this.drawHierarchyDatatype();
 	}
 	
 	addEntity (arg0_naissance_obj, arg1_do_not_refresh) {
@@ -34,8 +36,12 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		}
 	}
 	
-	drawHierarchyDatatype () {
+	drawHierarchyDatatype (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
 		//Declare local instance variables
+		let all_geometries = this.getAllGeometries();
 		let hierarchy_obj = {};
 		
 		//Delete any self-references; already assigned entities with other .parent
@@ -55,9 +61,10 @@ naissance.FeatureGroup = class extends naissance.Feature {
 				
 				//naissance.FeatureGroup, naissance.FeatureLayer handling
 				if (local_entity instanceof naissance.Feature && local_entity.drawHierarchyDatatype) {
-					hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
+					hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype(options);
 				} else {
 					//naissance.Feature generic handling
+					if (options.hide_features) continue; //Internal guard clause if features are meant to be hidden
 					if (local_entity instanceof naissance.Feature) {
 						hierarchy_obj[local_key] = new ve.HierarchyDatatype({
 							icon: new ve.HTML(`<icon>inventory_2</icon>`, {
@@ -65,6 +72,7 @@ naissance.FeatureGroup = class extends naissance.Feature {
 						}, { instance: local_entity });
 					}
 					//naissance.Geometry generic handling
+					if (options.hide_geometries) continue; //Internal guard clause if geometries are meant to be hidden
 					if (local_entity instanceof naissance.Geometry) {
 						if (local_entity.drawHierarchyDatatype) {
 							hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
@@ -89,16 +97,30 @@ naissance.FeatureGroup = class extends naissance.Feature {
 				}
 			}
 		
-		//Set this.interface
-		let interface_obj = new ve.HierarchyDatatype({
+		//Return statement
+		return new ve.HierarchyDatatype({
 			icon: new ve.HTML(`<icon>folder</icon>`),
 			...super.drawHierarchyDatatypeGenerics(),
+			
+			polity_number: veHTML(`(${String.formatNumber(all_geometries.length)})`),
+			edit: veButton(() => {
+				super.open("instance", {
+					id: this.id,
+					name: this._name,
+					width: "24rem"
+				});
+				this.draw();
+			}, {
+				name: `<icon>more_vert</icon>`,
+				tooltip: "Edit Group",
+				style: { order: 100, padding: 0 }
+			}),
 			
 			...hierarchy_obj
 		}, {
 			attributes: {
 				"data-entities": this.entities.length,
-				"data-type": "FeatureGroup" 
+				"data-type": "FeatureGroup"
 			},
 			instance: this,
 			is_collapsed: this.is_collapsed,
@@ -116,10 +138,6 @@ naissance.FeatureGroup = class extends naissance.Feature {
 			},
 			type: "group",
 		});
-		if (!this.interface) this.interface = interface_obj;
-		
-		//Return statement
-		return interface_obj;
 	}
 	
 	fromJSON (arg0_json) {
