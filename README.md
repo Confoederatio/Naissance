@@ -49,7 +49,7 @@ Maps are saved as `.naissance` files, or in the case of Livemaps, as mapmodes wi
 
 ### Extensibility.
 
-Naissance HGIS is compatible with anything in the npm, Python (both regular pip and `.ipynb` notebooks), and R ecosystems via Vercengen. UI components are additionally just as extensible, as they need only store an `.element`: HTMLElement and `.v` (state value), and can be composed on the fly.
+Naissance HGIS is compatible with anything in the npm, Python (both regular pip and `.ipynb` notebooks), and R ecosystems via Vercengen. UI components are additionally just as extensible, as they need only store an `.element`: HTMLElement and `.v` (state value), and can be composed on the fly. Since it is Electron-based, it slots into native web map libraries unlike legacy GIS.
 
 These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, GeoJSON, GeoPNG, GeoTIFF, KMZ/KML, NC, and other file formats are supported by default; alongside Proj4JS live-warping. Blacktraffic scrapers rely on Chrome (Puppeteer) and Firefox (Selenium) and can capture Deck.gl, Leaflet, MapLibre, Maptalks and OpenLayers geometries.
 
@@ -71,7 +71,7 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 > Stadestér refers to urban data, whereas Velkscala refers to population data generally.
 
 - Atlas: (Vector) - Polity data from 3000BC-2023AD, based off [Cliopatria](https://www.nature.com/articles/s41597-025-04516-9), and currently undergoing manual cleaning. Interpreter scripts can be found at Collation in the `livemap` folder, and cleaned polygons at `saves/atlas.naissance`.
-- Eoscala: (Raster) - Economic estimates (GDP PPP) from 10000BC-2023AD, (Gini) from 21500BC-1800AD [[point-based]](https://docs.google.com/spreadsheets/d/1WAn29290A2empQgYbvkp-qGcqMCtfyfz5DQ7I5p_rqs/edit?gid=0#gid=0) at 5-arcmin resolution.
+- Eoscala: (Raster) - Economic estimates (GDP PPP) from 10000BC-2023AD, (Gini) from 21500BC-1800AD [[point-based]](https://docs.google.com/spreadsheets/d/1WAn29290A2empQgYbvkp-qGcqMCtfyfz5DQ7I5p_rqs/edit?gid=0#gid=0) at 5-arcmin resolution; Gapminder provides Gini past 1800AD.
   - [[Dataset]](https://github.com/Confoederatio/Eoscala-Velkscala) | [[Methodology]](https://confoederatio.org/papers/Eoscala%201.0_Velkscala%200.5_%20A%20Gridded%20Reconstruction%20of%20Global%20GDP%20and%20Population%20from%2010000BC%20to%20the%20Present-4.pdf)
 - Stadestér/Velkscala: (Raster/Vector) - Population estimates (rural, urban, total), land use and ALCC (from HYDE/LUH2KK10) from 10000BC-2025AD. Urban extents and locations are given as GeoJSON datasets, with individual pop. estimates for 41k+ cities between 3000BC-2025AD. Yearly urban extents are made available from 1800AD cities. 5-arcmin resolution.
   - [[Dataset (Github)]](https://github.com/Confoederatio/Stadester) | [[Dataset (Zenodo)]](https://zenodo.org/records/17180328) | [[Methodology]](https://confoederatio.org/papers/Stadest%C3%A9r%201.0%20-%20A%20Global%20Database%20of%2041000%2B%20Cities%20From%203000BC%20to%20the%20Present.pdf)
