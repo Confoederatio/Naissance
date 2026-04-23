@@ -13,7 +13,7 @@
  * 
  * ##### Instance:
  * - `<component_key>`: {@link ve.Component} - Automatic destructuring for component_key.
- * - `.components_obj`: {@link Object}<{@link ve.Component}> - Internal private field for `.v`.
+ * - `.components_obj`: {@link Object}<{@link ve.Component}|{@link HTMLElement}> - Internal private field for `.v`.
  * - `.dimensions=[0,0]`: {@link Array}<{@link number}, {@link number}>
  *   `.reserved_keys`: {@link Array}<{@link string}> - Controls what keys are reserved and cannot be destructured.
  * - `.v`: {@link Object}<{@link ve.Component}>
@@ -215,7 +215,7 @@ ve.Interface = class extends ve.Component {
 					}
 					
 					//Set inner cell contents
-					target_cell_el.appendChild(local_value.element);
+					target_cell_el.appendChild(ve.Component.getElement(local_value));
 				}
 			} catch (e) { console.error(e); }
 		});

@@ -139,6 +139,9 @@ ve.Feature = class {
 	/**
 	 * Removes the {@link ve.Feature} from its static `.instances` field in addition to unmounting the feature from the DOM.
 	 * - Method of: {@link ve.Feature}
+	 * 
+	 * @param {Object} [arg0_options]
+	 *  @param {string} [arg0_options.class_instance="class"] - Either 'instance'/'class'.
 	 */
 	remove (arg0_options) {
 		//Convert from parameters
@@ -177,7 +180,6 @@ ve.Feature = class {
 					}
 			});
 		
-		//Remove element
 		if (this.element) this.element.remove();
 	}
 	

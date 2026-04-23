@@ -78,11 +78,14 @@ ve.HTML = class extends ve.Component {
 				delete this.draw_loop;
 			}
 			this.draw_function = this.value;
-			
 			if (this.options.do_not_refresh !== true) {
 				this.v = this.draw_function(this);
 				this.draw_loop = setInterval(() => {
-					this.v = this.draw_function(this);
+					if (typeof this.draw_function === "function") {
+						this.v = this.draw_function(this);
+					} else {
+						clearInterval(this.draw_loop);
+					}
 				}, 100);
 			} else {
 				this.v = this.draw_function(this);

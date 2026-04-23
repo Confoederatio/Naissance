@@ -35,6 +35,7 @@
  * ##### Methods:
  * - <span color=00ffff>{@link ve.CRUD.draw|draw}</span>()
  * - <span color=00ffff>{@link ve.CRUD.filterTable|filterTable}</span>(arg0_search_string:{@link string}, arg1_options:{@link Object}) | {@link Array}<{@link any}>
+ * - <span color-00ffff>{@link ve.CRUD.gc|gc}</span>()
  * - <span color=00ffff>{@link ve.CRUD.getFilters|getFilters}</span>() | {@link Object}{ name:{@link string}, special_function:{@link function} }
  * - <span color=00ffff>{@link ve.CRUD.getTable|getTable}</span>(arg0_filter_function:{@link function}) | {@link Array}<{@link Array}<{@link any}>>
  * - <span color=00ffff>{@link ve.CRUD.redrawSelections|redrawSelections}</span>()
@@ -64,8 +65,12 @@ ve.CRUD = class extends ve.Component {
       this.element.setAttribute("component", "ve-crud");
       this.element.instance = this;
       HTML.setAttributesObject(this.element, options.attributes);
+    this.id = Class.generateRandomID(ve.CRUD);
     this.options = options;
     this.value = value;
+    
+    //Push to instances
+    ve.CRUD.instances.push(this);
     
     //Call this.draw()
     this.from_binding_fire_silently = true;
@@ -183,7 +188,7 @@ ve.CRUD = class extends ve.Component {
       ...this.options.searchbar_options
     });
 
-    //Initialize table with header only; refresh logic will populate data
+    //Initialise table with header only; refresh logic will populate data
     this.table_array = [this.options.header];
     this.table = new ve.Table(this.table_array, {
       disable_hide_columns: [0],
@@ -392,6 +397,7 @@ ve.CRUD = class extends ve.Component {
             "crud-select": "true",
             "data-value": String(this.value[i]?.selected)
           },
+          gc: true,
           onuserchange: (v, e) => {
             e.element.setAttribute("data-value", String(v));
             
@@ -419,8 +425,10 @@ ve.CRUD = class extends ve.Component {
       let row_value = this.options.special_function(this.value[i]);
       
       if (row_value)
-        for (let x = 0; x < row_value.length; x++)
+        for (let x = 0; x < row_value.length; x++) {
+          if (row_value[x].instance) row_value[x].instance.gc();
           local_array.push(row_value[x]);
+        }
       
       //Push local_array to table_array
       this.table_array.push(local_array);
@@ -447,8 +455,10 @@ ve.CRUD = class extends ve.Component {
       let is_selected = local_value.value?.selected;
       let local_checkbox = local_value.row[0].instance;
       
-      local_checkbox.v = is_selected;
-      local_checkbox.element.setAttribute("data-value", is_selected);
+      if (local_checkbox) {
+        local_checkbox.v = is_selected;
+        if (local_checkbox.element) local_checkbox.element.setAttribute("data-value", is_selected);
+      }
     });
   }
 };

@@ -4,7 +4,7 @@ if (!global.naissance) global.naissance = {};
  */
 naissance.FeatureLayer = class extends naissance.Feature {
 	constructor (arg0_entities, arg1_options) {
-		super();
+		super(arg1_options);
 		this.cannot_nest_self = true;
 		this.class_name = "FeatureLayer";
 		/**
@@ -22,6 +22,13 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		//Declare UI
 		this.interface = veInterface({
 			open_table: veButton(() => this.window.refresh(), { name: "View Geometries", x: 0, y: 0 }),
+			debug: veButton(() => {
+				console.log(`$feature - naissance.FeatureLayer (ID: ${this.id}):`, this);
+				window.$feature = this;
+			}, {
+				name: "Debug",
+				x: 1, y: 0
+			}),
 			show_features: veToggle(this.metadata?.show_layer_features, {
 				name: "Show Layer Features",
 				onuserchange: (v) => {
@@ -80,7 +87,12 @@ naissance.FeatureLayer = class extends naissance.Feature {
 				})
 			}),
 			
-			actions: this.drawActionsPalette({ move_to_filters: ["FeatureLayer"] })
+			actions: this.drawActionsPalette({
+				name: "Layer",
+				type: "layer",
+				
+				move_to_filters: ["FeatureLayer"] 
+			})
 		}, { is_folder: false });
 	}
 	
@@ -303,6 +315,42 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		this.type = (json.type) ? json.type : "default";
 	}
 	
+	/**
+	 * Returns all unique keyframe dates in a layer.
+	 * 
+	 * @param {Object} [arg0_options]
+	 *  @param {boolean} [arg0_options.return_timestamps=false] - Whether to return timestamps.
+	 */
+	getUniqueKeyframeDates (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
+		//Declare local instance variables
+		let all_geometries = this.getAllGeometries();
+		let unique_timestamps = [];
+		
+		//Iterate over all_geometries and fetch unique_keyframes
+		for (let i = 0; i < all_geometries.length; i++) {
+			let local_history_keyframes = Object.keys(all_geometries[i].history.keyframes)
+				.map(Date.convertTimestampToInt);
+			
+			for (let x = 0; x < local_history_keyframes.length; x++)
+				if (!unique_timestamps.includes(local_history_keyframes[x]))
+					unique_timestamps.push(local_history_keyframes[x]);
+		}
+		
+		//If return_timestamps is not false, return dates instead
+		if (!options.return_timestamps) {
+			let unique_dates = [];
+			
+			//Return statement
+			for (let i = 0; i < unique_timestamps.length; i++)
+				unique_dates.push(Date.convertTimestampToDate(unique_timestamps[i]));
+			return unique_dates;
+		}
+		return unique_timestamps;
+	}
+	
 	hasEntity (arg0_naissance_obj) {
 		//Convert from parameters
 		let naissance_obj = arg0_naissance_obj;
@@ -422,47 +470,5 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		
 		//Return statement
 		return main._layers.provinces;
-	}
-	
-	/**
-	 * Parses a JSON action for a target FeatureLayer.
-	 * - Static method of: {@link naissance.FeatureLayer}
-	 * 
-	 * `arg0_json`: {@link Object|string}
-	 * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
-	 * <br>
-	 * - #### Extraneous Commands:
-	 *   - `.create_layer`: {@link Object}
-	 *     - `.do_not_refresh=false`: {@link boolean}
-	 *     - `.id`: {@link string}
-	 * - #### Internal Commands:
-	 *   - `.set_layer_option`: {@link Object}
-	 *     - `.key`: {@link string} - The key to change for the selected layer.
-	 *     - `.value`: {@link any} - What to change the value of the key to.
-	 */
-	static parseAction (arg0_json) {
-		//Convert from parameters
-		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
-		
-		//Declare local instance variables
-		let layer_obj = naissance.Feature.instances.filter((v) => v.id === json.feature_id)[0];
-		
-		//Parse extraneous commands
-		//create_layer
-		if (json.create_layer)
-			if (json.create_layer.id) {
-				let new_layer = new naissance.FeatureLayer();
-				new_layer.id = json.create_layer.id;
-				
-				if (!json.create_layer.do_not_refresh)
-					UI_LeftbarHierarchy.refresh();
-			}
-		
-		//Parse commands for layer_obj
-		if (layer_obj) {
-			//set_layer_option
-			if (json.set_layer_option)
-				layer_obj[json.set_layer_option.key] = json.set_layer_option.value;
-		}
 	}
 };

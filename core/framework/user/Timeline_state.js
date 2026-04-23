@@ -27,11 +27,12 @@
 		}
 		
 		//Save action to current timeline if needed
-		if (!do_not_push_action)
+		if (!do_not_push_action) {
 			new DALS.Action(json);
-		
-		//Force all UI_LeftbarHierarchy instances to .refresh()
-		UI_LeftbarHierarchy.refresh();
+			
+			//Force all UI_LeftbarHierarchy instances to .refresh()
+			UI_LeftbarHierarchy.refresh();
+		}
 	};
 }
 
@@ -82,9 +83,11 @@
 		//3. Handle naissance.Feature classes
 		Object.iterate(json, (local_key, local_value) => {
 			if (local_value.class_name && local_value.type === "feature") {
-				let feature_obj = new naissance[local_value.class_name]();
+				let feature_obj = new naissance[local_value.class_name](undefined, {
+					metadata: local_value.metadata
+				});
+				
 				if (local_value.id) feature_obj.id = local_value.id;
-				if (local_value.metadata) feature_obj.metadata = local_value.metadata;
 				if (local_value.value) feature_obj.json = local_value.value;
 			}
 		});
@@ -134,6 +137,7 @@
 			json_obj[local_feature.id] = {
 				id: local_feature.id,
 				class_name: local_feature.class_name,
+				metadata: local_feature.metadata,
 				type: "feature",
 				value: local_feature.toJSON()
 			};

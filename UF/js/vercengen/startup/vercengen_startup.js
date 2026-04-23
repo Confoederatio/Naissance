@@ -16,15 +16,43 @@ global.path = require("path");
 		 */
 		global.ve = {
 			/**
+			 * @type {number}
+			 */
+			start_timestamp: new Date().getTime(),
+			
+			/**
 			 * Registry is initialised from {@link window.ve_registry} if it exists. Otherwise, default settings are used across Vercengen.
 			 * @type {Object}
 			 */
-			registry: (window.ve_registry) ? window.ve_registry :{
+			registry: (window.ve_registry) ? window.ve_registry : {
+				/**
+				 * Whether to enable heuristic free.
+				 * @type {boolean}
+				 */
+				debug_heuristic_free: false,
+				
+				/**
+				 * The number of seconds after program-start to target {@link ve.Component}/{@link ve.Feature} with heuristic free.
+				 * @type {number}
+				 */
+				debug_heuristic_free_start: 0,
+				
+				/**
+				 * The number of seconds from the current timestamp to target {@link ve.Component}/{@link ve.Feature} with heuristic free.
+				 * @type {number}
+				 */
+				debug_heuristic_free_end: 5,
+				
 				/**
 				 * Determines whether or not to run linters at runtime.
 				 * @type {boolean}
 				 */
 				debug_mode: true,
+				/**
+				 * Whether to profile {@link ve.Component}. Can be memory-intensive.
+				 * @type {boolean}
+				 */
+				debug_profile_components: false,
 				
 				/**
 				 * @type {{"<component_key>": ve.Component}}
@@ -387,6 +415,9 @@ global.path = require("path");
 			"!UF/archives",
 			"UF",
 			
+			//Localisation
+			"UF/js/vercengen/engine/vercengen_localisation.js",
+			
 			//Blockly/Maptalks
 			"UF/libraries",
 			"UF/libraries/blockly.js",
@@ -433,9 +464,6 @@ global.path = require("path");
 			"UF/js/vercengen/components/ComponentScriptManager/monaco/monaco_startup.js",
 			
 			"UF/js/vercengen/features",
-			
-			//Localisation
-			"UF/js/vercengen/vercengen_localisation.js",
 		] : [];
 			load_patterns = load_patterns.concat(options.load_files);
 		
@@ -510,6 +538,7 @@ global.path = require("path");
 				global.ve_gc_loop = setInterval(() => {
 					//Perform GC
 					if (ve?.Tooltip?.refresh) ve.Tooltip.refresh();
+					ve.gc();
 				}, 1000);
 				
 				clearInterval(global.initialise_ve_loop);

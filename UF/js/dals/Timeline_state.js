@@ -45,7 +45,7 @@
 	 * @returns {Object}
 	 */
 	DALS.Timeline.saveState = function () {
-		console.error(`DALS.Timeline.saveState() has not been manuially overridden by the program! Returning an empty object.\n- If you are seeing this for the first time, it is likely because of state initialisation.`);
+		console.error(`DALS.Timeline.saveState() has not been manually overridden by the program! Returning an empty object.\n- If you are seeing this for the first time, it is likely because of state initialisation.`);
 		
 		//Return statement
 		return {};

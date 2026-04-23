@@ -33,14 +33,14 @@ global.UI_FeatureLayerWindow = class extends ve.Class {
 				//2. Name column
 				let name_component = veText(local_geometry.name, {
 					attributes: {
-						"data-value": local_geometry.name,
+						"data-value": local_geometry.getAllNames().join(", "),
 					},
 					onprogramchange: (v, e) => {
-						e.element.setAttribute("data-value", v);
+						e.element.setAttribute("data-value", local_geometry.getAllNames().join(", "));
 						e.v = v;
 					},
 					onuserchange: (v, e) => {
-						e.element.setAttribute("data-value", v);
+						e.element.setAttribute("data-value", local_geometry.getAllNames().join(", "));
 						local_geometry.name = v;
 					},
 				});
@@ -117,7 +117,9 @@ global.UI_FeatureLayerWindow = class extends ve.Class {
 		let do_not_refresh = arg0_do_not_refresh;
 		
 		//Declare local instance variables
-		let all_geometries = this.layer.getAllGeometries();
+		let all_geometries = this.layer.getAllGeometries(undefined, {
+			refresh_metadata: true
+		});
 		
 		//Refresh this.CRUD
 		if (!this.CRUD || !this.isOpen("instance")) this.draw();

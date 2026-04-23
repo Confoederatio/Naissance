@@ -6,6 +6,40 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/date/date_maths.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_maths.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/geospatiale/maptalks_turf.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/geospatiale/maptalks_turf.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/html/html_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentCRUD.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentCRUD.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHTML.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHTML.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSpreadsheet/spreadsheet_iframe.html" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSpreadsheet/spreadsheet_iframe.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_electron.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_themes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Feature.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Feature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/windows/UI_FeatureLayerWindow.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/windows/UI_FeatureLayerWindow.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +47,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="2454" />
+    <option name="cachedIndexableFilesCount" value="2468" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -32,29 +66,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHELLCHECK.PATH": "C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.1\\plugins\\Shell Script\\shellcheck.exe",
-    "augment.onboarding.workspace.first.indexed.D:/Project 1706 - Naissance Electron": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Project 1706 - Naissance Electron",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "ts.external.directory.path": "C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.1\\plugins\\Shell Script\\shellcheck.exe&quot;,
+    &quot;augment.onboarding.workspace.first.indexed.D:/Project 1706 - Naissance Electron&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Project 1706 - Naissance Electron&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\htmlp\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Project 1706 - Naissance Electron\UF\js\geospatiale" />
@@ -96,6 +130,7 @@
       <workItem from="1769908876275" duration="7749000" />
       <workItem from="1774772315308" duration="9332000" />
       <workItem from="1776142774931" duration="1681000" />
+      <workItem from="1776958086862" duration="91000" />
     </task>
     <servers />
   </component>

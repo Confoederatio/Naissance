@@ -7,7 +7,7 @@ let { performance } = require("perf_hooks");
 
 //Metadata - Title
 let latest_fps = 0;
-let naissance_version = "1.7b Chukchi";
+let naissance_version = "1.8b Guinea";
 let title_update_interval;
 let win;
 
@@ -24,29 +24,29 @@ let win;
         nodeIntegration: true,
         webSecurity: false
       },
-
+      
       icon: path.join(process.cwd(), `gfx/logo.png`)
     });
-
+    
     //Load file; open Inspect Element
     win.loadFile("index.html").then(() => {
-			win.webContents.openDevTools();
-			win.setMenuBarVisibility(false);
-		});
-
+      win.webContents.openDevTools();
+      win.setMenuBarVisibility(false);
+    });
+    
     //Listen for FPS updates from the renderer process
     ipcMain.on("update-fps", (event, fps) => {
       latest_fps = fps;
     });
-
+    
     //Update the title every second with the latest data
     title_update_interval = setInterval(function () {
-			let memory_usage = process.memoryUsage();
-
+      let memory_usage = process.memoryUsage();
+      
       let heap_used_mb = (memory_usage.heapUsed/1024/1024).toFixed(2);
-			let rss_mb = (memory_usage.rss/1024/1024).toFixed(2);
-			let title_string = `Naissance HGIS ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
-
+      let rss_mb = (memory_usage.rss/1024/1024).toFixed(2);
+      let title_string = `Naissance (Révelt) ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
+      
       win.setTitle(title_string);
     }, 1000);
     
@@ -64,11 +64,11 @@ let win;
       shell.openExternal(url);
       return { action: "deny" };
     });
-
+    
     //Get the default session
     try {
       let default_session = session.defaultSession;
-
+      
       //Set up CORS settings for the default session
       default_session.webRequest.onHeadersReceived((details, callback) => {
         callback({
@@ -95,7 +95,7 @@ let win;
   app.whenReady().then(() => {
     //Create the window and instantiate it
     createWindow();
-
+    
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
@@ -103,7 +103,7 @@ let win;
       Menu.setApplicationMenu(null);
     });
   });
-
+  
   //Window lifecycle defaults
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
@@ -112,6 +112,6 @@ let win;
 
 //IPC handling
 {
-  let ve = require("./UF/js/vercengen/startup/vercengen_electron");
+  let ve = require("./UF/js/vercengen/engine/vercengen_electron");
   ve.initialiseIPC();
 }

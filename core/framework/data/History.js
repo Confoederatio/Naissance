@@ -28,7 +28,6 @@ naissance.History = class extends ve.Class {
 			let local_keyframe = this.keyframes[timestamp];
 				local_keyframe.addData(...argn_arguments);
 		}
-		if (!this.do_not_draw) this.draw();
 		
 		//Return statement
 		return this.keyframes[timestamp];
@@ -129,14 +128,15 @@ naissance.History = class extends ve.Class {
 				delete this.keyframes[timestamp];
 			}
 		}
-		
-		if (!this.do_not_draw) this.draw();
 	}
 	
-	draw () {
+	draw (arg0_interface_obj) {
+		//Convert from parameter
+		let interface_obj = arg0_interface_obj;
+		
 		//Declare local instance variables
 		let components_obj = {};
-		this.interface = new ve.Interface({}, { name: "Keyframes", width: 99 });
+		if (this.interface && typeof this.interface.remove === "function") this.interface.remove();
 		this.getKeyframe({ refresh_localisation: true });
 		
 		//Iterate over all_keyframes and push it to components_obj
@@ -205,6 +205,7 @@ naissance.History = class extends ve.Class {
 					x: 4, y: 0
 				})
 			}, {
+				gc: true,
 				is_folder: false,
 				style: {
 					"> table > tbody > tr": {
@@ -215,7 +216,12 @@ naissance.History = class extends ve.Class {
 			});
 		}, { sort_mode: "date_descending" });
 		
-		this.interface.v = components_obj;
+		//Set interface_obj.v
+		if (interface_obj) {
+			interface_obj.v = components_obj;
+		} else {
+			this.interface = new ve.Interface(components_obj, { name: "Keyframes", width: 99 });
+		}
 	}
 	
 	fromJSON (arg0_json) {
@@ -235,7 +241,6 @@ naissance.History = class extends ve.Class {
 				this.addKeyframe(local_date, ...local_keyframe.value);
 			}
 			this.do_not_draw = false;
-			this.draw();
 		} else {
 			console.error(`naissance.History.fromJSON() requires arg0_json to have a .keyframes Array<Object>.`, json);
 		}
@@ -317,6 +322,7 @@ naissance.History = class extends ve.Class {
 									...local_keyframe.value[x].variables,
 								};
 						} else if (local_keyframe.value[x] !== undefined) {
+							if (local_keyframe.value[x] === "undefined") continue; //Overwrite undefined strings
 							if (x !== 0 && local_keyframe.value[x] === null) continue; //Null should be overridden for [1] symbols, [2] properties
 							//If the value is null or a primitive, it overwrites the previous accumulated state
 							return_keyframe.value[x] = local_keyframe.value[x];
@@ -356,7 +362,6 @@ naissance.History = class extends ve.Class {
 			this.keyframes[ot_timestamp] = this.keyframes[timestamp];
 			
 			delete this.keyframes[timestamp];
-			if (!this.do_not_draw) this.draw();
 		}
 	}
 	
@@ -399,6 +404,7 @@ naissance.History = class extends ve.Class {
 		for (let i = 0; i < all_keyframes.length; i++) {
 			let local_keyframe = this.keyframes[all_keyframes[i]];
 			
+			if (local_keyframe.value[0] === undefined) local_keyframe.value[0] = "undefined";
 			json_obj.keyframes[all_keyframes[i]] = { value: local_keyframe.value };
 		}
 		

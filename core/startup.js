@@ -60,6 +60,7 @@ global.l4p = "./livemap/4.view/politics/";
 				leftbar_ui: new UI_Leftbar(),
 				
 				//Rightbar
+				edit_brush_keyframes: new UI_BrushKeyframes(),
 				edit_geometry_label: new UI_EditGeometryLabel(),
 				edit_geometry_line: new UI_EditGeometryLine(),
 				edit_geometry_point: new UI_EditGeometryPoint(),
@@ -176,6 +177,8 @@ global.l4p = "./livemap/4.view/politics/";
 			"!core/startup.js",
 			"!core/archives",
 			"core",
+			"core/framework/brush",
+			"core/framework/actions",
 			"histmap",
 			"livemap"
 		],

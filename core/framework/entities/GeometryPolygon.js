@@ -166,8 +166,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			//5. Add bindings
 			if (this.geometry) {
 				this.geometry.addEventListener("click", (e) => {
-					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
+					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode)) {
+						this.history.draw(this.keyframes_ui);
 						super.open("instance", { name: this.name, ...this.window_options });
+					}
 				});
 			}
 		}
@@ -180,9 +182,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					this.label_geometries[i].remove();
 			if (this.selected_geometry) this.selected_geometry.remove();
 		}
-		
-		//7. Render keyframes
-		try { this.keyframes_ui.v = this.history.interface.v; } catch (e) {}
 	}
 	
 	drawHierarchyDatatype () {
@@ -198,7 +197,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		} catch (e) {}
 		
 		//Return statement
-		let hierarchy_datatype = new ve.HierarchyDatatype({
+		if (this.hierarchy_datatype?.remove) this.hierarchy_datatype.remove();
+		this.hierarchy_datatype = new ve.HierarchyDatatype({
 			icon: veHTML(`<icon style = "${
 				(current_symbol?.polygonFill) ? `color: ${current_symbol?.polygonFill};` : ""
 			}">pentagon</icon>`, {
@@ -206,7 +206,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}),
 			...super.drawHierarchyDatatypeGenerics(),
 			context_menu: veButton(() => {
-				this.history.draw();
+				try { this.history.draw(this.keyframes_ui); } catch (e) {}
 				super.open("instance", { name: this.name, ...this.window_options });
 			}, {
 				attributes: { class: "order-101" },
@@ -232,7 +232,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			}
 		});
 		delete this._current_keyframe;
-		return hierarchy_datatype;
+		return this.hierarchy_datatype;
 	}
 	
 	getActionsBarElement () {
@@ -240,7 +240,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		let actions_bar_el = super.getActionsBarElement();
 		
 		let context_menu_button = veButton(() => {
-			this.history.draw();
+			try { this.history.draw(this.keyframes_ui); } catch (e) {}
 			super.open("instance", { name: this.name, ...this.window_options });
 		}, {
 			attributes: { class: "order-101" },
@@ -251,194 +251,5 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//Return statement
 		return actions_bar_el;
-	}
-	
-	handleNodeEditorEnd (arg0_e) {
-		//Convert from parameters
-		let e = arg0_e;
-		
-		//Transfer handler
-		if (main.brush.mode === "node_transfer") try {
-			let from_geometry_id = main.brush.from_geometry_id;
-			let from_geometry;
-				if (from_geometry_id)
-					for (let i = 0; i < naissance.Geometry.instances.length; i++)
-						if (naissance.Geometry.instances[i].id === from_geometry_id) {
-							from_geometry = naissance.Geometry.instances[i];
-							break;
-						}
-			
-			//Get the intersection of from_geometry and e.geometry
-			if (!(from_geometry?.geometry && e?.geometry)) return; //Internal guard clause if neither are presently defined
-			if (from_geometry?.id === this.id) return; //Internal guard clause for self-selection
-			
-			let cursor_turf_geometry = Geospatiale.convertMaptalksToTurf(e.geometry);
-			let ot_turf_geometry = Geospatiale.convertMaptalksToTurf(from_geometry.geometry);
-			let turf_geometry = (this.geometry) ? Geospatiale.convertMaptalksToTurf(this.geometry) : null;
-			
-			let turf_intersection = (main.brush.node_editor.mode === "add") ?
-				turf.intersect(turf.featureCollection([ot_turf_geometry, cursor_turf_geometry])) :
-				turf.intersect(turf.featureCollection([turf_geometry, cursor_turf_geometry]));
-			if (!turf_intersection) return; //Internal guard clause if nothing overlaps
-			turf_intersection = turf.buffer(turf_intersection, 0.001, { units: "kilometers" });
-			
-			//Transfer selected polygon
-			e.geometry = Geospatiale.convertTurfToMaptalks(turf_intersection);
-			
-			if (main.brush.node_editor.mode === "add") {
-				DALS.Timeline.parseAction({
-					options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-					value: [{
-						type: "GeometryPolygon",
-						geometry_id: from_geometry.id,
-						remove_from_polygon: { geometry: e.geometry.toJSON() }
-					}]
-				});
-			} else if (main.brush.node_editor.mode === "remove") {
-				/*let debug_polygon = maptalks.Geometry.fromJSON(e.geometry.toJSON());
-					console.log(`Debug polygon:`, debug_polygon);
-					debug_polygon.addTo(main.layers.overlay_layer);*/
-				
-				DALS.Timeline.parseAction({
-					options: { name: "Add to Polygon", key: "add_to_polygon" },
-					value: [{
-						type: "GeometryPolygon",
-						geometry_id: from_geometry.id,
-						add_to_polygon: { geometry: e.geometry.toJSON() }
-					}]
-				});
-			}
-			
-		} catch (e) { console.error(e); }
-		
-		//Push action to timeline
-		if (main.brush.node_editor.mode === "add") {
-			e.geometry = main.brush.getAddPolygon(e.geometry);
-			DALS.Timeline.parseAction({
-				options: { name: "Add to Polygon", key: "add_to_polygon" },
-				value: [{
-					type: "GeometryPolygon",
-					
-					geometry_id: this.id,
-					add_to_polygon: { geometry: e.geometry.toJSON() },
-					simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_polygon) ?
-						main.brush.simplify : undefined
-				}]
-			});
-		} else if (main.brush.node_editor.mode === "remove") {
-			e.geometry = main.brush.getRemovePolygon(e.geometry);
-			DALS.Timeline.parseAction({
-				options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-				value: [{
-					type: "GeometryPolygon",
-					geometry_id: this.id,
-					remove_from_polygon: { geometry: e.geometry.toJSON() }
-				}]
-			});
-		}
-		
-		main.brush.node_editor.disable();
-		main.brush.node_editor.enable();
-	}
-	
-	/**
-	 * Parses a JSON action for a target GeometryPolygon.
-	 * - Static method of: {@link naissance.GeometryPolygon}
-	 * 
-	 * `arg0_json`: {@link Object|string}
-	 * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
-	 * <br>
-	 * - #### Extraneous Commands:
-	 * - `.create_polygon`: {@link Object}
-	 *   - `.do_not_refresh`: {@link boolean}
-	 *   - `.id`: {@link string}
-	 *   - `.name`: {@link string}
-	 * - #### Internal Commands:
-	 * - `.add_to_polygon`: {@link Object}
-	 *   - `.geometry`: {@link string}
-	 * - `.hide_polygon`: {@link boolean}
-	 * - `.remove_from_polygon`: {@link Object}
-	 *   - `.geometry`: {@link string}
-	 * - `.set_polygon`: {@link Object}
-	 *   - `.geometry`: {@link Object}|{@link string}
-	 * - `.show_polygon`: {@link boolean}
-	 * - `.simplify_polygon`: {@link number} - The amount to simplify the Polygon by.
-	 */
-	static parseAction (arg0_json) { //[WIP] - Add .set_history
-		//Convert from parameters
-		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
-		
-		//Declare local instance variables
-		let polygon_obj = naissance.Geometry.instances.filter((v) => v.id === json.geometry_id)[0];
-		
-		//Parse extraneous commands
-		//create_polygon
-		if (json.create_polygon)
-			if (json.create_polygon.id) {
-				let new_polygon = new naissance.GeometryPolygon();
-					new_polygon.id = json.create_polygon.id;
-					if (json.create_polygon.name) {
-						new_polygon.fire_action_silently = true;
-						new_polygon.name = json.create_polygon.name;
-						delete new_polygon.fire_action_silently;
-					}
-					if (main.brush.selected_feature)
-						if (!json.create_polygon.do_not_refresh)
-							UI_LeftbarHierarchy.refresh();
-			}
-		
-		//Parse commands for polygon_obj
-		if (polygon_obj && polygon_obj instanceof naissance.GeometryPolygon) {
-			//add_to_polygon
-			if (json.add_to_polygon) {
-				let geometry = polygon_obj.geometry;
-				let ot_geometry = maptalks.Geometry.fromJSON(json.add_to_polygon.geometry);
-				
-				//Union with existing geometry if defined, if undefined replace geometry
-				if (polygon_obj.geometry) {
-					geometry = Geospatiale.convertMaptalksToTurf(geometry);
-					ot_geometry = Geospatiale.convertMaptalksToTurf(ot_geometry);
-					polygon_obj.addKeyframe(main.date, Geospatiale.convertTurfToMaptalks(
-						turf.union(turf.featureCollection([geometry, ot_geometry]))
-					).toJSON());
-				} else {
-					polygon_obj.addKeyframe(main.date, ot_geometry.toJSON());
-				}
-			}
-			
-			//remove_from_polygon
-			if (json.remove_from_polygon) {
-				let geometry = polygon_obj.geometry;
-				let ot_geometry = maptalks.Geometry.fromJSON(json.remove_from_polygon.geometry);
-				
-				//Difference with existing geometry, if return value is null replace geometry
-				if (polygon_obj.geometry) {
-					let turf_difference = turf.difference(turf.featureCollection([
-						Geospatiale.convertMaptalksToTurf(geometry),
-						Geospatiale.convertMaptalksToTurf(ot_geometry)
-					]));
-					polygon_obj.addKeyframe(main.date, (turf_difference) ? 
-						Geospatiale.convertTurfToMaptalks(turf_difference).toJSON() : null);
-				}
-			}
-			
-			//set_polygon
-			if (json.set_polygon && json.set_polygon.geometry) {
-				let new_geometry = json.set_polygon.geometry;
-				
-				if (typeof new_geometry === "string")
-					new_geometry = JSON.parse(new_geometry);
-				polygon_obj.addKeyframe(main.date, new_geometry);
-			}
-			
-			//simplify_polygon
-			if (json.simplify_polygon !== undefined) {
-				let geometry = polygon_obj.geometry;
-				let turf_simplify = turf.simplify(Geospatiale.convertMaptalksToTurf(geometry), { tolerance: json.simplify_polygon });
-				
-				polygon_obj.addKeyframe(main.date, (turf_simplify) ?
-					Geospatiale.convertTurfToMaptalks(turf_simplify).toJSON() : null);
-			}
-		}
 	}
 };

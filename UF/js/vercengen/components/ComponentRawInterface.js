@@ -11,7 +11,7 @@
  * 
  * ##### Instance:
  * - `<component_key>`: {@link ve.Component} - Contains any destructured components.
- * - `.components_obj`: {@link Object}<{@link ve.Component}>
+ * - `.components_obj`: {@link Object}<{@link ve.Component}|{@link HTMLElement}>
  * - `.reserved_keys`: {@link Array}<{@link string}> - Controls what keys are reserved and cannot be destructured.
  * - `.v`: {@link Object}<{@link ve.Component}>
  * 
@@ -88,7 +88,7 @@ ve.RawInterface = class extends ve.Component {
 				}
 				
 				if (local_value.element) {
-					this.element.appendChild(local_value.element);
+					this.element.appendChild(ve.Component.getElement(local_value));
 				} else {
 					console.warn(`ve.RawInterface: No local_value.element could be detected for the following ve.Component:`, local_value, `Are you sure you are not destructuring a ve.Component?`);
 				}

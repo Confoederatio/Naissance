@@ -13,23 +13,29 @@
 	 * @alias HTML.getAllParentsElements
 	 * 
 	 * @param {HTMLElement} arg0_el
+	 * @param {Object} [arg1_options]
+	 *  @param {string} [arg1_options.type="parentElement"] - Either 'parentElement'/'parentNode'.
 	 * 
 	 * @returns {HTMLElement[]}
 	 */
-	HTML.getAllParentElements = function (arg0_el) {
+	HTML.getAllParentElements = function (arg0_el, arg1_options) {
 		//Convert from parameters
 		let el = (typeof arg0_el === "object") ? arg0_el : document.querySelector(arg0_el);
+		let options = (arg1_options) ? arg1_options : {};
+		
+		//Initialise options
+		if (!options.type) options.type = "parentElement";
 		
 		if (!el) return []; //Internal guard clause if element is invalid
 		
 		//Declare local instance variables
-		let current_el = el.parentElement;
+		let current_el = el[options.type];
 		let parent_els = [];
 		
 		//Iterate over all ancestors
 		while (current_el) {
 			parent_els.push(current_el);
-			current_el = current_el.parentElement;
+			current_el = current_el[options.type];
 		}
 		
 		//Return statement

@@ -3,8 +3,6 @@
  * 
  * Hierarchy datatype used as a nested draggable item/group for {@link ve.Hierarchy}. Item by default.
  * - Functional binding: <span color=00ffff>veHierarchyDatatype</span>().
- * 
- * [WIP] - This section, especially with `.oncollapse` and `.instance.is_collapsed`:{@link boolean} reflection is scheduled to be reworked in future updates.
  *  
  * ##### Constructor:
  * - `arg0_value`: {@link Object}<{@link ve.Component}>
@@ -16,8 +14,9 @@
  *   - `.type="item"`: {@link string} - Either 'group'/'item'.
  * 
  * ##### Instance:
- * - `.components_obj`: {@link Object}<{@link ve.Component}>
+ * - `.components_obj`: {@link Object}<{@link ve.Component}|{@link HTMLElement}>
  * - `.instance`: {@link any} - The bound object which this HierarchyDatatype is visualising.
+ * - `.is_collapsed=false`: {@link boolean}
  * - `.is_vercengen_hierarchy_datatype=true`: {@link boolean}
  * - `.name`; {@link string} - Accessor. Differs from {@link ve.Component.name} in that it is a {@link ve.Text}.v value instead of a span element.
  * - `.oncollapse`: {@link function}(v:{@link boolean}, e:{@link ve.HierarchyDatatype}) - Fires upon a user toggling the collapse button.
@@ -179,7 +178,7 @@ ve.HierarchyDatatype = class extends ve.Component {
 		//1. Append regular components first as group components
 		Object.iterate(this.components_obj, (local_key, local_value) => {
 			if (!local_value.is_vercengen_hierarchy_datatype) {
-				this.element.appendChild(local_value.element);
+				this.element.appendChild(ve.Component.getElement(local_value));
 			} else {
 				has_subitems = true;
 			}
@@ -193,7 +192,7 @@ ve.HierarchyDatatype = class extends ve.Component {
 			//Iterate over all this.components_obj and append the sublist at the end
 			Object.iterate(this.components_obj, (local_key, local_value) => {
 				if (local_value.is_vercengen_hierarchy_datatype)
-					ol_el.appendChild(local_value.element);
+					ol_el.appendChild(ve.Component.getElement(local_value));
 			});
 			this.element.appendChild(ol_el);
 		}

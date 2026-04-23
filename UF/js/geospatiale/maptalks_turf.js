@@ -13,7 +13,7 @@
 	 * 
 	 * @param {maptalks.Geometry} arg0_geometry
 	 * 
-	 * @returns {turf.Geometry}
+	 * @returns {turf.Geometry|null}
 	 */
 	Geospatiale.convertMaptalksToTurf = function (arg0_geometry) {
 		//Convert from parameters
@@ -21,12 +21,25 @@
 		
 		//Internal guard clause if the geometry is already a Turf geometry
 		if (Geospatiale.getCoordsType(geometry) === "turf_geometry") return geometry;
-		
-		//Declare local instance variables
-		let geojson = geometry.toGeoJSON();
+		if (geometry === null) return null;
 		
 		//Return statement
-		return turf.feature(geojson.geometry);
+		try {
+			if (typeof geometry === "object" && typeof geometry.toJSON !== "function") {
+				let temp_geometry = maptalks.GeoJSON.toGeometry(geometry);
+				if (temp_geometry === null)
+					temp_geometry = maptalks.Geometry.fromJSON(geometry);
+				geometry = temp_geometry;
+			}
+			let geojson = geometry.toGeoJSON();
+			
+			//Return statement
+			return turf.feature(geojson.geometry);
+		} catch (e) {
+			console.error(e);
+			if (typeof geometry === "object") return geometry;
+			return null;
+		}
 	};
 	
 	/**
@@ -34,7 +47,7 @@
 	 * 
 	 * @param {turf.Geometry} arg0_geometry
 	 * 
-	 * @returns {maptalks.Geometry}
+	 * @returns {maptalks.Geometry|maptalks.GeometryCollection}
 	 */
 	Geospatiale.convertTurfToMaptalks = function (arg0_geometry) {
 		const geometry = arg0_geometry;
@@ -73,9 +86,9 @@
 			return undefined;
 		
 		//Check if type is 'turf_geometry'
-		if (format.geometry && format.properties && format.type && Object.keys(format).length <= 3) {
+		if (typeof format.toJSON !== "function" && format.type) { //GeoJSON cannot have live functions bound to it
 			return "turf_geometry";
-		} else if (Object.keys(format).length > 3) {
+		} else {
 			return "maptalks_geometry";
 		}
 	};

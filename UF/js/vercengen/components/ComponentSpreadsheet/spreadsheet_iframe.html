@@ -32,16 +32,74 @@
 	const { createUniver } = UniverPresets
 	const { LocaleType, mergeLocales } = UniverCore
 	const { UniverSheetsCorePreset } = UniverPresetSheetsCore
+  //MODIFY START
 	
-	const { univerAPI } = createUniver({
+	// 1. Capture the 'univer' instance correctly
+	const { univer, univerAPI } = createUniver({
 		locale: LocaleType.EN_US,
 		locales: {
 			[LocaleType.EN_US]: mergeLocales(UniverPresetSheetsCoreEnUS),
 		},
 		presets: [UniverSheetsCorePreset()],
-	})
+	});
 	
-	univerAPI.createWorkbook({ name: 'Test Sheet' });
+	function startResizeLoop() {
+		const appContainer = document.getElementById('app');
+		let lastWidth = 0;
+		let lastHeight = 0;
+		
+		function checkResize() {
+			const currentWidth = appContainer.offsetWidth;
+			const currentHeight = appContainer.offsetHeight;
+			
+			if (currentWidth !== lastWidth || currentHeight !== lastHeight) {
+				lastWidth = currentWidth;
+				lastHeight = currentHeight;
+				
+				/**
+				 * SIMULATING THE "SWITCH BACK" FOCUS
+				 * This is the lightweight attempt. It triggers the same logic
+				 * as alt-tabbing back to the IDE.
+				 */
+				window.dispatchEvent(new FocusEvent('focus'));
+				window.dispatchEvent(new Event('resize'));
+				
+				/**
+				 * THE REMOUNT OPTION (React-style)
+				 * If the focus simulation isn't enough to resize the canvas,
+				 * we perform a "Soft Remount" using your existing functions.
+				 */
+				const activeWorkbook = univerAPI.getActiveWorkbook();
+				if (activeWorkbook) {
+					try {
+						// 1. Capture the current state
+						const snapshot = getData();
+						
+						// 2. Reload the data.
+						// Your setData() function already disposes the old workbook
+						// and calls createUniverSheet, forcing a full reflow.
+						setData(snapshot);
+						
+						// 3. Re-fire the resize event to let the new engine see the container
+						setTimeout(() => {
+							window.dispatchEvent(new Event('resize'));
+						}, 0);
+					} catch (e) {
+						console.error('Soft remount failed:', e);
+					}
+				}
+			}
+			
+			//requestAnimationFrame(checkResize);
+		}
+		
+		setInterval(() => checkResize(), 100);
+	}
+	
+	// Start the loop after your initial workbook creation
+	startResizeLoop();
+	
+  //MODIFY END
 	univerAPI.addEvent(univerAPI.Event.SheetValueChanged, (e) => {
 		window.parent.ve.Spreadsheet.fireToBinding(window.table_id);
 	});

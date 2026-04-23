@@ -16,7 +16,12 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		
 		//Declare UI; attached to UI_LeftbarHierarchy
 		this.interface = veInterface({
-			actions: this.drawActionsPalette({ move_to_filters: ["FeatureGroup"] })
+			actions: this.drawActionsPalette({
+				name: "Group",
+				type: "group",
+				
+				move_to_filters: ["FeatureGroup"] 
+			})
 		}, { is_folder: false });
 		this.drawHierarchyDatatype();
 	}
@@ -113,7 +118,7 @@ naissance.FeatureGroup = class extends naissance.Feature {
 			}, {
 				name: `<icon>more_vert</icon>`,
 				tooltip: "Edit Group",
-				style: { order: 100, padding: 0 }
+				attributes: { class: "order-100" },
 			}),
 			
 			...hierarchy_obj
@@ -236,35 +241,5 @@ naissance.FeatureGroup = class extends naissance.Feature {
 			metadata: this.metadata,
 			options: this.options
 		});
-	}
-	
-	/**
-	 * Parses a JSON action for a target FeatureGroup.
-	 * - Static method of: {@link naissance.FeatureGroup}
-	 * 
-	 * `arg0_json`: {@link Object|string}
-	 * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
-	 * <br>
-	 * - #### Extraneous Commands:
-	 * - `.create_group`: {@link Object}
-	 *   - `.do_not_refresh=false`: {@link boolean}
-	 *   - `.id`: {@link string}
-	 * - #### Internal Commands:
-	 * - `.delete_feature`: {@link boolean}
-	 */
-	static parseAction (arg0_json) {
-		//Convert from parameters
-		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
-		
-		//Parse extraneous commands
-		//create_group
-		if (json.create_group)
-			if (json.create_group.id) {
-				let new_group = new naissance.FeatureGroup();
-				new_group.id = json.create_group.id;
-				
-				if (!json.create_group.do_not_refresh)
-					UI_LeftbarHierarchy.refresh();
-			}
 	}
 };
