@@ -84,7 +84,7 @@ naissance.Geometry = class extends ve.Class {
 		 */
 		this.label_geometries = [];
 		/** @type {boolean} */
-		this.selected = false; //Should be overridden by a getter/setter that attempts to render this.selected_geometry
+		this._selected = false; //Should be overridden by a getter/setter that attempts to render this.selected_geometry
 		/**
 		 * Selected geometry overlay.
 		 * - Mirror of: {@link this.geometry}
@@ -393,22 +393,40 @@ naissance.Geometry = class extends ve.Class {
 	}
 	
 	/**
-	 * Returns a unique list of all names as a flat array, without respect to keyframes.
+	 * Returns a unique list of all names as a flat array, without respect to keyframes. Most recent namees first.
+	 * 
+	 * @param {Object} [arg0_options]
+	 *  @param {boolean} [arg0_options.return_objects=false] - Whether to return objects. Returns [{ name: string, timestamp: number, ... }] in ascending order.
 	 */
-	getAllNames () {
+	getAllNames (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
 		//Declare local instance variables
-		let all_names = [];
+		let all_names = []; //[{ name: string, timestamp: number }, ...]
 		
 		//Iterate over this.history.keyframes
 		Object.iterate(this.history.keyframes, (local_key, local_value) => {
+			let is_duplicate = false;
 			let local_properties = local_value.value?.[2];
 			
-			if (local_properties?.name)
-				if (!all_names.includes(local_properties.name))all_names.push(local_properties.name);
-		});
+			if (local_properties?.name) {
+				for (let i = 0; i < all_names.length; i++)
+					if (all_names[i].name === local_properties.name) {
+						is_duplicate = true;
+						break;
+					}
+				
+				if (!is_duplicate)
+					all_names.push({ name: local_properties.name, timestamp: local_value?.timestamp });
+			}
+		}, { sort_mode: "descending" });
+		
+		all_names.sort((a, b) => b.timestamp - a.timestamp);
 		
 		//Return statement
-		return all_names;
+		return (!options.return_objects) ? 
+			all_names.map((element) => element.name) : all_names;
 	}
 	
 	/**

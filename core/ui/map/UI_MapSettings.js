@@ -134,6 +134,9 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		//Set spatial reference
 		if (json.spatial_reference)
 			map.setSpatialReference(json.spatial_reference);
+		
+		//Update mapmode draw
+		main.interfaces.mapmodes_ui.draw();
 	}
 	
 	static toJSON () {

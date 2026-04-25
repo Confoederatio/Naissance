@@ -33,7 +33,7 @@ global.UI_FeatureLayerWindow = class extends ve.Class {
 				//2. Name column
 				let name_component = veText(local_geometry.name, {
 					attributes: {
-						"data-value": local_geometry.getAllNames().join(", "),
+						"data-value": local_geometry.getAllNames().join(", "), //Most recent name first
 					},
 					onprogramchange: (v, e) => {
 						e.element.setAttribute("data-value", local_geometry.getAllNames().join(", "));

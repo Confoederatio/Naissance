@@ -10,6 +10,7 @@ global.UI_Mapmodes_Settings = class extends ve.Class {
 				onuserchange: (v) => {
 					main.settings.disable_mapmode_interactivity = v;
 					this.update();
+					UI_Settings.saveSettings();
 				}
 			})
 		}, {

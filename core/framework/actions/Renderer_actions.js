@@ -3,6 +3,8 @@
  * - Static method of: {@link naissance.Renderer}
  *
  * `arg0_json`: {@link Object|string}
+ * - `.add_mapmode`: {@link string} - The mapmode ID to add.
+ * - `.remove_mapmode`: {@link string} - The mapmode ID to remove.
  * - `.set_map_spatial_reference`: {@link Object}
  */
 naissance.Renderer.parseAction = function (arg0_json) {

@@ -3,11 +3,13 @@ global.UI_Mapmodes = class extends ve.Class {
 		super();
 		
 		//Declare local instance variables
+		this._shift_positions = 1;
+		
 		this.interface = new ve.Interface({
 			mapmode_selection: new ve.SearchSelect({}, {
 				header_components_obj: {
 					add_new_mapmode: veButton(() => {
-						
+						this.openAddMapmodesWindow();
 					}, {
 						name: "<icon>add_circle</icon>",
 						tooltip: "Add New Mapmode",
@@ -82,11 +84,70 @@ global.UI_Mapmodes = class extends ve.Class {
 	draw () {
 		//Declare local instance variables
 		let components_obj = {};
+		let map_settings = main.map.settings;
+		let mapmodes_array = main.user.mapmodes;
 		
 		//Iterate over all naissance.Mapmode.instances
 		for (let i = 0; i < naissance.Mapmode.instances.length; i++) {
 			let local_mapmode = naissance.Mapmode.instances[i];
-			components_obj[local_mapmode.id] = local_mapmode.drawHierarchyDatatype();
+			if (!(map_settings.enabled_mapmodes && map_settings.enabled_mapmodes.includes(local_mapmode.id)))
+				continue; //Internal guard clause if map settings does not have this mapmode enabled
+			
+			let local_mapmode_button = local_mapmode.drawHierarchyDatatype();
+				local_mapmode_button.element.addEventListener("contextmenu", () => {
+					if (!local_mapmode.is_enabled) return; //Internal guard clause if mapmode is not enabled
+					
+					let get_current_idx = () => mapmodes_array.indexOf(local_mapmode.id);
+					
+					if (this.adjust_mapmode_window) this.adjust_mapmode_window.close();
+					this.adjust_mapmode_window = veWindow({
+						shift_bar: veRawInterface({
+							shift_left_button: veButton(() => {
+								let local_idx = get_current_idx();
+								let shift_positions = this._shift_positions;
+								let new_index = Math.max(local_idx - shift_positions, 0);
+								
+								main.user.mapmodes = Array.moveElement(mapmodes_array, local_idx, new_index);
+								this.draw();
+								naissance.Mapmode.draw();
+							}, {
+								name: "<icon>chevron_left</icon>",
+								tooltip: loc("ve.registry.localisation.List_shift_left")
+							}),
+							shift_positions: veNumber(this._shift_positions, {
+								min: 1,
+								name: loc("ve.registry.localisation.List_shift"),
+								onuserchange: (v) => this._shift_positions = v,
+								style: {
+									marginLeft: `calc(var(--padding)*0.5)`,
+									marginRight: `calc(var(--padding)*0.5)`,
+									whiteSpace: "nowrap",
+									"input": { textAlign: "center" }
+								}
+							}),
+							shift_right_button: veButton(() => {
+								let local_idx = get_current_idx();
+								let shift_positions = this._shift_positions;
+								let new_index = Math.min(local_idx + shift_positions, mapmodes_array.length - 1);
+								
+								main.user.mapmodes = Array.moveElement(mapmodes_array, local_idx, new_index);
+								this.draw();
+								naissance.Mapmode.draw();
+							}, {
+								name: "<icon>chevron_right</icon>",
+								tooltip: loc("ve.registry.localisation.List_shift_right")
+							})
+						}, {
+							style: { alignItems: "center", display: "flex", justifyContent: "center" }
+						})
+					}, {
+						name: "Adjust Mapmode",
+						can_rename: false,
+						do_not_wrap: true
+					});
+					console.log(local_mapmode);
+				});
+			components_obj[local_mapmode.id] = local_mapmode_button;
 			
 			let local_component_obj = components_obj[local_mapmode.id];
 			
@@ -101,5 +162,66 @@ global.UI_Mapmodes = class extends ve.Class {
 		
 		//Set new mapmode_selection value
 		this.interface.mapmode_selection.v = components_obj;
+	}
+	
+	openAddMapmodesWindow () {
+		if (this.add_mapmodes_window) this.add_mapmodes_window.close(); //Close add_mapmodes_window if already open
+		
+		//Declare local instance variables
+		let components_obj = {};
+		let map_settings = main.map.settings;
+		
+		if (!map_settings.enabled_mapmodes) map_settings.enabled_mapmodes = [];
+		
+		//Iterate over all naissance.Mapmode.instances and determine which are already in the local savefile
+		for (let i = 0; i < naissance.Mapmode.instances.length; i++) {
+			let local_mapmode = naissance.Mapmode.instances[i];
+			
+			let local_mapmode_button = veButton((v, e) => {
+				let mapmode_index = map_settings.enabled_mapmodes.indexOf(local_mapmode.id);
+				
+				//Toggle map_settings.enabled_mapmodes
+				(mapmode_index !== -1) ?
+					map_settings.enabled_mapmodes.splice(mapmode_index, 1) :
+					map_settings.enabled_mapmodes.push(local_mapmode.id);
+				
+				//Update attribute; save map settings
+				e.element.setAttribute("data-is-enabled", map_settings.enabled_mapmodes.includes(local_mapmode.id));
+				this.draw();
+			}, {
+				name: `${(local_mapmode.options.icon) ? `<icon>${local_mapmode.options.icon}</icon>&nbsp;&nbsp;` : ""}${local_mapmode.options.name}`,
+				attributes: {
+					"data-is-enabled": map_settings.enabled_mapmodes.includes(local_mapmode.id)
+				},
+				tooltip: local_mapmode.options.tooltip
+			});
+			
+			components_obj[local_mapmode.id] = local_mapmode_button;
+		}
+		
+		this.add_mapmodes_window = veWindow({
+			mapmodes_search: veSearchSelect(components_obj, {
+				display: "inline",
+				placeholder: "Search for mapmode ...",
+				searchbar_style: {
+					width: `calc(100% - var(--padding))`
+				},
+				style: {
+					"> [component='ve-button']": {
+						display: "inline",
+						padding: 0
+					},
+					"[data-is-enabled='true'] button": {
+						backgroundColor: `var(--accent-primary-colour)`
+					}
+				},
+			})
+		}, {
+			name: "Add Mapmodes",
+			can_rename: false,
+			width: "30rem",
+			x: "50dvw - 30rem/2",
+			y: "50dvh"
+		});
 	}
 };

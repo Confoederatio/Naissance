@@ -361,7 +361,6 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 	}
 	
 	static refresh () {
-		console.log(`UI Refresh called!`);
 		this.refresh_frame = true;
 		
 		if (!this.logic_loop) this.logic_loop = setInterval(() => {

@@ -84,14 +84,12 @@ global.l4p = "./livemap/4.view/politics/";
 				
 				//Background layers
 				selection_layer: new maptalks.VectorLayer("selection_layer", [], { hitDetect: false, interactive: false, zIndex: 5 }),
-				mapmode_top_layer: new maptalks.VectorLayer("mapmode_top_layer", [], { hitDetect: true, interactive: true, zIndex: 4 }),
 				entity_layer: new maptalks.VectorLayer("entity_layer", [], {
 					hitDetect: true,
 					interactive: true,
 					zIndex: 3
 				}),
-				mapmode_bottom_layer: new maptalks.VectorLayer("mapmode_bottom_layer", [], { hitDetect: true, interactive: true, zIndex: 2 }),
-				group_tile_layers: new maptalks.GroupTileLayer("group_tile_layers", [], { zIndex: 1 })
+				group_tile_layers: new maptalks.GroupTileLayer("group_tile_layers", [], { zIndex: -10000 }) //Tile layers must be at bottom
 			},
 			map: map,
 			renderer: new naissance.Renderer(map),
