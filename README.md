@@ -68,16 +68,17 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 #### Histmap:
 
 > [!NOTE] 
-> Stadestér refers to urban data, whereas Velkscala refers to population data generally.
+> Stadestér refers to urban data, whereas Velkscala refers to population data generally, including ALCC/LU models.
 
-- Atlas: (Vector) - Polity data from 3000BC-2023AD, based off [Cliopatria](https://www.nature.com/articles/s41597-025-04516-9), and currently undergoing manual cleaning. Interpreter scripts can be found at Collation in the `livemap` folder, and cleaned polygons at `saves/atlas.naissance`.
-- Eoscala: (Raster) - Economic estimates (GDP PPP) from 10000BC-2023AD, (Gini) from 21500BC-1800AD [[point-based]](https://docs.google.com/spreadsheets/d/1WAn29290A2empQgYbvkp-qGcqMCtfyfz5DQ7I5p_rqs/edit?gid=0#gid=0) at 5-arcmin resolution; Gapminder provides Gini past 1800AD.
+- Atlas: (Vector) - De facto polity extents from 3000BC-2014AD, GeoJSON. Sub-yearly resolution. De jure polity extents from C-Shapes 2.0.
+  - [[Dataset]](https://confoederatio.org/data/atlas_0.5b.json) | [[Timelapse]](https://www.youtube.com/watch?v=Kc0zNfiAd8c)
+- Eoscala: (Raster) - Economic estimates (GDP PPP) from 10000BC-2023AD, (Gini) from 21500BC-1800AD [[point-based]](https://docs.google.com/spreadsheets/d/1WAn29290A2empQgYbvkp-qGcqMCtfyfz5DQ7I5p_rqs/edit?gid=0#gid=0) at 5-arcmin resolution; Gapminder provides Gini past 1800AD [here](https://www.gapminder.org/data/documentation/gini/).
   - [[Dataset]](https://github.com/Confoederatio/Eoscala-Velkscala) | [[Methodology]](https://confoederatio.org/papers/Eoscala%201.0_Velkscala%200.5_%20A%20Gridded%20Reconstruction%20of%20Global%20GDP%20and%20Population%20from%2010000BC%20to%20the%20Present-4.pdf)
 - Stadestér/Velkscala: (Raster/Vector) - Population estimates (rural, urban, total), land use and ALCC (from HYDE/LUH2KK10) from 10000BC-2025AD. Urban extents and locations are given as GeoJSON datasets, with individual pop. estimates for 41k+ cities between 3000BC-2025AD. Yearly urban extents are made available from 1800AD cities. 5-arcmin resolution.
   - [[Dataset (Github)]](https://github.com/Confoederatio/Stadester) | [[Dataset (Zenodo)]](https://zenodo.org/records/17180328) | [[Methodology]](https://confoederatio.org/papers/Stadest%C3%A9r%201.0%20-%20A%20Global%20Database%20of%2041000%2B%20Cities%20From%203000BC%20to%20the%20Present.pdf)
 
 #### Livemap:
 
-- Collation (Vector) - ORBATs and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/Collation).
+- Collation (Vector) - ORBATs, territorial control, and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/Collation).
 - Deprojector (Beta; Raster) - Arbitrary projection-to-projection georeferencing using ML. These scripts are currently a proof-of-concept and not recommended for production.
   - [[Tool (Github)]](https://github.com/Confoederatio/Deprojector) 
