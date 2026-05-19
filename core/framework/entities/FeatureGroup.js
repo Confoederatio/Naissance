@@ -158,31 +158,17 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		//Iterate over json.entities IN SAVED ORDER to restore them
 		for (let x = 0; x < json.entities.length; x++) {
 			let entity_def = json.entities[x];
+			let local_feature = naissance.Feature.instances[entity_def.id];
 			
-			//Check naissance.Feature.instances
-			for (let i = 0; i < naissance.Feature.instances.length; i++) {
-				let local_feature = naissance.Feature.instances[i];
-				
-				if (
-					entity_def.class_name === local_feature.class_name &&
-					entity_def.id === local_feature.id
-				) {
-					this.addEntity(local_feature, true);
-					break;
-				}
-			}
+			if (entity_def.class_name === local_feature?.class_name)
+				this.addEntity(local_feature, true);
 			
 			//Check naissance.Geometry.instances
-			for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-				let local_geometry = naissance.Geometry.instances[i];
+			if (naissance.Geometry.instances[entity_def.id]) {
+				let local_geometry = naissance.Geometry.instances[entity_def.id];
 				
-				if (
-					entity_def.class_name === local_geometry.class_name &&
-					entity_def.id === local_geometry.id
-				) {
+				if (entity_def.class_name === local_geometry.class_name)
 					this.addEntity(local_geometry, true);
-					break;
-				}
 			}
 		}
 		

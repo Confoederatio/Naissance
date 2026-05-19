@@ -21,7 +21,7 @@ naissance.GeometryLine.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let line_obj = naissance.Geometry.instances.filter((v) => v.id === json.geometry_id)[0];
+	let line_obj = naissance.Geometry.instances[json.geometry_id];
 	
 	//Parse extraneous commands
 	//create_line

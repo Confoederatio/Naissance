@@ -1,6 +1,6 @@
 if (!global.naissance) global.naissance = {};
 naissance.Feature = class extends ve.Class {
-	static instances = [];
+	static instances = {};
 	
 	constructor (arg0_options) {
 		//Convert from parameters
@@ -24,7 +24,7 @@ naissance.Feature = class extends ve.Class {
 		this._parent = undefined;
 		
 		//Push to naissance.Feature.instances
-		naissance.Feature.instances.push(this);
+		naissance.Feature.instances[this.id] = this;
 		setTimeout(() => {
 			if (main.brush.selected_feature?.entities && !this.cannot_nest_self) { //Sanity check to make sure .cannot_nest_self is invalid for nesting
 				this.parent = main.brush.selected_feature;
@@ -297,7 +297,7 @@ naissance.Feature = class extends ve.Class {
 						confirm: veButton(() => {
 							try {
 								//Declare local instance variables
-								let ot_feature = naissance.Feature.instances.filter((v) => v.id === this.ui.to_feature_id)[0];
+								let ot_feature = naissance.Feature.instances[this.ui.to_feature_id];
 								
 								//Parse action
 								DALS.Timeline.parseAction({
@@ -614,30 +614,37 @@ naissance.Feature = class extends ve.Class {
 		let delete_keys = ["_entities", "entities"]
 		
 		//Remove from naissance.Feature.instances
-		for (let i = naissance.Feature.instances.length - 1; i >= 0; i--) {
-			let local_feature = naissance.Feature.instances[i];
-			
-			if (local_feature.id === this.id)
-				naissance.Feature.instances.splice(i, 1);
-			if (local_feature.entities)
-				//Iterate over delete_keys and local_feature.entities.length to ensure clean removal
-				for (let x = 0; x < delete_keys.length; x++)
-					if (local_feature[delete_keys[x]])
-						for (let y = local_feature[delete_keys[x]].length - 1; y >= 0; y--)
-							if (local_feature[delete_keys[x]][y].id === this.id)
-								local_feature[delete_keys[x]].splice(y, 1);
-		}
+		delete naissance.Feature.instances[this.id];
+		
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
+			for (let i = 0; i < delete_keys.length; i++)
+				if (local_feature[delete_keys[i]])
+					for (let x = local_feature[delete_keys[i]].length - 1; x >= 0; x--)
+						if (local_feature[delete_keys[i]][x].id === this.id)
+							local_feature[delete_keys[i]].splice(x, 1);
+		});
 		
 		//Remove from local_feature.entities
 		if (this.hide) this.hide();
 		if (this.entities)
-			for (let x = 0; x < this.entities.length; x++)
-				if (this.entities[x].id === this.id)
-					naissance.Feature.instances.splice(x, 1);
+			for (let i = 0; i < this.entities.length; i++)
+				if (this.entities[i].id === this.id)
+					this.entities[i].remove();
 		
 		//Rerender deleted feature and remove it from the map
 		if (this.draw) this.draw();
 		UI_LeftbarHierarchy.refresh();
+	}
+	
+	setID (arg0_id) {
+		//Convert from parameters
+		let id = arg0_id;
+		
+		//Declare local instance variables; shuffle ID
+		let old_id = JSON.parse(JSON.stringify(this.id));
+		this.id = id;
+		naissance.Feature.instances[id] = this;
+		delete naissance.Feature.instances[old_id];
 	}
 	
 	show () {

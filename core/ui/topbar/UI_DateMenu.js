@@ -163,11 +163,7 @@ global.UI_DateMenu = class extends ve.Class {
 			
 			// Update global state and UI
 			UI_DateMenu.setDate(next);
-			naissance.Geometry.instances.forEach((local_geometry) =>
-				local_geometry.draw(),
-			);
-			
-			// Schedule next tick
+			//Schedule next tick
 			UI_DateMenu.logic_loop = setTimeout(tick, this.tick_speed);
 		};
 		
@@ -181,6 +177,7 @@ global.UI_DateMenu = class extends ve.Class {
 		
 		//Set date
 		main.date = date;
+		main.timestamp = Date.getTimestamp(main.date);
 		main.interfaces.date_ui.date.v = date;
 		DALS.Timeline.parseAction({
 			options: { name: "Refresh Date", key: "load_date" },

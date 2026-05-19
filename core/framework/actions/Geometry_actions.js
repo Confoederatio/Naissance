@@ -43,7 +43,7 @@ naissance.Geometry.parseAction = function (arg0_json) { //[WIP] - Add variable a
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let geometry_obj = naissance.Geometry.instances.filter((v) => v.id === json.geometry_id)[0];
+	let geometry_obj = naissance.Geometry.instances[json.geometry_id];
 	
 	//Parse commands for geometry_obj
 	if (geometry_obj) {

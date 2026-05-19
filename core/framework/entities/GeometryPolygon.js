@@ -139,35 +139,32 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 	}
 	
 	draw () {
-		//Declare local instance variables
-		let brush_symbol = main.brush.getBrushSymbol();
-		let derender_geometry = false;
+		//Remove geometry first to handle it
+		if (this.geometry) this.geometry.remove();
+		if (this.selected_geometry) this.selected_geometry.remove();
+		if (this.label_geometries)
+			for (let i = this.label_geometries.length - 1; i >= 0; i--) {
+				this.label_geometries[i].remove();
+				this.label_geometries.splice(i, 1);
+			}
+		this.geometry = undefined;
+		this.selected_geometry = undefined;
 		
 		//1. Set this.value from current relative keyframe
-		this.value = this.history.getKeyframe({ date: main.date }).value;
-		if (this.value === undefined || this.value.length === 0 || this._is_visible === false) 
-			derender_geometry = true;
+		if (this.history._hasTimestampAfter(main.timestamp)) {
+			this.value = this.history.getKeyframe({ date: main.timestamp }).value;
+			if (this.value === undefined || this.value?.length === 0 || this._is_visible === false) return;
 			
-		//2. Check any cause for derendering
-		if (this.value && this.value[0] === null) derender_geometry = true; //Coords are null, derender geometry
-		if (this.value && this.value[2]) {
-			if (this.value[2].hidden) derender_geometry = true;
-			if (this.value[2].max_zoom && map.getZoom() > this.value[2].max_zoom) derender_geometry = true;
-			if (this.value[2].min_zoom && map.getZoom() < this.value[2].min_zoom) derender_geometry = true;
-		}
-		
-		//3. Draw this.geometry, this.label from this.value onto map
-		if (!derender_geometry) {
+			//2. Check any cause for derendering
+			if (this.value && this.value[0] === null) return;
+			if (this.value && this.value[2]) {
+				if (this.value[2].hidden) return;
+				if (this.value[2].max_zoom && map.getZoom() > this.value[2].max_zoom) return;
+				if (this.value[2].min_zoom && map.getZoom() < this.value[2].min_zoom) return;
+			}
+			
+			//3. Draw this.geometry, this.label_geometries, this.selected_geometry onto map
 			try {
-				if (this.geometry) this.geometry.remove();
-				if (this.label_geometries)
-					for (let i = this.label_geometries.length - 1; i >= 0; i--) {
-						this.label_geometries[i].remove();
-						this.label_geometries.splice(i, 1);
-					}
-				if (this.selected_geometry) this.selected_geometry.remove();
-				
-				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
@@ -193,23 +190,13 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			} catch (e) { console.error(e); }
 			
 			//5. Add bindings
-			if (this.geometry) {
+			if (this.geometry)
 				this.geometry.addEventListener("click", (e) => {
 					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode)) {
 						this.history.draw(this.keyframes_ui);
 						super.open("instance", { name: this.name, ...this.window_options });
 					}
 				});
-			}
-		}
-		
-		//6. Derender geometry handler
-		if (derender_geometry) {
-			if (this.geometry) this.geometry.remove();
-			if (this.label_geometries)
-				for (let i = 0; i < this.label_geometries.length; i++)
-					this.label_geometries[i].remove();
-			if (this.selected_geometry) this.selected_geometry.remove();
 		}
 	}
 	

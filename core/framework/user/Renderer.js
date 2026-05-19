@@ -26,21 +26,16 @@ naissance.Renderer = class extends ve.Class {
 		//1. Base Hierarchy handling
 		if (!entity_obj) {
 			//Iterate over all naissance.Feature.instances
-			for (let i = 0; i < naissance.Feature.instances.length; i++) {
-				let local_feature = naissance.Feature.instances[i];
-				
+			Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 				if (!local_feature.parent)
 					rendering_order.push(local_feature);
 				rendering_order = rendering_order.concat(this.getRenderingOrder(local_feature));
-			}
+			});
 			
 			//Iterate over all naissance.Geometry.instances
-			for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-				let local_geometry = naissance.Geometry.instances[i];
-				
-				if (!local_geometry.parent)
-					rendering_order.push(local_geometry);
-			}
+			Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+				if (!local_geometry.parent) rendering_order.push(local_geometry);
+			});
 		}
 		//2. naissance.Feature handling
 		else {

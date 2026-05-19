@@ -1,10 +1,9 @@
 if (!global.naissance) global.naissance = {};
 naissance.Geometry = class extends ve.Class {
-	static instances = [];
+	static instances = {};
 	static reserved_keys = ["name"];
 	
 	constructor () {
-		//Convert from parameters
 		super();
 		this.history = new naissance.History({}, {
 			_id: () => this.id,
@@ -112,7 +111,7 @@ naissance.Geometry = class extends ve.Class {
 		};
 		
 		//Push to naissance.Geometry.instances
-		naissance.Geometry.instances.push(this);
+		naissance.Geometry.instances[this.id] = this;
 		if (main.brush.selected_feature?.entities) {
 			this.parent = main.brush.selected_feature;
 			main.brush.selected_feature.entities.push(this);
@@ -419,7 +418,7 @@ naissance.Geometry = class extends ve.Class {
 					}
 				
 				if (!is_duplicate)
-					all_names.push({ name: local_properties.name, timestamp: local_value?.timestamp });
+					all_names.push({ name: local_properties.name, timestamp: local_value.timestamp });
 			}
 		}, { sort_mode: "descending" });
 		
@@ -485,9 +484,7 @@ naissance.Geometry = class extends ve.Class {
 	 */
 	getLayer () {
 		//Iterate over naissance.Feature.instances
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
-			let local_feature = naissance.Feature.instances[i];
-			
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 			if (local_feature instanceof naissance.FeatureLayer) {
 				let local_geometries = local_feature.getAllGeometries();
 				
@@ -496,7 +493,7 @@ naissance.Geometry = class extends ve.Class {
 						//Return statement
 						return local_feature;
 			}
-		}
+		});
 	}
 	
 	/**
@@ -514,19 +511,15 @@ naissance.Geometry = class extends ve.Class {
 		super.close("instance"); //Close any open UIs
 		
 		//Remove from naissance.Feature .entities
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
-			let local_feature = naissance.Feature.instances[i];
-			
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 			if (local_feature.entities)
-				for (let x = 0; x < local_feature.entities.length; x++)
-					if (local_feature.entities[x].id === this.id)
-						local_feature.entities.splice(x, 1);
-		}
+				for (let i = 0; i < local_feature.entities.length; i++)
+					if (local_feature.entities[i].id === this.id)
+						local_feature.entities.splice(i, 1);
+		});
 		
 		//Remove from naissance.Geometry.instances
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			if (naissance.Geometry.instances[i].id === this.id)
-				naissance.Geometry.instances.splice(i, 1);
+		delete naissance.Geometry.instances[this.id];
 		
 		//Rerender deleted geometry and remove it from the map
 		this.history = new naissance.History();
@@ -546,6 +539,17 @@ naissance.Geometry = class extends ve.Class {
 		this.history.removeKeyframe(date);
 		if (Object.keys(this.history.keyframes).length === 0) //Remove geometry if no keyframes exist anymore
 			this.remove();
+	}
+	
+	setID (arg0_id) {
+		//Convert from parameters
+		let id = arg0_id;
+		
+		//Declare local instance variables; shuffle ID
+		let old_id = JSON.parse(JSON.stringify(this.id));
+		this.id = id;
+		naissance.Geometry.instances[id] = this;
+		delete naissance.Geometry.instances[old_id];
 	}
 	
 	/**
@@ -702,18 +706,8 @@ naissance.Geometry = class extends ve.Class {
 	 * @returns {{"<geometry_id>": naissance.Geometry}}
 	 */
 	static getObject () {
-		//Declare local instance variables
-		let return_obj = {};
-		
-		//Iterate over all naissance.Geometry.instances
-		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-			let local_geometry = naissance.Geometry.instances[i];
-			
-			return_obj[local_geometry.id] = local_geometry;
-		}
-		
 		//Return statement
-		return return_obj;
+		return naissance.Geometry.instances;
 	}
 	
 	/**

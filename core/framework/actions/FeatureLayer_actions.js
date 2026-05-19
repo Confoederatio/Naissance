@@ -19,7 +19,7 @@ naissance.FeatureLayer.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let layer_obj = naissance.Feature.instances.filter((v) => v.id === json.feature_id)[0];
+	let layer_obj = naissance.Feature.instances[json.feature_id];
 	
 	//Parse extraneous commands
 	//create_layer

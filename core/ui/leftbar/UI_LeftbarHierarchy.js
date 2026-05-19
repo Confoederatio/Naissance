@@ -121,22 +121,18 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 	
 	drawFeatures () {
 		//Iterate over all naissance.FeatureGroups/naissance.FeatureLayers and render them recursively
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
-			let local_feature = naissance.Feature.instances[i];
-			
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 			if (!local_feature.parent)
 				this.hierarchy_obj[`${local_feature.class_name}-${local_feature.id}`] = local_feature.drawHierarchyDatatype();
-		}
+		});
 	}
 	
 	drawGeometries () {
 		//Iterate over all naissance.Geometries and render them at base
-		for (let i = 0; i < naissance.Geometry.instances.length; i++) {
-			let local_geometry = naissance.Geometry.instances[i];
-			
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
 			if (!local_geometry.parent && local_geometry.drawHierarchyDatatype)
 				this.hierarchy_obj[`${local_geometry.class_name}-${local_geometry.id}`] = local_geometry.drawHierarchyDatatype();
-		}
+		});
 	}
 	
 	drawHierarchy () {
@@ -256,14 +252,12 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 				//3. If reassignment is allowed, reassign the present entity to its new group
 				if (allow_reassignment[0]) {
 					//3.1. Remove from the .entities of any old naissance.Feature that contains it
-					for (let i = 0; i < naissance.Feature.instances.length; i++) {
-						let local_feature = naissance.Feature.instances[i];
-						
+					Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 						if (local_feature.entities)
-							for (let x = local_feature.entities.length - 1; x >= 0; x--)
-								if (local_feature.entities[x].class_name === instance.class_name && local_feature.entities[x].id === instance.id)
-									local_feature.entities.splice(x, 1);
-					}
+							for (let i = local_feature.entities.length - 1; i >= 0; i--)
+								if (local_feature.entities[i].class_name === instance.class_name && local_feature.entities[i].id === instance.id)
+									local_feature.entities.splice(i, 1);
+					});
 					
 					//3.2. Handle Root/Parent assignment and Sorting
 					if (new_parent && new_parent.entities) {
@@ -282,7 +276,7 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 						let root_level_els = current_hierarchy.element.querySelectorAll(":scope > ol > li[component='ve-hierarchy-datatype']");
 						let root_instances = Array.from(root_level_els).map(el => el.instance.options.instance);
 						
-						// Sort Features and Geometries globally based on their index in the visual hierarchy
+						// Sort function to compare based on the root_instances order
 						const sortFn = (a, b) => {
 							let indexA = root_instances.indexOf(a);
 							let indexB = root_instances.indexOf(b);
@@ -290,8 +284,31 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 							return indexA - indexB;
 						};
 						
-						naissance.Feature.instances.sort(sortFn);
-						if (naissance.Geometry?.instances) naissance.Geometry.instances.sort(sortFn);
+						// Rebuild Feature.instances to reflect the new order
+						let sortedFeatures = Object.values(naissance.Feature.instances).sort(sortFn);
+						let newFeatureMap = {};
+						for (let i = 0; i < sortedFeatures.length; i++) {
+							let feat = sortedFeatures[i];
+							newFeatureMap[feat.id] = feat;
+						}
+						naissance.Feature.instances = newFeatureMap;
+						
+						// Handle Geometries
+						if (naissance.Geometry?.instances) {
+							if (Array.isArray(naissance.Geometry.instances)) {
+								// If Geometry is still an array
+								naissance.Geometry.instances.sort(sortFn);
+							} else {
+								// If Geometry is also a map, apply the same rebuild logic
+								let sortedGeoms = Object.values(naissance.Geometry.instances).sort(sortFn);
+								let newGeomMap = {};
+								for (let i = 0; i < sortedGeoms.length; i++) {
+									let geom = sortedGeoms[i];
+									newGeomMap[geom.id] = geom;
+								}
+								naissance.Geometry.instances = newGeomMap;
+							}
+						}
 					}
 					
 					this.refresh();

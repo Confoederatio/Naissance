@@ -53,9 +53,8 @@ global.UI_FeatureDatalist = class extends ve.Component {
 		let feature_map = {};
 		
 		//Fetch all current features and their names
-		for (let i = 0; i < naissance.Feature.instances.length; i++) {
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 			let is_valid = true;
-			let local_feature = naissance.Feature.instances[i];
 			
 			//Deal with options.filter_types
 			if (this.options.filter_types)
@@ -65,7 +64,7 @@ global.UI_FeatureDatalist = class extends ve.Component {
 			//Append to map if valid feature
 			if (is_valid)
 				feature_map[local_feature.id] = local_feature.name;
-		}
+		});
 		
 		let current_value = this.v;
 		this.datalist = veDatalist(feature_map, {

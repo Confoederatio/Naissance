@@ -19,7 +19,7 @@ naissance.FeatureTileLayer.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let tile_layer_obj = naissance.Feature.instances.filter((v) => v.id === json.feature_id)[0];
+	let tile_layer_obj = naissance.Feature.instances[json.feature_id];
 	
 	//Parse extraneous commands
 	//create_tile_layer
@@ -46,9 +46,10 @@ naissance.FeatureTileLayer.parseAction = function (arg0_json) {
 		//apply_as_base_layer
 		if (json.apply_as_base_layer) {
 			//Iterate over all naissance.Feature.instances; remove .is_base_layer flag from all instances first
-			for (let i = 0; i < naissance.Feature.instances.length; i++)
-				if (naissance.Feature.instances[i] instanceof naissance.FeatureTileLayer)
-					delete naissance.Feature.instances[i].is_base_layer;
+			Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
+				if (local_feature instanceof naissance.FeatureTileLayer)
+					delete local_feature.is_base_layer;
+			});
 			
 			//Replace base layer
 			map.removeBaseLayer();

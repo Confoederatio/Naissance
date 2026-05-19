@@ -34,7 +34,7 @@ naissance.GeometryPolygon.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let polygon_obj = naissance.Geometry.instances.filter((v) => v.id === json.geometry_id)[0];
+	let polygon_obj = naissance.Geometry.instances[json.geometry_id];
 	
 	//Parse extraneous commands
 	//create_polygon

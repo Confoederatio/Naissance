@@ -26,7 +26,7 @@ naissance.Feature.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let feature_obj = naissance.Feature.instances.filter((v) => v.id === json.feature_id)[0];
+	let feature_obj = naissance.Feature.instances[json.feature_id];
 	
 	//Parse commands for feature_obj
 	if (feature_obj) {
@@ -90,7 +90,7 @@ naissance.Feature.parseAction = function (arg0_json) {
 		
 		//move_all_entities_to_feature
 		if (json.move_all_entities_to_feature !== undefined) {
-			let ot_feature_obj = naissance.Feature.instances.filter((v) => v.id === json.move_all_entities_to_feature)[0];
+			let ot_feature_obj = naissance.Feature.instances[json.move_all_entities_to_feature];
 			
 			if (ot_feature_obj && ot_feature_obj?.id !== feature_obj.id) {
 				let local_entities = [...feature_obj.entities];

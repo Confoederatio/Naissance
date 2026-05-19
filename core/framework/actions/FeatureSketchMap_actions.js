@@ -24,7 +24,7 @@ naissance.FeatureSketchMap.parseAction = function (arg0_json) {
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let sketch_map_obj = naissance.Feature.instances.filter((v) => v.id === json.feature_id)[0];
+	let sketch_map_obj = naissance.Feature.instances[json.feature_id];
 	
 	//Parse extraneous commands
 	//create_sketch_map

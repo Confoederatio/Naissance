@@ -101,13 +101,7 @@ naissance.GeometryPolygon.handleNodeEditorEnd = function (arg0_e) {
 	if (main.brush.mode === "node_transfer") {
 		try {
 			let from_geometry_id = main.brush.from_geometry_id;
-			let from_geometry;
-			if (from_geometry_id)
-				for (let i = 0; i < naissance.Geometry.instances.length; i++)
-					if (naissance.Geometry.instances[i].id === from_geometry_id) {
-						from_geometry = naissance.Geometry.instances[i];
-						break;
-					}
+			let from_geometry = naissance.Geometry.instances[from_geometry_id];
 			
 			//Get the intersection of from_geometry and e.geometry
 			if (!(from_geometry?.geometry && e?.geometry)) return; //Internal guard clause if neither are presently defined

@@ -482,10 +482,15 @@ naissance.Brush = class extends ve.Class {
 	}
 	
 	hasSelectedGeometry () {
+		//Declare local instance variables
+		let has_selected_geometry = false;
+		
 		//Return statement
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			if (naissance.Geometry.instances[i].selected === true)
-				return true;
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+			if (local_geometry.selected === true) has_selected_geometry = true;
+		});
+		
+		return has_selected_geometry;
 	}
 	
 	static setSelectedLabelSymbol (arg0_symbol_obj) {
@@ -499,14 +504,14 @@ naissance.Brush = class extends ve.Class {
 		};
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			if (naissance.Geometry.instances[i].selected)
-				json_obj.value.push({
-					type: "Geometry",
-					
-					geometry_id: naissance.Geometry.instances[i].id,
-					set_label_symbol: symbol_obj
-				});
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+			json_obj.value.push({
+				type: "Geometry",
+				
+				geometry_id: local_geometry.id,
+				set_label_symbol: symbol_obj
+			});
+		});
 		DALS.Timeline.parseAction(json_obj);
 	}
 	
@@ -521,14 +526,14 @@ naissance.Brush = class extends ve.Class {
 		};
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			if (naissance.Geometry.instances[i].selected)
-				json_obj.value.push({
-					type: "Geometry",
-					
-					geometry_id: naissance.Geometry.instances[i].id,
-					set_symbol: symbol_obj
-				});
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+			json_obj.value.push({
+				type: "Geometry",
+				
+				geometry_id: local_geometry.id,
+				set_symbol: symbol_obj
+			});
+		});
 		DALS.Timeline.parseAction(json_obj);
 	}
 	
@@ -543,14 +548,14 @@ naissance.Brush = class extends ve.Class {
 		};
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
-		for (let i = 0; i < naissance.Geometry.instances.length; i++)
-			if (naissance.Geometry.instances[i].selected)
-				json_obj.value.push({
-					type: "Geometry",
-					
-					geometry_id: naissance.Geometry.instances[i].id,
-					set_properties: properties_obj
-				});
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+			json_obj.value.push({
+				type: "Geometry",
+				
+				geometry_id: local_geometry.id,
+				set_properties: properties_obj
+			});
+		});
 		DALS.Timeline.parseAction(json_obj);
 	}
 };

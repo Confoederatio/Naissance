@@ -14,6 +14,19 @@ naissance.History = class extends ve.Class {
 		this.interface = new ve.Interface({}, { name: "Keyframes", width: 99 });
 	}
 	
+	_hasTimestampAfter (arg0_timestamp) {
+		//Convert from parameters
+		let timestamp = Date.getTimestamp(arg0_timestamp);
+		
+		let all_keyframes = Object.keys(this.keyframes);
+		
+		for (let i = 0; i < all_keyframes.length; i++)
+			if (timestamp >= parseInt(all_keyframes[i]))
+				//Return statement
+				return true;
+		return false;
+	}
+	
 	addKeyframe (arg0_date, ...argn_arguments) {
 		//Convert from parameters
 		let date = (arg0_date !== undefined) ? Date.convertTimestampToDate(arg0_date) : main.date;
@@ -292,14 +305,10 @@ naissance.History = class extends ve.Class {
 		
 		//1. If options.absolute_keyframe = true, iterate over all keyframes in this.keyframes, and return the most recent one
 		if (options.absolute_keyframe) {
-			Object.iterate(
-				this.keyframes,
-				(local_key, local_keyframe) => {
-					if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
-						return_keyframe = this.keyframes[local_key];
-				},
-				{ sort_mode: "date_ascending" }
-			);
+			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
+				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
+					return_keyframe = this.keyframes[local_key];
+			}, { sort_mode: "date_ascending" });
 			
 			//Return statement
 			return return_keyframe;
@@ -313,18 +322,23 @@ naissance.History = class extends ve.Class {
 				value: [],
 			};
 			
-			Object.iterate(this.keyframes, (local_key, local_keyframe) => {
+			let all_keyframes = this.getTimestamps();
+			
+			if (all_keyframes[0] > timestamp) 
+				if (!options.refresh_localisation) return return_keyframe; //Internal guard clause
+			for (let i = 0; i < all_keyframes.length; i++) {
+				let local_keyframe = this.keyframes[all_keyframes[i]];
+				
 				//Parse localisation first, then concatenate
 				if (options.refresh_localisation)
-					local_keyframe.localisation = (this.options.localisation_function) ? 
+					local_keyframe.localisation = (this.options.localisation_function) ?
 						this.options.localisation_function(local_keyframe, return_keyframe) : "";
 				
-				if (Date.convertTimestampToInt(local_key) <= Date.convertTimestampToInt(timestamp))
+				if (Date.convertTimestampToInt(all_keyframes[i]) <= Date.convertTimestampToInt(timestamp)) {
 					for (let x = 0; x < local_keyframe.value.length; x++)
 						if (typeof local_keyframe.value[x] === "object" && local_keyframe.value[x] !== null) {
-							let old_variables = return_keyframe.value[x]?.variables
-								? return_keyframe.value[x].variables
-								: {};
+							let old_variables = return_keyframe.value[x]?.variables ? 
+								return_keyframe.value[x].variables : {};
 							
 							//Return keyframe
 							return_keyframe.value[x] = {
@@ -344,7 +358,10 @@ naissance.History = class extends ve.Class {
 							//If the value is null or a primitive, it overwrites the previous accumulated state
 							return_keyframe.value[x] = local_keyframe.value[x];
 						}
-			}, { sort_mode: "date_ascending" });
+				} else { 
+					if (!options.refresh_localisation) break; 
+				}
+			}
 			
 			//Return statement
 			return return_keyframe;
