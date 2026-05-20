@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target FeatureTileLayer.
  * - Static method of: {@link naissance.FeatureTileLayer}
@@ -26,7 +28,7 @@ naissance.FeatureTileLayer.parseAction = function (arg0_json) {
 	if (json.create_tile_layer)
 		if (json.create_tile_layer.id) {
 			let new_tile_layer = new naissance.FeatureTileLayer();
-			new_tile_layer.id = json.create_tile_layer.id;
+				new_tile_layer.setID(json.create_tile_layer.id);
 			
 			if (!json.create_tile_layer.do_not_refresh)
 				UI_LeftbarHierarchy.refresh();

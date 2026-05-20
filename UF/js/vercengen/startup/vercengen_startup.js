@@ -225,31 +225,34 @@ global.path = require("path");
 	 * @returns {Array<string>}
 	 */
 	ve.getFilesInFolder = function (arg0_folder_path, arg1_evaluated_set) {
-		//Convert from parameters
 		let folder_path = arg0_folder_path;
 		let evaluated_set = arg1_evaluated_set;
 		
-		//Declare local instance variables
-		let file_list = fs.readdirSync(folder_path, { withFileTypes: true });
+		// Use readdirSync and immediately sort the entry list
+		// Strict ASCII sort ensures 'Forse.js' (dot) comes before 'Forse_conditionals.js' (_)
+		let file_list = fs.readdirSync(folder_path, { withFileTypes: true }).sort((a, b) => {
+			if (a.name < b.name) return -1;
+			if (a.name > b.name) return 1;
+			return 0;
+		});
+		
 		let return_files = [];
 		
-		//Iterate over all entries in file_list
 		for (let local_file_entry of file_list) {
 			let full_path = path.join(folder_path, local_file_entry.name);
 			
-			//Skip any full_path in the evaluated_set
 			if (evaluated_set.has(full_path)) continue;
-				evaluated_set.add(full_path);
-				
-			//Recursively import files from directories
+			evaluated_set.add(full_path);
+			
 			if (local_file_entry.isDirectory()) {
-				return_files = return_files.concat(ve.getFilesInFolder(full_path, evaluated_set));
+				return_files = return_files.concat(
+					ve.getFilesInFolder(full_path, evaluated_set),
+				);
 			} else {
 				return_files.push(full_path);
 			}
 		}
 		
-		//Return statement
 		return return_files;
 	};
 	
@@ -325,45 +328,44 @@ global.path = require("path");
 	 * @returns {Array<string>}
 	 */
 	ve.getWildcardsInFolder = function (arg0_folder_path, arg1_wildcard_pattern) {
-		//Convert from parameters
 		let folder_path = arg0_folder_path;
 		let wildcard_pattern = arg1_wildcard_pattern;
 		
-		//Declare local instance variables
 		let base = path.basename(wildcard_pattern);
 		let directory = path.dirname(wildcard_pattern);
 		
-		//Non-wildcard resolution
 		if (!base.includes("*")) {
-			//No wildcard, simply return if the file exists
 			let absolute_path = path.resolve(folder_path, wildcard_pattern);
-			
-			//Return statement
 			if (fs.existsSync(absolute_path) && fs.statSync(absolute_path).isFile())
 				return [absolute_path];
-			if (fs.existsSync(absolute_path) && fs.statSync(absolute_path).isDirectory())
+			if (
+				fs.existsSync(absolute_path) &&
+				fs.statSync(absolute_path).isDirectory()
+			)
 				return ve.getFilesInFolder(absolute_path, new Set());
 			return [];
 		}
 		
-		//Wildcard: match files in the directory
 		let absolute_dir = path.resolve(folder_path, directory);
 		
-		//Return statement
 		if (!fs.existsSync(absolute_dir) || !fs.statSync(absolute_dir).isDirectory())
 			return [];
 		
-		//Return regex wildcard; return statement
-		let regex = new RegExp("^" +
-			base.replace(/\./g, "\\.")
-				.replace(/\*/g, ".*") + "$"
+		let regex = new RegExp(
+			"^" + base.replace(/\./g, "\\.").replace(/\*/g, ".*") + "$",
 		);
 		
-		//Return statement
-		return fs.readdirSync(absolute_dir)
-			.filter((f) => regex.test(f))
-			.map((f) => path.join(absolute_dir, f))
-			.filter((f) => fs.statSync(f).isFile());
+		// Return strictly sorted list of files matching the wildcard
+		return fs
+		.readdirSync(absolute_dir)
+		.filter((f) => regex.test(f))
+		.sort((a, b) => {
+			if (a < b) return -1;
+			if (a > b) return 1;
+			return 0;
+		})
+		.map((f) => path.join(absolute_dir, f))
+		.filter((f) => fs.statSync(f).isFile());
 	};
 	
 	/**
@@ -456,6 +458,7 @@ global.path = require("path");
 			"UF/js/vercengen/components/ComponentFileExplorer/file_operations_ui.js",
 			//ve.NodeEditor
 			"UF/js/vercengen/components/ComponentNodeEditor/ComponentNodeEditor.js",
+			"UF/js/vercengen/components/ComponentNodeEditor/core/framework/forse/Forse.js",
 			"UF/js/vercengen/components/ComponentNodeEditor/",
 			//ve.ScriptManager
 			"!UF/libraries/monaco/",
@@ -469,7 +472,7 @@ global.path = require("path");
 		
 		let load_files = ve.getImportFiles(load_patterns);
 		
-		console.log(`[VERCENGEN] Importing ${load_files.length} files.`);
+		console.log(`[VERCENGEN] Importing ${load_files.length} files.`, load_files);
 		
 		//1. Handle browser <link>/<script> tags
 		

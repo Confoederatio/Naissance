@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target Geometry.
  * - Static method of: {@link naissance.Geometry}

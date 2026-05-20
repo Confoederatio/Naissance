@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target GeometryLine.
  * - Static method of: {@link naissance.GeometryLine}
@@ -28,7 +30,7 @@ naissance.GeometryLine.parseAction = function (arg0_json) {
 	if (json.create_line)
 		if (json.create_line.id) {
 			let new_line = new naissance.GeometryLine();
-			new_line.id = json.create_line.id;
+				new_line.setID(json.create_line.id);
 			if (json.create_line.name) {
 				new_line.fire_action_silently = true;
 				new_line.name = json.create_line.name;

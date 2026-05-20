@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target GeometryPoint.
  * - Static method of: {@link naissance.GeometryPoint}
@@ -27,7 +29,7 @@ naissance.GeometryPoint.parseAction = function (arg0_json) {
 	if (json.create_point)
 		if (json.create_point.id) {
 			let new_point = new naissance.GeometryPoint();
-			new_point.id = json.create_point.id;
+				new_point.setID(json.create_point.id);
 			if (json.create_point.coordinates !== undefined) {
 				let maptalks_marker_obj = new maptalks.Marker();
 				maptalks_marker_obj.setCoordinates(json.create_point.coordinates);

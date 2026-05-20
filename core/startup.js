@@ -188,7 +188,7 @@ global.l4p = "./livemap/4.view/politics/";
 			"core/framework/brush",
 			"core/framework/actions",
 			"histmap",
-			"livemap"
+			"livemap",
 		],
 		special_function: function () {
 			try {

@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target FeatureLayer.
  * - Static method of: {@link naissance.FeatureLayer}
@@ -31,7 +33,7 @@ naissance.FeatureSketchMap.parseAction = function (arg0_json) {
 	if (json.create_sketch_map)
 		if (json.create_sketch_map.id) {
 			let new_sketch_map = new naissance.FeatureSketchMap();
-			new_sketch_map.id = json.create_sketch_map.id;
+				new_sketch_map.setID(json.create_sketch_map.id);
 			
 			if (!json.create_sketch_map.do_not_refresh)
 				UI_LeftbarHierarchy.refresh();

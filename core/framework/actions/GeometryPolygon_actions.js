@@ -1,3 +1,5 @@
+if (!global.naissance) global.naissance = {};
+
 /**
  * Parses a JSON action for a target GeometryPolygon.
  * - Static method of: {@link naissance.GeometryPolygon}
@@ -41,7 +43,7 @@ naissance.GeometryPolygon.parseAction = function (arg0_json) {
 	if (json.create_polygon)
 		if (json.create_polygon.id) {
 			let new_polygon = new naissance.GeometryPolygon();
-			new_polygon.id = json.create_polygon.id;
+				new_polygon.setID(json.create_polygon.id);
 			if (json.create_polygon.name) {
 				new_polygon.fire_action_silently = true;
 				new_polygon.name = json.create_polygon.name;
