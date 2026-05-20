@@ -41,9 +41,9 @@
 <details>
   <summary><h3>Installation.</h3></summary>
 
-    1. Download Node.JS if not installed: https://nodejs.org/en/download
-    2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
-    3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
+  1. Download Node.JS if not installed: https://nodejs.org/en/download
+  2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
+  3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
     
 </details>
 
