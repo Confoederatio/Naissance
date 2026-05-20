@@ -10,8 +10,9 @@ if %ERRORLEVEL% neq 0 (
 )
 call npm install
 echo [Naissance HGIS] Auto-run is starting ..
+
 :main
-taskkill /F /IM "electron.exe" /T >nul 2>&1
+taskkill /F /IM "electron.exe" /T >nul 2>&1 # [WIP] - Temporary solution until it can be fixed in code
 npm start
 echo [Naissance HGIS] Depending on your system, this may take a while.
 timeout /t 30
