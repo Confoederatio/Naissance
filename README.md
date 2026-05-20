@@ -38,7 +38,16 @@
 
 **Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branches, merges, and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
 
-To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen). If installing on MacOS/Linux, run `autorun.sh` first. If installing on Windows, run `autorun.bat`.
+<details>
+  <summary><h3>Installation.</h3></summary>
+
+    1. Download Node.JS if not installed: https://nodejs.org/en/download
+    2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
+    3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
+    
+</details>
+
+To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen).
 
 ---
 
