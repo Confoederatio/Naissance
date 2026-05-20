@@ -41,13 +41,15 @@
 <details open>
   <summary><h3>Installation.</h3></summary>
 
-  1. Download Node.JS if not installed: https://nodejs.org/en/download
-  2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
-  3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
+**Note.** Most of the dev builds are built for Windows, since that's what most use. If you are on MacOS/Linux and need tech support, please join the Discord.
+
+1. Download Node.JS if not installed: https://nodejs.org/en/download
+2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
+3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
     
 </details>
 
-To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen).
+To get the most out of Naissance's built-in visual scripting and custom UI capabilities, you may find it useful to familiarise yourself with our software engine, [Vercengen](https://github.com/Confoederatio/Vercengen). This is bundled with Naissance, and you do not have to install it separately.
 
 ---
 
