@@ -53,7 +53,6 @@ global.l4p = "./livemap/4.view/politics/";
     //Declare global variables
 		global.main_navbar = new UI_Navbar();
     global.main = {
-			date: Date.getCurrentDate(),
 			hierarchy: {},
 			interfaces: {
 				//Leftbar
@@ -137,6 +136,9 @@ global.l4p = "./livemap/4.view/politics/";
 		
 		//2. Set aliases
 		main.brush = main.user.brush;
+		
+		//3. Set datee
+		UI_DateMenu.setDate(Date.getCurrentDate());
   };
 	
 	global.loadSettings = function () {

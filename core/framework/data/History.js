@@ -18,6 +18,7 @@ naissance.History = class extends ve.Class {
 		//Convert from parameters
 		let timestamp = Date.getTimestamp(arg0_timestamp);
 		
+		//Declare local instance variables
 		let all_keyframes = Object.keys(this.keyframes);
 		
 		for (let i = 0; i < all_keyframes.length; i++)

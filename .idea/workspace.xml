@@ -6,22 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/Brush_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/Brush_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureGroup_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureGroup_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureLayer_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureLayer_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureSketchMap_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureSketchMap_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureTileLayer_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureTileLayer_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/Feature_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/Feature_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/GeometryLine_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/GeometryLine_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/GeometryPoint_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/GeometryPoint_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/GeometryPolygon_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/GeometryPolygon_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/Geometry_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/Geometry_actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/actions/Renderer_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/Renderer_actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gfx/icons/mac/icon.icns" beforeDir="false" afterPath="$PROJECT_DIR$/gfx/icons/mac/icon.icns" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/topbar/UI_DateMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/topbar/UI_DateMenu.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +101,7 @@
       <workItem from="1776142774931" duration="1681000" />
       <workItem from="1776958086862" duration="91000" />
       <workItem from="1779287678837" duration="4185000" />
-      <workItem from="1779294192530" duration="592000" />
+      <workItem from="1779294192530" duration="1191000" />
     </task>
     <servers />
   </component>

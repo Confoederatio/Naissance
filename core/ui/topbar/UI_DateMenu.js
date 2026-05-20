@@ -177,7 +177,7 @@ global.UI_DateMenu = class extends ve.Class {
 		
 		//Set date
 		main.date = date;
-		main.timestamp = Date.getTimestamp(main.date);
+		main.timestamp = Date.getTimestamp(date);
 		main.interfaces.date_ui.date.v = date;
 		DALS.Timeline.parseAction({
 			options: { name: "Refresh Date", key: "load_date" },
