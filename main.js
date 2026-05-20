@@ -29,10 +29,10 @@ let win;
     });
     
     //Load file; open Inspect Element
-    win.loadFile("index.html").then(() => {
-      win.webContents.openDevTools();
-      win.setMenuBarVisibility(false);
-    });
+    win.webContents.openDevTools();
+    win.setMenuBarVisibility(false);
+    
+    win.loadFile("index.html");
     
     //Listen for FPS updates from the renderer process
     ipcMain.on("update-fps", (event, fps) => {
@@ -45,7 +45,7 @@ let win;
       
       let heap_used_mb = (memory_usage.heapUsed/1024/1024).toFixed(2);
       let rss_mb = (memory_usage.rss/1024/1024).toFixed(2);
-      let title_string = `Naissance (Révelt) ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
+      let title_string = `Naissance HGIS ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
       
       win.setTitle(title_string);
     }, 1000);

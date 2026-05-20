@@ -138,7 +138,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		}
 	}
 	
-	draw () {
+	draw () { //[WIP] - Use setCoordinates() first and retain geometries
 		//Remove geometry first to handle it
 		if (this.geometry) this.geometry.remove();
 		if (this.selected_geometry) this.selected_geometry.remove();

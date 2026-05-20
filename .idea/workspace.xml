@@ -6,39 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/dals/Timeline_state.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/date/date_maths.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_maths.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/geospatiale/maptalks_turf.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/geospatiale/maptalks_turf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/html/html_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/html/html_basic.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentCRUD.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentCRUD.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHTML.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHTML.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentHierarchy/ComponentHierarchyDatatype.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentInterface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentRawInterface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSpreadsheet/spreadsheet_iframe.html" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/components/ComponentSpreadsheet/spreadsheet_iframe.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/engine/VercengenFeature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_electron.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_localisation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/startup/vercengen_themes.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/data/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/data/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Feature.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Feature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureGroup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureSketchMap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/FeatureTileLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/Geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/Geometry.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryLine.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorun.bat" beforeDir="false" afterPath="$PROJECT_DIR$/autorun.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/brush/Brush.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/brush/Brush.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/entities/GeometryPolygon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Brush.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/BrushNodeEditor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Renderer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/user/Timeline_state.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/startup.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/startup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/windows/UI_FeatureLayerWindow.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/windows/UI_FeatureLayerWindow.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,6 +101,7 @@
       <workItem from="1774772315308" duration="9332000" />
       <workItem from="1776142774931" duration="1681000" />
       <workItem from="1776958086862" duration="91000" />
+      <workItem from="1779287678837" duration="574000" />
     </task>
     <servers />
   </component>

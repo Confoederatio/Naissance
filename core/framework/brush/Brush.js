@@ -175,7 +175,7 @@ naissance.Brush = class extends ve.Class {
 			})
 		}, { name: "Brush Options:", open: true });
 		this.optimisation = veInterface({
-			simplify: veRange(0.05, {
+			simplify: veRange(0, {
 				binding: "this.simplify",
 				name: "Simplify", x: 0, y: 0
 			}),
