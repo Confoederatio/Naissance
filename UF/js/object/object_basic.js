@@ -1122,4 +1122,15 @@
 		//Return statement
 		return return_array;
 	};
+	
+	/**
+	 * Converts an Object to JSON.
+	 * @alias Object.toJSON
+	 * 
+	 * @param {Object} arg0_object
+	 * @param {Object} [arg1_options]
+	 */
+	Object.toJSON = function (arg0_object, arg1_options) {
+		
+	};
 }

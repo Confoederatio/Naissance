@@ -300,8 +300,8 @@
 	Date.getTimestamp = function (arg0_date_object) {
 		let date = arg0_date_object ? arg0_date_object : Date.getBlankDate();
 		
-		if (typeof date === "string")
-			if (!isNaN(parseFloat(date))) return parseFloat(date);
+		if (!isNaN(date)) return date; //Internal guard clause if already a number
+		if (typeof date === "string") if (!isNaN(parseFloat(date))) return parseFloat(date); //Internal guard clause for string
 		
 		let date_obj = {
 			...Date.getBlankDate(),

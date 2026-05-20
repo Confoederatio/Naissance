@@ -8,6 +8,7 @@
  * - `arg0_components_obj`: {@link Object}<{@link ve.Component}>
  * - `arg1_options`: {@link Object}
  *   - `.anchor="top_left"` - Either 'bottom_left'/'bottom_right'/'top_left'/'top_right'.
+ *   - `.attributes`: {@link Object}
  *   - `.height="auto"`: {@link number}
  *   - `.width="12rem"`: {@link number}
  *   - `.x=HTML.mouse_x`: {@link function}|{@link number} - If the type is a function, it must return a number.

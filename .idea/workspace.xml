@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="" />
+    <list default="true" id="b6ca913c-9149-4525-9f78-1a8f128a8f69" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/class/class_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/class/class_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/date/date_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/date/date_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/object/object_basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/object/object_basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" beforeDir="false" afterPath="$PROJECT_DIR$/UF/js/vercengen/features/Window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureGroup_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureGroup_actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/framework/actions/FeatureLayer_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/framework/actions/FeatureLayer_actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/leftbar/UI_LeftbarHierarchy.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +104,7 @@
       <workItem from="1774772315308" duration="9332000" />
       <workItem from="1776142774931" duration="1681000" />
       <workItem from="1776958086862" duration="91000" />
-      <workItem from="1779287678837" duration="793000" />
+      <workItem from="1779287678837" duration="1340000" />
     </task>
     <servers />
   </component>
