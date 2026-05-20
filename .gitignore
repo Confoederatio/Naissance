@@ -1,6 +1,7 @@
 app
 archives
 _dist
+.idea
 naissance.exe
 Naissance HGIS.exe
 resources
