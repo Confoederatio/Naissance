@@ -85,8 +85,7 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 
 #### Histmap:
 
-> [!NOTE] 
-> Stadestér refers to urban data, whereas Velkscala refers to population data generally, including ALCC/LU models.
+> **Note.** Stadestér refers to urban data, whereas Velkscala refers to population data generally, including ALCC/LU models.
 
 - Atlas: (Vector) - De facto polity extents from 3000BC-2014AD, GeoJSON. Sub-yearly resolution. De jure polity extents from C-Shapes 2.0.
   - [[Dataset (.json)]](https://confoederatio.org/data/atlas_0.5b.json) | [[Dataset (.naissance)]](https://confoederatio.org/data/atlas_0.5b.naissance) | [[Timelapse]](https://www.youtube.com/watch?v=Kc0zNfiAd8c)
