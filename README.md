@@ -43,6 +43,12 @@
 
 **Note.** Most of the dev builds are built for Windows, since that's what most use. If you are on MacOS/Linux and need tech support, please join the Discord.
 
+<ins>Stable Release (1.8, Windows):</ins>
+1. Download [Naissance 1.8b](https://drive.google.com/file/d/1iJqcm0RdnodjdwQ9QiuVErCZBiS46uy6/view?usp=sharing)
+2. Extract ZIP file when downloaded.
+3. Run `Naissance HGIS.exe`.
+
+<ins>Latest Dev Build</ins> or <ins>MacOS/Linux:</ins>
 1. Download Node.JS if not installed: https://nodejs.org/en/download
 2. Click `Code` > `Download ZIP` > Extract ZIP file when downloaded.
 3. Run `autorun.bat` if on Windows. If on MacOS/Linux, run `autorun.sh`.
@@ -79,8 +85,7 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 
 #### Histmap:
 
-> [!NOTE] 
-> Stadestér refers to urban data, whereas Velkscala refers to population data generally, including ALCC/LU models.
+> **Note.** Stadestér refers to urban data, whereas Velkscala refers to population data generally, including ALCC/LU models.
 
 - Atlas: (Vector) - De facto polity extents from 3000BC-2014AD, GeoJSON. Sub-yearly resolution. De jure polity extents from C-Shapes 2.0.
   - [[Dataset (.json)]](https://confoederatio.org/data/atlas_0.5b.json) | [[Dataset (.naissance)]](https://confoederatio.org/data/atlas_0.5b.naissance) | [[Timelapse]](https://www.youtube.com/watch?v=Kc0zNfiAd8c)
