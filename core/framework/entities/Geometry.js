@@ -483,8 +483,13 @@ naissance.Geometry = class extends ve.Class {
 	 * @returns {naissance.FeatureLayer}
 	 */
 	getLayer () {
-		//Iterate over naissance.Feature.instances
-		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
+		//Declare local instance variables
+		let all_feature_keys = Object.keys(naissance.Feature.instances);
+		
+		//Iterate over all_feature_keys naissance.Feature.instances
+		for (let i = 0; i < all_feature_keys.length; i++) {
+			let local_feature = naissance.Feature.instances[all_feature_keys[i]];
+			
 			if (local_feature instanceof naissance.FeatureLayer) {
 				let local_geometries = local_feature.getAllGeometries();
 				
@@ -493,7 +498,7 @@ naissance.Geometry = class extends ve.Class {
 						//Return statement
 						return local_feature;
 			}
-		});
+		}
 	}
 	
 	/**

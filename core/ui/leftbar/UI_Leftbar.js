@@ -39,14 +39,9 @@ global.UI_Leftbar = class extends ve.Class {
 							style: { "#name": { alignItems: "center", display: "flex" } }
 						}),
 						script_manager: veButton(() => {
-							if (this.script_manager_window) this.script_manager_window.close();
-							this.script_manager_window = veWindow(veScriptManager(), {
-								name: "ScriptManager",
-								height: "80vh",
-								width: "80vw"
-							});
+							new UI_SystemManagerWindow();
 						}, {
-							name: `<icon>code</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">Script Manager</span>`,
+							name: `<icon>computer</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">System Manager</span>`,
 							tooltip: `ScriptManager positioning is temporary, and will be changed in the future to be integrated into the main node editor.`,
 							style: { "#name": { alignItems: "center", display: "flex" }, marginLeft: "0.25rem" }
 						})

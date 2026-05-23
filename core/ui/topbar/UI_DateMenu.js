@@ -3,7 +3,6 @@ global.UI_DateMenu = class extends ve.Class {
 	static logic_loop = null;
 	
 	constructor () {
-		console.warn(`[WIP] - UI_DateMenu needs a revamp: add proper setDate() instead of main.date, end date doesn't work yet for timelapses.`);
 		super();
 		
 		let navbar_el = document.querySelector(".ve.navbar");

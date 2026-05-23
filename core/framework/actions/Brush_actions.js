@@ -48,7 +48,6 @@ naissance.Brush.parseAction = function (arg0_json) {
 		
 		//Select new geometry
 		if (typeof json.select_geometry_id === "string") {
-			console.log(`Selecting ${json.select_geometry_id}`);
 			main.brush.selected_geometry = naissance.Geometry.instances[json.select_geometry_id];
 			if (main.brush.selected_geometry) main.brush.selected_geometry.draw();
 		} else if (json.select_geometry_id === false) {

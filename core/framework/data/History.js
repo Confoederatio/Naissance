@@ -144,7 +144,7 @@ naissance.History = class extends ve.Class {
 		}
 	}
 	
-	draw (arg0_interface_obj) { //[WIP] - Context menus need to be better and to use DALS
+	draw (arg0_interface_obj) {
 		//Convert from parameter
 		let interface_obj = arg0_interface_obj;
 		

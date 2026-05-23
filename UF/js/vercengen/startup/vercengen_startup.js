@@ -415,6 +415,7 @@ global.path = require("path");
 		//Declare local instance variables
 		let load_patterns = (!options.do_not_import_UF) ? [
 			"!UF/archives",
+			"!UF/js/vercengen/workers",
 			"UF",
 			
 			//Localisation
