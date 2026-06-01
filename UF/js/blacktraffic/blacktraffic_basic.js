@@ -119,6 +119,7 @@
 	};
 	
 	/**
+	 * Sends an IPC task out from a render/worker thread to the main thread for processing, resolving the Promise once the result is received.
 	 * 
 	 * @param {string} arg0_channel
 	 * @param {Object} [arg1_options]
@@ -130,41 +131,68 @@
 	Blacktraffic.task = async function (arg0_channel, arg1_options) {
 		//Convert from parameters
 		let channel = arg0_channel;
-		let options = (arg1_options) ? arg1_options : {};
+		let options = arg1_options ? arg1_options : {};
 		
 		if (!options.args) options.args = [];
 		
-		//Declare local instance variables
-		let ipcRenderer = electron.ipcRenderer;
-		console.log("Blacktraffic sending args:", options.args);
+		//Safe environment detection
+		let ipc_renderer = (global.electron) ? global.electron.ipcRenderer : null;
+		let is_renderer = (ipc_renderer !== undefined && ipc_renderer !== null);
 		
-		//Return statement
-		return new Promise((resolve, reject) => {
-			//Clean up existing listeners to prevent leaks or duplicate handlers
-			ipcRenderer.removeAllListeners(`${channel}:ready`);
-			
-			ipcRenderer.on(`${channel}:ready`, (event, ...response_args) => {
-				//Clean up listener immediately after execution
-				ipcRenderer.removeAllListeners(`${channel}:ready`);
+		if (is_renderer) {
+			//Renderer logic uses the standard Electron IPC pipe
+			return new Promise((resolve, reject) => {
+				ipc_renderer.removeAllListeners(`${channel}:ready`);
 				
-				try {
-					if (typeof options.special_function === "function") {
-						// Use target special function to process the event/data before resolving
-						let result = options.special_function(event, ...response_args);
-						resolve(result);
-					} else {
-						// Resolve with the payload. Fall back to returning the raw array if multiple parameters exist
-						(response_args.length === 1) ?
-							resolve(response_args[0]) :
-							resolve(response_args);
+				ipc_renderer.on(`${channel}:ready`, (event, ...response_args) => {
+					ipc_renderer.removeAllListeners(`${channel}:ready`);
+					
+					try {
+						if (typeof options.special_function === "function") {
+							resolve(options.special_function(event, ...response_args));
+						} else {
+							//Return first arg or full array
+							(response_args.length === 1) ?
+								resolve(response_args[0]) :
+								resolve(response_args);
+						}
+					} catch (err) {
+						reject(err);
 					}
-				} catch (err) {
-					reject(err);
-				}
+				});
+				
+				ipc_renderer.send(channel, ...options.args);
 			});
+		} else {
+			//Worker logic only runs if ipc_renderer is not present
+			let task_id = Object.generateRandomID();
 			
-			//Send the payload to trigger the main process task
-			ipcRenderer.send(channel, ...options.args);
-		});
+			try {
+				//We use a generic require to avoid loader issues where possible
+				let node_threads = require("worker_threads");
+				let parent_port = node_threads.parentPort;
+				
+				if (parent_port) {
+					return new Promise((resolve) => {
+						let listener = (msg) => {
+							if (msg.type === "worker_ipc_ready" && msg.task_id === task_id) {
+								parent_port.off("message", listener);
+								resolve(msg.results);
+							}
+						};
+						parent_port.on("message", listener);
+						
+						parent_port.postMessage({
+							type: "worker_ipc_request",
+							task_id: task_id,
+							channel: channel,
+							args: options.args
+						});
+					});
+				}
+			} catch (e) {
+				console.error("Environment detection failed: No IPC source available.");
+			}
+		}
 	};
 }
