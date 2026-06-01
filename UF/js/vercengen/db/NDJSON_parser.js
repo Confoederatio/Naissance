@@ -1,5 +1,12 @@
 //Import libraries
 if (!global.ve) global.ve = {};
+if (!global.NDJSON)
+	/**
+	 * The namespace for NDJSON utility functions.
+	 *
+	 * @namespace NDJSON
+	 */
+	global.NDJSON = {};
 
 if (!global.fs) try { fs = require("fs"); } catch (e) {}
 let { parentPort, workerData } = require("node:worker_threads");
@@ -8,7 +15,10 @@ let { file_path, start, end, initial_depth } = workerData;
 
 //Initialise function
 {
-	ve.NDJSON_processSegment = function () {
+	/**
+	 * Processes a segment. Internal helper function for parsing NDJSON.
+	 */
+	NDJSON.processSegment = function () {
 		//Declare local instance variables
 		let depth = initial_depth;
 		let read_stream = fs.createReadStream(file_path, { start, end });
@@ -66,4 +76,4 @@ let { file_path, start, end, initial_depth } = workerData;
 }
 
 //Start worker
-ve.NDJSON_processSegment();
+NDJSON.processSegment();

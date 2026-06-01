@@ -117,4 +117,54 @@
 		//Return statement
 		return new Promise(resolve => setTimeout(resolve, ms));
 	};
+	
+	/**
+	 * 
+	 * @param {string} arg0_channel
+	 * @param {Object} [arg1_options]
+	 *  @param {any[]} [arg1_options.args]
+	 *  @param {function} [arg1_options.special_function] - Function to use when resolving the channel.
+	 * 
+	 * @returns {Promise}
+	 */
+	Blacktraffic.task = async function (arg0_channel, arg1_options) {
+		//Convert from parameters
+		let channel = arg0_channel;
+		let options = (arg1_options) ? arg1_options : {};
+		
+		if (!options.args) options.args = [];
+		
+		//Declare local instance variables
+		let ipcRenderer = electron.ipcRenderer;
+		console.log("Blacktraffic sending args:", options.args);
+		
+		//Return statement
+		return new Promise((resolve, reject) => {
+			//Clean up existing listeners to prevent leaks or duplicate handlers
+			ipcRenderer.removeAllListeners(`${channel}:ready`);
+			
+			ipcRenderer.on(`${channel}:ready`, (event, ...response_args) => {
+				//Clean up listener immediately after execution
+				ipcRenderer.removeAllListeners(`${channel}:ready`);
+				
+				try {
+					if (typeof options.special_function === "function") {
+						// Use target special function to process the event/data before resolving
+						let result = options.special_function(event, ...response_args);
+						resolve(result);
+					} else {
+						// Resolve with the payload. Fall back to returning the raw array if multiple parameters exist
+						(response_args.length === 1) ?
+							resolve(response_args[0]) :
+							resolve(response_args);
+					}
+				} catch (err) {
+					reject(err);
+				}
+			});
+			
+			//Send the payload to trigger the main process task
+			ipcRenderer.send(channel, ...options.args);
+		});
+	};
 }

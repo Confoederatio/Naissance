@@ -2,6 +2,7 @@
 global.fs = require("fs");
 global.path = require("path");
 
+
 //Initialise functions
 {
 	/**
@@ -21,10 +22,10 @@ global.path = require("path");
 			start_timestamp: new Date().getTime(),
 			
 			/**
-			 * Registry is initialised from {@link window.ve_registry} if it exists. Otherwise, default settings are used across Vercengen.
+			 * Registry is initialised from {@link global.ve_registry} if it exists. Otherwise, default settings are used across Vercengen.
 			 * @type {Object}
 			 */
-			registry: (window.ve_registry) ? window.ve_registry : {
+			registry: (global.ve_registry) ? global.ve_registry : {
 				/**
 				 * Whether to enable heuristic free.
 				 * @type {boolean}
@@ -357,21 +358,23 @@ global.path = require("path");
 		
 		// Return strictly sorted list of files matching the wildcard
 		return fs
-		.readdirSync(absolute_dir)
-		.filter((f) => regex.test(f))
-		.sort((a, b) => {
-			if (a < b) return -1;
-			if (a > b) return 1;
-			return 0;
-		})
-		.map((f) => path.join(absolute_dir, f))
-		.filter((f) => fs.statSync(f).isFile());
+			.readdirSync(absolute_dir)
+			.filter((f) => regex.test(f))
+			.sort((a, b) => {
+				if (a < b) return -1;
+				if (a > b) return 1;
+				return 0;
+			})
+			.map((f) => path.join(absolute_dir, f))
+			.filter((f) => fs.statSync(f).isFile());
 	};
 	
 	/**
 	 * Initialises Vercengen and associated UF files.
 	 */
 	ve.initialise = function () {
+		if (ve.is_not_browser) return; //Internal guard clause if this is not a browser context
+		
 		//Initialise UF handlers
 		new DALS.Timeline(); //Initialise starting timeline
 		HTML.initialise();
@@ -413,15 +416,7 @@ global.path = require("path");
 		if (options.load_files === undefined) options.load_files = [];
 		
 		//Declare local instance variables
-		let load_patterns = (!options.do_not_import_UF) ? [
-			"!UF/archives",
-			"!UF/js/vercengen/workers",
-			"UF",
-			
-			//Localisation
-			"UF/js/vercengen/engine/vercengen_localisation.js",
-			
-			//Blockly/Maptalks
+		let browser_load_patterns = [
 			"UF/libraries",
 			"UF/libraries/blockly.js",
 			"UF/libraries/bi_blockly/",
@@ -444,6 +439,17 @@ global.path = require("path");
 			"UF/libraries/univer/univerjs.index.js",
 			"UF/libraries/univer/univerjs.umd.index.js",
 			"UF/libraries/univer/univer.en-US.js",
+		];
+		let load_patterns = (!options.do_not_import_UF) ? [
+			"!UF/archives",
+			"!UF/js/vercengen/db",
+			"UF",
+			
+			//Localisation
+			"UF/js/vercengen/engine/vercengen_localisation.js",
+			
+			//Blockly/Maptalks
+			...((options.is_browser) ? browser_load_patterns : []),
 			
 			//DALS, Vercengen Components
 			"UF/js/dals/Timeline.js",
@@ -468,39 +474,41 @@ global.path = require("path");
 			"UF/js/vercengen/components/ComponentScriptManager/monaco/monaco_startup.js",
 			
 			"UF/js/vercengen/features",
+			
+			...((options.is_browser) ? [] : [
+				"!UF/libraries",
+				"!UF/js/ontology",
+				"!UF/js/vercengen/components",
+				"!UF/js/vercengen/features",
+				"UF/libraries/turf.min.js"
+			])
 		] : [];
 			load_patterns = load_patterns.concat(options.load_files);
+		ve.is_not_browser = (!options.is_browser);
 		
 		let load_files = ve.getImportFiles(load_patterns);
 		
-		console.log(`[VERCENGEN] Importing ${load_files.length} files.`, load_files);
+		if (!ve.is_not_browser)
+			console.log(`[VERCENGEN] Importing ${load_files.length} files.`, load_files);
 		
 		//1. Handle browser <link>/<script> tags
-		
 		if (options.is_browser) { //[WIP] - Refactor at a later date
 			// Build up the full HTML snippet for all files in order
 			let html_concat = "";
 			
 			for (let i = 0; i < load_files.length; i++) {
-				const local_file_path = load_files[i];
-				const local_file_extension = path.extname(local_file_path).toLowerCase();
+				let local_file_path = load_files[i];
+				let local_file_extension = path.extname(local_file_path).toLowerCase();
 				
 				// Each file becomes HTML markup in correct order
 				if (local_file_extension === ".css") {
 					html_concat += `<link rel="stylesheet" type="text/css" href="${local_file_path}">`;
 				} else if (local_file_extension === ".js") {
-					// close the script tag safely
 					html_concat += `<script type="text/javascript" src="${local_file_path}"></` + `script>`;
 				}
 			}
 			
-			// Inject all tags via HTML concatenation
-			//
-			// document.write() integrates the tags into the parsing process.
-			// This ensures that <script> blocks execute *in exact given order*,
-			// per HTML parser rules.
-			//
-			// This must run during document loading (not after DOM is complete).
+			//Inject all tags via HTML concatenation
 			injectConcatenatedHTML(html_concat);
 		}
 		
@@ -512,7 +520,7 @@ global.path = require("path");
 				
 				if (local_file_extension === ".js")
 					if (options.is_node) {
-						const local_library = require(local_file_path);
+						let local_library = require(local_file_path);
 						
 						//Destructure Node.js objects into global
 						for (let [key, value] of Object.entries(local_library)) {

@@ -10,6 +10,7 @@
  *   - `.disabled=false`: {@link boolean} - Whether the item is draggable within the hierarchy.
  *   - `.id`: {@link string}
  *   - `.name_options`: {@link Object} - Any options that should be carried over to `.components_obj.name`. Same options as {@link ve.Text}.
+ *   - `.is_collapsed=false`: {@link boolean}
  *   - `.no_folders=false`: {@link boolean} - Whether minimising/maximising individual folders should be allowed.
  *   - `.type="item"`: {@link string} - Either 'group'/'item'.
  * 
