@@ -426,12 +426,16 @@ if (!global.NDJSON)
 		let write_streams = {};
 		
 		//Iterate over all workers and ensure partitions
-		if (!fs.existsSync(folder_path)) fs.mkdirSync(folder_path, { recursive: true });
+		if (!fs.existsSync(folder_path))
+			fs.mkdirSync(folder_path, { recursive: true });
 		for (let i = 0; i < pool.length; i++)
-			write_streams[i] = fs.createWriteStream(path.join(folder_path, `${i}.ndjson`));
+			write_streams[i] = fs.createWriteStream(
+				path.join(folder_path, `${i}.ndjson`)
+			);
 		
-		//Iterate over all lines in rl
-		let rl = readline.createInterface({ input: fs.createReadStream(file_path) });
+		//Iterate over all lines in rs
+		let rs = fs.createReadStream(file_path);
+		let rl = readline.createInterface({ input: rs });
 		
 		for await (let line of rl) {
 			let match = line.match(/^"([^"]+)"\s*:/);
@@ -441,14 +445,18 @@ if (!global.NDJSON)
 				if (clean_line.endsWith(",")) clean_line = clean_line.slice(0, -1);
 				
 				if (!write_streams[wid].write(clean_line + "\n"))
-					await new Promise(r => write_streams[wid].once("drain", r));
+					await new Promise((r) => write_streams[wid].once("drain", r));
 			}
 		}
+		
+		//Cleanup read handles explicitly
+		rl.close();
+		rs.destroy();
 		
 		//Iterate over all workers in pool and finish
 		for (let i = 0; i < pool.length; i++) {
 			write_streams[i].end();
-			await new Promise(r => write_streams[i].on("finish", r));
+			await new Promise((r) => write_streams[i].on("finish", r));
 		}
 	};
 	
@@ -507,7 +515,7 @@ if (!global.NDJSON)
 		map[id] = null;
 		
 		//Return statement
-		return await NDJSON.setValues(path.resolve(ve.ndjson_file_path), map);
+		return await NDJSON.setValues(map);
 	};
 	
 	/**
@@ -529,7 +537,7 @@ if (!global.NDJSON)
 			map[ids[i]] = null;
 		
 		//Return statement
-		return await NDJSON.setValues(path.resolve(ve.ndjson_file_path), map);
+		return await NDJSON.setValues(map);
 	};
 	
 	/**
@@ -548,26 +556,40 @@ if (!global.NDJSON)
 		let ws = fs.createWriteStream(file_path); // Overwrite target .ndjson
 		ws.write("{\n");
 		
-		//Iterate over all workeers and writee as needed
+		//Iterate over all workers and write as needed
 		let first = true;
 		for (let i = 0; i < pool.length; i++) {
 			let page_file = path.join(folder_path, `${i}.ndjson`);
 			if (fs.existsSync(page_file)) {
 				//Iterate over all lines in rl
-				let rl = readline.createInterface({ input: fs.createReadStream(page_file) });
+				let rs = fs.createReadStream(page_file);
+				let rl = readline.createInterface({ input: rs });
 				for await (let line of rl) {
 					if (line.trim().length === 0) continue;
 					if (!first) ws.write(",\n");
 					ws.write(line.trim());
 					first = false;
 				}
+				rl.close();
+				rs.destroy();
 			}
 		}
 		
 		ws.write("\n}");
 		ws.end();
-		await new Promise(r => ws.on("finish", r));
-		fs.rmSync(folder_path, { recursive: true, force: true });
+		await new Promise((r) => ws.on("finish", r));
+		
+		//Retry mechanism for rmSync to handle lingering handles on Windows
+		let removed = false;
+		let attempts = 0;
+		while (!removed && attempts < 5)
+			try {
+				fs.rmSync(folder_path, { recursive: true, force: true });
+				removed = true;
+			} catch (e) {
+				attempts++;
+				await new Promise((r) => setTimeout(r, 100));
+			}
 	};
 	
 	/**
@@ -610,7 +632,7 @@ if (!global.NDJSON)
 		map[id] = value;
 		
 		//Return statement
-		return await NDJSON.setValues(parg.resolve(ve.ndjson_file_path), map);
+		return await NDJSON.setValues(map);
 	};
 	
 	/**

@@ -95,27 +95,26 @@ async function handleTask (arg0_task) {
 	
 	let forEachLine = async (filePath, callback) => {
 		if (fs.existsSync(filePath)) {
-			let rl = readline.createInterface({
-				input: fs.createReadStream(filePath)
-			});
-			for await (let line of rl) {
-				let match = line.match(/^"([^"]+)"\s*:/);
-				let result;
-				
-				if (match) {
-					let key = match[1];
-					let val_str = getCleanValue(
-						line.substring(line.indexOf(":") + 1)
-					);
-					result = await callback(key, val_str, line);
-				} else {
-					result = await callback(null, null, line);
+			let rs = fs.createReadStream(filePath);
+			let rl = readline.createInterface({ input: rs });
+			try {
+				for await (let line of rl) {
+					let match = line.match(/^"([^"]+)"\s*:/);
+					let result = match
+						? await callback(
+							match[1],
+							getCleanValue(line.substring(line.indexOf(":") + 1)),
+							line
+						)
+						: await callback(null, null, line);
+					
+					if (result === false) break;
 				}
-				
-				if (result === false) {
-					rl.close();
-					break;
-				}
+			} finally {
+				rl.close();
+				rs.destroy();
+				// Ensure OS has tick to release file descriptor
+				await new Promise((r) => setImmediate(r));
 			}
 		}
 	};
@@ -127,8 +126,8 @@ async function handleTask (arg0_task) {
 		return clean;
 	};
 	let resolveHistory = (data, timestamp, options) => {
-		let history_obj = (typeof data.history === "string") ?
-			JSON.parse(data.history) : data.history;
+		let history_obj =
+			typeof data.history === "string" ? JSON.parse(data.history) : data.history;
 		
 		//Return statement
 		if (history_obj && history_obj.keyframes) {
@@ -140,12 +139,13 @@ async function handleTask (arg0_task) {
 	};
 	
 	let updateNDJSON = async (getUpdatedValue) => {
-		let tmp_file = `${page_file}.tmp_${Date.now()}`;
+		let tmp_file = `${page_file}.tmp_${Date.now()}_${Math.floor(
+			Math.random() * 1000
+		)}`;
 		let updated = false;
 		
 		let dir = path.dirname(page_file);
-		if (!fs.existsSync(dir))
-			fs.mkdirSync(dir, { recursive: true });
+		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 		
 		let ws = fs.createWriteStream(tmp_file);
 		
@@ -162,26 +162,47 @@ async function handleTask (arg0_task) {
 			});
 		}
 		
-		let extraAppends = getUpdatedValue(null, null, updated);
-		if (extraAppends) {
-			for (let [k, val] of Object.entries(extraAppends))
-				if (val !== null)
-					ws.write(`"${k}":${JSON.stringify(val)}\n`);
+		let extra_appends = getUpdatedValue(null, null, updated);
+		if (extra_appends) {
+			for (let [k, val] of Object.entries(extra_appends))
+				if (val !== null) ws.write(`"${k}":${JSON.stringify(val)}\n`);
 		}
 		
 		ws.end();
-		await new Promise(r => ws.on("finish", r));
+		await new Promise((r) => ws.on("finish", r));
 		
-		fs.renameSync(tmp_file, page_file);
+		// Handle Windows EPERM via retry loop for renameSync
+		let renamed = false;
+		let attempts = 0;
+		while (!renamed && attempts < 10) {
+			try {
+				fs.renameSync(tmp_file, page_file);
+				renamed = true;
+			} catch (e) {
+				attempts++;
+				if (attempts >= 10) throw e;
+				await new Promise((r) => setTimeout(r, 50));
+			}
+		}
 	};
 	
 	//Declare local instance variables
 	let {
-		file_path, id, limit_end, keyframes, update_map, query, task_id, timestamp, type
-	} = task; //Destructure parameters from task
-	let page_file = path.join(`${file_path}.tmpndjson`, `${workerData.worker_id}.ndjson`);
+		file_path,
+		id,
+		limit_end,
+		keyframes,
+		update_map,
+		query,
+		task_id,
+		timestamp,
+		type,
+	} = task;
+	let page_file = path.join(
+		`${file_path}.tmpndjson`,
+		`${workerData.worker_id}.ndjson`
+	);
 	
-	//diff: parses the .history.keyframes for an individual ID
 	if (type === "diff") {
 		let found = await findByID((obj) => {
 			let state_val = resolveHistory(obj, timestamp);
@@ -190,26 +211,22 @@ async function handleTask (arg0_task) {
 				return {
 					key: id,
 					class_name: obj.class_name,
-					value: state_val
+					value: state_val,
 				};
 			} else {
 				return {
 					key: id,
 					class_name: obj.class_name,
-					value: (typeof obj.value === "string") ?
-						JSON.parse(obj.value) : obj.value
+					value:
+						typeof obj.value === "string" ? JSON.parse(obj.value) : obj.value,
 				};
 			}
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: found });
 	}
 	
-	//diff_all: parses `.history.keyframes` for all individual IDs.
 	if (type === "diff_all") {
 		let list = [];
-		
 		await forEachLine(page_file, (key, val_str) => {
 			try {
 				let entity_obj = JSON.parse(val_str);
@@ -219,24 +236,23 @@ async function handleTask (arg0_task) {
 					list.push({
 						key,
 						class_name: entity_obj.class_name,
-						value: state_val
+						value: state_val,
 					});
 				} else {
 					list.push({
 						key,
 						class_name: entity_obj.class_name,
-						value: (typeof entity_obj.value === "string") ?
-							JSON.parse(entity_obj.value) : entity_obj.value
+						value:
+							typeof entity_obj.value === "string"
+								? JSON.parse(entity_obj.value)
+								: entity_obj.value,
 					});
 				}
 			} catch (e) {}
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: list });
 	}
 	
-	//get_diffs: parses `.history.keyframes` for multiple IDs in a single pass.
 	if (type === "get_diffs") {
 		let found = await findMany(task.ids, (key, obj) => {
 			let state_val = resolveHistory(obj, timestamp);
@@ -245,43 +261,37 @@ async function handleTask (arg0_task) {
 				return {
 					key,
 					class_name: obj.class_name,
-					value: state_val
+					value: state_val,
 				};
 			} else {
 				return {
 					key,
 					class_name: obj.class_name,
-					value: (typeof obj.value === "string") ?
-						JSON.parse(obj.value) : obj.value
+					value:
+						typeof obj.value === "string" ? JSON.parse(obj.value) : obj.value,
 				};
 			}
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: found });
 	}
 	
-	//get_hierarchy_values: sends back metadata, names, and symbols of Geometry classes, as well as Feature classes
 	if (type === "get_hierarchy_values") {
 		let list = [];
-		
 		await forEachLine(page_file, (key, val_str) => {
 			try {
 				let entity_obj = JSON.parse(val_str);
-				let state_val = resolveHistory(entity_obj, timestamp, {
-					type: "get_keyframes"
-				});
 				
 				if (typeof entity_obj.history !== "undefined") {
-					//Iterate over all_keyframes to ensure we pass back minimal data
+					let current_keyframe = resolveHistory(entity_obj, timestamp);
+					let state_val = resolveHistory(entity_obj, timestamp, {
+						type: "get_keyframes",
+					});
 					let all_keyframes = Object.keys(state_val);
 					
 					for (let i = 0; i < all_keyframes.length; i++) {
 						let local_keyframe = state_val[all_keyframes[i]];
-						
 						delete local_keyframe.localisation;
-						if (local_keyframe.value)
-							local_keyframe.value[0] = undefined;
+						if (local_keyframe.value) local_keyframe.value[0] = undefined;
 					}
 					
 					list.push({
@@ -289,60 +299,49 @@ async function handleTask (arg0_task) {
 						class_name: entity_obj.class_name,
 						metadata: entity_obj.metadata,
 						name: History.getName(state_val, timestamp),
-						value: state_val
+						current_keyframe: current_keyframe,
+						value: state_val,
 					});
 				} else {
 					list.push({
 						key,
 						class_name: entity_obj.class_name,
 						metadata: entity_obj.metadata,
-						value: (typeof entity_obj.value === "string") ?
-							JSON.parse(entity_obj.value) : entity_obj.value
+						value:
+							typeof entity_obj.value === "string"
+								? JSON.parse(entity_obj.value)
+								: entity_obj.value,
 					});
 				}
 			} catch (e) {}
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: list });
 	}
 	
-	//get_keyframes: returns keyframes for an ID.
 	if (type === "get_keyframes") {
 		let found = await findByID((obj) => {
 			let state_val = resolveHistory(obj, undefined, {
-				type: "get_keyframes"
+				type: "get_keyframes",
 			});
-			return (state_val !== null) ? { key: id, value: state_val } : null;
+			return state_val !== null ? { key: id, value: state_val } : null;
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: found });
 	}
 	
-	//get_value: returns the Object representing an ID.
 	if (type === "get_value") {
 		let found = await findByID((obj) => obj);
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: found });
 	}
 	
-	//get_values: returns the Objects representing multiple IDs in a single pass.
 	if (type === "get_values") {
 		let found = await findMany(task.ids, (key, obj) => obj);
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: found });
 	}
 	
-	//query: queries an Object based on strict matches, and returns an Array<Object>.
 	if (type === "query") {
 		let list = [];
-		
 		await forEachLine(page_file, (key, val_str) => {
-			if (limit_end !== undefined && list.length >= limit_end) return false; // Break early
-			
+			if (limit_end !== undefined && list.length >= limit_end) return false;
 			try {
 				let obj = JSON.parse(val_str);
 				let matches = true;
@@ -358,31 +357,28 @@ async function handleTask (arg0_task) {
 				}
 			} catch (e) {}
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: list });
 	}
 	
-	//set_keyframes: sets/updates the .history.keyframes for an individual ID.
 	if (type === "set_keyframes") {
 		await updateNDJSON((key, val_str, updated) => {
 			if (key === null) {
 				return updated ? null : { [id]: { history: { keyframes } } };
 			}
-			
 			if (key === id) {
 				try {
 					let obj = JSON.parse(val_str);
-					let is_history_string = (typeof obj.history === "string");
-					let history_obj = is_history_string ?
-						JSON.parse(obj.history) : obj.history;
+					let is_history_string = typeof obj.history === "string";
+					let history_obj = is_history_string
+						? JSON.parse(obj.history)
+						: obj.history;
 					
 					if (!history_obj) history_obj = {};
 					history_obj.keyframes = keyframes;
 					
-					obj.history = is_history_string ?
-						JSON.stringify(history_obj) : history_obj;
-					
+					obj.history = is_history_string
+						? JSON.stringify(history_obj)
+						: history_obj;
 					return obj;
 				} catch (e) {
 					return undefined;
@@ -390,12 +386,9 @@ async function handleTask (arg0_task) {
 			}
 			return undefined;
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: true });
 	}
 	
-	//set_values: sets multiple key-value pairs in the NDJSON partition.
 	if (type === "set_values") {
 		let updated_keys = new Set();
 		await updateNDJSON((key, val_str) => {
@@ -405,15 +398,12 @@ async function handleTask (arg0_task) {
 					if (!updated_keys.has(k)) rem[k] = update_map[k];
 				return rem;
 			}
-			
 			if (update_map.hasOwnProperty(key)) {
 				updated_keys.add(key);
 				return update_map[key];
 			}
 			return undefined;
 		});
-		
-		//Return statement
 		return parentPort.postMessage({ task_id, results: true });
 	}
 }

@@ -4,9 +4,6 @@ global.UI_SystemManagerWindow = class {
 	constructor () {
 		if (UI_SystemManagerWindow.instance) UI_SystemManagerWindow.instance.close();
 		UI_SystemManagerWindow.instance = vePageMenuWindow({
-			histmap_workers: {
-				name: "Histmap Workers"
-			},
 			livemap_workers: {
 				name: "Livemap Workers"
 			},

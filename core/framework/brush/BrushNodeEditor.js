@@ -115,7 +115,10 @@ naissance.GeometryPolygon.handleNodeEditorEnd = function (arg0_e) {
 				turf.intersect(turf.featureCollection([ot_turf_geometry, cursor_turf_geometry])) :
 				turf.intersect(turf.featureCollection([turf_geometry, cursor_turf_geometry]));
 			if (!turf_intersection) return; //Internal guard clause if nothing overlaps
-			turf_intersection = turf.buffer(turf_intersection, Math.returnSafeNumber(main.brush.node_buffer/1000, 0.01), { units: "kilometers" });
+			turf_intersection = turf.buffer(turf_intersection, 0.001, {
+				units: "kilometers",
+				steps: 1
+			});
 			
 			//Transfer selected polygon
 			e.geometry = Geospatiale.convertTurfToMaptalks(turf_intersection);
@@ -132,19 +135,6 @@ naissance.GeometryPolygon.handleNodeEditorEnd = function (arg0_e) {
 						}
 					}]
 				}); //Remove cut from target polygon
-				setTimeout(() => {
-					DALS.Timeline.parseAction({
-						options: { name: "Simplify Polygon", key: "simplify_polygon" },
-						value: [{
-							type: "GeometryPolygon",
-							geometry_id: this.id,
-							simplify_polygon: {
-								date_range: date_range,
-								tolerance: 0.01
-							}
-						}]
-					}, true);
-				}, 100);
 			} else if (main.brush.node_editor.mode === "remove") {
 				DALS.Timeline.parseAction({
 					options: { name: "Add to Polygon", key: "add_to_polygon" },
@@ -154,27 +144,9 @@ naissance.GeometryPolygon.handleNodeEditorEnd = function (arg0_e) {
 						add_to_polygon: {
 							date_range: date_range,
 							geometry: e.geometry.toJSON() 
-						},
-						simplify_polygon: {
-							date_range: date_range,
-							tolerance: 0.01
 						}
 					}]
 				});
-				
-				setTimeout(() => {
-					DALS.Timeline.parseAction({
-						options: { name: "Simplify Polygon", key: "simplify_polygon" },
-						value: [{
-							type: "GeometryPolygon",
-							geometry_id: from_geometry.id,
-							simplify_polygon: {
-								date_range: date_range,
-								tolerance: 0.01
-							}
-						}]
-					}, true);
-				}, 100);
 			}
 			
 		} catch (e) { console.error(e); }
