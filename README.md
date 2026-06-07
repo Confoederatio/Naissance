@@ -43,10 +43,10 @@
 
 **Note.** Most of the dev builds are built for Windows, since that's what most use. If you are on MacOS/Linux and need tech support, please join the Discord.
 
-<ins>Stable Release (1.8.1, Windows):</ins>
-1. Download [Naissance 1.8.1b](https://drive.google.com/file/d/1naehENAm4a2uknQV954HJuobW5t2ZFrk/view?usp=sharing)
+<ins>Stable Release (1.8.2, Windows):</ins>
+1. Download [Naissance 1.8.2b](https://drive.google.com/file/d/1NmypaHEm6AcbJxK5_6qh5jo7x9lJMDjU/view?usp=sharing)
 2. Extract ZIP file when downloaded.
-3. Run `Naissance HGIS.exe`.
+3. Run `naissance.exe`.
 
 <ins>Latest Dev Build</ins> or <ins>MacOS/Linux:</ins>
 1. Download Node.JS if not installed: https://nodejs.org/en/download
