@@ -286,7 +286,7 @@ naissance.Geometry = class extends ve.Class {
 					this.variables_editor = veWindow({
 						table_editor: veSpreadsheet(this.metadata.variables, {
 							dark_mode: true,
-							onuserchange: (v, e) => { //[WIP] - Finish function body
+							onuserchange: (v, e) => {
 								let array_values = e.convertToArray();
 								this.history.do_not_draw = true;
 								
@@ -303,27 +303,44 @@ naissance.Geometry = class extends ve.Class {
 								});
 								
 								//2. Reconstruct .variables for all valid keyframes
-								for (let i = 0; i < array_values.length; i++)
-									for (let x = 0; x < array_values[i].length; x++) //Iterate over all rows in spreadsheets
-										if (array_values[i][x][0]) {
-											let local_date = Date.convertStringToDate(array_values[i][x][0].toString());
+								for (let i = 0; i < array_values.length; i++) {
+									let current_sheet = array_values[i];
+									let header_row = (current_sheet[0]) ? current_sheet[0] : [];
+									
+									//Calculate max width of the sheet to ensure consistent column indexing
+									let max_sheet_width = header_row.length;
+									for (let x = 0; x < current_sheet.length; x++)
+										if (current_sheet[x] && current_sheet[x].length > max_sheet_width)
+											max_sheet_width = current_sheet[x].length;
+									
+									for (let x = 1; x < current_sheet.length; x++) {
+										let current_row = current_sheet[x];
+										
+										if (current_row && current_row[0]) {
+											let local_date = Date.convertStringToDate(current_row[0].toString());
 											let local_variables_obj = {};
 											
-											//If local_date is defined, iterate over all values in row and append them to local_variables_obj
-											if (local_date && array_values[i][x].length > 1) {
-												for (let y = 1; y < array_values[i][x].length; y++) {
-													let local_cell_variable_name = y;
-													if (array_values[i][0][y])
-														local_cell_variable_name = array_values[i][0][y];
+											//If local_date is defined, iterate based on the global max width of the sheet
+											if (local_date) {
+												for (let y = 1; y < max_sheet_width; y++) {
+													let variable_name = (header_row[y]) ?
+														header_row[y] : y; //Fallback to index if header cell is empty
+													let cell_value = current_row[y];
 													
-													local_variables_obj[local_cell_variable_name] = array_values[i][x][y];
+													//Only append Truthy and non-empty values to prevent resetting historical fields
+													if (cell_value !== null && cell_value !== undefined && cell_value !== "" && cell_value !== " ")
+														local_variables_obj[variable_name] = cell_value;
 												}
 												
-												this.history.addKeyframe(local_date, undefined, undefined, {
-													variables: local_variables_obj
-												});
+												//Only add keyframe if there are actual variable changes defined for this date
+												if (Object.keys(local_variables_obj).length > 0)
+													this.history.addKeyframe(local_date, undefined, undefined, {
+														variables: local_variables_obj
+													});
 											}
 										}
+									}
+								}
 								
 								this.metadata.variables = e.toJSON();
 								delete this.history.do_not_draw;

@@ -78,6 +78,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		if (this.value[2]) { //[WIP] - Refactor labelling logic at a later date
 			//Declare local instance variables
 			let brush_symbol = main.brush.getBrushSymbol();
+			let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 			let hide_labels_under_km2 = Math.returnSafeNumber(main.settings.hide_labels_under_km2, 1000);
 			
 			//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
@@ -118,12 +119,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					if (label_geometries.length === 0) {
 						this.label_geometries[i].setSymbol({
 							textName: label_name,
-							
-							textFaceName: brush_symbol.textFaceName,
-							textFill: brush_symbol.textFill,
-							textHaloFill: brush_symbol.textHaloFill,
-							textHaloRadius: brush_symbol.textHaloRadius,
-							textSize: brush_symbol.textSize,
+							...default_label_symbol,
 							...this.value[2].label_symbol
 						});
 						
@@ -152,7 +148,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//1. Set this.value from current relative keyframe
 		if (this.history._hasTimestampAfter(main.timestamp)) {
-			this.value = this.history.getKeyframe({ date: main.timestamp }).value;
+			this.value = this.history.getKeyframe({ 
+				date: main.timestamp,
+				guaranteed_indexes: [1]
+			}).value;
 			if (this.value === undefined || this.value?.length === 0 || this._is_visible === false) return;
 			
 			//2. Check any cause for derendering
@@ -167,7 +166,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			try {
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
-					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
+					if (this.geometry) this.geometry.setSymbol({
+						...naissance.Renderer.getDefaultSymbol(),
+						...this.value?.[1],
+					});
 					main.layers.entity_layer.addGeometry(this.geometry);
 					this._drawLabels();
 				}

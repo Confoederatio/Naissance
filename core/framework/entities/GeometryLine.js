@@ -51,7 +51,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 	
 	draw () {
 		//Declare local instance variables
-		let brush_symbol = main.brush.getBrushSymbol();
+		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -113,12 +113,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 							if (label_geometries.length === 0) {
 								this.label_geometries[i].setSymbol({
 									textName: label_name,
-									
-									textFaceName: brush_symbol.textFaceName,
-									textFill: brush_symbol.textFill,
-									textHaloFill: brush_symbol.textHaloFill,
-									textHaloRadius: brush_symbol.textHaloRadius,
-									textSize: brush_symbol.textSize,
+									...default_label_symbol,
 									...this.value[2].label_symbol
 								});
 								

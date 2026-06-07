@@ -293,6 +293,10 @@ naissance.History = class extends ve.Class {
 		return (all_timestamps.length > 0) ? this.keyframes[all_timestamps.length - 1] : undefined;
 	}
 	
+	/**
+	 * @param {Object} [arg0_options]
+	 *  @param {number[]} [arg0_options.guaranteed_indexes]
+	 */
 	getKeyframe (arg0_options) {
 		//Convert from parameters
 		let options = (arg0_options) ? arg0_options : {};
@@ -324,43 +328,58 @@ naissance.History = class extends ve.Class {
 			};
 			
 			let all_keyframes = this.getTimestamps();
+			let remaining_guarantees = (options.guaranteed_indexes) ?
+				[...options.guaranteed_indexes] : [];
 			
-			if (all_keyframes[0] > timestamp) 
+			if (all_keyframes[0] > timestamp)
 				if (!options.refresh_localisation) return return_keyframe; //Internal guard clause
 			for (let i = 0; i < all_keyframes.length; i++) {
 				let local_keyframe = this.keyframes[all_keyframes[i]];
+				let is_past_timestamp = (Date.convertTimestampToInt(all_keyframes[i]) > Date.convertTimestampToInt(timestamp));
 				
 				//Parse localisation first, then concatenate
 				if (options.refresh_localisation)
 					local_keyframe.localisation = (this.options.localisation_function) ?
 						this.options.localisation_function(local_keyframe, return_keyframe) : "";
 				
-				if (Date.convertTimestampToInt(all_keyframes[i]) <= Date.convertTimestampToInt(timestamp)) {
-					for (let x = 0; x < local_keyframe.value.length; x++)
-						if (typeof local_keyframe.value[x] === "object" && local_keyframe.value[x] !== null) {
-							let old_variables = return_keyframe.value[x]?.variables ? 
-								return_keyframe.value[x].variables : {};
-							
-							//Return keyframe
-							return_keyframe.value[x] = {
-								...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
-								...local_keyframe.value[x],
-							};
-							
-							//Handle nested .variables
-							if (local_keyframe.value[x] && local_keyframe.value[x].variables)
-								return_keyframe.value[x].variables = {
-									...old_variables,
-									...local_keyframe.value[x].variables,
+				if (!is_past_timestamp || remaining_guarantees.length > 0) {
+					for (let x = 0; x < local_keyframe.value.length; x++) {
+						let is_guaranteed = (options.guaranteed_indexes) ?
+							options.guaranteed_indexes.includes(x) : false;
+						let is_resolved = (return_keyframe.value[x] !== undefined && return_keyframe.value[x] !== null);
+						
+						//Update value if before original timestamp cutoff, or if index is a guarantee that hasn't been fixed yet
+						if (!is_past_timestamp || (is_guaranteed && !is_resolved)) {
+							if (typeof local_keyframe.value[x] === "object" && local_keyframe.value[x] !== null) {
+								let old_variables = (return_keyframe.value[x]?.variables) ?
+									return_keyframe.value[x].variables : {};
+								
+								//Return keyframe
+								return_keyframe.value[x] = {
+									...(return_keyframe.value[x] ? return_keyframe.value[x] : {}),
+									...local_keyframe.value[x],
 								};
-						} else if (local_keyframe.value[x] !== undefined) {
-							if (local_keyframe.value[x] === "undefined") continue; //Overwrite undefined strings
-							if (x !== 0 && local_keyframe.value[x] === null) continue; //Null should be overridden for [1] symbols, [2] properties
-							//If the value is null or a primitive, it overwrites the previous accumulated state
-							return_keyframe.value[x] = local_keyframe.value[x];
+								
+								//Handle nested .variables
+								if (local_keyframe.value[x] && local_keyframe.value[x].variables)
+									return_keyframe.value[x].variables = {
+										...old_variables,
+										...local_keyframe.value[x].variables,
+									};
+							} else if (local_keyframe.value[x] !== undefined) {
+								if (local_keyframe.value[x] === "undefined") continue; //Overwrite undefined strings
+								if (x !== 0 && local_keyframe.value[x] === null) continue; //Null should be overridden for [1] symbols, [2] properties
+								//If the value is null or a primitive, it overwrites the previous accumulated state
+								return_keyframe.value[x] = local_keyframe.value[x];
+							}
+							
+							//Remove from guarantees if now truthy
+							if (is_guaranteed && return_keyframe.value[x] !== undefined && return_keyframe.value[x] !== null)
+								remaining_guarantees = remaining_guarantees.filter(idx => idx !== x);
 						}
-				} else { 
-					if (!options.refresh_localisation) break; 
+					}
+				} else {
+					if (!options.refresh_localisation) break;
 				}
 			}
 			

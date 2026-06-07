@@ -113,7 +113,7 @@ naissance.Geometry.parseAction = function (arg0_json) { //[WIP] - Add variable a
 			
 			geometry_obj.history.cleanKeyframes();
 			geometry_obj.history.getKeyframe(); //Refresh localisation
-			geometry_obj.history.draw(geometry_obj.keyframes_ui);
+			//geometry_obj.history.draw(geometry_obj.keyframes_ui);
 		}
 		
 		//delete_geometry

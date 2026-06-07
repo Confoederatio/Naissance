@@ -66,7 +66,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 	
 	draw () {
 		//Declare local instance variables
-		let brush_symbol = main.brush.getBrushSymbol();
+		let default_symbol = naissance.Renderer.getDefaultSymbol();
+		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -75,7 +76,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			derender_geometry = true;
 		
 		//2. Check any cause for derendering
-		if (this.value && this.value[0] === null) 
+		if (this.value && !this.value[0]) 
 			derender_geometry = true; //Coords are null, derender geometry
 		if (this.value && this.value[2]) {
 			if (this.value[2].hidden) derender_geometry = true;
@@ -98,12 +99,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					this.geometry.setSymbol({
-						markerDx: brush_symbol._markerDx,
-						markerDy: brush_symbol._markerDy,
-						markerFile: brush_symbol._markerFile,
-						markerHeight: brush_symbol._markerHeight,
-						markerOpacity: brush_symbol._markerOpacity,
-						markerWidth: brush_symbol._markerWidth,
+						...default_symbol,
 					});
 					if (this.value[1] && this.geometry) 
 						this.geometry.setSymbol({
@@ -137,12 +133,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 								this.label_geometries[i].setSymbol({
 									textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
 									textName: label_name,
-									
-									textFaceName: brush_symbol.textFaceName,
-									textFill: brush_symbol.textFill,
-									textHaloFill: brush_symbol.textHaloFill,
-									textHaloRadius: brush_symbol.textHaloRadius,
-									textSize: brush_symbol.textSize,
+									...default_label_symbol,
 									...this.value[2].label_symbol
 								});
 								

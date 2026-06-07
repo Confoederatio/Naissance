@@ -77,6 +77,44 @@ naissance.Renderer = class extends ve.Class {
 				rendering_order[i].draw();
 	}
 	
+	static getDefaultLabelSymbol () {
+		//Declare local instance variables
+		let map_defines = config.defines.map;
+		
+		let default_maptalks_label_keys = map_defines.default_maptalks_label_keys;
+		let maptalks_label_obj = {};
+		
+		for (let i = 0; i < default_maptalks_label_keys.length; i++)
+			maptalks_label_obj[default_maptalks_label_keys[i]] = map_defines.default_maptalks_symbol[default_maptalks_label_keys[i]];
+		
+		//Return statement; diff main.settings.default_label_symbol and config.defines.map.default_maptalks_symbol
+		return {
+			...maptalks_label_obj,
+			...main.settings.default_label_symbol
+		};
+	}
+	
+	static getDefaultSymbol () {
+		//Declare local instance variables
+		let map_defines = config.defines.map;
+		
+		let default_maptalks_symbol = map_defines.default_maptalks_symbol;
+		let default_symbol_obj = {
+			...main.settings.default_line_symbol,
+			...main.settings.default_point_symbol,
+			...main.settings.default_polygon_symbol
+		};
+		
+		//Iterate over default_symbol_obj; if same as corresponding default_maptalks_symbol, remove it
+		Object.iterate(default_symbol_obj, (local_key, local_value) => {
+			if (local_value === default_maptalks_symbol[local_key])
+				delete default_symbol_obj[local_key];
+		});
+		
+		//Return statement
+		return default_symbol_obj;
+	}
+	
 	static toggleUI () {
 		let all_interface_els = document.querySelectorAll(`#ve-overlay > .ve`);
 		naissance.Renderer.hide_ui = (!naissance.Renderer.hide_ui);

@@ -133,69 +133,37 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										UI_Settings.saveSettings();
 									}
 								}),
-								default_label_symbol: veInterface({
-									hide_labels_by_default: veToggle(main.settings.hide_labels_by_default, {
-										name: "Hide Labels by Default",
-										tooltip: "Labels will not appear by default when new Geometries are created.",
-										
-										onuserchange: (v) => {
-											main.settings.hide_labels_by_default = v;
-											UI_Settings.saveSettings();
-										}
-									}),
-									hide_labels_under_km2: veNumber(Math.returnSafeNumber(main.settings.hide_labels_under_km2, 1000), {
-										name: "Hide Labels Under Area (km^2)",
-										tooltip: "Labels will not appear for exclaves under this area.",
-										onuserchange: (v) => {
-											main.settings.hide_labels_under_km2 = v;
-											UI_Settings.saveSettings();
-										}
-									}),
-									
-									default_label_colour: veColour((main.settings.default_label_colour) ? main.settings.default_label_colour : [255, 255, 255], {
-										name: "Font Colour",
-										onuserchange: (v, e) => {
-											main.settings.default_label_colour = e.getHex();
-											UI_Settings.saveSettings();
-										}
-									}),
-									default_label_font: veSelect(main.settings.font_registry, {
-										name: "Font Family",
-										selected: main.settings.default_label_font,
-										
-										onuserchange: (v) => {
-											main.settings.default_label_font = v;
-											UI_Settings.saveSettings();
-										}
-									}),
-									default_label_font_size: veNumber(Math.returnSafeNumber(main.settings.default_label_font_size, 14), {
-										name: "Font Size",
-										
-										min: 6,
-										onuserchange: (v) => {
-											main.settings.default_label_font_size = v;
-											UI_Settings.saveSettings();
-										}
-									}),
-									default_label_stroke: veColour((main.settings.default_label_stroke) ? main.settings.default_label_stroke : [0, 0, 0], {
-										name: "Font Stroke",
-										onuserchange: (v, e) => {
-											main.settings.default_label_stroke = e.getHex();
-											UI_Settings.saveSettings();
-										}
-									}),
-									default_label_stroke_width: veNumber(Math.returnSafeNumber(main.settings.default_label_stroke_width, 2), {
-										name: "Font Stroke Width",
-										
-										min: 0,
-										onuserchange: (v) => {
-											main.settings.default_label_stroke_width = v;
-											UI_Settings.saveSettings();
-										}
-									})
-								}, {
-									attributes: { class: "ve-disable-nesting" },
-									name: "Default Label Symbol" 
+								default_label_symbol: new UI_LabelSymbol(main.settings.default_label_symbol, {
+									name: "Default Label Symbol",
+									special_function: (v) => {
+										let all_keys = Object.keys(v);
+										Object.setValue(main.settings, `default_label_symbol.${all_keys[0]}`, v[all_keys[0]]);
+										UI_Settings.saveSettings();
+									}
+								}),
+								default_line_symbol: new UI_LineSymbol(main.settings.default_line_symbol, {
+									name: "Default Line Symbol",
+									special_function: (v) => {
+										let all_keys = Object.keys(v);
+										Object.setValue(main.settings, `default_line_symbol.${all_keys[0]}`, v[all_keys[0]]);
+										UI_Settings.saveSettings();
+									}
+								}),
+								default_point_symbol: new UI_PointSymbol(main.settings.default_point_symbol, {
+									name: "Default Point Symbol",
+									special_function: (v) => {
+										let all_keys = Object.keys(v);
+										Object.setValue(main.settings, `default_point_symbol.${all_keys[0]}`, v[all_keys[0]]);
+										UI_Settings.saveSettings();
+									}
+								}),
+								default_polygon_symbol: new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
+									name: "Default Polygon Symbol",
+									special_function: (v) => {
+										let all_keys = Object.keys(v);
+										Object.setValue(main.settings, `default_polygon_symbol.${all_keys[0]}`, v[all_keys[0]]);
+										UI_Settings.saveSettings();
+									}
 								}),
 								province_layer_symbol: veInterface({
 									province_layer_opacity: veRange(Math.returnSafeNumber(main.settings.province_layer_opacity, 0.5), {
@@ -213,7 +181,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 								}, {
 									attributes: { class: "ve-disable-nesting" },
 									name: "Province Layer Symbol"
-								})
+								}),
 							}
 						}
 					}, {
@@ -266,6 +234,25 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 			});
 			return;
 		}
+		
+		//main.settings.default_point_symbol
+		if (!main.settings.default_point_symbol) main.settings.default_point_symbol = {};
+		let default_point_symbol = main.settings.default_point_symbol;
+		
+			if (default_point_symbol.markerDx === undefined) default_point_symbol.markerDx = 0;
+			if (default_point_symbol.markerDy === undefined) default_point_symbol.markerDy = 0;
+			if (default_point_symbol.markerHeight === undefined) default_point_symbol.markerHeight = 40;
+			if (default_point_symbol.markerWidth === undefined) default_point_symbol.markerWidth = 40;
+			if (default_point_symbol.markerFile === undefined) default_point_symbol.markerFile = "gfx/icons/marker_default.png";
+		
+		//main.settings.default_polygon_symbol
+		if (!main.settings.default_polygon_symbol) main.settings.default_polygon_symbol = {};
+		let default_polygon_symbol = main.settings.default_polygon_symbol;
+			
+			if (default_polygon_symbol.polygonFill === undefined)
+				default_polygon_symbol.polygonFill = "#1bbc9b";
+			if (default_polygon_symbol.polygonOpacity === undefined)
+				default_polygon_symbol.polygonOpacity = 0.7;
 		
 		//main.settings.autoload_file handler
 		if (main.settings.autoload_file && main.settings.autoloading_mode === "default")

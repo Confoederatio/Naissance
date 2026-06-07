@@ -309,33 +309,24 @@ naissance.Brush = class extends ve.Class {
 	}
 	
 	getBrushSymbol () {
-		//Return statement
-		return {
-			//Point
-			_markerFile: "gfx/icons/marker_default.png",
-			_markerHeight: 40,
-			_markerWidth: 40,
-			_markerDx: 0,
-			_markerDy: 0,
-			_markerOpacity: 1,
-			
-			//Polygon
+		//Declare local instance variables
+		let brush_symbol_obj = {
 			polygonFill: this.brush_options.colour.getHex(),
 			polygonOpacity: this.opacity/100,
 			lineColor: this.brush_options.stroke_colour.getHex(),
 			lineOpacity: this.stroke_opacity/100,
-			lineWidth: this.stroke_width,
-			
-			//Label
-			textFaceName: (main.settings.default_label_font) ?
-				main.settings.default_label_font : "Karla, sans-serif",
-			textFill: (main.settings.default_label_colour) ?
-				main.settings.default_label_colour : `#ffffff`,
-			textHaloFill: (main.settings.default_label_stroke) ?
-				main.settings.default_label_stroke : `#000000`,
-			textHaloRadius: Math.returnSafeNumber(main.settings.default_label_stroke_width, 2),
-			textSize: Math.returnSafeNumber(main.settings.default_label_font_size, 14)
+			lineWidth: this.stroke_width
 		};
+		let default_symbol_obj = naissance.Renderer.getDefaultSymbol();
+		
+		//Diff brush_symbol_obj with default_symbol_obj
+		Object.iterate(brush_symbol_obj, (local_key, local_value) => {
+			if (local_value === default_symbol_obj[local_key])
+				delete brush_symbol_obj[local_key];
+		});
+		
+		//Return statement
+		return brush_symbol_obj;
 	}
 	
 	getCoordinates () { return this.cursor.getCoordinates(); }
