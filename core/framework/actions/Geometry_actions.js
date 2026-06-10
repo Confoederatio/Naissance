@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target Geometry.
  * - Static method of: {@link naissance.Geometry}
  *
- * `arg0_json`: {@link Object|string}
- * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.geometry_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
  * <br>
  * - #### Extraneous Commands:
  * - `.clean_keyframes`: {@link Array}<{@link string}> - Arguments: ["symbol"]. Whether to clean keyframes, including the default `main.brush.getBrushSymbol()` (if symbol is enabled), as well as any duplicates.
@@ -40,15 +40,21 @@ if (!global.naissance) global.naissance = {};
  *
  * @param {Object|string} arg0_json
  */
-naissance.Geometry.parseAction = function (arg0_json) { //[WIP] - Add variable actions
+naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add variable actions
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let geometry_obj = naissance.Geometry.instances[json.geometry_id];
+	let geometry_obj = (typeof json.geometry_obj === "string") ? 
+		naissance.Geometry.instances[json.geometry_obj] : json.geometry_obj;
 	
 	//Parse commands for geometry_obj
 	if (geometry_obj) {
+		//Specialised Geometry handler
+		if (geometry_obj.class_name)
+			if (["GeometryLine", "GeometryPoint", "GeometryPolygon"].includes(geometry_obj.class_name))
+				await naissance[geometry_obj.class_name].parseAction(json);
+		
 		//Abstraction handlers
 		{
 			//set_symbol._set_label_symbol

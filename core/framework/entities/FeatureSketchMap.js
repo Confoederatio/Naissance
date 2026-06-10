@@ -59,14 +59,10 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 								}, { name: " ", style: { display: "inline" } }),
 								
 								delete_button: veButton(() => {
-									DALS.Timeline.parseAction({
-										options: { name: "Deleted SketchMap Geometry", key: "delete_sketch_map_geometry" },
-										value: [{
-											type: "FeatureSketchMap",
-											feature_id: this.id,
-											delete_entity: { id: i }
-										}]
-									});
+									DALS.Timeline.parseAction("delete_sketch_map_geometry", [{
+										feature_obj: this.id,
+										delete_entity: { id: i }
+									}]);
 								}, { name: "<icon>delete</icon> Delete" })
 							}, { name: " " })
 						}
@@ -84,23 +80,19 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 							name_element: new ve.Text((local_symbol?.textName) ? local_symbol?.textName : "", { 
 								name: "Name",
 								onchange: (v, e) => {
-									DALS.Timeline.parseAction({
-										options: { name: "Edited SketchMap Marker Label", key: "edit_sketch_map_marker_label" },
-										value: [{ 
-											type: "FeatureSketchMap", 
-											feature_id: this.id, 
-											set_entity_symbol: {
-												id: i,
-												value: {
-													textFaceName: "Karla, sans-serif",
-													textFill: `rgb(255, 255, 255)`,
-													textHaloFill: `rgb(0, 0, 0)`,
-													textHaloRadius: 2,
-													textName: v
-												}
+									DALS.Timeline.parseAction("edit_sketch_map_marker_layer", [{
+										feature_obj: this.id,
+										set_entity_symbol: {
+											id: i,
+											value: {
+												textFaceName: "Karla, sans-serif",
+												textFill: `rgb(255, 255, 255)`,
+												textHaloFill: `rgb(0, 0, 0)`,
+												textHaloRadius: 2,
+												textName: v
 											}
-										}]
-									});
+										}
+									}]);
 									console.log(local_entity);
 								}
 							}),
@@ -117,14 +109,10 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 				}
 				
 				local_entity.addEventListener("editend", (e) => {
-					DALS.Timeline.parseAction({
-						options: { name: "Edited SketchMap Geometry", key: "edit_sketch_map_geometry" },
-						value: [{
-							type: "FeatureSketchMap",
-							feature_id: this.id,
-							edit_entity: { id: i, value: e.target.toJSON() }
-						}]
-					});
+					DALS.Timeline.parseAction("edit_sketch_map_geometry", [{
+						feature_obj: this.id,
+						edit_entity: { id: i, value: e.target.toJSON() }
+					}]);
 				});
 			}
 			
@@ -198,10 +186,10 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 		if (!this.draw_tool) {
 			this.draw_tool = new maptalks.DrawTool({ mode: "Polygon" }).addTo(map).disable();
 			this.draw_tool.on("drawend", (e) => {
-				DALS.Timeline.parseAction({
-					options: { name: "Create SketchMap Geometry", key: "create_sketch_map_geometry" },
-					value: [{ type: "FeatureSketchMap", feature_id: this.id, add_geometry: e.geometry.toJSON() }]
-				});
+				DALS.Timeline.parseAction("create_sketch_map_geometry", [{ 
+					feature_obj: this.id, 
+					add_geometry: e.geometry.toJSON() 
+				}]);
 				this.draw_tool.disable();
 				this.draw();
 			});
@@ -222,10 +210,10 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 			}, { name: "<icon>edit_off</icon> Clear Brush", x: 0, y: 0 }),
 			clear_layer: new ve.Button(() => {
 				veConfirm(`Are you sure you want to delete this layer? This clears all geometries currently bound to the Sketch Layer!`, { special_function: () =>
-					DALS.Timeline.parseAction({
-						options: { name: "Clear SketchMap Layer", key: "clear_sketch_map_layer" },
-						value: [{ type: "FeatureSketchMap", feature_id: this.id, clear_layer: true }]
-					})
+					DALS.Timeline.parseAction("clear_sketch_map_layer", [{ 
+						feature_obj: this.id, 
+						clear_layer: true
+					}])
 				});
 			}, { name: "<icon>delete</icon> Clear Layer", x: 1, y: 0 }),
 		}, { 

@@ -9,7 +9,7 @@ if (!global.naissance) global.naissance = {};
  * - `.remove_mapmode`: {@link string} - The mapmode ID to remove.
  * - `.set_map_spatial_reference`: {@link Object}
  */
-naissance.Renderer.parseAction = function (arg0_json) {
+naissance.Renderer.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	

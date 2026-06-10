@@ -1,5 +1,53 @@
 if (!global.naissance) global.naissance = {};
 naissance.Geometry = class extends ve.Class {
+	static history_localisation_function = (new_keyframe, old_keyframe) => { //[WIP] - Finish function
+		//Declare local instance variables
+		let return_string = [];
+		
+		try {
+			//[0] .geometry change
+			if (new_keyframe.value[0])
+				return_string.push(`Geometry changed`);
+			if (new_keyframe.value[0] === null)
+				return_string.push(`Geometry removed`);
+			
+			//[1] .symbol change
+			if (new_keyframe.value[1])
+				return_string.push(`Symbol changed to: ${String.formatObject(new_keyframe.value[1])}`);
+			
+			//[2] .properties change
+			if (new_keyframe.value[2]?.hidden === false)
+				return_string.push(`Geometry visible`);
+			if (new_keyframe.value[2]?.hidden === true)
+				return_string.push(`Geometry hidden`);
+			if (new_keyframe.value[2]?.label_geometries)
+				if (new_keyframe.value[2].label_geometries.length > 0)
+					return_string.push(`Set custom label geometries`);
+			if (new_keyframe.value[2]?.label_name)
+				return_string.push(`Label name changed to: ${new_keyframe.value[2].label_name}`);
+			if (new_keyframe.value[2]?.label_symbol)
+				return_string.push(`Label symbol changed to: ${String.formatObject(new_keyframe.value[2].label_symbol)}`);
+			if (new_keyframe.value[2]?.max_zoom !== undefined)
+				return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
+			if (new_keyframe.value[2]?.min_zoom !== undefined)
+				return_string.push(`Minimum zoom set to ${new_keyframe.value[2].min_zoom}`);
+			if (new_keyframe.value[2]?.name)
+				return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
+			if (new_keyframe.value[2]?.variables)
+				return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
+		} catch (e) {
+			try {
+				JSON.stringify(old_keyframe);
+				JSON.stringify(new_keyframe);
+			} catch (e) {
+				console.error(`Was a circular reference detected? If so, ensure that you are feeding in arg0_v, and not arg1_e for the property in question.`);
+			}
+			console.error(`new_keyframe:`, new_keyframe, `old_keyframe:`, old_keyframe, `Error:`, e);
+		}
+		
+		//Return statement
+		return String.formatArray(return_string);
+	};
 	static instances = {};
 	static reserved_keys = ["name"];
 	
@@ -7,54 +55,7 @@ naissance.Geometry = class extends ve.Class {
 		super();
 		this.history = new naissance.History({}, {
 			_id: () => this.id,
-			localisation_function: (new_keyframe, old_keyframe) => { //[WIP] - Finish function
-				//Declare local instance variables
-				let return_string = [];
-				
-				try {
-					//[0] .geometry change
-					if (new_keyframe.value[0])
-						return_string.push(`Geometry changed`);
-					if (new_keyframe.value[0] === null)
-						return_string.push(`Geometry removed`);
-					
-					//[1] .symbol change
-					if (new_keyframe.value[1])
-						return_string.push(`Symbol changed to: ${String.formatObject(new_keyframe.value[1])}`);
-					
-					//[2] .properties change
-					if (new_keyframe.value[2]?.hidden === false)
-						return_string.push(`Geometry visible`);
-					if (new_keyframe.value[2]?.hidden === true)
-						return_string.push(`Geometry hidden`);
-					if (new_keyframe.value[2]?.label_geometries)
-						if (new_keyframe.value[2].label_geometries.length > 0)
-							return_string.push(`Set custom label geometries`);
-					if (new_keyframe.value[2]?.label_name)
-						return_string.push(`Label name changed to: ${new_keyframe.value[2].label_name}`);
-					if (new_keyframe.value[2]?.label_symbol)
-						return_string.push(`Label symbol changed to: ${String.formatObject(new_keyframe.value[2].label_symbol)}`);
-					if (new_keyframe.value[2]?.max_zoom !== undefined)
-						return_string.push(`Maximum zoom set to ${new_keyframe.value[2].max_zoom}`);
-					if (new_keyframe.value[2]?.min_zoom !== undefined)
-						return_string.push(`Minimum zoom set to ${new_keyframe.value[2].min_zoom}`);
-					if (new_keyframe.value[2]?.name)
-						return_string.push(`Name changed to ${new_keyframe.value[2].name}`);
-					if (new_keyframe.value[2]?.variables)
-						return_string.push(`Variables changed to: ${String.formatObject(new_keyframe.value[2].variables)}`);
-				} catch (e) {
-					try {
-						JSON.stringify(old_keyframe);
-						JSON.stringify(new_keyframe);
-					} catch (e) {
-						console.error(`Was a circular reference detected? If so, ensure that you are feeding in arg0_v, and not arg1_e for the property in question.`);
-					}
-					console.error(`new_keyframe:`, new_keyframe, `old_keyframe:`, old_keyframe, `Error:`, e);
-				}
-				
-				//Return statement
-				return String.formatArray(return_string);
-			}
+			localisation_function: naissance.Geometry.history_localisation_function
 		});
 		this.id = Class.generateRandomID(naissance.Geometry);
 		this.instance = this;
@@ -64,11 +65,6 @@ naissance.Geometry = class extends ve.Class {
 		//Initialise this.options
 		if (!this.options) this.options = {};
 			this.options.instance = this;
-		
-		//Declare local instance variables
-		this.fire_action_silently = true;
-		this.name = undefined;
-		delete this.fire_action_silently;
 		
 		//Define naissance.Geometry contract
 		
@@ -103,10 +99,7 @@ naissance.Geometry = class extends ve.Class {
 			width: "30rem",
 			onuserchange: (v) => {
 				if (v.name)
-					DALS.Timeline.parseAction({
-						options: { name: "Rename Geometry", key: "rename_geometry" },
-						value: [{ type: "Geometry", geometry_id: this.id, set_name: v.name }]
-					});
+					DALS.Timeline.parseAction("rename_geometry", [{ geometry_obj: this.id, set_name: v.name }]);
 			}
 		};
 		
@@ -158,10 +151,7 @@ naissance.Geometry = class extends ve.Class {
 		let value = (arg0_value) ? arg0_value : `New ${(this.class_name) ? this.class_name : "Geometry"}`;
 		
 		//Send DALS.Timeline.parseAction() command
-		DALS.Timeline.parseAction({
-			options: { name: "Rename Geometry", key: "rename_Geometry" },
-			value: [{ type: "Geometry", geometry_id: this.id, set_name: value }]
-		}, this.fire_action_silently);
+		DALS.Timeline.parseAction("rename_geometry", [{ geometry_obj: this.id, set_name: value }], this.fire_action_silently);
 	}
 	
 	get selected () {
@@ -225,10 +215,7 @@ naissance.Geometry = class extends ve.Class {
 					
 					onuserchange: (v) => {
 						if (v.close)
-							DALS.Timeline.parseAction({
-								options: { name: "Edit Geometry Tags", key: "edit_geometry_tags" },
-								value: [{ type: "Geometry", geometry_id: this.id, set_tags: this.metadata.tags }]
-							});
+							DALS.Timeline.parseAction("edit_geometry_tags", [{ geometry_obj: this.id, set_tags: this.metadata.tags }]);
 					}
 				})
 			}, {
@@ -236,10 +223,7 @@ naissance.Geometry = class extends ve.Class {
 				name: "<icon>new_label</icon>", tooltip: "Manage Tags"
 			}),
 			hide_geometry: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Hide Geometry", key: "hide_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: true } }]
-				});
+				DALS.Timeline.parseAction("hide_geometry", [{ geometry_obj: this.id, set_properties: { hidden: true } }]);
 			}, {
 				attributes: { class: "order-100" },
 				name: `<icon>visibility</icon>`,
@@ -247,10 +231,7 @@ naissance.Geometry = class extends ve.Class {
 				tooltip: "Hide Geometry"
 			}),
 			show_geometry: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Show Geometry", key: "show_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, set_properties: { hidden: false } }]
-				});
+				DALS.Timeline.parseAction("show_geometry", [{ geometry_obj: this.id, set_properties: { hidden: false } }]);
 			}, {
 				attributes: { class: "order-100" },
 				name: "<icon>visibility_off</icon>",
@@ -258,10 +239,7 @@ naissance.Geometry = class extends ve.Class {
 				tooltip: "Show Geometry"
 			}),
 			delete_button: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete Geometry", key: "delete_geometry" },
-					value: [{ type: "Geometry", geometry_id: this.id, delete_geometry: true }]
-				});
+				DALS.Timeline.parseAction("delete_geometry", [{ geometry_obj: this.id, delete_geometry: true }]);
 			}, {
 				attributes: { class: "order-101" },
 				name: "<icon>delete</icon>",
@@ -360,10 +338,7 @@ naissance.Geometry = class extends ve.Class {
 							
 							//Call DALS.Timeline.parseAction() .set_history 
 							if (v.close)
-								DALS.Timeline.parseAction({
-									options: { name: "Edit Geometry History", key: "edit_geometry_history" },
-									value: [{ type: "Geometry", geometry_id: this.id, set_history: this.history.toJSON() }]
-								});
+								DALS.Timeline.parseAction("edit_geometry_history", [{ geometry_obj: this.id, set_history: this.history.toJSON() }]);
 						}
 					});
 				}, { name: "<icon>rule</icon> Variables Editor", x: 0, y: 1 }),
@@ -723,6 +698,18 @@ naissance.Geometry = class extends ve.Class {
 	}
 	
 	/**
+	 * Updates the geometry UI.
+	 */
+	update () {
+		//Update name
+		if (super.isOpen("instance"))
+			this.instance_window.setName(this.name);
+		
+		//Update keyframes
+		if (this.keyframes_ui) this.history.draw(this.keyframes_ui);
+	}
+	
+	/**
 	 * Returns a map of all `naissance.Geometry.instances`.
 	 * 
 	 * @returns {{"<geometry_id>": naissance.Geometry}}
@@ -780,10 +767,7 @@ naissance.Geometry = class extends ve.Class {
 			old_date = JSON.parse(JSON.stringify(main.date));
 			UI_DateMenu.setDate(options.date);
 		}
-		DALS.Timeline.parseAction({
-			options: { name: options.name, key: options.key },
-			value: dals_value_array
-		});
+		DALS.Timeline.parseAction(options.key, dals_value_array);
 		if (options.date)
 			UI_DateMenu.setDate(old_date);
 	};

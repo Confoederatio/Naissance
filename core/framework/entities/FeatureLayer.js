@@ -77,14 +77,10 @@ naissance.FeatureLayer = class extends naissance.Feature {
 				name: "Layer Type",
 				selected: this._type,
 				
-				onuserchange: (v) => DALS.Timeline.parseAction({
-					options: { name: "Set Layer Type", key: "set_layer_type" },
-					value: [{ 
-						type: "FeatureLayer", 
-						feature_id: this.id, 
-						set_layer_option: { key: "type", value: v } 
-					}]
-				})
+				onuserchange: (v) => DALS.Timeline.parseAction("set_layer_type", [{
+					feature_obj: this.id,
+					set_layer_option: { key: "type", value: v }
+				}])
 			}),
 			
 			actions: this.drawActionsPalette({

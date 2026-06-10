@@ -206,7 +206,7 @@
     font-size: var(--body-font-size);
     padding: var(--padding);
     position: fixed;
-    z-index: 99;
+    z-index: 9999; /* 10x higher than .ve.context-menu */
 }
 .ve.toast:has(> icon) {
     align-items: center;

@@ -12,6 +12,7 @@
  *     - `.components_obj`: {@link Object}<{@link ve.Component}>
  * - `arg1_options`: {@link Object}
  *   - `.do_not_wrap=false`: {@link boolean} - Whether to wrap the component in a ve.RawInterface instead.
+ *   - `.retain=false`: {@link boolean} - Whether to retain pages when switching.
  *   - `.starting_page=Object.keys(page_obj)[0]`
  * 
  * ##### Instance:
@@ -143,7 +144,7 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 	 *
 	 * @alias v
 	 * @memberof ve.Component.ve.PageMenu
-	 * 
+	 *
 	 * @param {string} arg0_page_key
 	 */
 	set v (arg0_page_key) {
@@ -163,8 +164,22 @@ ve.PageMenu = class extends ve.Component { //[WIP] - This should be updated late
 		}
 		
 		//Switch interface to selected page
-		this.interface_el.innerHTML = "";
-		this.interface_el.appendChild(this.interfaces_obj[page_key].element);
+		if (this.options.retain) {
+			Object.keys(this.interfaces_obj).forEach((local_key) => {
+				let local_interface = this.interfaces_obj[local_key];
+				if (local_interface.element) {
+					local_interface.element.style.display = "none";
+				}
+			});
+			let target_interface = this.interfaces_obj[page_key];
+			if (!this.interface_el.contains(target_interface.element)) {
+				this.interface_el.appendChild(target_interface.element);
+			}
+			target_interface.element.style.display = "";
+		} else {
+			this.interface_el.innerHTML = "";
+			this.interface_el.appendChild(this.interfaces_obj[page_key].element);
+		}
 		setTimeout(() => {
 			this.updateUnderline();
 		}, 100);

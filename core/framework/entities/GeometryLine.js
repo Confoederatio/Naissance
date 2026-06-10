@@ -16,14 +16,12 @@ naissance.GeometryLine = class extends naissance.Geometry {
 				//Return statement
 				return `ID: ${this.id} | Length: ${String.formatNumber(length_km)}km`
 			}, { width: 99, x: 0, y: 0 }),
-			move_to_brush: veButton(() => DALS.Timeline.parseAction({
-				options: { name: "Select Geometry" },
-				value: [{ type: "Brush", select_geometry_id: this.id }]
-			}), { name: "Move To Brush", limit: () => (main.brush.selected_geometry?.id !== this.id), x: 0, y: 1 }),
-			finish_line: veButton(() => DALS.Timeline.parseAction({
-				options: { name: "Deselect Geometry", key: "deselect_geometry" },
-				value: [{ type: "Brush", select_geometry_id: false }]
-			}), { name: "Finish Line", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
+			move_to_brush: veButton(() => DALS.Timeline.parseAction("select_geometry", [{ 
+				type: "Brush", select_geometry_id: this.id 
+			}]), { name: "Move To Brush", limit: () => (main.brush.selected_geometry?.id !== this.id), x: 0, y: 1 }),
+			finish_line: veButton(() => DALS.Timeline.parseAction("deselect_geometry", [{ 
+				type: "Brush", select_geometry_id: false 
+			}]), { name: "Finish Line", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
 			
 			selected: veCheckbox(this.selected, {
 				name: "Selected",
@@ -32,8 +30,14 @@ naissance.GeometryLine = class extends naissance.Geometry {
 			})
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
-			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
-			edit_stroke: main.interfaces.edit_geometry_line.draw({ _id: () => this.id, name: "Stroke" })
+			edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
+				name: "Label",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			}),
+			edit_stroke: new UI_LineSymbol(main.settings.default_line_symbol, {
+				name: "Stroke",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			})
 		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true
@@ -158,15 +162,10 @@ naissance.GeometryLine = class extends naissance.Geometry {
 					&& e.pickGeometryIndex !== undefined
 				) {
 					//Remove this index from the line instead
-					DALS.Timeline.parseAction({
-						options: { name: "Remove from Line", key: "remove_from_line" },
-						value: [{
-							type: "GeometryLine",
-							
-							geometry_id: main.brush._selected_geometry.id,
-							remove_from_line: e.pickGeometryIndex
-						}]
-					});
+					DALS.Timeline.parseAction("remove_from_line", [{
+						geometry_obj: main.brush._selected_geometry.id,
+						remove_from_line: e.pickGeometryIndex
+					}]);
 				}
 			});
 		}

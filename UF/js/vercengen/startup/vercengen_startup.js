@@ -114,6 +114,14 @@ global.path = require("path");
 						default_text_colour: "auto"
 					},
 					
+					Date: {
+						/**
+						 * Whether to disable caching timestamps for faster repeat conversion.
+						 * @type {boolean}
+						 */
+						do_not_cache_timestamps: false
+					},
+					
 					Log: {
 						/**
 						 * Determines the default console height.

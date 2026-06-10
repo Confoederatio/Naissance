@@ -73,31 +73,28 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		
 		//Fire action
 		if (proj4js_string.length > 0)
-			DALS.Timeline.parseAction({
-				options: { name: "Set Map Projection", key: "set_map_projection" },
-				value: [{ type: "Renderer", set_map_spatial_reference: {
-					projection: {
-						code: "proj4-custom",
-						project: (c) => {
-							if (!Array.isArray(c.toArray())) return new maptalks.Coordinate([0, 0]);
-							let pc = proj4js_transform.forward(c.toArray());
-							
-							//If projection returns invalid or NaN, return neutral coords
-							if (!pc || isNaN(pc[0]) || isNaN(pc[1])) pc = [0, 0];
-							return new maptalks.Coordinate(pc);
-						},
-						unproject: (pc) => {
-							if (!Array.isArray(pc.toArray())) return new maptalks.Coordinate([0, 0]);
-							let result = proj4js_transform.inverse(pc.toArray());
-							if (!result || isNaN(result[0]) || isNaN(result[1])) result = [0, 0];
-							return new maptalks.Coordinate(result);
-						},
-						measure: "EPSG:4326"
+			DALS.Timeline.parseAction("set_map_projection", [{ type: "Renderer", set_map_spatial_reference: {
+				projection: {
+					code: "proj4-custom",
+					project: (c) => {
+						if (!Array.isArray(c.toArray())) return new maptalks.Coordinate([0, 0]);
+						let pc = proj4js_transform.forward(c.toArray());
+						
+						//If projection returns invalid or NaN, return neutral coords
+						if (!pc || isNaN(pc[0]) || isNaN(pc[1])) pc = [0, 0];
+						return new maptalks.Coordinate(pc);
 					},
-					fullExtent: config.defines.map.custom_projections_full_extent,
-					resolutions: config.defines.map.custom_projections_resolutions
-				} }]
-			}, do_not_add_to_undo_redo);
+					unproject: (pc) => {
+						if (!Array.isArray(pc.toArray())) return new maptalks.Coordinate([0, 0]);
+						let result = proj4js_transform.inverse(pc.toArray());
+						if (!result || isNaN(result[0]) || isNaN(result[1])) result = [0, 0];
+						return new maptalks.Coordinate(result);
+					},
+					measure: "EPSG:4326"
+				},
+				fullExtent: config.defines.map.custom_projections_full_extent,
+				resolutions: config.defines.map.custom_projections_resolutions
+			} }], do_not_add_to_undo_redo);
 	}
 	
 	_DALS_setProjection (arg0_projection, arg1_do_not_add_to_undo_redo) {
@@ -110,10 +107,10 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		
 		//Fire action
 		if (selected_projection_obj.options)
-			DALS.Timeline.parseAction({
-				options: { name: "Set Map Projection", key: "set_map_projection" },
-				value: [{ type: "Renderer", set_map_spatial_reference: selected_projection_obj.options }]
-			}, do_not_add_to_undo_redo);
+			DALS.Timeline.parseAction("set_map_projection", [{ 
+				type: "Renderer", 
+				set_map_spatial_reference: selected_projection_obj.options 
+			}], do_not_add_to_undo_redo);
 	}
 	
 	static fromJSON (arg0_json) {

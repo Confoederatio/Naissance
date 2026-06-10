@@ -55,7 +55,7 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 		options.dark_mode = (options.dark_mode !== undefined) ? options.dark_mode : true;
 			
 		//Declare local instance variables
-		let topbar_button_style = { marginLeft: "var(--cell-padding)" };
+		let topbar_button_style = { marginRight: "var(--cell-padding)" };
 		
 		this.element = document.createElement("div");
 			this.element.setAttribute("component", "ve-datavis-suite");
@@ -63,6 +63,8 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 			this.element.style.display = "flex";
 			this.element.style.flexDirection = "column";
 			this.element.style.height = "100%";
+			this.element.style.inset = "0";
+			this.element.style.position = "absolute";
 			HTML.setAttributesObject(this.element, options.attributes);
 		this.options = options;
 		
@@ -93,7 +95,7 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 				file_explorer: new ve.FileExplorer(undefined, {
 					style: {
 						flex: "0 0 20rem",
-						maxHeight: "50rem",
+						maxHeight: "calc(100% - var(--padding) - var(--cell-padding))",
 						overflowY: "auto"
 					},
 					x: 0, y: 0,
@@ -118,7 +120,8 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 			}, {
 				style: {
 					display: "flex",
-					flex: 1
+					flex: 1,
+					minHeight: 0,
 				}
 			})
 		};
@@ -718,6 +721,7 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 		}, {
 			name: loc("ve.registry.localisation.DatavisSuite_edit_graph"),
 			can_rename: false,
+			do_not_wrap: true,
 			width: "30rem",
 			
 			onuserchange: (v, e) => {
@@ -837,4 +841,14 @@ ve.DatavisSuite = class extends ve.Component { //[WIP] - Finish function body
 		//this.element.innerHTML = "";
 		Object.iterate(this.components_obj, (local_key, local_value) => local_value.bind(this.element));
 	}
+};
+
+//Functional binding
+
+/**
+ * @returns {ve.Button}
+ */
+veDatavisSuite = function () {
+	//Return statement
+	return new ve.DatavisSuite(...arguments);
 };

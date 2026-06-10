@@ -16,10 +16,7 @@ global.UI_DateMenu = class extends ve.Class {
 			tooltip: "BC years are negative.",
 			onuserchange: (v) => {
 				if (this.is_playing) return;
-				DALS.Timeline.parseAction({
-					options: { name: "Set Date", key: "load_date" },
-					value: [{ type: "global", set_date: v }, { type: "global", refresh_date: true }]
-				});
+				DALS.Timeline.parseAction("load_date",  [{ set_date: v }, { refresh_date: true }]);
 				naissance.Mapmode.draw();
 			}
 		});
@@ -178,9 +175,6 @@ global.UI_DateMenu = class extends ve.Class {
 		main.date = date;
 		main.timestamp = Date.getTimestamp(date);
 		main.interfaces.date_ui.date.v = date;
-		DALS.Timeline.parseAction({
-			options: { name: "Refresh Date", key: "load_date" },
-			value: [{ type: "global", refresh_date: true }]
-		}, true);
+		DALS.Timeline.parseAction("load_date", [{ refresh_date: true }], true);
 	}
 };

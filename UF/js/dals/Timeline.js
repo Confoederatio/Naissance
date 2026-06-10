@@ -101,23 +101,30 @@ DALS.Timeline = class {
 	 * 
 	 * @param {Object|string} arg0_json
 	 * @param {Object} [arg1_options]
-	 *  @param {boolean} [arg1_options.di_not_parse_action=false]
+	 *  @param {boolean} [arg1_options.do_not_parse_action=false]
 	 * 
 	 * @returns {DALS.Action}
 	 */
-	addAction (arg0_json, arg1_options) {
+	async addAction (arg0_json, arg1_options) {
 		//Convert from parameters
 		let json = (typeof arg0_json !== "string") ? JSON.stringify(arg0_json) : arg0_json;
 		let options = (arg1_options) ? arg1_options : {};
 		
 		//Declare local instance variables
 		let json_obj = JSON.parse(json);
-			if (json_obj.options === undefined) json_obj.options = {};
-				if (json_obj.options.timeline === undefined) json_obj.options.timeline = this.id;
+		
+		if (json_obj.options === undefined) json_obj.options = {};
+		if (json_obj.options.timeline === undefined) json_obj.options.timeline = this.id;
+		
 		let new_action = new DALS.Action(json_obj);
-			if (options.do_not_parse_action !== false)
-				DALS.Timeline.parseAction(json_obj, true);
+		
+		if (!options.do_not_parse_action) {
+			let action_key = json_obj.key || json_obj.options?.key;
+			let action_value = (json_obj.value !== undefined) ? json_obj.value : json_obj;
 			
+			await DALS.Timeline.parseAction(action_key, action_value, true);
+		}
+		
 		//Return statement
 		return new_action;
 	}
@@ -178,7 +185,7 @@ DALS.Timeline = class {
 	 * Deletes the present timeline and removes its references.
 	 * - Method of: {@link DALS.Timeline}
 	 */
-	delete () {
+	async delete () {
 		if (DALS.Timeline.instances.length <= 1) {
 			//Simply clear the entire state since the last timeline is being removed
 			this.value = [];
@@ -197,7 +204,7 @@ DALS.Timeline = class {
 			//2. If the current timeline is being removed, jump to this.parent_timeline index
 			if (DALS.Timeline.current_timeline === this.id) {
 				let parent_timeline_obj = DALS.Timeline.getTimeline(this.parent_timeline[0]);
-					parent_timeline_obj.jumpToAction(this.parent_timeline[1]);
+				await parent_timeline_obj.jumpToAction(this.parent_timeline[1]);
 			}
 			
 			//3. Iterate over DALS.Timeline.instances; delete from DALS.Timeline.instances
@@ -340,9 +347,9 @@ DALS.Timeline = class {
 	}
 	
 	/**
-	 * Groups together actions with the same `.key` field to avoid their duplication and returns the grouped `.value` of the present timeline acoordingly.
+	 * Groups together actions with the same `.key` field to avoid their duplication and returns the grouped `.value` of the present timeline accordingly.
 	 * - Method of: {@link DALS.Timeline}
-	 * 
+	 *
 	 * @returns {DALS.Action[][]}
 	 */
 	getGroups () {
@@ -351,22 +358,36 @@ DALS.Timeline = class {
 		let timeline_groups = [];
 		
 		if (this.value.length > 1) {
+			let action_1 = (typeof this.value[1] === "string") ?
+				JSON.parse(this.value[1]) : this.value[1];
+			
+			if (action_1.options === undefined) action_1.options = {};
+			action_1.options.timeline_index = 1;
+			
 			//Start with first action after state head
-			current_group.push(this.value[1]);
+			current_group.push(action_1);
 			
 			//Iterate over remaining mutations in timeline
 			for (let i = 2; i < this.value.length; i++) {
-				let current_action = this.value[i];
-				let previous_action = this.value[i - 1];
+				let local_current = (typeof this.value[i] === "string") ?
+					JSON.parse(this.value[i]) : this.value[i];
+				let local_previous = (typeof this.value[i - 1] === "string") ?
+					JSON.parse(this.value[i - 1]) : this.value[i - 1];
 				
-				//Continue the same group if .key is the same
-				current_action.options.timeline_index = i;
-				if (current_action.options.key === previous_action.options.key) {
-					current_group.push(current_action);
+				if (local_current.options === undefined) local_current.options = {};
+				if (local_previous.options === undefined) local_previous.options = {};
+				
+				local_current.options.timeline_index = i;
+				
+				let current_key = local_current.key || local_current.options?.key;
+				let previous_key = local_previous.key || local_previous.options?.key;
+				
+				if (current_key === previous_key) {
+					current_group.push(local_current);
 				} else {
 					//Different .key, push finished group, start new one
 					timeline_groups.push(current_group);
-					current_group = [current_action];
+					current_group = [local_current];
 				}
 			}
 		}
@@ -412,36 +433,83 @@ DALS.Timeline = class {
 	 * 
 	 * @param {number|string} arg0_action_id
 	 */
-	jumpToAction (arg0_action_id) {
+	async jumpToAction (arg0_action_id) {
 		//Convert from parameters
 		let action_id = arg0_action_id;
 		
-		//1. Cast index to action_id if typeof number, assuming that it is valid
-		if (typeof action_id === "number")
-			if (action_id <= this.value.length - 1)
-				action_id = this.value[action_id].id;
+		//Declare local instance variables
+		let target_index = -1;
+		
+		if (DALS.Timeline.jump_token === undefined)
+			DALS.Timeline.jump_token = 0;
+		
+		DALS.Timeline.jump_token++;
+		let local_jump_token = DALS.Timeline.jump_token;
+		
+		//1. Resolve the target index before touching state
+		if (typeof action_id === "number") {
+			target_index = Math.floor(action_id);
+		} else {
+			for (let i = 1; i < this.value.length; i++) {
+				let action_obj = (typeof this.value[i] === "string") ?
+					JSON.parse(this.value[i]) : this.value[i];
+				
+				if (action_obj.id === action_id) {
+					target_index = i;
+					break;
+				}
+			}
+		}
+		
+		if (target_index < 0)
+			return DALS.Timeline.current_index;
+		
+		if (target_index > this.value.length - 1)
+			target_index = this.value.length - 1;
 		
 		//2. Load initial state at head
-		this.jumpToStart();
+		DALS.Timeline.current_index = 0;
+		DALS.Timeline.current_timeline = this.id;
+		await Promise.resolve(DALS.Timeline.loadState(this.value[0]));
 		
-		//3. Redo actions starting from the state head using DALS.Timeline.parseAction() until we hit the target action ID
-		for (let i = 1; i < this.value.length; i++) {
-			DALS.Timeline.parseAction(this.value[i].value, true);
+		if (local_jump_token !== DALS.Timeline.jump_token)
+			return DALS.Timeline.current_index;
+		
+		//3. If jumping to the head, stop after loading the head state
+		if (target_index === 0)
+			return DALS.Timeline.current_index;
+		
+		//4. Redo actions from the state head up to the requested absolute index
+		for (let i = 1; i <= target_index; i++) {
+			let action_obj = (typeof this.value[i] === "string") ?
+				JSON.parse(this.value[i]) : this.value[i];
+			
+			let action_key = action_obj.key || action_obj.options?.key;
+			let action_value = (action_obj.value !== undefined) ?
+				action_obj.value : action_obj;
+			
+			await DALS.Timeline.parseAction(action_key, action_value, true);
+			
+			if (local_jump_token !== DALS.Timeline.jump_token)
+				return DALS.Timeline.current_index;
+			
 			DALS.Timeline.current_index = i;
-			if (this.value[i].id === action_id) break;
 		}
+		
+		//Return statement
+		return DALS.Timeline.current_index;
 	}
 	
 	/**
 	 * Jumps to the end of this timeline.
 	 * - Method of: {@link DALS.Timeline}
 	 */
-	jumpToEnd () {
+	async jumpToEnd () {
 		//Jump to action if there are actions to jump to, otherwise load state head
 		if (this.value.length > 1) {
-			this.jumpToAction(this.value[this.value.length - 1].id);
+			await this.jumpToAction(this.value.length - 1);
 		} else {
-			this.jumpToStart();
+			await this.jumpToAction(0);
 		}
 	}
 	
@@ -450,6 +518,11 @@ DALS.Timeline = class {
 	 * - Method of: {@link DALS.Timeline}
 	 */
 	jumpToStart () {
+		//Invalidate any in-progress jump/replay
+		if (DALS.Timeline.jump_token === undefined)
+			DALS.Timeline.jump_token = 0;
+		DALS.Timeline.jump_token++;
+		
 		//Load initial state
 		DALS.Timeline.current_index = 0;
 		DALS.Timeline.current_timeline = this.id;
@@ -472,11 +545,13 @@ DALS.Timeline = class {
 		//1. Cast action_id to index, assuming that it is valid
 		if (typeof action_id === "string") {
 			//Iterate over all actions in this.value
-			for (let i = 1; i < this.value.length; i++)
-				if (this.value[i].id === action_id) {
+			for (let i = 1; i < this.value.length; i++) {
+				let action_obj = (typeof this.value[i] === "string") ? JSON.parse(this.value[i]) : this.value[i];
+				if (action_obj.id === action_id) {
 					action_index = i;
 					break;
 				}
+			}
 		} else {
 			action_index = action_id;
 		}
@@ -618,39 +693,34 @@ DALS.Timeline = class {
 	/**
 	 * Redoes an action group in the current timeline. Returns the jumped to index.
 	 * - Static method of: {@link DALS.Timeline}
-	 * 
+	 *
 	 * @returns {number}
 	 */
-	static redo () {
+	static async redo () {
 		//Declare local instance variables
 		let timeline_obj = DALS.Timeline.getTimeline(DALS.Timeline.current_timeline);
-		
-		//Iterate over all timeline_groups and figure out the last_group to rewind to
-		let current_index = 1;
-		let next_index = 1;
 		let timeline_groups = timeline_obj.getGroups();
 		
+		//Generate running endpoints list starting with the initial state (0)
+		let end_points = [0];
+		let current_offset = 0;
+		
 		for (let i = 0; i < timeline_groups.length; i++) {
-			let local_domain = [current_index, current_index + timeline_groups[i].length];
-			
-			//Check if DALS.Timeline.current_index is within local_domain
-			if (DALS.Timeline.current_index > local_domain[0] && DALS.Timeline.current_index <= local_domain[1]) {
-				let next_group = timeline_groups[i + 1];
-				if (next_group) {
-					next_index = local_domain[1] + next_group.length; 
-				} else {
-					next_index = local_domain[1];
-				}
-				
-				break;
-			}
-			
-			//Increment current_index to keep track of things
-			current_index += timeline_groups[i].length;
+			current_offset += timeline_groups[i].length;
+			end_points.push(current_offset);
 		}
 		
-		//Jump to next_index
-		timeline_obj.jumpToAction(next_index);
+		//Find the smallest endpoint strictly greater than the current index
+		let next_index = DALS.Timeline.current_index;
+		for (let i = 0; i < end_points.length; i++) {
+			if (end_points[i] > DALS.Timeline.current_index) {
+				next_index = end_points[i];
+				break;
+			}
+		}
+		
+		if (next_index !== DALS.Timeline.current_index)
+			await timeline_obj.jumpToAction(next_index);
 		
 		//Return statement
 		return next_index;
@@ -675,39 +745,35 @@ DALS.Timeline = class {
 	/**
 	 * Undoes an action group in the current timeline. Returns the jumped to index.
 	 * - Static method of: {@link DALS.Timeline}
-	 * 
+	 *
 	 * @returns {number}
 	 */
-	static undo () {
+	static async undo () {
 		//Declare local instance variables
 		let timeline_obj = DALS.Timeline.getTimeline(DALS.Timeline.current_timeline);
-		
-		//Iterate over all timeline_groups and figure out the last_group to rewind to
-		let current_index = 1;
-		let last_index = 1;
 		let timeline_groups = timeline_obj.getGroups();
 		
+		//Generate running endpoints list starting with the initial state (0)
+		let end_points = [0];
+		let current_offset = 0;
+		
 		for (let i = 0; i < timeline_groups.length; i++) {
-			let local_domain = [current_index, current_index + timeline_groups[i].length];
-			
-			//Check if DALS.Timeline.current_index is within local_domain
-			if (DALS.Timeline.current_index > local_domain[0] && DALS.Timeline.current_index <= local_domain[1]) {
-				let last_group = timeline_groups[i - 1];
-				if (last_group) {
-					last_index = local_domain[0] - 1;
-				} else {
-					last_index = local_domain[1];
-				}
-				
-				break;
-			}
-			
-			//Increment current_index to keep track of things
-			current_index += timeline_groups[i].length;
+			current_offset += timeline_groups[i].length;
+			end_points.push(current_offset);
 		}
 		
-		//Jump to next_index
-		timeline_obj.jumpToAction(last_index);
+		//Find the largest endpoint strictly less than the current index
+		let last_index = 0;
+		for (let i = 0; i < end_points.length; i++) {
+			if (end_points[i] < DALS.Timeline.current_index) {
+				last_index = end_points[i];
+			} else {
+				break;
+			}
+		}
+		
+		if (last_index !== DALS.Timeline.current_index)
+			await timeline_obj.jumpToAction(last_index);
 		
 		//Return statement
 		return last_index;

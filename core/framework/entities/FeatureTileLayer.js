@@ -27,16 +27,13 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		let options = (arg0_options) ? arg0_options : {};
 		
 		//Execute DALS action
-		DALS.Timeline.parseAction({
-			options: { name: "Set TileLayer Options", key: "set_tile_layer_options" },
-			value: [{
-				type: "FeatureTileLayer",
-				feature_id: this.id,
-				add_options: {
-					...options
-				}
-			}]
-		});
+		DALS.Timeline.parseAction("set_tile_layer_options", [{
+			type: "FeatureTileLayer",
+			feature_obj: this.id,
+			add_options: {
+				...options
+			}
+		}]);
 	}
 	
 	_DALS_applyAsBaseLayer (arg0_do_not_add_to_undo_redo) {
@@ -44,14 +41,10 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		let do_not_add_to_undo_redo = arg0_do_not_add_to_undo_redo;
 		
 		//Fire action
-		DALS.Timeline.parseAction({
-			options: { name: "Apply TileLayer as Base", key: "apply_tile_layer_as_base" },
-			value: [{
-				type: "FeatureTileLayer",
-				feature_id: this.id,
-				apply_as_base_layer: true
-			}]
-		}, do_not_add_to_undo_redo);
+		DALS.Timeline.parseAction("apply_tile_layer_as_base", [{
+			feature_obj: this.id,
+			apply_as_base_layer: true
+		}], do_not_add_to_undo_redo);
 	}
 	
 	_DALS_recalculatePreset (arg0_preset) {

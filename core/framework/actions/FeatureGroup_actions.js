@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target FeatureGroup.
  * - Static method of: {@link naissance.FeatureGroup}
  *
- * `arg0_json`: {@link Object|string}
- * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.feature_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
  * <br>
  * - #### Extraneous Commands:
  * - `.create_group`: {@link Object}
@@ -14,7 +14,7 @@ if (!global.naissance) global.naissance = {};
  * - #### Internal Commands:
  * - `.delete_feature`: {@link boolean}
  */
-naissance.FeatureGroup.parseAction = function (arg0_json) {
+naissance.FeatureGroup.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	

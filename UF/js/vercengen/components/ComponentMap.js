@@ -31,6 +31,7 @@ ve.Map = class extends ve.Component {
 			center: [51.505, -0.09],
 			zoom: 5,
 			baseLayer: this.getDefaultBaseLayer(),
+			doubleClickZoom: false,
 			...arg0_value
 		};
 			

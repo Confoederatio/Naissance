@@ -10,7 +10,7 @@ if (!global.naissance) global.naissance = {};
  *
  * @param {Object|string} arg0_json
  */
-naissance.Brush.parseAction = function (arg0_json) {
+naissance.Brush.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
@@ -33,15 +33,10 @@ naissance.Brush.parseAction = function (arg0_json) {
 				
 				for (let i = 0; i < all_layer_geometries.length; i++)
 					if (all_layer_geometries[i].id !== main.brush.selected_geometry.id && all_layer_geometries[i].geometry) try {
-						DALS.Timeline.parseAction({
-							options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-							value: [{
-								type: "GeometryPolygon",
-								
-								geometry_id: all_layer_geometries[i].id,
-								remove_from_polygon: { geometry: main.brush.selected_geometry.geometry.toJSON() }
-							}]
-						});
+						DALS.Timeline.parseAction("remove_from_polygon", [{
+							geometry_obj: all_layer_geometries[i].id,
+							remove_from_polygon: { geometry: main.brush.selected_geometry.geometry.toJSON() }
+						}]);
 					} catch (e) { console.warn(e); }
 			}
 		}

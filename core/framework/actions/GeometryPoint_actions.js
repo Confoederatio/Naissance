@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target GeometryPoint.
  * - Static method of: {@link naissance.GeometryPoint}
  *
- * `arg0_json`: {@link Object|string}
- * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.geometry_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Geometry} ID to target changes
  * for, if any.
  * <br>
  * - #### Extraneous Commands:
@@ -17,12 +17,13 @@ if (!global.naissance) global.naissance = {};
  * - #### Internal Commands:
  *   - `.set_coordinates`: {@link maptalks.Coordinate}
  */
-naissance.GeometryPoint.parseAction = function (arg0_json) {
+naissance.GeometryPoint.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let point_obj = naissance.Geometry.instances[json.geometry_id];
+	let point_obj = (typeof json.geometry_obj === "string") ?
+		naissance.Geometry.instances[json.geometry_obj] : json.geometry_obj;
 	
 	//Parse extraneous commands
 	//create_point

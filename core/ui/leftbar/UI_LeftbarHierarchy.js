@@ -48,30 +48,21 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 			if (!local_instance) return;
 			
 			if (local_instance instanceof naissance.Feature && local_instance.entities !== undefined) {
-				DALS.Timeline.parseAction({
-					options: { name: "Select Feature", key: "select_feature" },
-					value: [{ type: "Brush", select_feature_id: local_instance.id }]
-				});
+				DALS.Timeline.parseAction("select_feature", [{ type: "Brush", select_feature_id: local_instance.id }]);
 			} else {
 				//Selection logic for naissance.Geometry
 				let already_selected = (main.brush.selected_geometry?.id === local_instance.id);
 				
 				if (!already_selected) {
 					if (!HTML.ctrl_pressed) {
-						DALS.Timeline.parseAction({
-							options: { name: "Select Geometry", key: "select_geometry" },
-							value: [{ type: "Brush", select_geometry_id: local_instance.id }]
-						});
+						DALS.Timeline.parseAction("select_geometry", [{ type: "Brush", select_geometry_id: local_instance.id }]);
 					} else {
 						local_instance.selected = (!local_instance.selected);
 					}
 				}
 				//Deselect if already selected
 				else {
-					DALS.Timeline.parseAction({
-						options: { name: "Deselect Geometry", key: "deselect_geometry" },
-						value: [{ type: "Brush", select_geometry_id: false }]
-					});
+					DALS.Timeline.parseAction("deselect_geometry", [{ type: "Brush", select_geometry_id: false }]);
 				}
 			}
 		});
@@ -139,31 +130,19 @@ global.UI_LeftbarHierarchy = class { //[WIP] - Finish naissance.Feature first
 		let actions_bar = new ve.HierarchyDatatype({
 			create_new_group: new ve.Button(() => {
 				let feature_id = Class.generateRandomID(naissance.Feature);
-				DALS.Timeline.parseAction({
-					options: { name: "Create Group", key: "create_group" },
-					value: [{ type: "FeatureGroup", create_group: { id: feature_id } }]
-				});
+				DALS.Timeline.parseAction("create_group", [{ type: "FeatureGroup", create_group: { id: feature_id } }]);
 			}, { name: "<icon>create_new_folder</icon>", tooltip: "Create New Group" }),
 			create_new_layer: new ve.Button(() => {
 				let feature_id = Class.generateRandomID(naissance.Feature);
-				DALS.Timeline.parseAction({
-					options: { name: "Create Layer", key: "create_layer" },
-					value: [{ type: "FeatureLayer", create_layer: { id: feature_id } }]
-				});
+				DALS.Timeline.parseAction("create_layer", [{ type: "FeatureLayer", create_layer: { id: feature_id } }]);
 			}, { name: "<icon>layers</icon>", tooltip: "Create New Layer" }),
 			create_new_sketch_map: new ve.Button(() => {
 				let feature_id = Class.generateRandomID(naissance.Feature);
-				DALS.Timeline.parseAction({
-					options: { name: "Create Sketch Map", key: "create_sketch_map" },
-					value: [{ type: "FeatureSketchMap", create_sketch_map: { id: feature_id } }]
-				});
+				DALS.Timeline.parseAction("create_sketch_map", [{ type: "FeatureSketchMap", create_sketch_map: { id: feature_id } }]);
 			}, { name: "<icon>app_registration</icon>", tooltip: "Create New Sketch Map" }),
 			create_new_tile_layer: new ve.Button(() => {
 				let feature_id = Class.generateRandomID(naissance.Feature);
-				DALS.Timeline.parseAction({
-					options: { name: "Create Tile Layer", key: "create_tile_layer" },
-					value: [{ type: "FeatureTileLayer", create_tile_layer: { id: feature_id } }]
-				});
+				DALS.Timeline.parseAction("create_tile_layer", [{ type: "FeatureTileLayer", create_tile_layer: { id: feature_id } }]);
 			}, { name: "<icon>view_module</icon>", tooltip: "Create New Tile Layer" })
 		}, {
 			attributes: {

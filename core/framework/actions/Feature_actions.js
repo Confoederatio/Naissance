@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target Feature.
  * - Static method of: {@link naissance.Feature}
  *
- * `arg0_json`: {@link Object|string}
- * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for, if any.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.feature_id`: {@link Object}|{@link string} - Identifier. The {@link naissance.Feature} ID to target changes for, if any.
  * <br>
  * - ##### Extraneous Commands:
  * - `.add_variable`: {@link Object}
@@ -23,15 +23,21 @@ if (!global.naissance) global.naissance = {};
  *
  * @param {Object|string} arg0_json
  */
-naissance.Feature.parseAction = function (arg0_json) {
+naissance.Feature.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let feature_obj = naissance.Feature.instances[json.feature_id];
+	let feature_obj = (typeof json.feature_obj === "string") ? 
+		naissance.Feature.instances[json.feature_obj] : json.feature_obj;
 	
 	//Parse commands for feature_obj
 	if (feature_obj) {
+		//Specialised Feature handler
+		if (feature_obj.class_name)
+			if (["FeatureGroup", "FeatureLayer", "FeatureSketchMap", "FeatureTileLayer"].includes(feature_obj.class_name))
+				await naissance[feature_obj.class_name].parseAction(json);
+		
 		//add_variable
 		if (json.add_variable !== undefined) {
 			let all_geometries = feature_obj.getAllGeometries();

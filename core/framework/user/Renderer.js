@@ -94,15 +94,21 @@ naissance.Renderer = class extends ve.Class {
 		};
 	}
 	
-	static getDefaultSymbol () {
+	static getDefaultSymbol (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
+		//Initialise options
+		if (!options.exclude) options.exclude = [];
+		
 		//Declare local instance variables
 		let map_defines = config.defines.map;
 		
 		let default_maptalks_symbol = map_defines.default_maptalks_symbol;
 		let default_symbol_obj = {
-			...main.settings.default_line_symbol,
-			...main.settings.default_point_symbol,
-			...main.settings.default_polygon_symbol
+			...((!options.exclude.includes("line")) ? main.settings.default_line_symbol : {}),
+			...((!options.exclude.includes("point")) ? main.settings.default_point_symbol : {}),
+			...((!options.exclude.includes("polygon")) ? main.settings.default_polygon_symbol : {}),
 		};
 		
 		//Iterate over default_symbol_obj; if same as corresponding default_maptalks_symbol, remove it

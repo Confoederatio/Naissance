@@ -241,7 +241,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 		
 			if (default_point_symbol.markerDx === undefined) default_point_symbol.markerDx = 0;
 			if (default_point_symbol.markerDy === undefined) default_point_symbol.markerDy = 0;
-			if (default_point_symbol.markerHeight === undefined) default_point_symbol.markerHeight = 40;
+			if (default_point_symbol.markerHeight === undefined) default_point_symbol.markerHeight = 24;
 			if (default_point_symbol.markerWidth === undefined) default_point_symbol.markerWidth = 40;
 			if (default_point_symbol.markerFile === undefined) default_point_symbol.markerFile = "gfx/icons/marker_default.png";
 		
@@ -261,10 +261,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 				
 				//Load state
 				setTimeout(() => {
-					DALS.Timeline.parseAction({
-						options: { name: "Load Save", key: "load_save" },
-						value: [{ type: "global", load_save: load_data }]
-					});
+					DALS.Timeline.parseAction("load_save", [{ load_save: load_data }]);
 				}, 100);
 			}
 	}

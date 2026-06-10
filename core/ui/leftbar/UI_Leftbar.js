@@ -18,10 +18,7 @@ global.UI_Leftbar = class extends ve.Class {
 							let data = (arg0_data) ? arg0_data : {};
 							
 							//Load state
-							DALS.Timeline.parseAction({
-								options: { name: "Load Save", key: "load_save" },
-								value: [{ type: "global", load_save: data }]
-							});
+							DALS.Timeline.parseAction("load_save", [{ load_save: data }]);
 						},
 						save_extension: ".naissance",
 						save_function: DALS.Timeline.saveState

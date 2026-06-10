@@ -24,10 +24,7 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 			new_point: veButton(() => this._openNewGeometryUI("GeometryPoint"), { name: "New Point" }),
 			
 			clear_brush: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Clear Brush", key: "clear_brush" },
-					value: [{ type: "Brush", select_geometry_id: false }]
-				});
+				DALS.Timeline.parseAction("clear_brush", [{ type: "Brush", select_geometry_id: false }]);
 				this.interface.close();
 			}, { name: "Clear Brush", limit: () => main.brush._selected_geometry })
 		}, { id: "ui_map_context_menu" });
@@ -54,19 +51,18 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 				veToast(`Created ${this.geometry_interface.geometry_name.v}`);
 				let select_geometry_id = Class.generateRandomID(naissance.Geometry);
 				
-				DALS.Timeline.parseAction({
-					options: { name: `Create ${geometry_class}`, key: `create_${geometry_class}` },
-					value: [{ type: geometry_class, [DALS_command]: {
+				DALS.Timeline.parseAction(`create_${geometry_class}`, [{ 
+					type: geometry_class, [DALS_command]: {
 						id: select_geometry_id,
 						name: this.geometry_interface.geometry_name.v,
 						
 						coordinates: (DALS_command === "create_point") ? (map.mouse_click_coords || map.mouse_hover_coords) : undefined
-					}}]
-				});
-				DALS.Timeline.parseAction({
-					options: { name: "Select Geometry", key: "select_geometry" },
-					value: [{ type: "Brush", select_geometry_id: select_geometry_id }]
-				});
+					}
+				}]);
+				DALS.Timeline.parseAction("select_geometry", [{ 
+					type: "Brush", 
+					select_geometry_id: select_geometry_id 
+				}]);
 				this.interface.close();
 			})
 		}, { id: "brush_map_context_menu_new_geometry" });

@@ -369,25 +369,15 @@ naissance.Brush = class extends ve.Class {
 					
 					//Buffer so that provinces aren't irregular
 					if (!HTML.ctrl_pressed) {
-						DALS.Timeline.parseAction({
-							options: { name: "Add to Polygon", key: "add_to_polygon" },
-							value: [{
-								type: "GeometryPolygon",
-								
-								geometry_id: this._selected_geometry.id,
-								add_to_polygon: { geometry: all_geometries[i].toJSON() }
-							}]
-						});
+						DALS.Timeline.parseAction("add_to_polygon", [{
+							geometry_obj: this._selected_geometry.id,
+							add_to_polygon: { geometry: all_geometries[i].toJSON() }
+						}]);
 					} else {
-						DALS.Timeline.parseAction({
-							options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-							value: [{
-								type: "GeometryPolygon",
-								
-								geometry_id: this._selected_geometry.id,
-								remove_from_polygon: { geometry: all_geometries[i].toJSON() }
-							}]
-						});
+						DALS.Timeline.parseAction("remove_from_polygon", [{
+							geometry_obj: this._selected_geometry.id,
+							remove_from_polygon: { geometry: all_geometries[i].toJSON() }
+						}]);
 					}
 				}
 		});
@@ -425,27 +415,17 @@ naissance.Brush = class extends ve.Class {
 				if (processed_geometry)
 					if (HTML.left_click) {
 						//add_to_polygon
-						DALS.Timeline.parseAction({
-							options: { name: "Add to Polygon", key: "add_to_polygon" },
-							value: [{
-								type: "GeometryPolygon",
-								
-								geometry_id: this._selected_geometry.id,
-								add_to_polygon: { geometry: processed_geometry.toJSON() },
-								simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_polygon) ?
-									main.brush.simplify : undefined
-							}]
-						});
+						DALS.Timeline.parseAction("add_to_polygon", [{
+							geometry_obj: this._selected_geometry.id,
+							add_to_polygon: { geometry: processed_geometry.toJSON() },
+							simplify_polygon: (main.brush.simplify > 0 && main.brush.simplify_applies_to_polygon) ?
+								main.brush.simplify : undefined
+						}]);
 					} else if (HTML.right_click) {
-						DALS.Timeline.parseAction({
-							options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-							value: [{
-								type: "GeometryPolygon",
-								
-								geometry_id: this._selected_geometry.id,
-								remove_from_polygon: { geometry: processed_geometry.toJSON() }
-							}]
-						});
+						DALS.Timeline.parseAction("remove_from_polygon", [{
+							geometry_obj: this._selected_geometry.id,
+							remove_from_polygon: { geometry: processed_geometry.toJSON() }
+						}]);
 					}
 			}
 		});
@@ -482,21 +462,17 @@ naissance.Brush = class extends ve.Class {
 		let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
 		
 		//Declare local instance variables
-		let json_obj = {
-			options: { name: "Set Selected Label Symbol", key: "set_selected_label_symbol" },
-			value: []
-		};
+		let json_obj = [];
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
 		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
-			json_obj.value.push({
-				type: "Geometry",
-				
-				geometry_id: local_geometry.id,
-				set_label_symbol: symbol_obj
-			});
+			if (local_geometry.selected)
+				json_obj.push({
+					geometry_obj: local_geometry.id,
+					set_label_symbol: symbol_obj
+				});
 		});
-		DALS.Timeline.parseAction(json_obj);
+		DALS.Timeline.parseAction("set_selected_label_symbol", json_obj);
 	}
 	
 	static setSelectedSymbol (arg0_symbol_obj) {
@@ -504,22 +480,17 @@ naissance.Brush = class extends ve.Class {
 		let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
 		
 		//Declare local instance variables
-		let json_obj = {
-			options: { name: "Set Selected Symbol", key: "set_selected_symbol" },
-			value: []
-		};
+		let json_obj = [];
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
 		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
 			if (local_geometry.selected)
-				json_obj.value.push({
-					type: "Geometry",
-					
-					geometry_id: local_geometry.id,
+				json_obj.push({
+					geometry_obj: local_geometry.id,
 					set_symbol: symbol_obj
 				});
 		});
-		DALS.Timeline.parseAction(json_obj);
+		DALS.Timeline.parseAction("set_selected_symbol", json_obj);
 	}
 	
 	static setSelectedProperties (arg0_properties_obj) {

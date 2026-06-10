@@ -232,6 +232,22 @@ ve.Hierarchy = class extends ve.Component {
 			
 			//Reinstantiate Nestable instance safely after DOM has finished restructuring
 			this.nestable = new Nestable(ol_el, { items: ".group, .item" });
+			
+			//Restrict dragging to our list DOM tree boundaries
+			let original_move_element = this.nestable._moveElement;
+			let local_root_parent = this.nestable.parent;
+			this.nestable._moveElement = function (el, type) {
+				let target_parent = type.parent;
+				let is_descendant = (target_parent === local_root_parent) ?
+					true : local_root_parent.contains(target_parent);
+				
+				if (!is_descendant) {
+					return false;
+				}
+				
+				return original_move_element.call(this, el, type);
+			};
+			
 			this.nestable.on("stop", (e) => {
 				if (!this.options.allow_disabled_ordering)
 					this._handleDisabledOrdering(e);

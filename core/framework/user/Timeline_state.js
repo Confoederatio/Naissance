@@ -1,35 +1,66 @@
 //State mutation functions
 {
-	DALS.Timeline.parseAction = function (arg0_json, arg1_do_not_push_action) {
+	/**
+	 * Parses a user action inside Naissance. All user actions must be mapped to a valid JSON schema.
+	 * @alias DALS.Timeline.parseAction
+	 *
+	 * @param {string} [arg0_key] - The key to push to the current DALS timeline.
+	 * @param {Object[]} [arg1_json] - If no top-level ID is passed, the action is assumed to be global.
+	 * @param {boolean} [arg2_do_not_push_action=false]
+	 */
+	DALS.Timeline.parseAction = async function (arg0_key, arg1_json, arg2_do_not_push_action) {
 		//Convert from parameters
-		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
-		let do_not_push_action = arg1_do_not_push_action;
+		let key = arg0_key;
+		let json = (typeof arg1_json === "string") ? JSON.parse(arg1_json) : arg1_json;
+		let do_not_push_action = arg2_do_not_push_action;
 		
 		//Initialise JSON
-		if (json.options === undefined) json.options = {};
-		if (json.value === undefined) json.value = [];
+		if (json === undefined) json = [];
+		
+		//Allow callers to pass either a raw MVP array or a full action object
+		if (!Array.isArray(json) && json.value !== undefined) {
+			if (key === undefined)
+				key = json.key || json.options?.key;
+			
+			json = (typeof json.value === "string") ?
+				JSON.parse(json.value) : json.value;
+		}
+		if (json === undefined) json = [];
+		if (!Array.isArray(json)) json = [json];
 		
 		//Iterate over multi-value packet (MVP) and filter it down to superclass single-value packets (SVPs)
-		//console.log(json.value);
-		for (let i = 0; i < json.value.length; i++) {
-			if (json.value[i].type === "global") {
-				if (json.value[i].load_save)
-					DALS.Timeline.loadState(json.value[i].load_save);
-				if (json.value[i].set_date) {
-					UI_DateMenu.setDate(json.value[i].set_date);
-				} else if (json.value[i].refresh_date === true) {
-					Object.iterate(naissance.Geometry.instances, (local_key, local_value) => 
-						local_value.draw());
+		for (let i = 0; i < json.length; i++) {
+			if (json[i].feature_obj) {
+				await naissance.Feature.parseAction(json[i]);
+			} else if (json[i].geometry_obj) {
+				await naissance.Geometry.parseAction(json[i]);
+			} else {
+				if (json[i].type) {
+					await naissance[json[i].type].parseAction(json[i]);
+				} else {
+					if (json[i].load_save)
+						DALS.Timeline.loadState(json[i].load_save);
+					if (json[i].set_date) {
+						UI_DateMenu.setDate(json[i].set_date);
+					} else if (json[i].refresh_date === true) {
+						Object.iterate(naissance.Geometry.instances, (local_key, local_value) =>{
+							local_value.draw();
+							local_value.update();
+						});
+					}
 				}
-				continue;
 			}
-			if (json.value[i].type)
-				naissance[json.value[i].type].parseAction(json.value[i]);
 		}
 		
 		//Save action to current timeline if needed
 		if (!do_not_push_action) {
-			new DALS.Action(json);
+			new DALS.Action({
+				options: {
+					key: key,
+					name: key
+				},
+				value: json
+			});
 			
 			//Force all UI_LeftbarHierarchy instances to .refresh()
 			UI_LeftbarHierarchy.refresh();
@@ -46,7 +77,6 @@
 		
 		//0. Clear map
 		console.log(`DALS.Timeline.loadState called.`);
-		
 		{
 			//Clear _layers
 			main._layers.province_layers = [];
@@ -67,33 +97,31 @@
 		if (json.map_settings)
 			UI_MapSettings.fromJSON(json.map_settings);
 		
-		//2. Handle naissance.Geometry classes
-		//Iterate over JSON to load in each class
+		//2. Iterate over JSON to load in each class
 		Object.iterate(json, (local_key, local_value) => {
-			if (local_value.class_name && local_value.type === "geometry") {
-				let geometry_obj = new naissance[local_value.class_name]();
-				
-				//ID/History/Metadata deserialisation
-				if (local_value.id) geometry_obj.setID(local_value.id);
-				geometry_obj.history.fromJSON(local_value.history);
-				if (local_value.metadata) geometry_obj.metadata = local_value.metadata;
-				try {
-					if (geometry_obj.draw) geometry_obj.draw();
-				} catch (e) { console.warn(e); }
+			if (local_value.class_name) {
+				//2.1. Handle naissance.Geometry classes
+				if (local_value.type === "geometry") {
+					let geometry_obj = new naissance[local_value.class_name]({ is_import: true });
+					
+					//ID/History/Metadata deserialisation
+					if (local_value.id) geometry_obj.setID(local_value.id);
+					geometry_obj.history.fromJSON(local_value.history);
+					if (local_value.metadata) geometry_obj.metadata = local_value.metadata;
+				}
+				//2.2. Handle naissance.Feature classes
+				else if (local_value.type === "feature") {
+					let feature_obj = new naissance[local_value.class_name](undefined, {
+						metadata: local_value.metadata
+					});
+					
+					if (local_value.id) feature_obj.setID(local_value.id);
+					if (local_value.value) feature_obj.json = local_value.value;
+				}
 			}
 		});
 		
-		//3. Handle naissance.Feature classes
-		Object.iterate(json, (local_key, local_value) => {
-			if (local_value.class_name && local_value.type === "feature") {
-				let feature_obj = new naissance[local_value.class_name](undefined, {
-					metadata: local_value.metadata
-				});
-				
-				if (local_value.id) feature_obj.setID(local_value.id);
-				if (local_value.value) feature_obj.json = local_value.value;
-			}
-		});
+		//3. Features must be rendered separately
 		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
 			local_feature.fromJSON(local_feature.json);
 			try {

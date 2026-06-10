@@ -60,10 +60,6 @@ global.l4p = "./livemap/4.view/politics/";
 				
 				//Rightbar
 				edit_brush_keyframes: new UI_BrushKeyframes(),
-				edit_geometry_label: new UI_EditGeometryLabel(),
-				edit_geometry_line: new UI_EditGeometryLine(),
-				edit_geometry_point: new UI_EditGeometryPoint(),
-				edit_geometry_polygon: new UI_EditGeometryPolygon(),
 				edit_selected_geometries_ui: new UI_EditSelectedGeometries(),
 				mapmodes_ui: new UI_Mapmodes(),
 				

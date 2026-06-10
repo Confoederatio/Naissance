@@ -133,7 +133,7 @@
 		let date = arg0_date;
 		
 		//Declare local instance variables
-		if (typeof date === "string" && !isNaN(parseInt(date))) date = parseInt(date);
+		if (typeof date === "string" && !isNaN(parseFloat(date))) date = parseFloat(date);
 		if (typeof date === "number") date = new Date(date);
 		if (typeof date === "string") date = Date.parse(date);
 		

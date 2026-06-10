@@ -11,7 +11,6 @@ naissance.History = class extends ve.Class {
 			components_obj: {},
 			...arg1_options
 		};
-		this.interface = new ve.Interface({}, { name: "Keyframes", width: 99 });
 	}
 	
 	_hasTimestampAfter (arg0_timestamp) {
@@ -165,13 +164,10 @@ naissance.History = class extends ve.Class {
 					(local_value.localisation) ? local_value.localisation : "", { x: 1, y: 0 }),
 				actions_bar:  veRawInterface({
 					jump_to_date: veButton((e) => {
-						DALS.Timeline.parseAction({
-							options: { name: "Set Date", key: "load_date" },
-							value: [
-								{ type: "global", set_date: Date.convertTimestampToDate(local_key) },
-								{ type: "global", refresh_date: true }
-							]
-						});
+						DALS.Timeline.parseAction("load_date", [
+							{ set_date: Date.convertTimestampToDate(local_key) },
+							{ refresh_date: true }
+						]);
 					}, {
 						name: "<icon>arrow_forward</icon>",
 						tooltip: "Jump to Date"
@@ -180,17 +176,13 @@ naissance.History = class extends ve.Class {
 						let move_keyframe_window = veWindow({
 							new_date: veDate(JSON.parse(JSON.stringify(local_value.date)), { name: "New Date" }),
 							confirm: veButton(() => {
-								DALS.Timeline.parseAction({
-									options: { name: "Move Keyframe", key: "move_keyframe" },
-									value: [{
-										type: "Geometry",
-										geometry_id: this.options._id(),
-										move_keyframe: {
-											date: local_value.date,
-											ot_date: move_keyframe_window.new_date.v
-										}
-									}]
-								});
+								DALS.Timeline.parseAction("move_keyframe", [{
+									geometry_obj: this.options._id(),
+									move_keyframe: {
+										date: local_value.date,
+										ot_date: move_keyframe_window.new_date.v
+									}
+								}]);
 								move_keyframe_window.close();
 							})
 						}, {
@@ -202,34 +194,22 @@ naissance.History = class extends ve.Class {
 						tooltip: "Move Keyframe to Date"
 					}),
 					remove_keyframe: veButton((e) => {
-						DALS.Timeline.parseAction({
-							options: { name: "Delete Keyframe", key: "delete_keyframe" },
-							value: [
-								{ type: "Geometry", geometry_id: this.options._id(), remove_keyframe: local_key },
-								{ type: "global", refresh_date: true }
-							]
-						});
+						DALS.Timeline.parseAction("delete_keyframe", [
+							{ geometry_obj: this.options._id(), remove_keyframe: local_key },
+							{ refresh_date: true }
+						]);
 					}, {
 						name: "<icon>delete</icon>",
 						tooltip: "Delete Keyframe"
 					})
 				}, {
-					style: {
-						display: "flex",
-						flexWrap: "nowrap",
-						"[component='ve-button']": { marginRight: "var(--padding)" }
-					},
+					attributes: { class: "actions-bar" },
 					x: 2, y: 0
 				})
 			}, {
+				attributes: { "naissance-ui": "HistoryKeyframes" },
 				gc: true,
-				is_folder: false,
-				style: {
-					"> table > tbody > tr": {
-						"[id='0-0']": { width: "6rem" },
-						"[id='1-0']": { width: "50%" },
-					}
-				}
+				is_folder: false
 			});
 			
 			let local_keyframe_ui = components_obj[`t_${local_key}`];
@@ -237,6 +217,10 @@ naissance.History = class extends ve.Class {
 				if (this.keyframe_context_menu) this.keyframe_context_menu.close();
 				
 				this.keyframe_context_menu = veContextMenu({
+					copy_timestamp: veButton(() => {
+						navigator.clipboard.writeText(local_key);
+						veToast(`Copied timestamp to keyboard.`);
+					}, { name: "Copy Timestamp" }),
 					copy_geometry_to_date: veButton(() => {
 						let timestamp = Date.getTimestamp(main.date);
 						
@@ -262,14 +246,13 @@ naissance.History = class extends ve.Class {
 		//Iterate over all_json_keys and assume them as keyframes
 		if (json.keyframes) {
 			let all_keyframes = Object.keys(json.keyframes).sort();
-			
 			this.do_not_draw = true;
 			this.keyframes = {};
+			
 			for (let i = 0; i < all_keyframes.length; i++) {
-				let local_date = Date.convertTimestampToDate(all_keyframes[i]);
-				let local_keyframe = json.keyframes[all_keyframes[i]];
-				
-				this.addKeyframe(local_date, ...local_keyframe.value);
+				let local_key = all_keyframes[i];
+				let local_keyframe = json.keyframes[local_key];
+				this.addKeyframe(local_key, ...local_keyframe.value);
 			}
 			this.do_not_draw = false;
 		} else {

@@ -24,14 +24,10 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 					local_component.name = `Cancel Moving Marker`;
 					
 					map.once("click", (e) => {
-						DALS.Timeline.parseAction({
-							options: { name: "Set Point Position", key: "set_point_position" },
-							value: [{
-								type: "GeometryPoint",
-								geometry_id: this.id,
-								set_coordinates: e.coordinate.toJSON()
-							}]
-						});
+						DALS.Timeline.parseAction("set_point_position", [{
+							geometry_obj: this.id,
+							set_coordinates: e.coordinate.toJSON()
+						}]);
 						
 						delete this._is_being_moved;
 						this.draw();
@@ -47,8 +43,14 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			}, { name: "Move Marker", x: 0, y: 1 })
 		}, { is_folder: false });
 		this.edit_symbol_ui = veInterface({
-			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
-			edit_point: main.interfaces.edit_geometry_point.draw({ _id: () => this.id, name: "Point" })
+			edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
+				name: "Label",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			}),
+			edit_point: new UI_PointSymbol(main.settings.default_point_symbol, {
+				name: "Point",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			})
 		}, { name: "Edit Symbol" });
 		this.keyframes_ui = veInterface({}, {
 			name: "Keyframes", open: true

@@ -211,7 +211,6 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
         this.components_el.insertBefore(current_component.element, this.components_el.children[i] || null);
 
       current_component.setOwner(this, [this]);
-      current_component.element.style.display = "inline";
       
       //2. Define context menu interfaces (only if not already initialised)
       if (!current_component._ve_list_init) {

@@ -8,67 +8,21 @@ if (!global.naissance) global.naissance = {};
  * @type {naissance.GeometryPolygon}
  */
 naissance.GeometryPolygon = class extends naissance.Geometry {
-	constructor () {
-		super();
+	constructor (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+			super(options);
+		
+		//Declare local instance variables
 		this.class_name = "GeometryPolygon";
 		this.node_editor_mode = "Polygon";
 		
-		//Declare UI
-		this.interface = veInterface({
-			information: veHTML(() => {
-				//Declare local instance variables
-				let area_km2 = (this.geometry && this.isOpen("instance")) ? 
-					this.geometry.getArea()/1000000 : 0;
-				
-				//Return statement
-				return `ID: ${this.id} | Area: ${String.formatNumber(area_km2)}km^2`;
-			}, { width: 99, x: 0, y: 0 }),
-			move_to_brush: veButton(() => DALS.Timeline.parseAction({
-				options: { name: "Select Geometry" },
-				value: [{ type: "Brush", select_geometry_id: this.id }]
-			}), { name: "Move To Brush", limit: () => (main.brush.selected_geometry?.id !== this.id), x: 0, y: 1 }),
-			finish_polygon: veButton(() => DALS.Timeline.parseAction({
-				options: { name: "Deselect Geometry", key: "deselect_geometry" },
-				value: [{ type: "Brush", select_geometry_id: false }]
-			}), { name: "Finish Polygon", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
-			
-			selected: veCheckbox(this.selected, {
-				name: "Selected",
-				onuserchange: (v) => this.selected = v,
-				x: 1, y: 1
-			}),
-			debug: veButton(() => {
-				console.log(`$geometry - naissance.GeometryPolygon (ID: ${this.id}):`, this);
-				window.$geometry = this;
-			}, {
-				name: "Debug",
-				x: 2, y: 1
-			}),
-			
-			actions_bar: veRawInterface(this.drawHierarchyDatatypeGenerics(), {
-				name: "<b>Quick Actions:</b>",
-				style: {
-					alignItems: "center",
-					display: "flex",
-					"[component='ve-button']": { marginLeft: "var(--padding)" }
-				},
-				width: 99
-			})
-		}, { is_folder: false });
-		this.edit_symbol_ui = veInterface({
-			edit_fill: main.interfaces.edit_geometry_polygon.draw({ _id: () => this.id, name: "Fill" }),
-			edit_label: main.interfaces.edit_geometry_label.draw({ _id: () => this.id, name: "Label" }),
-			edit_stroke: main.interfaces.edit_geometry_line.draw({ _id: () => this.id, name: "Stroke" })
-		}, { name: "Edit Symbol" });
-		this.keyframes_ui = veInterface({}, {
-			name: `Keyframes`, open: true
-		});
-		super.drawVariablesEditor();
-		
 		//Add keyframe with default brush symbol upon instantiation
-		let brush_symbol = main.brush.getBrushSymbol();
-		if (brush_symbol)
-			this.addKeyframe(main.date, undefined, brush_symbol);
+		if (!options.is_import) {
+			let brush_symbol = main.brush.getBrushSymbol();
+			if (brush_symbol)
+				this.addKeyframe(main.date, undefined, brush_symbol);
+		}
 		
 		//KEEP AT BOTTOM!
 		this.updateOwner();
@@ -134,7 +88,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		}
 	}
 	
-	draw () { //[WIP] - Use setCoordinates() first and retain geometries
+	draw () {
 		//Remove geometry first to handle it
 		if (this.geometry) this.geometry.remove();
 		if (this.selected_geometry) this.selected_geometry.remove();
@@ -167,7 +121,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					if (this.geometry) this.geometry.setSymbol({
-						...naissance.Renderer.getDefaultSymbol(),
+						...naissance.Renderer.getDefaultSymbol({ exclude: ["point"] }),
 						...this.value?.[1],
 					});
 					main.layers.entity_layer.addGeometry(this.geometry);
@@ -194,10 +148,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			//5. Add bindings
 			if (this.geometry)
 				this.geometry.addEventListener("click", (e) => {
-					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode)) {
-						this.history.draw(this.keyframes_ui);
-						super.open("instance", { name: this.name, ...this.window_options });
-					}
+					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
+						this.open("instance", { name: this.name, ...this.window_options });
 				});
 		}
 	}
@@ -260,7 +212,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		let context_menu_button = veButton(() => {
 			try { this.history.draw(this.keyframes_ui); } catch (e) {}
-			super.open("instance", { name: this.name, ...this.window_options });
+			this.open("instance", { name: this.name, ...this.window_options });
 		}, {
 			attributes: { class: "order-101" },
 			name: "<icon>more_vert</icon>",
@@ -270,5 +222,74 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//Return statement
 		return actions_bar_el;
+	}
+	
+	open (arg0_type, arg1_options) {
+		//Convert from parameters
+		let type = (arg0_type) ? arg0_type : "instance";
+		let options = (arg1_options) ? arg1_options : {};
+		
+		//Declare local instance variables
+		if (!this.interface) this.interface = veInterface({
+			information: veHTML(() => {
+				//Declare local instance variables
+				let area_km2 = (this.geometry && this.isOpen("instance")) ?
+					this.geometry.getArea()/1000000 : 0;
+				
+				//Return statement
+				return `ID: ${this.id} | Area: ${String.formatNumber(area_km2)}km^2`;
+			}, { width: 99, x: 0, y: 0 }),
+			move_to_brush: veButton(() => DALS.Timeline.parseAction("select_geometry", [{
+				type: "Brush", select_geometry_id: this.id
+			}]), { name: "Move To Brush", limit: () => (main.brush.selected_geometry?.id !== this.id), x: 0, y: 1 }),
+			finish_polygon: veButton(() => DALS.Timeline.parseAction("deselect_geometry", [{
+				type: "Brush", select_geometry_id: false
+			}]), { name: "Finish Polygon", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
+			
+			selected: veCheckbox(this.selected, {
+				name: "Selected",
+				onuserchange: (v) => this.selected = v,
+				x: 1, y: 1
+			}),
+			debug: veButton(() => {
+				console.log(`$geometry - naissance.GeometryPolygon (ID: ${this.id}):`, this);
+				window.$geometry = this;
+			}, {
+				name: "Debug",
+				x: 2, y: 1
+			}),
+			
+			actions_bar: veRawInterface(this.drawHierarchyDatatypeGenerics(), {
+				name: "<b>Quick Actions:</b>",
+				style: {
+					alignItems: "center",
+					display: "flex",
+					"[component='ve-button']": { marginLeft: "var(--padding)" }
+				},
+				width: 99
+			})
+		}, { is_folder: false });
+		if (!this.edit_symbol_ui) this.edit_symbol_ui = veInterface({
+			edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
+				name: "Label",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			}),
+			edit_polygon: new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
+				name: "Polygon",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			}),
+			edit_stroke: new UI_LineSymbol(main.settings.default_line_symbol, {
+				name: "Stroke",
+				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+			})
+		}, { name: "Edit Symbol" });
+		if (!this.keyframes_ui) this.keyframes_ui = veInterface({}, {
+			name: `Keyframes`, open: true
+		});
+		if (!this.variables_ui) super.drawVariablesEditor();
+		this.update();
+		
+		//Call super.open for ve.Class
+		super.open(type, options);
 	}
 };

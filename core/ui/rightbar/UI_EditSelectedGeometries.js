@@ -4,13 +4,23 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 	}
 	
 	draw () {
-		/**
-		 * maptalks.Polygon symbol:
-		 */
-		this.polygon_symbol = main.interfaces.edit_geometry_polygon.draw();
-		this.line_symbol = main.interfaces.edit_geometry_line.draw();
-		this.point_symbol = main.interfaces.edit_geometry_point.draw();
-		this.label_symbol = main.interfaces.edit_geometry_label.draw();
+		//Declare local instance variables
+		this.label_symbol = new UI_LabelSymbol(main.settings.default_label_symbol, {
+			name: "Label Symbol",
+			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
+		});
+		this.line_symbol = new UI_LineSymbol(main.settings.default_line_symbol, {
+			name: "Line Symbol",
+			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
+		});
+		this.point_symbol = new UI_PointSymbol(main.settings.default_point_symbol, {
+			name: "Point Symbol",
+			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
+		});
+		this.polygon_symbol = new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
+			name: "Polygon Symbol",
+			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
+		});
 		this.properties = new ve.Interface({
 			visibility: new ve.Interface({
 				minimum_zoom: new ve.Number(0, {
@@ -44,16 +54,9 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		//Convert from parameters
 		let options = (arg0_options) ? arg0_options : {};
 		
-		//Return function
-		return (arg0_symbol_obj) => {
-			//Convert from parameters
-			let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
-			
-			//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
-			(options._id) ?
-				naissance.Geometry.setSymbols(options._id(), 
-					(!options.wrapper_key) ? symbol_obj : { [options.wrapper_key]: symbol_obj }) :
-				naissance.Brush.setSelectedSymbol(symbol_obj);
-		};
+		//Call naissance.Geometry.setSymbols if this.options._id is defined, otherwise call naissance.Brush.setSelectedSymbol
+		(options._id) ?
+			naissance.Geometry.setSymbols(options._id, options) :
+			naissance.Brush.setSelectedSymbol(options);
 	};
 };

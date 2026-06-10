@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target FeatureLayer.
  * - Static method of: {@link naissance.FeatureLayer}
  *
- * `arg0_json`: {@link Object|string}
- * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.feature_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
  * <br>
  * - #### Extraneous Commands:
  * - `.create_sketch_map`: {@link Object}
@@ -21,12 +21,13 @@ if (!global.naissance) global.naissance = {};
  *   - `.id`: {@link number} - The index of the edited geometry.
  *   - `.value`: {@link Object} - The value of the edited symbol.
  */
-naissance.FeatureSketchMap.parseAction = function (arg0_json) {
+naissance.FeatureSketchMap.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let sketch_map_obj = naissance.Feature.instances[json.feature_id];
+	let sketch_map_obj = (typeof json.feature_obj === "string") ?
+		naissance.Feature.instances[json.feature_obj] : json.feature_obj;
 	
 	//Parse extraneous commands
 	//create_sketch_map

@@ -1,0 +1,12 @@
+[naissance-ui="HistoryKeyframes"] {
+    .actions-bar {
+        display: flex;
+        flex-wrap: nowrap;
+        
+        [component="ve-button"] { margin-right: var(--padding); }
+    }
+    > table > tbody > tr {
+        [id="0-0"] { width: 6rem; }
+        [id="1-0"] { width: 50%; }
+    }
+}

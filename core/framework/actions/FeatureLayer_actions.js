@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target FeatureLayer.
  * - Static method of: {@link naissance.FeatureLayer}
  *
- * `arg0_json`: {@link Object|string}
- * - `.feature_id`: {@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.feature_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Feature} ID to target changes for.
  * <br>
  * - #### Extraneous Commands:
  *   - `.create_layer`: {@link Object}
@@ -16,12 +16,13 @@ if (!global.naissance) global.naissance = {};
  *     - `.key`: {@link string} - The key to change for the selected layer.
  *     - `.value`: {@link any} - What to change the value of the key to.
  */
-naissance.FeatureLayer.parseAction = function (arg0_json) {
+naissance.FeatureLayer.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let layer_obj = naissance.Feature.instances[json.feature_id];
+	let layer_obj = (typeof json.feature_obj === "string") ? 
+		naissance.Feature.instances[json.feature_obj] : json.feature_obj;
 	
 	//Parse extraneous commands
 	//create_layer

@@ -43,10 +43,7 @@ naissance.Feature = class extends ve.Class {
 		let value = (arg0_value) ? arg0_value : "";
 		
 		//Send DALS.Timeline.parseAction() command
-		DALS.Timeline.parseAction({
-			options: { name: "Rename Feature", key: "rename_Feature" },
-			value: [{ type: "Feature", feature_id: this.id, set_name: value }]
-		}, this.fire_action_silently);
+		DALS.Timeline.parseAction("rename_feature", [{ feature_obj: this.id, set_name: value }], this.fire_action_silently);
 	}
 	
 	get parent () {
@@ -205,18 +202,14 @@ naissance.Feature = class extends ve.Class {
 								} else {
 									actual_date = (this.ui.add_variable_keyframe) ? this.ui.add_variable_keyframe : "start";
 								}
-							DALS.Timeline.parseAction({
-								options: { name: "Add Variable", key: `add_variable_${this.ui.add_variable_key}` },
-								value: [{
-									type: "Feature",
-									feature_id: this.id,
-									add_variable: {
-										date: actual_date,
-										key: this.ui.add_variable_key,
-										value: (this.ui.add_variable_value !== undefined) ? this.ui.add_variable_value : ""
-									}
-								}]
-							});
+							DALS.Timeline.parseAction(`add_variable_${this.ui.add_variable_key}`, [{
+								feature_obj: this.id,
+								add_variable: {
+									date: actual_date,
+									key: this.ui.add_variable_key,
+									value: (this.ui.add_variable_value !== undefined) ? this.ui.add_variable_value : ""
+								}
+							}]);
 						}, { name: "Confirm" })
 					}, { 
 						name: "Add Variable", 
@@ -230,14 +223,11 @@ naissance.Feature = class extends ve.Class {
 				clean_geometry_tags: veButton(() => {
 					veConfirm(`Are you sure you want to clean all geometry tags in ${this.name}?`, {
 						special_function: () => {
-							DALS.Timeline.parseAction({
-								options: { name: "Clean Geometry Tags", key: `clean_${options.type}_geometry_tags` },
-								value: [{
-									type: "Feature",
-									feature_id: this.id,
-									clean_geometry_tags: true
-								}]
-							});
+							DALS.Timeline.parseAction(`clean_${options.type}_geometry_tags`, [{
+								type: "Feature",
+								feature_obj: this.id,
+								clean_geometry_tags: true
+							}]);
 							veToast(`Cleaned geometry tags.`);
 						}
 					});
@@ -254,14 +244,10 @@ naissance.Feature = class extends ve.Class {
 							let all_flags = [];
 							if (this.ui.clean_symbols) all_flags.push("symbol");
 							
-							DALS.Timeline.parseAction({
-								options: { name: "Clean Keyframes", key: `clean_${options.type}_keyframes` },
-								value: [{
-									type: "Feature",
-									feature_id: this.id,
-									clean_keyframes: all_flags
-								}]
-							});
+							DALS.Timeline.parseAction(`clean_${options.type}_keyframes`, [{
+								feature_obj: this.id,
+								clean_keyframes: all_flags
+							}]);
 							veToast(`Cleaned ${options.name} keyframes.`);
 						}, { name: "Confirm" })
 					}, { name: `Clean ${options.name} Keyframes`, can_rename: false });
@@ -269,14 +255,10 @@ naissance.Feature = class extends ve.Class {
 				flatten_all_geometries: veButton(() => {
 					veConfirm(`Are you sure you want to flatten all geometries in ${this.name}?`, {
 						special_function: () => {
-							DALS.Timeline.parseAction({
-								options: { name: "Flatten Geometries", key: `flatten_${options.type}_geometries` },
-								value: [{
-									type: "Feature",
-									feature_id: this.id,
-									flatten_all_geometries: true
-								}]
-							});
+							DALS.Timeline.parseAction(`flatten_${options.type}_geometries`, [{
+								feature_obj: this.id,
+								flatten_all_geometries: true
+							}]);
 							veToast(`Flattened all geometries.`);
 						}
 					});
@@ -300,14 +282,10 @@ naissance.Feature = class extends ve.Class {
 								let ot_feature = naissance.Feature.instances[this.ui.to_feature_id];
 								
 								//Parse action
-								DALS.Timeline.parseAction({
-									options: { name: "Move Geometries To", key: `move_${options.type}_geometries_to` },
-									value: [{
-										type: "Feature",
-										feature_id: this.id,
-										move_all_entities_to_feature: this.ui.to_feature_id
-									}]
-								});
+								DALS.Timeline.parseAction(`move_${options.type}_geometries_to`, [{
+									feature_obj: this.id,
+									move_all_entities_to_feature: this.ui.to_feature_id
+								}]);
 								veToast(`Moved all geometries from ${this.name} ${options.name} to ${ot_feature.name} ${options.name}.`);
 							} catch (e) { console.error(e); }
 						}, { name: "Confirm" })
@@ -329,17 +307,13 @@ naissance.Feature = class extends ve.Class {
 							let simplify_threshold = Math.returnSafeNumber(this.ui.simplify_threshold, 0.01);
 							
 							try {
-								DALS.Timeline.parseAction({
-									options: { name: "Simplify Polygons", key: `simplify_${options.type}_geometries` },
-									value: [{
-										type: "Feature",
-										feature_id: this.id,
-										simplify_all_polygons: {
-											tolerance: simplify_threshold,
-											truncate: this.ui.truncate_threshold
-										}
-									}]
-								});
+								DALS.Timeline.parseAction(`simplify_${options.type}_geometries`, [{
+									feature_obj: this.id,
+									simplify_all_polygons: {
+										tolerance: simplify_threshold,
+										truncate: this.ui.truncate_threshold
+									}
+								}]);
 								veToast(`Simplified all geometries by ${String.formatNumber(simplify_threshold, 2)}.`);
 							} catch (e) { console.error(e); }
 						}, { name: "Confirm" })
@@ -454,10 +428,7 @@ naissance.Feature = class extends ve.Class {
 		//Return statement
 		return {
 			hide_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Hide Feature", key: "hide_feature" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: false }]
-				});
+				DALS.Timeline.parseAction("hide_feature", [{ feature_obj: this.id, set_visibility: false }]);
 			}, {
 				attributes: { class: "order-99" },
 				name: `<icon>visibility</icon>`,
@@ -465,10 +436,7 @@ naissance.Feature = class extends ve.Class {
 				tooltip: "Hide Feature"
 			}),
 			show_visibility: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Show Feature", key: "show_feature" },
-					value: [{ type: "Feature", feature_id: this.id, set_visibility: true }]
-				});
+				DALS.Timeline.parseAction("show_feature", [{ feature_obj: this.id, set_visibility: true }]);
 			}, {
 				attributes: { class: "order-99" },
 				name: "<icon>visibility_off</icon>",
@@ -476,10 +444,7 @@ naissance.Feature = class extends ve.Class {
 				tooltip: "Show Feature"
 			}),
 			delete_button: veButton(() => {
-				DALS.Timeline.parseAction({
-					options: { name: "Delete Feature", key: "delete_feature" },
-					value: [{ type: "Feature", feature_id: this.id, delete_feature: true }]
-				});
+				DALS.Timeline.parseAction("delete_feature", [{ feature_obj: this.id, delete_feature: true }]);
 			}, {
 				attributes: { class: "order-100" },
 				name: "<icon>delete</icon>", 

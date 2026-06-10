@@ -21,13 +21,13 @@
 		
 		//Check to make sure that the inputted date_string is valid
 		for (let i = 0; i < date_array.length; i++)
-			if (isNaN(parseInt(date_array[i])))
+			if (isNaN(parseFloat(date_array[i])))
 				return;
 		
 		//Iterate over all elements in date_array and cast them to a date object
 		for (let i = 0; i < date_array.length; i++)
 			if (date_properties[i])
-				date_obj[date_properties[i]] = parseInt(date_array[i]);
+				date_obj[date_properties[i]] = parseFloat(date_array[i]);
 		
 		//Return statement
 		return date_obj;
@@ -36,9 +36,9 @@
 	/**
 	 * Converts a timestamp to a Date object.
 	 * @alias Date.convertTimestampToDate
-	 * 
+	 *
 	 * @param {number|string} arg0_timestamp
-	 * 
+	 *
 	 * @returns {{year: number, month: number, day: number, hour: number, minute: number}|*}
 	 */
 	Date.convertTimestampToDate = function (arg0_timestamp) {
@@ -46,11 +46,30 @@
 		
 		if (typeof timestamp === "object") return timestamp;
 		
-		timestamp = parseInt(timestamp);
+		timestamp = parseFloat(timestamp);
 		if (isNaN(timestamp)) return Date.getBlankDate();
+		
+		//Declare local instance variables
+		let do_not_cache_timestamps = ve.registry.settings.Date.do_not_cache_timestamps;
+		
+		// Map cache for extremely fast O(1) repeat lookups
+		if (!do_not_cache_timestamps) {
+			if (!Date._conversion_cache) Date._conversion_cache = new Map();
+			let cached_val = Date._conversion_cache.get(timestamp);
+			if (cached_val) {
+				return {
+					year: cached_val.year,
+					month: cached_val.month,
+					day: cached_val.day,
+					hour: cached_val.hour,
+					minute: cached_val.minute
+				};
+			}
+		}
 		
 		let date_obj = Date.getBlankDate();
 		let minutes = timestamp;
+		let minutes_per_400_years = 210379680; // 146097 days * 24 * 60
 		
 		// --- Handle BCE (negative timestamps) ---
 		if (minutes < 0) {
@@ -64,6 +83,13 @@
 				if (-minutes <= year_minutes) break;
 				minutes += year_minutes;
 				date_obj.year--;
+				
+				// Fast-jump after passing the custom BCE leap year boundary (-45)
+				if (date_obj.year === -46) {
+					let four_hundred_years = Math.floor((-minutes) / minutes_per_400_years);
+					minutes += four_hundred_years * minutes_per_400_years;
+					date_obj.year -= four_hundred_years * 400;
+				}
 			}
 			
 			// We're now inside (date_obj.year - 1). Enter that year.
@@ -85,6 +111,13 @@
 				if (minutes < y_minutes) break;
 				minutes -= y_minutes;
 				date_obj.year++;
+				
+				// Fast-jump after passing the custom CE leap year boundary (45)
+				if (date_obj.year === 46) {
+					let four_hundred_years = Math.floor(minutes / minutes_per_400_years);
+					minutes -= four_hundred_years * minutes_per_400_years;
+					date_obj.year += four_hundred_years * 400;
+				}
 			}
 		}
 		
@@ -109,6 +142,16 @@
 		date_obj.hour = Math.floor(minutes / 60);
 		date_obj.minute = minutes % 60;
 		
+		// Store a copy in the Map cache before returning
+		if (!do_not_cache_timestamps)
+			Date._conversion_cache.set(timestamp, {
+				year: date_obj.year,
+				month: date_obj.month,
+				day: date_obj.day,
+				hour: date_obj.hour,
+				minute: date_obj.minute
+			});
+		
 		return date_obj;
 	};
 	
@@ -125,7 +168,7 @@
 		let timestamp = arg0_timestamp;
 		
 		//Return statement
-		return parseInt(
+		return parseFloat(
 			Math.numerise(timestamp.toString().replace("t_", "").replace("tz_", ""))
 		);
 	};

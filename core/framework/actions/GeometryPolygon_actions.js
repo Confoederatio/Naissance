@@ -4,8 +4,8 @@ if (!global.naissance) global.naissance = {};
  * Parses a JSON action for a target GeometryPolygon.
  * - Static method of: {@link naissance.GeometryPolygon}
  *
- * `arg0_json`: {@link Object|string}
- * - `.geometry_id`: {@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
+ * `arg0_json`: {@link Object}|{@link string}
+ * - `.geometry_obj`: {@link Object}|{@link string} - Identifier. The {@link naissance.Geometry} ID to target changes for, if any.
  * <br>
  * - #### Extraneous Commands:
  * - `.create_polygon`: {@link Object}
@@ -31,12 +31,13 @@ if (!global.naissance) global.naissance = {};
  *   - `.tolerance`: {@link number}
  *   - `.truncate`: {@link number}
  */
-naissance.GeometryPolygon.parseAction = function (arg0_json) {
+naissance.GeometryPolygon.parseAction = async function (arg0_json) {
 	//Convert from parameters
 	let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 	
 	//Declare local instance variables
-	let polygon_obj = naissance.Geometry.instances[json.geometry_id];
+	let polygon_obj = (typeof json.geometry_obj === "string") ?
+		naissance.Geometry.instances[json.geometry_obj] : json.geometry_obj;
 	
 	//Parse extraneous commands
 	//create_polygon
@@ -80,17 +81,13 @@ naissance.GeometryPolygon.parseAction = function (arg0_json) {
 			//Date range handling
 			if (json.add_to_polygon.date_range) {
 				_parseGeometryActionsInDateRange(json.add_to_polygon.date_range, (local_keyframe) => {
-					DALS.Timeline.parseAction({
-						options: { name: "Add to Polygon", key: "add_to_polygon" },
-						value: [{
-							type: "GeometryPolygon",
-							geometry_id: polygon_obj.id,
-							add_to_polygon: {
-								date: local_keyframe,
-								geometry: json.add_to_polygon.geometry
-							}
-						}]
-					}, true);
+					DALS.Timeline.parseAction("add_to_polygon", [{
+						geometry_obj: polygon_obj.id,
+						add_to_polygon: {
+							date: local_keyframe,
+							geometry: json.add_to_polygon.geometry
+						}
+					}], true);
 				});
 			} else {
 				//Union with existing geometry if defined, if undefined replace geometry
@@ -121,17 +118,13 @@ naissance.GeometryPolygon.parseAction = function (arg0_json) {
 			//Difference with existing geometry, if return value is null replace geometry
 			if (json.remove_from_polygon.date_range) {
 				_parseGeometryActionsInDateRange(json.remove_from_polygon.date_range, (local_keyframe) => {
-					DALS.Timeline.parseAction({
-						options: { name: "Remove from Polygon", key: "remove_from_polygon" },
-						value: [{
-							type: "GeometryPolygon",
-							geometry_id: polygon_obj.id,
-							remove_from_polygon: {
-								date: local_keyframe,
-								geometry: json.remove_from_polygon.geometry
-							}
-						}]
-					}, true);
+					DALS.Timeline.parseAction("remove_from_polygon", [{
+						geometry_obj: polygon_obj.id,
+						remove_from_polygon: {
+							date: local_keyframe,
+							geometry: json.remove_from_polygon.geometry
+						}
+					}], true);
 				});
 			} else {
 				//Difference with existing geometry; if it covers the entire geometry set to null to hide
@@ -177,18 +170,14 @@ naissance.GeometryPolygon.parseAction = function (arg0_json) {
 							let local_simplify_options = json.simplify_polygon;
 								delete local_simplify_options.date_range;
 								
-							DALS.Timeline.parseAction({
-								options: { name: "Simplify Polygon", key: "simplify_polygon" },
-								value: [{
-									type: "GeometryPolygon",
-									geometry_id: polygon_obj.id,
-									simplify_polygon: {
-										date: local_keyframe,
-										tolerance: tolerance,
-										...local_simplify_options
-									}
-								}]
-							}, true);
+							DALS.Timeline.parseAction("simplify_polygon", [{
+								geometry_obj: polygon_obj.id,
+								simplify_polygon: {
+									date: local_keyframe,
+									tolerance: tolerance,
+									...local_simplify_options
+								}
+							}], true);
 						});
 					} else {
 						let geometry = (json.simplify_polygon.date) ? 

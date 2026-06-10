@@ -132,7 +132,8 @@ ve.UndoRedo = class extends ve.Component {
 							String.formatNumber(this.translate_y, 2), 
 							String.formatNumber(this.scale, 2))
 					)
-				}
+				},
+				options: { style: { overflow: "hidden" } }
 			}
 		}, { 
 			name: this.options.name,
