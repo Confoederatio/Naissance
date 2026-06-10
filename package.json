@@ -25,7 +25,7 @@
   ],
   "build": {
     "appId": "confoederatio.naissance",
-    "productName": "Naissance HGIS",
+    "productName": "naissancce",
     "asar": true,
     "directories": {
       "output": "./_dist"
@@ -70,7 +70,7 @@
   "nsis": {
     "installerIcon": "gfx/icons/icon.ico",
     "uninstallerIcon": "gfx/icons/icon.ico",
-    "uninstallDisplayName": "Naissance HGIS",
+    "uninstallDisplayName": "naissance",
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true
