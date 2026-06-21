@@ -719,7 +719,7 @@
 	 * @param {Object} arg0_object
 	 * @param {function(arg0_local_key, arg1_local_value, arg2_index)|function(arg0_local_value)} arg1_function
 	 * @param {Object} [arg2_options]
-	 *  @param {Object|string} [arg2_options.sort_mode] - Either 'ascending'/'descending'. Sorts object keys.
+	 *  @param {Object|string} [arg2_options.sort_mode] - Either 'ascending'/'descending', or an Object. Sorts object keys.
 	 *   @param {string} [arg2_options.sort_mode.key] - Refers to a subobject key to iterate by.
 	 *   @param {string} [arg2_options.sort_mode.type="descending"] - Either 'ascending'/'descending'.
 	 */

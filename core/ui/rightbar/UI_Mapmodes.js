@@ -7,6 +7,7 @@ global.UI_Mapmodes = class extends ve.Class {
 		
 		this.interface = new ve.Interface({
 			mapmode_selection: new ve.SearchSelect({}, {
+				display: "inline",
 				header_components_obj: {
 					add_new_mapmode: veButton(() => {
 						this.openAddMapmodesWindow();

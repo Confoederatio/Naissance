@@ -111,7 +111,7 @@
         background-color: var(--bg-secondary-colour);
         display: flex;
         height: var(--navbar-height);
-        padding-inline-start: calc(var(--padding)*2);
+        padding-inline-start: var(--padding);
         
         > div {
             padding-right: calc(var(--padding)*2);

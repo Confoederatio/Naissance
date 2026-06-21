@@ -53,6 +53,7 @@
  * ##### Methods:
  * - <span color=00ffff>{@link ve.Component.addComponent|addComponent}</span>() - Attempts to mount the current component on its parent_el.
  * - <span color=00ffff>{@link ve.Component.bind|bind}</span>(arg0_container_el:{@link HTMLElement}) - Manually mounts the current component to arg0_container_el.
+ * - <span color=00ffff>{@link ve.Component.copy|copy}</span>() | {@link ve.Component} - Copies the current component.
  * - <span color=00ffff>{@link ve.Component.fireFromBinding|fireFromBinding}</span>() - Pseudo-setter from binding. Fires only upon program-driven changes to `.v` directly.
  * - <span color=00ffff>{@link ve.Component.fireToBinding|fireToBinding}</span>() - Pseudo-setter to binding. Fires only upon user-driven changes to `.v`.
  * - <span color=00ffff>{@link ve.Component.gc|gc}</span>() - Adds the component to garbage collection.
@@ -383,34 +384,30 @@ ve.Component = class {
 	 */
 	fireFromBinding () {
 		//Convert from parameters
-		let variable_string = (this.from_binding_string) ? JSON.parse(JSON.stringify(this.from_binding_string)) : undefined;
+		let variable_string = (this.from_binding_string) ? 
+			JSON.parse(JSON.stringify(this.from_binding_string)) : undefined;
 			if (this.from_binding_fire_silently) return; //Internal guard clause if this.from_binding is to fire silently
-			if (variable_string === undefined) return; //Internal guard clause if variable_string is undefined
 		
 		//Declare local instance variables
 		let initial_object = global;
 		
 		//Parse this to this.owner; watch mutation using getter/setter, and set this.v to new value
-		if (variable_string.startsWith("this.")) {
-			variable_string = variable_string.replace("this.", "");
-			initial_object = this.owner;
-		} else if (variable_string.startsWith("window.")) {
-			variable_string = variable_string.replace("window.", "");
-			initial_object = window;
-		} else {
-			variable_string = variable_string.replace("global.", "");
-		}
+		if (variable_string)
+			if (variable_string.startsWith("this.")) {
+				variable_string = variable_string.replace("this.", "");
+				initial_object = this.owner;
+			} else if (variable_string.startsWith("window.")) {
+				variable_string = variable_string.replace("window.", "");
+				initial_object = window;
+			} else {
+				variable_string = variable_string.replace("global.", "");
+			}
 		
 		//Set this.from_binding in a to binding manner
 		if (this.from_binding_string) {
 			this.from_binding_fire_silently = true;
 			Object.setValue(initial_object, variable_string, this.v);
 			delete this.from_binding_fire_silently;
-			
-			if (typeof this.options.onchange === "function") //Fire onchange (bidirectional)
-				this.options.onchange(this.v, this);
-			if (typeof this.options.onprogramchange === "function") //Fire onprogramchange (unidirectional)
-				this.options.onprogramchange(this.v, this);
 		}
 	}
 	
@@ -542,6 +539,28 @@ ve.Component = class {
 		
 		//Set variable_key, append to container_el
 		container_el.append(this.element);
+	}
+	
+	/**
+	 * Copies the current component and returns a new instance of it.
+	 * - Method of: {@link ve.Component}
+	 * 
+	 * @returns {ve.Component}
+	 */
+	copy () {
+		let components_obj = {};
+		
+		if (this.components_obj) {
+			Object.iterate(this.components_obj, (local_key, local_value) => {
+				if (typeof local_value.copy === "function")
+					components_obj[local_key] = local_value.copy()
+			});
+			
+			//Return statement
+			return new this.constructor(components_obj, this.options);
+		} else {
+			return new this.constructor(this.v, this.options);
+		}
 	}
 	
 	/**

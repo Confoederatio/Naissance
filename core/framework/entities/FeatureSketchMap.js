@@ -3,6 +3,11 @@ if (!global.naissance) global.naissance = {};
  * @type {naissance.FeatureLayer}
  */
 naissance.FeatureSketchMap = class extends naissance.Feature {
+	static hierarchy_symbol = {
+		icon: "app_registration",
+		name: "Sketch Map"
+	};
+	
 	constructor (arg0_entities, arg1_options) {
 		super();
 		this.class_name = "FeatureSketchMap";
@@ -12,11 +17,6 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 		this._entities = [];
 		this._is_visible = true;
 		this._name = "New Sketch Map";
-		this.toolbar = undefined;
-		
-		//Declare UI, attached to UI_LeftbarHierarchy
-		this.interface = undefined;
-		this.handleEvents();
 	}
 	
 	addGeometry (arg0_geometry) {
@@ -122,46 +122,48 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 		}
 	}
 	
-	drawHierarchyDatatype () {
+	drawUI () {
 		//Declare local instance variables
-		this.interface = new ve.HierarchyDatatype({
-			icon: new ve.HTML(`<icon>app_registration</icon>`),
-			...super.drawHierarchyDatatypeGenerics(),
-			edit: veButton(() => {
-				super.open("instance", {
-					id: this.id,
-					name: this._name,
-					width: "24rem"
-				});
+		if (!this.draw_tool) {
+			this.draw_tool = new maptalks.DrawTool({ mode: "Polygon" }).addTo(map).disable();
+			this.draw_tool.on("drawend", (e) => {
+				DALS.Timeline.parseAction("create_sketch_map_geometry", [{
+					feature_obj: this.id,
+					add_geometry: e.geometry.toJSON()
+				}]);
+				this.draw_tool.disable();
 				this.draw();
-			}, {
-				name: "<icon>more_vert</icon>",
-				tooltip: "Edit Sketch Map",
-				style: { order: 100, padding: 0 }
-			})
-		}, {
-			ignore_component: true,
-			instance: this,
-			name: this.name,
-			name_options: {
-				onchange: (v) => {
-					this.name = v;
-					this.drawHierarchyDatatype();
-				}
-			},
-			type: "item",
-			style: {
-				".nst-content": {
-					paddingRight: 0
-				},
-				"[component='ve-button'] > button": {
-					border: 0
-				}
-			}
+			});
+		}
+		
+		//Populate UI
+		this.entity_items = ["Polygon", "LineString", "Point", "Circle", "Ellipse", "Rectangle", "FreeHandLineString", "FreeHandPolygon"].map((local_value) => {
+			//Return statement
+			return veButton(() => this.draw_tool.setMode(local_value).enable(), { name: local_value });
 		});
 		
 		//Return statement
-		return this.interface;
+		return {
+			entity_items_interface: new ve.RawInterface({
+				...this.entity_items
+			}, { name: " " }),
+			brush_interface:  new ve.Interface({
+				clear_brush: new ve.Button(() => {
+					this.draw_tool.disable();
+				}, { name: "<icon>edit_off</icon> Clear Brush", x: 0, y: 0 }),
+				clear_layer: new ve.Button(() => {
+					veConfirm(`Are you sure you want to delete this layer? This clears all geometries currently bound to the Sketch Layer!`, { special_function: () =>
+							DALS.Timeline.parseAction("clear_sketch_map_layer", [{
+								feature_obj: this.id,
+								clear_layer: true
+							}])
+					});
+				}, { name: "<icon>delete</icon> Clear Layer", x: 1, y: 0 }),
+			}, {
+				is_folder: false,
+				style: { marginLeft: "auto", marginRight: "auto" }
+			})
+		};
 	}
 	
 	fromJSON (arg0_json) {
@@ -179,47 +181,6 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 		
 		//Draw HierarchyDatatype if possible
 		this.drawHierarchyDatatype();
-	}
-	
-	handleEvents () {
-		//Declare local instance variables
-		if (!this.draw_tool) {
-			this.draw_tool = new maptalks.DrawTool({ mode: "Polygon" }).addTo(map).disable();
-			this.draw_tool.on("drawend", (e) => {
-				DALS.Timeline.parseAction("create_sketch_map_geometry", [{ 
-					feature_obj: this.id, 
-					add_geometry: e.geometry.toJSON() 
-				}]);
-				this.draw_tool.disable();
-				this.draw();
-			});
-		}
-		
-		//Populate UI
-		this.entity_items = ["Polygon", "LineString", "Point", "Circle", "Ellipse", "Rectangle", "FreeHandLineString", "FreeHandPolygon"].map((local_value) => {
-			//Return statement
-			return veButton(() => this.draw_tool.setMode(local_value).enable(), { name: local_value }); 
-		});
-		this.entity_items_interface = new ve.RawInterface({
-			...this.entity_items
-		}, { name: " " });
-		
-		this.brush_interface = new ve.Interface({
-			clear_brush: new ve.Button(() => {
-				this.draw_tool.disable();
-			}, { name: "<icon>edit_off</icon> Clear Brush", x: 0, y: 0 }),
-			clear_layer: new ve.Button(() => {
-				veConfirm(`Are you sure you want to delete this layer? This clears all geometries currently bound to the Sketch Layer!`, { special_function: () =>
-					DALS.Timeline.parseAction("clear_sketch_map_layer", [{ 
-						feature_obj: this.id, 
-						clear_layer: true
-					}])
-				});
-			}, { name: "<icon>delete</icon> Clear Layer", x: 1, y: 0 }),
-		}, { 
-			is_folder: false,
-			style: { marginLeft: "auto", marginRight: "auto" }
-		});
 	}
 	
 	hide () {

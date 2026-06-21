@@ -1,61 +1,15 @@
 if (!global.naissance) global.naissance = {};
 
 naissance.GeometryPoint = class extends naissance.Geometry {
+	static hierarchy_symbol = {
+		icon: "location_on",
+		name: "Point"
+	};
+	
 	constructor () {
 		super();
 		this.class_name = "GeometryPoint";
 		this.node_editor_mode = "Point";
-		
-		//Declare UI
-		this.interface = veInterface({
-			information: veHTML(() => {
-				//Declare local instance variables
-				let coordinates = (this.geometry && this.isOpen("instance")) ? 
-					this.geometry.getCoordinates().toJSON() : { x: 0, y: 0 }
-				
-				return `ID: ${this.id} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
-			}, { width: 99, x: 0, y: 0 }),
-			move_marker: veButton((v, local_component) => {
-				if (!this._is_being_moved) {
-					veToast(`Click a new location on the map to move this marker to.`);
-					
-					this._is_being_moved = true;
-					this.draw();
-					local_component.name = `Cancel Moving Marker`;
-					
-					map.once("click", (e) => {
-						DALS.Timeline.parseAction("set_point_position", [{
-							geometry_obj: this.id,
-							set_coordinates: e.coordinate.toJSON()
-						}]);
-						
-						delete this._is_being_moved;
-						this.draw();
-						local_component.name = `Move Marker`;
-					});
-				} else {
-					veToast(`Cancelled marker movement.`);
-					
-					delete this._is_being_moved;
-					this.draw();
-					local_component.name = `Move Marker`;
-				}
-			}, { name: "Move Marker", x: 0, y: 1 })
-		}, { is_folder: false });
-		this.edit_symbol_ui = veInterface({
-			edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
-				name: "Label",
-				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
-			}),
-			edit_point: new UI_PointSymbol(main.settings.default_point_symbol, {
-				name: "Point",
-				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
-			})
-		}, { name: "Edit Symbol" });
-		this.keyframes_ui = veInterface({}, {
-			name: "Keyframes", open: true
-		});
-		super.drawVariablesEditor();
 		
 		//Add keyframe with default brush symbol upon instantiation
 		let brush_symbol = main.brush.getBrushSymbol();
@@ -73,7 +27,12 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
-		this.value = this.history.getKeyframe({ date: main.date }).value;
+		this.value = this.history.getKeyframe({
+			date: main.date,
+			guaranteed_indexes: [1]
+		}).value;
+		this.value[1] = this.getSymbol(this.value[1]);
+		
 		if (this.value === undefined || this.value.length === 0 || this._is_visible === false)
 			derender_geometry = true;
 		
@@ -168,10 +127,10 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		
 		//5. Add bindings
 		if (this.geometry) {
-			this.keyframes_ui.v = this.history.interface.v;
+			this.history.draw(this.keyframes_ui);
 			
 			this.geometry.addEventListener("click", () => {
-				super.open("instance", { name: this.name, ...this.window_options });
+				this.open("instance", { name: this.name, ...this.window_options });
 			});
 		}
 		
@@ -185,47 +144,45 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		}
 	}
 	
-	drawHierarchyDatatype () {
-		//Declare local instance variables
-		let current_keyframe = this.history.getKeyframe();
-		let current_symbol = current_keyframe.value[1];
-		
+	drawUI () {
 		//Return statement
-		return new ve.HierarchyDatatype({
-			icon: veHTML(`<icon>location_on</icon>`, { tooltip: "GeometryPoint" }),
-			...super.drawHierarchyDatatypeGenerics(),
-			context_menu: veButton(() => {
-				this.history.draw(this.keyframes_ui);
-				super.open("instance", { name: this.name, ...this.window_options })
-			}, {
-				name: "<icon>more_vert</icon>",
-				tooltip: "More Actions",
-				style: { cursor: "padding", order: 101, padding: 0 }
-			})
-		}, {
-			attributes: {
-				"data-is-selected": this.selected,
-				"data-is-visible": (current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length) ? "true" : "false",
-				"data-selected-geometry": (main.brush.selected_geometry?.id === this.id),
-			},
-			instance: this,
-			name: this.name,
-			name_options: {
-				onprogramchange: () => {
-					this.drawHierarchyDatatype();
-				},
-				onuserchange: (v) => {
-					this.name = v;
+		return {
+			move_marker: veButton((v, local_component) => {
+				if (!this._is_being_moved) {
+					veToast(`Click a new location on the map to move this marker to.`);
+					
+					this._is_being_moved = true;
+					this.draw();
+					local_component.name = `Cancel Moving Marker`;
+					
+					map.once("click", (e) => {
+						DALS.Timeline.parseAction("set_point_position", [{
+							geometry_obj: this.id,
+							set_coordinates: e.coordinate.toJSON()
+						}]);
+						
+						delete this._is_being_moved;
+						this.draw();
+						local_component.name = `Move Marker`;
+					});
+				} else {
+					veToast(`Cancelled marker movement.`);
+					
+					delete this._is_being_moved;
+					this.draw();
+					local_component.name = `Move Marker`;
 				}
-			},
-			style: {
-				".nst-content": {
-					paddingRight: 0
-				},
-				"[component='ve-button'] > button": {
-					border: 0
-				}
-			}
-		});
+			}, { name: "Move Marker", x: 0, y: 1 }),
+			edit_symbol_ui: veInterface({
+				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
+					name: "Label",
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+				}),
+				edit_point: new UI_PointSymbol(main.settings.default_point_symbol, {
+					name: "Point",
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+				})
+			}, { name: "Edit Symbol" })
+		};
 	}
 };

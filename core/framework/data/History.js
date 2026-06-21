@@ -226,7 +226,47 @@ naissance.History = class extends ve.Class {
 						
 						this.addKeyframe(timestamp, ...[local_value.value[0]]);
 						veToast(`Copied geometry keyframe to present date.`);
-					}, { name: "Copy Geometry To Date" })
+					}, { name: "Copy Geometry To Date" }),
+					
+					//Edit Symbol, Edit Properties
+					edit_symbol_button: veButton(() => {
+						if (this.edit_symbol_object_window) this.edit_symbol_object_window.close();
+						this.edit_symbol_object_window = veWindow({
+							symbol_obj: veObjectEditor(local_value.value[1], {
+								onuserchange: (v) => this.edit_symbol_object = v
+							}),
+							confirm: veButton(() => {
+								if (this.edit_symbol_object)
+									if (Object.keys(this.edit_symbol_object).length > 0) {
+										this.addKeyframe(local_key, undefined, this.edit_symbol_object);
+										veToast(`Edited symbol at timestamp.`);
+									} else {
+										local_value.value[1] = undefined;
+										veToast(`Deleted symbol at timestamp.`);
+									}
+								this.getKeyframe({ refresh_localisation: true });
+							}, { name: "Confirm" })
+						}, { name: "Edit Symbol", can_rename: false, width: "20rem" })
+					}, { name: "Edit Symbol" }),
+					edit_properties_button: veButton(() => {
+						if (this.edit_properties_object_window) this.edit_properties_object_window.close();
+						this.edit_properties_object_window = veWindow({
+							symbol_obj: veObjectEditor(local_value.value[2], {
+								onuserchange: (v) => this.edit_properties_object = v
+							}),
+							confirm: veButton(() => {
+								if (this.edit_properties_object)
+									if (Object.keys(this.edit_properties_object).length > 0) {
+										this.addKeyframe(local_key, undefined, undefined, this.edit_properties_object);
+										veToast(`Edited properties at timestamp.`);
+									} else {
+										local_value.value[2] = undefined;
+										veToast(`Deleted properties at timestamp.`);
+									}
+								this.getKeyframe({ refresh_localisation: true });
+							}, { name: "Confirm" })
+						}, { name: "Edit Properties", can_rename: false, width: "20rem" });
+					}, { name: "Edit Properties" })
 				}, { id: "ui_keyframe_context_menu" })
 			});
 		}, { sort_mode: "date_descending" });
@@ -278,7 +318,9 @@ naissance.History = class extends ve.Class {
 	
 	/**
 	 * @param {Object} [arg0_options]
+	 *  @param {boolean} [arg0_options.bake_keyframes=false]
 	 *  @param {number[]} [arg0_options.guaranteed_indexes]
+	 *  @param {boolean} [arg0_options.refresh_localisation=false]
 	 */
 	getKeyframe (arg0_options) {
 		//Convert from parameters
@@ -288,6 +330,7 @@ naissance.History = class extends ve.Class {
 		if (options.date === undefined) options.date = main.date;
 		
 		//Declare local instance variables
+		let return_keyframes = {};
 		let return_keyframe = {};
 		let timestamp = Date.getTimestamp(options.date);
 		
@@ -313,9 +356,8 @@ naissance.History = class extends ve.Class {
 			let all_keyframes = this.getTimestamps();
 			let remaining_guarantees = (options.guaranteed_indexes) ?
 				[...options.guaranteed_indexes] : [];
+			let last_geometry;
 			
-			if (all_keyframes[0] > timestamp)
-				if (!options.refresh_localisation) return return_keyframe; //Internal guard clause
 			for (let i = 0; i < all_keyframes.length; i++) {
 				let local_keyframe = this.keyframes[all_keyframes[i]];
 				let is_past_timestamp = (Date.convertTimestampToInt(all_keyframes[i]) > Date.convertTimestampToInt(timestamp));
@@ -325,7 +367,7 @@ naissance.History = class extends ve.Class {
 					local_keyframe.localisation = (this.options.localisation_function) ?
 						this.options.localisation_function(local_keyframe, return_keyframe) : "";
 				
-				if (!is_past_timestamp || remaining_guarantees.length > 0) {
+				if (!is_past_timestamp || remaining_guarantees.length > 0 || options.bake_keyframes) {
 					for (let x = 0; x < local_keyframe.value.length; x++) {
 						let is_guaranteed = (options.guaranteed_indexes) ?
 							options.guaranteed_indexes.includes(x) : false;
@@ -361,13 +403,30 @@ naissance.History = class extends ve.Class {
 								remaining_guarantees = remaining_guarantees.filter(idx => idx !== x);
 						}
 					}
+					
+					//options.bake_keyframes handler
+					if (options.bake_keyframes) {
+						return_keyframes[all_keyframes[i]] = structuredClone(return_keyframe);
+						let baked_keyframe = return_keyframes[all_keyframes[i]];
+						
+						if (baked_keyframe?.value?.[2]?.hidden === true) {
+							if (baked_keyframe.value[0])
+								last_geometry = structuredClone(baked_keyframe.value[0]);
+							baked_keyframe.value[0] = null;
+						} else if (
+							baked_keyframe?.value?.[2]?.hidden === false && 
+							!(return_keyframe.value[0] || return_keyframe.value[0] === null)
+						) {
+							if (last_geometry) baked_keyframe.value[0] = structuredClone(last_geometry);
+						}
+					}
 				} else {
 					if (!options.refresh_localisation) break;
 				}
 			}
 			
 			//Return statement
-			return return_keyframe;
+			return (!options.bake_keyframes) ? return_keyframe : return_keyframes;
 		}
 	}
 	

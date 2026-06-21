@@ -14,6 +14,9 @@ if (!global.naissance) global.naissance = {};
  *   - `.date`: {@link Object} - The date of the keyframe to move.
  *   - `.ot_date`: {@link Object} - The date to move the keyframe to.
  * - `.remove_keyframe`: {@link number} - The timestamp of the removed keyframe.
+ * - `.remove_property`: {@link Object}
+ *   - `.date`: {@link number}|{@link Object} - Optional.
+ *   - `.key`: {@link string}
  * - `.set_history`: {@link string} - The JSON `.history` string to set for the target Geometry.
  * - `.set_label_symbol`: {@link Object}
  * - `.set_name`: {@link string}
@@ -87,7 +90,7 @@ naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add vari
 				} else if (json.add_variable.date === "start") {
 					timestamp = geometry_obj.history.getFirstKeyframe().timestamp;
 				} else {
-					timestamp = Date.getTimestamp((json.add_variable.date) ?
+					timestamp = Date.getTimestamp((json.add_variable.date !== undefined) ?
 						json.add_variable.date : main.date);
 				}
 			
@@ -147,6 +150,22 @@ naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add vari
 			geometry_obj.history.draw(geometry_obj.keyframes_ui);
 		}
 		
+		//remove_property
+		if (json.remove_property) {
+			if (json.remove_property.date) {
+				let keyframe_obj = geometry_obj.history[Date.getTimestamp(json.remove_property.date)];
+					
+				if (keyframe_obj)
+					delete keyframe_obj.value?.[2]?.[json.remove_property.key];
+			} else {
+				Object.iterate(geometry_obj.history, (local_key, local_value) => {
+					delete local_value.value?.[2]?.[json.remove_property.key];
+				});
+			}
+			
+			geometry_obj.history.cleanKeyframes(); //Clean keyframes just in-case
+		}
+		
 		//remove_variable
 		if (typeof json.remove_variable === "object") {
 			let timestamp;
@@ -155,7 +174,7 @@ naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add vari
 				} else if (json.remove_variable.date === "start") {
 					timestamp = geometry_obj.history.getFirstKeyframe().timestamp;
 				} else {
-					timestamp = Date.getTimestamp((json.remove_variable.date) ?
+					timestamp = Date.getTimestamp((json.remove_variable.date !== undefined) ?
 						json.remove_variable.date : main.date);
 				}
 			
@@ -164,7 +183,7 @@ naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add vari
 			if (keyframe?.value?.[2]?.variables) {
 				delete keyframe.value[2].variables[json.remove_variable.key];
 				
-				if (Object.keys(keyframe.value[2].variables))
+				if (Object.keys(keyframe.value[2].variables).length === 0)
 					delete keyframe.value[2].variables;
 				if (
 					(keyframe.value[0] === "undefined" || !keyframe.value[0]) &&

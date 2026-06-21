@@ -96,7 +96,7 @@ ve.Colour = class extends ve.Component { //[WIP] - Refactor at a later date
 		
 		//RGBA Opacity Slider Logic
 		if (this.options.is_rgba) {
-			this.opacity_slider = new ve.Range(this.alpha*100, {
+			this.opacity_slider = new ve.Range(Math.round(this.alpha*100), {
 				name: loc("ve.registry.localisation.Colour_opacity_label"),
 				min: 0,
 				max: 100,

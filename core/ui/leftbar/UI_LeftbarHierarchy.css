@@ -1,17 +1,43 @@
 [component="ve-hierarchy"].ui-leftbar-hierarchy {
+    /* -- Buttons -- */
+    [data-type] {
+        [component="ve-button"] button { border: 0; }
+        .nst-content { padding-right: 0; }
+    }
+    
+    .order-99 {
+        margin-left: auto;
+        order: 99;
+        padding: 0;
+    }
+    .order-100 { order: 100; padding: 0; }
+    .order-101 { order: 101; padding: 0; }
+    
+    /* -- Search -- */
+    [data-is-search] {
+        background-color: var(--bg-secondary-colour);
+        border: 1px solid var(--bg-primary-colour);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+        padding: 0 0 0 0.5rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        
+        align-items: center;
+        display: flex;
+        width: 20rem;
+        
+        .nst-handle { display: none; }
+    }
+
+    /* -- Selection -- */
     [data-is-selected="true"] > .nst-content {
         border: 3px dashed var(--geometry-selection-colour);
     }
     [data-selected-geometry="true"] > .nst-content {
         border: 3px solid var(--geometry-selection-colour);
     }
-    [data-is-visible="false"]:not([data-selected-geometry="true"]) > .nst-content {
-        opacity: 0.4;
-    }
-    [data-is-visible="false"][data-selected-geometry="true"] > .nst-content {
-        opacity: 0.7;
-    }
-    
     .naissance-selected-feature {
         > .nst-content {
             border: 3px solid var(--accent-secondary-colour);
@@ -25,24 +51,17 @@
         }
     }
 
-    /* -- naissance.Feature -- */
-    .order-99 {
-        margin-left: auto;
-        order: 99;
-        padding: 0;
+    /* -- Visibility -- */
+    .onhover-visible {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.1s ease;
     }
-    .order-100 { order: 100; padding: 0; }
-    .order-101 { order: 101; padding: 0; }
-
-    /* -- naissance.FeatureGroup -- */
-    [data-type="FeatureGroup"] {
-        [component="ve-button"] > button { border: 0; }
-        .nst-content { padding-right: 0; }
-    }
-    /* -- naissance.GeometryPolygon -- */
-    [data-type="GeometryPolygon"] {
-        [component="ve-button"] > button { border: 0; }
-        .nst-content { padding-right: 0; }
+    .nst-content:has(#metadata[is-visible="false"]) { opacity: 0.4; }
+    .nst-content:hover .onhover-visible {
+        opacity: 1;
+        pointer-events: auto;
+        width: auto;
     }
 }
 
@@ -55,18 +74,86 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+
+    hr {
+        border: 1px solid var(--body-colour);
+        margin-bottom: calc(var(--padding)*1.25);
+        margin-top: calc(var(--padding)*1.25);
+        opacity: 0.5;
+        width: 5rem;
+    }
     
-    .actions-bar .nst-content {
-        padding: 0;
+    .actions-bar {
+        list-style: none;
+        .nst-handle { display: none; }
+        
+        .nst-content {
+            align-items: baseline;
+            flex-direction: column;
+            padding: var(--padding);
+            
+            [component="ve-raw-interface"] {
+                display: flex;
+                width: 100%;
+                [component="ve-button"] {
+                    margin-right: var(--cell-padding);
+                }
+            }
+            .create-bar {
+                [component="ve-button"].add-button:after {
+                    content: "+";
+                    font-weight: 700;
+                    line-height: var(--body-font-size);
+                    text-align: center;
+                    width: var(--body-font-size);
+
+                    pointer-events: none;
+                    position: absolute;
+                    transform: translate(
+                            calc(var(--body-font-size)/-2 - var(--body-font-size)/2),
+                            calc(var(--body-font-size) + var(--padding) - var(--body-font-size)/4)
+                    );
+                }
+            }
+            .label { padding-bottom: var(--padding); }
+        }
     }
     .topbar {
         margin-top: calc(var(--cell-padding)*1.25);
-        margin-bottom: calc(var(--cell-padding)*1.25);
+        width: calc(100% - var(--padding));
+        
+        [ve-searchbar="true"] {
+            width: auto;
+        }
     }
     .ui-leftbar-hierarchy {
         flex-grow: 1;
         overflow: auto;
         scrollbar-color: white transparent;
         scrollbar-width: thin;
+        
+        li.nst-item > .nst-content { width: 20rem; }
+        .nst-content .nst-button { display: block; }
+        
+        [data-entities="0"] { .nst-content .nst-button { display: none; } }
+    }
+    
+    /* -- Search Results -- */
+    .osm-no-results {
+        font-style: oblique;
+        opacity: 0.75;
+    }
+    .osm-search-result {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        icon { 
+            margin-right: var(--padding); 
+            width: 2rem; 
+        }
+        margin-top: var(--padding);
+    }
+    .osm-search-results {
+        margin-top: var(--padding);
     }
 }

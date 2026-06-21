@@ -1,5 +1,5 @@
 if (!global.naissance) global.naissance = {};
-naissance.Feature = class extends ve.Class {
+naissance.Feature = class extends naissance.Entity {
 	static instances = {};
 	
 	constructor (arg0_options) {
@@ -9,7 +9,6 @@ naissance.Feature = class extends ve.Class {
 		//Declare local instance variables
 		super();
 		this.id = Class.generateRandomID(naissance.Feature);
-		this.instance = this;
 		this.is_naissance_feature = true;
 		this._is_visible = true;
 		this.metadata = (options.metadata) ? options.metadata : {};
@@ -74,7 +73,7 @@ naissance.Feature = class extends ve.Class {
 		//Return statement
 		return veInterface({
 			actions_palette: veSearchSelect({
-				add_descriptions: veButton(() => { //[WIP] - Add line_break toggle, whole line/substring searching for duplicates
+				add_descriptions: veButton(() => {
 					//Set defaults
 					if (this.ui.add_descriptions_avoid_duplicates === undefined) this.ui.add_descriptions_avoid_duplicates = true;
 					if (this.ui.add_descriptions_insert_at === undefined) this.ui.add_descriptions_insert_at = "append";
@@ -155,14 +154,11 @@ naissance.Feature = class extends ve.Class {
 						width: "30rem"
 					})
 				}, { name: "Add Descriptions" }),
-				add_field: veButton(() => {
-					
-				}, { name: "Add Field", disabled: true }),
 				add_variable: veButton(() => {
 					if (this.add_variable_window) this.add_variable_window.close();
 					this.add_variable_window = veWindow({
 						variable_key: veText(this.ui.add_variable_key, {
-							name: "Field/Variable Key",
+							name: "Variable Key",
 							onuserchange: (v) => this.ui.add_variable_key = v
 						}),
 						value: veText(this.ui.add_variable_value, {
@@ -217,9 +213,178 @@ naissance.Feature = class extends ve.Class {
 						width: "20rem"
 					});
 				}, { name: "Add Variable" }),
-				clear_descriptions: veButton(() => {
+				add_variables: veButton(() => {
+					if (this.add_field_window) this.add_field_window.close();
+					this.add_field_window = veWindow({
+						field_name: veText(this.ui.add_variables_key, {
+							name: "Variable Key",
+							onuserchange: (v) => this.ui.add_variables_key = v
+						}),
+						edit_values: veList(veRawInterface({
+							date: veDate(),
+							value: veText()
+						}), {
+							name: "Edit Values",
+							onuserchange: (v) => {
+								//Declare local instance variables
+								let values = [];
+								
+								//Iterate over all v entries
+								for (let i = 0; i < v.length; i++)
+									values.push([Date.getTimestamp(v[i].date.v), v[i].value.v]);
+								
+								this.ui.add_variables_values = values;
+							}
+						}),
+						
+						confirm: veButton(() => {
+							//Declare local instance variables
+							let all_geometries = this.getAllGeometries();
+							let values = (this.ui.add_variables_values) ? this.ui.add_variables_values : [];
+							
+							if (!this.ui.add_variables_key) {
+								veToast(`<icon>warning</icon> You must set a valid field name.`);
+								return;
+							}
+							
+							//Add data to field
+							DALS.Timeline.parseAction(`add_column_${this.ui.add_variables_key}`, [{
+								feature_obj: this.id,
+								add_column: {
+									key: this.ui.add_variables_key,
+									values: values
+								}
+							}]);
+							veToast(`Added ${this.ui.add_variables_key} as a variable column to ${String.formatNumber(all_geometries.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Add Variables",
+						can_rename: false,
+						width: "30rem"
+					});
+				}, { name: "Add Variables" }),
+				add_property: veButton(() => {
+					if (this.add_property_window) this.add_property_window.close();
+					this.add_property_window = veWindow({
+						edit_values: veList(veRawInterface({
+							date: veDate(),
+							value: veObjectEditor()
+						}), {
+							name: "Edit Values",
+							onuserchange: (v) => {
+								//Declare local instance variables
+								let values = [];
+								
+								//Iterate over all v entries
+								for (let i = 0; i < v.length; i++)
+									values.push({
+										date: Date.getTimestamp(v[i].date.v),
+										value: v[i].value.v
+									});
+								
+								this.ui.add_property_values = values;
+							}
+						}),
+						confirm: veButton(() => {
+							if (!(this.ui.add_property_values?.length > 0)) {
+								veToast(`<icon>warning</icon> Adding a property requires a valid field and value.`);
+								return;
+							}
+							
+							//Declare local instance variables
+							let all_geometries = this.getAllGeometries();
+							let all_geometry_ids = [];
+								for (let i = 0; i < all_geometries.length; i++)
+									all_geometry_ids.push(all_geometries[i].id);
+							
+							//Iterate over all this.ui.add_property_values.length to finish adding properties
+							for (let i = 0; i < this.ui.add_property_values.length; i++) {
+								let local_property = this.ui.add_property_values[i];
+								
+								naissance.Geometry.setProperties(all_geometry_ids, local_property);
+							}
+							
+							veToast(`Successfully altered ${String.formatNumber(this.ui.add_property_values.length)} properties for ${String.formatNumber(all_geometries.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Add Property",
+						can_rename: false,
+						width: "30rem"
+					});
 					
-				}, { name: "Clear Descriptions", disabled: true }),
+				}, { name: "Add Property" }),
+				add_tag: veButton(() => {
+					if (this.add_tag_window) this.add_tag_window.close();
+					this.add_tag_window = veWindow({
+						tag_key: veText(this.ui.add_tag_key, {
+							name: "Tag Key",
+							onuserchange: (v) => this.ui.add_tag_key = v
+						}),
+						tag_mode: veSelect({
+							append: { name: "Append" },
+							insert: { name: "Insert" },
+							prepend: { name: "Prepend" }
+						}, {
+							name: "Tag Mode",
+							onuserchange: (v) => this.ui.add_tag_mode = v,
+							selected: (this.ui.add_tag_mode) ? this.ui.add_tag_mode : "append"
+						}),
+						insert_at_position: veNumber(this.ui.add_tag_insert_at_position, {
+							name: "Insert at Position",
+							limit: () => (this.ui.add_tag_mode === "insert"),
+							min: 0,
+							onuserchange: (v) => this.ui.add_tag_insert_at_position = v,
+						}),
+						confirm: veButton(() => {
+							if (!(this.ui?.add_tag_key?.length > 0)) {
+								veToast(`<icon>warning</icon> You must specify a valid tag key to add.`);
+								return;
+							}
+							
+							//Declare local instance variables
+							let all_geometries = this.getAllGeometries();
+							let tag_mode = (this.ui.add_tag_mode) ? this.ui.add_tag_mode : "append";
+							
+							//Ensure Objects exist for all_geometries
+							for (let i = 0; i < all_geometries.length; i++) {
+								if (!all_geometries[i].metadata) all_geometries[i].metadata = {};
+								if (!all_geometries[i].metadata.tags) all_geometries[i].metadata.tags = [];
+							}
+							
+							//Iteerate over all_geometries and parse tag_mode
+							if (tag_mode === "append") {
+								for (let i = 0; i < all_geometries.length; i++)
+									all_geometries[i].metadata.tags.push(this.ui.add_tag_key);
+							} else if (tag_mode === "insert") {
+								for (let i = 0; i < all_geometries.length; i++)
+									all_geometries[i].metadata.tags.splice(
+										Math.returnSafeNumber(this.ui.add_tag_insert_at_position), 0, this.ui.add_tag_key);
+							} else if (tag_mode === "prepend") {
+								for (let i = 0; i < all_geometries.length; i++)
+									all_geometries[i].metadata.tags.unshift(this.ui.add_tag_key);
+							}
+							
+							veToast(`Added ${this.ui.add_tag_key} to ${String.formatNumber(all_geometries.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Add Tag",
+						can_rename: false,
+						width: "30rem"
+					});
+				}, { name: "Add Tag" }),
+				clear_descriptions: veButton(() => {
+					veConfirm(`Are you sure you want to clear all descriptions in ${this.name}?`, {
+						special_function: () => {
+							//Declare local instance variables
+							let all_geometries = this.getAllGeometries();
+							
+							//Iterate over all_geometries and remove .metadata.description
+							for (let i = 0; i < all_geometries.length; i++)
+								delete all_geometries[i].metadata.description;
+							veToast(`Removed descriptions for ${String.formatNumber(all_geometries.length)} items.`);
+						}
+					});
+				}, { name: "Clear Descriptions" }),
 				clean_geometry_tags: veButton(() => {
 					veConfirm(`Are you sure you want to clean all geometry tags in ${this.name}?`, {
 						special_function: () => {
@@ -264,6 +429,86 @@ naissance.Feature = class extends ve.Class {
 					});
 				}, {
 					name: "Flatten All Geometries"
+				}),
+				merge_layers: veButton(() => {
+					if (this.merge_layers_window) this.merge_layers_window.close();
+					this.merge_layers_window = veWindow({
+						mode: veSelect({
+							auto: { name: "Auto" },
+							manual_dates: { name: "Manual Dates" }
+						}, {
+							name: "Mode",
+							selected: (this.ui.merge_layers_mode) ? this.ui.merge_layers_mode : "auto",
+							onuserchange: (v) => this.ui.merge_layers_mode = v
+						}),
+						to_layer: new UI_FeatureDatalist(this.ui.merge_layers_to_layer, {
+							name: "To Layer",
+							onuserchange: (v) => this.ui.merge_layers_to_layer = v
+						}),
+						
+						start_date: veDate(undefined, {
+							name: "Start Date",
+							limit: () => this.ui.merge_layers_mode === "manual_dates",
+							onuserchange: (v) => this.ui.merge_layers_start_date = v
+						}),
+						end_date: veDate(undefined, {
+							name: "End Date",
+							limit: () => this.ui.merge_layers_mode === "manual_dates",
+							onuserchange: (v) => this.ui.merge_layers_end_date = v
+						}),
+						delete_layer_after: veToggle((this.ui.merge_layers_delete_layer_after !== undefined) ? this.ui.merge_layers_delete_layer_after : true, {
+							name: "Delete Layer After",
+							onuserchange: (v) => this.ui.merge_layers_delete_layer_after = v
+						}),
+						
+						confirm: veButton(() => {
+							//Internal guard clause to ensure this.ui.merge_layers_to_layer is valid
+							if (!this.ui.merge_layers_to_layer) {
+								veToast(`<icon>warning</icon> You must select a valid Layer to merge ${this.name} into.`);
+								return;
+							}
+							
+							let to_layer_obj = naissance.Feature.instances[this.ui.merge_layers_to_layer];
+							if (!to_layer_obj) {
+								veToast(`<icon>warning</icon> No Layer with the specified ID could be found.`);
+								return;
+							}
+							if (to_layer_obj.class_name !== "FeatureLayer") {
+								veToast(`<icon>warning</icon> You cannot merge ${this.name} into a ${to_layer_obj.class_name}.`);
+								return;
+							}
+							
+							//Declare local instance variables
+							let options = {};
+							
+							if (this.ui.merge_layers_mode === "manual_dates") {
+								if (this.ui.merge_layers_end_date !== undefined) options.end_date = this.ui.merge_layers_end_date;
+								if (this.ui.merge_layers_start_date !== undefined) options.start_date = this.ui.merge_layers_start_date;
+								if (this.ui.merge_layers_delete_layer_after) options.do_not_delete_after = true;
+							}
+							
+							//Execute action; close windows after
+							DALS.Timeline.parseAction(`merge_layer_${to_layer_obj.id}`, [{
+								feature_obj: this.id,
+								type: "FeatureLayer",
+								merge_layer: {
+									to_layer_id: to_layer_obj.id,
+									...options
+								}
+							}]);
+							
+							veToast(`Successfully merged this layer into ${to_layer_obj.name}.`);
+							this.merge_layers_window.close();
+							this.close("instance");
+						}, { name: "Confirm" })
+					}, {
+						name: "Merge Layers",
+						can_rename: false,
+						width: "30rem"
+					})
+				}, { 
+					name: "Merge Layers",
+					limit: () => this.class_name === "FeatureLayer"
 				}),
 				move_entities_to: veButton(() => {
 					if (this.move_entities_window) this.move_entities_window.close();
@@ -319,12 +564,141 @@ naissance.Feature = class extends ve.Class {
 						}, { name: "Confirm" })
 					}, { name: "Simplify Polygons", can_rename: false });
 				}, { name: "Simplify Polygons" }),
-				remove_field: veButton(() => {
-					
-				}, { name: "Remove Field", disabled: true }),
+				remove_property: veButton(() => {
+					if (this.remove_property_window) this.remove_property_window.close();
+					this.remove_property_window = veWindow({
+						property_key: veText(this.ui.remove_property_key, {
+							name: "Property Key",
+							onuserchange: (v) => this.ui.remove_property_key = v
+						}),
+						property_date: veDate(main.date, {
+							name: "Date (Optional)",
+							onuserchange: (v) => this.ui.remove_property_date = v
+						}),
+						confirm: veButton(() => {
+							if (!this.ui.remove_property_key) {
+								veToast(`<icon>warning</icon> You must provide a valid property key.`);
+								return;
+							}
+							
+							let all_geometries = this.getAllGeometries();
+							let all_geometry_ids = [];
+							
+							for (let i = 0; i < all_geometries.length; i++)
+								if (all_geometries[i].id) all_geometry_ids.push(all_geometries[i].id);
+							
+							naissance.Geometry.parseActionForGeometries(all_geometry_ids, {
+								command: "remove_property",
+								key: "remove_property",
+								name: "Remove F.Property",
+								type: "Geometry",
+								value: {
+									date: this.ui.remove_property_date,
+									key: this.ui.remove_property_key
+								}
+							});
+							veToast(`Removed property ${this.ui.remove_property_key} from ${String.formatNumber(all_geometry_ids.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Remove Property",
+						can_rename: false,
+						width: "20rem"
+					});
+				}, { name: "Remove Property" }),
 				remove_variable: veButton(() => {
-					
-				}, { name: "Remove Variable", disabled: true }),
+					if (this.remove_variable_window) this.remove_variable_window.close();
+					this.remove_variable_window = veWindow({
+						variable_key: veText(this.ui.remove_variable_key, {
+							name: "Variable Key",
+							onuserchange: (v) => this.ui.remove_variable_key = v
+						}),
+						keyframe: veSelect({
+							end: { name: "End Date" },
+							manual: { name: "Manual Date" },
+							start: { name: "Start Date" },
+						}, {
+							name: "Keyframe",
+							selected: (this.ui.remove_variable_keyframe) ? this.ui.remove_variable_keyframe : "start",
+							onuserchange: (v) => this.ui.remove_variable_keyframe = v
+						}),
+						date: veDate(main.date, {
+							name: "Date",
+							limit: () => this.ui.remove_variable_keyframe === "manual",
+							onuserchange: (v) => this.ui.remove_variable_date = v
+						}),
+						confirm: veButton(() => {
+							if (!this.ui.remove_variable_key) {
+								veToast(`<icon>warning</icon> You must provide a valid variable key.`);
+								return;
+							}
+							
+							let actual_date = (this.ui.remove_variable_keyframe === "manual") ?
+								((this.ui.remove_variable_date) ? this.ui.remove_variable_date : main.date) :
+								((this.ui.remove_variable_keyframe) ? this.ui.remove_variable_keyframe : "start");
+							
+							let all_geometries = this.getAllGeometries();
+							let all_geometry_ids = [];
+							
+							for (let i = 0; i < all_geometries.length; i++)
+								if (all_geometries[i].id) all_geometry_ids.push(all_geometries[i].id);
+							
+							naissance.Geometry.parseActionForGeometries(all_geometry_ids, {
+								command: "remove_variable",
+								key: "remove_variable",
+								name: "Remove F.Variable",
+								type: "Geometry",
+								value: {
+									date: actual_date,
+									key: this.ui.remove_variable_key
+								}
+							});
+							veToast(`Removed variable ${this.ui.remove_variable_key} from ${String.formatNumber(all_geometry_ids.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Remove Variable",
+						can_rename: false,
+						width: "20rem"
+					});
+				}, { name: "Remove Variable" }),
+				remove_tags: veButton(() => {
+					if (this.remove_tag_window) this.remove_tag_window.close();
+					this.remove_tag_window = veWindow({
+						tag_key: veText(this.ui.remove_tag_key, {
+							name: "Tag Key",
+							onuserchange: (v) => this.ui.remove_tag_key = v
+						}),
+						confirm: veButton(() => {
+							if (!this.ui.remove_tag_key) {
+								veToast(`<icon>warning</icon> You must specify a valid tag key to remove.`);
+								return;
+							}
+							
+							let all_geometries = this.getAllGeometries();
+							let all_geometry_ids = [];
+							
+							for (let i = 0; i < all_geometries.length; i++) {
+								if (all_geometries[i].id) all_geometry_ids.push(all_geometries[i].id);
+								if (all_geometries[i].metadata?.tags) {
+									let tags = all_geometries[i].metadata.tags;
+									for (let x = tags.length - 1; x >= 0; x--)
+										if (tags[x] === this.ui.remove_tag_key) tags.splice(x, 1);
+								}
+							}
+							
+							naissance.Geometry.parseActionForGeometries(all_geometry_ids, {
+								command: "set_tags",
+								key: "set_tags",
+								name: "Remove F.Tag",
+								type: "Geometry"
+							});
+							veToast(`Removed tag ${this.ui.remove_tag_key} from ${String.formatNumber(all_geometry_ids.length)} geometries.`);
+						}, { name: "Confirm" })
+					}, {
+						name: "Remove Tag",
+						can_rename: false,
+						width: "20rem"
+					});
+				}, { name: "Remove Tag" }),
 				replace_descriptions: veButton(() => { //[WIP] - Should be changed to replace_descriptions
 					if (this.replace_descriptions_window) this.replace_descriptions_window.close();
 					this.replace_descriptions_window = veWindow({
@@ -422,35 +796,6 @@ naissance.Feature = class extends ve.Class {
 			style: { padding: 0 },
 			width: 99
 		});
-	}
-	
-	drawHierarchyDatatypeGenerics () {
-		//Return statement
-		return {
-			hide_visibility: veButton(() => {
-				DALS.Timeline.parseAction("hide_feature", [{ feature_obj: this.id, set_visibility: false }]);
-			}, {
-				attributes: { class: "order-99" },
-				name: `<icon>visibility</icon>`,
-				limit: () => this._is_visible,
-				tooltip: "Hide Feature"
-			}),
-			show_visibility: veButton(() => {
-				DALS.Timeline.parseAction("show_feature", [{ feature_obj: this.id, set_visibility: true }]);
-			}, {
-				attributes: { class: "order-99" },
-				name: "<icon>visibility_off</icon>",
-				limit: () =>  !this._is_visible,
-				tooltip: "Show Feature"
-			}),
-			delete_button: veButton(() => {
-				DALS.Timeline.parseAction("delete_feature", [{ feature_obj: this.id, delete_feature: true }]);
-			}, {
-				attributes: { class: "order-100" },
-				name: "<icon>delete</icon>", 
-				tooltip: "Delete",
-			}),
-		};
 	}
 	
 	/**
@@ -563,6 +908,23 @@ naissance.Feature = class extends ve.Class {
 		});
 	}
 	
+	getTimestamps () {
+		//Declare local instance variables
+		let all_geometries = this.getAllGeometries();
+		let all_timestamps = [];
+		
+		//Iterate over all_geometries and their .history.keyframes
+		for (let i = 0; i < all_geometries.length; i++) {
+			all_timestamps = [...new Set([
+				...all_timestamps, 
+				...Object.keys(all_geometries[i].history.keyframes).map(Number)
+			])];
+		}
+		
+		//Return statement
+		return all_timestamps.sort((a, b) => a - b);
+	}
+	
 	hide () {
 		//Declare local instance variables
 		this._is_visible = false;
@@ -572,6 +934,56 @@ naissance.Feature = class extends ve.Class {
 			for (let i = 0; i < this.entities.length; i++)
 				if (this.entities[i].hide)
 					this.entities[i].hide();
+	}
+	
+	open (arg0_type, arg1_options) {
+		//Convert from parameters
+		let type = arg0_type;
+		let options = (arg1_options) ? arg1_options : {};
+		
+		if (!this.quick_actions) this.quick_actions = veRawInterface({
+			hide_visibility: veButton(() => {
+				DALS.Timeline.parseAction("hide_feature", [{ feature_obj: this.id, set_visibility: false }]);
+			}, {
+				attributes: { class: "order-99 onhover-visible" },
+				name: `<icon>visibility</icon>`,
+				limit: () => this._is_visible,
+				tooltip: "Hide Feature"
+			}),
+			show_visibility: veButton(() => {
+				DALS.Timeline.parseAction("show_feature", [{ feature_obj: this.id, set_visibility: true }]);
+			}, {
+				attributes: { class: "order-99 onhover-visible" },
+				name: "<icon>visibility_off</icon>",
+				limit: () =>  !this._is_visible,
+				tooltip: "Show Feature"
+			}),
+			delete_button: veButton(() => {
+				DALS.Timeline.parseAction("delete_feature", [{ feature_obj: this.id, delete_feature: true }]);
+				super.close("instance");
+			}, {
+				attributes: { class: "order-100 onhover-visible" },
+				name: "<icon>delete</icon>",
+				tooltip: "Delete",
+			})
+		}, {
+			name: "<b>Quick Actions:</b>",
+			style: {
+				alignItems: "center",
+				display: "flex",
+				"[component='ve-button']": { marginLeft: "var(--padding)" },
+			},
+			width: 99
+		});
+		if (!this._interface) this._interface = veInterface({
+			quick_actions: this.quick_actions,
+			
+			...((typeof this.drawUI === "function") ? this.drawUI() : {}),
+			...ve.Class.getVercengenComponents(this)
+		}, { is_folder: false });
+		
+		//Call super.open for naissance.Entity
+		super.open(type, options);
 	}
 	
 	remove () {

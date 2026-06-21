@@ -38,13 +38,17 @@ global.UI_Leftbar = class extends ve.Class {
 						script_manager: veButton(() => {
 							new UI_SystemManagerWindow();
 						}, {
-							name: `<icon>computer</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">System Manager</span>`,
-							tooltip: `ScriptManager positioning is temporary, and will be changed in the future to be integrated into the main node editor.`,
+							name: `<icon>handyman</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">Advanced Tools</span>`,
+							tooltip: `Tools for modelling and extending Naissance, as well as a System Manager for tasks.`,
 							style: { "#name": { alignItems: "center", display: "flex" }, marginLeft: "0.25rem" }
 						})
 					}),
 					hierarchy: new UI_LeftbarHierarchy().value
 				}
+			},
+			timeline: {
+				name: "Timeline",
+				components_obj: {}
 			},
 			undo_redo: {
 				name: "Undo/Redo",

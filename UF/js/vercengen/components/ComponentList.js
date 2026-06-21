@@ -28,7 +28,7 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
 	
 	constructor (arg0_value, arg1_options) {
 		//Convert from parameters
-		let value = (arg0_value !== undefined) ? arg0_value : [];
+		let value = (arg0_value !== undefined) ? Array.toArray(arg0_value) : [];
 		let options = (arg1_options) ? arg1_options : {};
 		super(options);
 		
@@ -68,24 +68,21 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
 			this.add_item_button.bind(this.element);
 			
 			//Determine the template component (source)
-			let source_component = (options.placeholder) ? options.placeholder : this.value[0];
+			this.source_component = (options.placeholder) ? options.placeholder : this.value[0];
 			
-			if (source_component) {
+			if (this.source_component) {
 				try {
 					//1. Determine Class Name
-					if (source_component.class_name) {
-						this.class_name = source_component.class_name;
+					if (this.source_component.class_name) {
+						this.class_name = this.source_component.class_name;
 					} else {
 						// Fallback: Remove 've' prefix from constructor name (e.g., veText -> Text)
-						this.class_name = source_component.constructor.name.replace(/^ve/, "");
+						this.class_name = this.source_component.constructor.name.replace(/^ve/, "");
 					}
-					
-					//2. Determine Placeholder Value
-					this.placeholder = source_component.v;
 					
 				} catch (e) {
 					//Log error if it could not be resolved
-					console.error(`Class name/Placeholder could not be found for template:`, source_component, e);
+					console.error(`Class name/Placeholder could not be found for template:`, this.source_component, e);
 				}
 			}
 			
@@ -151,7 +148,7 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
 		//Push item to end of stack
 		//Ensure class_name is valid before attempting creation
 		if (this.class_name && global[`ve${this.class_name}`]) {
-			this.value.push(global[`ve${this.class_name}`](this.placeholder, this.options.options));
+			this.value.push(this.source_component.copy());
 			this.draw();
 		} else {
 			console.error(`ve.List: Cannot add item. Unknown class: ve${this.class_name}`);
@@ -267,7 +264,7 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
                 veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
                 return;
               }
-              this.value.splice(get_current_idx(), 0, global[`ve${this.class_name}`](this.placeholder));
+              this.value.splice(get_current_idx(), 0, this.source_component.copy());
               this.draw();
               this.fireToBinding();
             }, {
@@ -280,7 +277,7 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
                 veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
                 return;
               }
-              this.value.splice(get_current_idx() + 1, 0, global[`ve${this.class_name}`](this.placeholder));
+              this.value.splice(get_current_idx() + 1, 0, this.source_component.copy());
               this.draw();
               this.fireToBinding();
             }, {

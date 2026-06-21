@@ -3,6 +3,11 @@ if (!global.naissance) global.naissance = {};
  * @type {naissance.FeatureTileLayer}
  */
 naissance.FeatureTileLayer = class extends naissance.Feature {
+	static hierarchy_symbol = {
+		icon: "map",
+		name: "Tile Layer"
+	};
+	
 	constructor (arg0_options) {
 		super();
 		this.class_name = "FeatureTileLayer";
@@ -77,109 +82,73 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 			main.layers.group_tile_layers.addTo(map);
 			main.layers.group_tile_layers.removeLayer(this.layer);
 			if (this._is_visible)
-				main.layers.group_tile_layers.addLayer(this.layer);management
+				main.layers.group_tile_layers.addLayer(this.layer);
 		} catch (e) {}
 	}
 	
-	drawHierarchyDatatype () {
+	drawUI () {
 		//Declare local instance variables
 		let preset_options = {};
 		let presets_obj = config.features.tile_layer.tilemap_presets;
 		
 		//Populate preset_options
 		Object.iterate(presets_obj, (local_key, local_value) => {
-			preset_options[local_key] = { 
+			preset_options[local_key] = {
 				name: local_value.name,
 				selected: (this.options.preset === local_key)
 			};
 		});
 		
-		//Return this.interface
-		this.interface = new ve.HierarchyDatatype({
-			icon: new ve.HTML(`<icon>${(this.is_base_layer) ? "map" : "view_module"}</icon>`, { tooltip: (this.is_base_layer) ? "Base FeatureTileLayer" : "FeatureTileLayer" }),
-			...super.drawHierarchyDatatypeGenerics(),
-			edit_tile_layer: veButton(() => {
-				if (this.tile_layer_window) this.tile_layer_window.close();
-				this.tile_layer_window = veWindow({
-					opacity: veRange(Math.returnSafeNumber(this.layer?.options?.opacity, 0), {
-						name: "Opacity",
-						onuserchange: (v) => this._DALS_addOptions({ opacity: v })
-					}),
-					resolution: veSelect({
-						"256/": {
-							name: "256",
-							selected: true
-						},
-						"null": {
-							name: "512"
-						}
-					}, { 
-						name: "Resolution",
-						onuserchange: (v) => this._DALS_recalculatePreset(this.options.preset)
-					}),
-					set_preset: veSelect(preset_options, { 
-						name: "Tilemap Preset",
-						onuserchange: (v) => {
-							this.options.preset = v;
-							this._DALS_recalculatePreset(this.options.preset);
-						}
-					}),
-					
-					advanced_options: veInterface({
-						maptiler_key: veText("xWbyIIrJg1lF1fmQFByp", { name: "Maptiler Key" }),
-						url_template: veURL("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
-							name: "URL Template",
-							onuserchange: (v) => this._DALS_addOptions({ urlTemplate: v })
-						}),
-						subdomains: veText(["a", "b", "c", "d"], {
-							name: "Subdomains",
-							onuserchange: (v) => this._DALS_addOptions({ subdomains: v })
-						}),
-						
-						max_available_zoom: veNumber(0, {
-							name: "Max Available Zoom",
-							min: -1,
-							onuserchange: (v) => this._DALS_addOptions({ maxAvailableZoom: (v > 0) ? v : null })
-						}),
-						repeat_world: veToggle(false, {
-							name: "Repeat World",
-							onuserchange: (v) => this._DALS_addOptions({ repeatWorld: v })
-						})
-					}, { name: "Advanced Options" }),
-					
-					apply_as_base_layer: veButton(() => this._DALS_applyAsBaseLayer(), { name: "Apply as Base Layer" })
-				}, { name: `Edit ${this._name}`, can_rename: false, width: "24rem" });
-			}, {
-				name: "<icon>more_vert</icon>",
-				tooltip: "Edit Tile Layer",
-				style: {
-					order: 101,
-					padding: 0
-				}
-			})
-		}, {
-			ignore_component: true,
-			instance: this,
-			name: this.name,
-			name_options: {
-				onchange: (v) => {
-					this.name = v;
-					this.drawHierarchyDatatype();
-				}
-			},
-			type: "item",
-			style: {
-				".nst-content": {
-					paddingRight: 0
-				},
-				"[component='ve-button'] > button": {
-					border: 0
-				}
-			}
-		});
-		
 		//Return statement
-		return this.interface;
+		return {
+			opacity: veRange(Math.returnSafeNumber(this.layer?.options?.opacity, 0), {
+				name: "Opacity",
+				onuserchange: (v) => this._DALS_addOptions({ opacity: v })
+			}),
+			resolution: veSelect({
+				"256/": {
+					name: "256",
+					selected: true
+				},
+				"null": {
+					name: "512"
+				}
+			}, {
+				name: "Resolution",
+				onuserchange: (v) => this._DALS_recalculatePreset(this.options.preset)
+			}),
+			set_preset: veSelect(preset_options, {
+				name: "Tilemap Preset",
+				onuserchange: (v) => {
+					this.options.preset = v;
+					this._DALS_recalculatePreset(this.options.preset);
+				}
+			}),
+			
+			advanced_options: veInterface({
+				maptiler_key: veText("xWbyIIrJg1lF1fmQFByp", { name: "Maptiler Key" }),
+				url_template: veURL("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
+					name: "URL Template",
+					onuserchange: (v) => this._DALS_addOptions({ urlTemplate: v })
+				}),
+				subdomains: veText(["a", "b", "c", "d"], {
+					name: "Subdomains",
+					onuserchange: (v) => this._DALS_addOptions({ subdomains: v })
+				}),
+				
+				max_available_zoom: veNumber(0, {
+					name: "Max Available Zoom",
+					min: -1,
+					onuserchange: (v) => this._DALS_addOptions({ maxAvailableZoom: (v > 0) ? v : null })
+				}),
+				repeat_world: veToggle(false, {
+					name: "Repeat World",
+					onuserchange: (v) => this._DALS_addOptions({ repeatWorld: v })
+				})
+			}, { name: "Advanced Options" }),
+			
+			apply_as_base_layer: veButton(() => this._DALS_applyAsBaseLayer(), { name: "Apply as Base Layer" })
+		};
 	}
 	
 	fromJSON (arg0_json) {

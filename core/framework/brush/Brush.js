@@ -177,13 +177,31 @@ naissance.Brush = class extends ve.Class {
 		this.optimisation = veInterface({
 			simplify: veRange(0, {
 				binding: "this.simplify",
-				name: "Simplify", x: 0, y: 0
+				name: "Simplify", 
+				x: 0, y: 0,
+				style: {
+					"input[type='range']": { 
+						width: "calc(50% - var(--padding))" 
+					},
+					"#value-label": { marginLeft: "var(--padding)" }
+				}
 			}),
 			simplify_applies_to_polygon: veCheckbox(false, {
 				to_binding: "this.simplify_applies_to_polygon",
 				name: "Applies to Polygon",
 				tooltip: "Whether the simplification should apply to the polygon as well as the brush.",
-				x: 1, y: 0
+				x: 1, y: 0,
+				style: {
+					display: "flex",
+					"input[type='checkbox']": {
+						order: 0
+					},
+					"#name": {
+						marginLeft: "var(--padding)",
+						order: 1,
+						whiteSpace: "nowrap"
+					}
+				}
 			})
 		}, { name: "Brush Optimisation:", open: true });
 		this.information_display = veHTML(() => {

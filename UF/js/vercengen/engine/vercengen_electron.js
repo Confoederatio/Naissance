@@ -27,7 +27,15 @@ if (!global.v8) global.v8 = require("node:v8");
 	/**
 	 * Initialises IPC handlers.
 	 * 
-	 * ontology:initialise - Initialises Ontology streaming.
+	 * List of valid IPC channels:
+	 * - electron:close-dev-tools
+	 * - electron:is-dev-tools-focused
+	 * - electron:is-dev-tools-open
+	 * - electron:open-dev-tools
+	 * - electron:toggle-dev-tools
+	 * - ndjson - NDJSON handler (arg0_function_key, argn_arguments).
+	 * - ndjson:get-all-functions - Returns all NDJSON functions.
+	 * - ontology:initialise - Initialises Ontology streaming.
 	 * - ontology:stream-batch - DB sends batch to render.
 	 * - ontology:stream-done - Marks all streaming as finished (loaded into memory).
 	 * - ontology:stream-next - Render requests batch from DB.
@@ -45,6 +53,26 @@ if (!global.v8) global.v8 = require("node:v8");
 		
 		//Declare local instance variables
 		let ipc_main = electron.ipcMain;
+		
+		//electron
+		ipc_main.on("electron:close-dev-tools", async (event) => {
+			event.sender.closeDevTools();
+			event.sender.send("electron:close-dev-tools:ready");
+		});
+		ipc_main.on("electron:is-dev-tools-focused", async (event) => {
+			event.sender.send("electron:is-dev-tools-focused:ready", event.sender.isDevToolsFocused());
+		})
+		ipc_main.on("electron:is-dev-tools-open", async (event) => {
+			event.sender.send("electron:is-dev-tools-open:ready", event.sender.isDevToolsOpened());
+		});
+		ipc_main.on("electron:open-dev-tools", async (event) => {
+			event.sender.openDevTools();
+			event.sender.send("electron:open-dev-tools:ready");
+		});
+		ipc_main.on("electron:toggle-dev-tools", async (event) => {
+			event.sender.toggleDevTools();
+			event.sender.send("electron:toggle-dev-tools:ready");
+		});
 		
 		//ndjson
 		ipc_main.on("ndjson", async (event, function_key, ...argn_arguments) => {

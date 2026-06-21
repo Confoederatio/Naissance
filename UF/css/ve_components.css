@@ -23,9 +23,6 @@
         field-sizing: content;
         font-family: var(--body-font-family);
     }
-    input:not([type]) {
-        padding-bottom: 1.5px;
-    }
     input[type="number"] {
         min-width: calc(var(--default-width)/4);
     }
@@ -141,7 +138,7 @@
         min-width: 1rem;
     }
     input#month {
-        padding-bottom: 0.5px; /* -- Half pixel needed for some reason to remain in-place -- */
+        padding-bottom: 0;
     }
     #year-type {
         margin-right: var(--padding);
@@ -221,6 +218,13 @@
     height: 100%;
     width: 100%;
 }
+
+/* -- ve.Hierarchy -- */
+[component="ve-hierarchy"] {
+    scrollbar-color: var(--body-colour) transparent;
+    scrollbar-width: thin;
+}
+
 /* -- ve.HTML -- */
 [component="ve-html"]:empty {
     padding: 0;

@@ -8,6 +8,13 @@ if (!global.naissance) global.naissance = {};
  * @type {naissance.GeometryPolygon}
  */
 naissance.GeometryPolygon = class extends naissance.Geometry {
+	static hierarchy_symbol = {
+		icon: "pentagon",
+		name: "Polygon",
+		
+		colour: "fill" //Either 'fill'/'stroke'
+	};
+	
 	constructor (arg0_options) {
 		//Convert from parameters
 		let options = (arg0_options) ? arg0_options : {};
@@ -106,6 +113,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				date: main.timestamp,
 				guaranteed_indexes: [1]
 			}).value;
+			this.value[1] = this.getSymbol(this.value[1]);
+				
 			if (this.value === undefined || this.value?.length === 0 || this._is_visible === false) return;
 			
 			//2. Check any cause for derendering
@@ -154,142 +163,23 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		}
 	}
 	
-	drawHierarchyDatatype () {
-		//Declare local instance variables
-		let current_keyframe = this.history.getKeyframe();
-			this._current_keyframe = current_keyframe;
-		let current_symbol = current_keyframe.value[1];
-		let is_visible = false;
-		
-		try {
-			if (current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length)
-				is_visible = true;
-		} catch (e) {}
-		
+	drawUI () {
 		//Return statement
-		if (this.hierarchy_datatype?.remove) this.hierarchy_datatype.remove();
-		this.hierarchy_datatype = new ve.HierarchyDatatype({
-			icon: veHTML(`<icon style = "${
-				(current_symbol?.polygonFill) ? `color: ${current_symbol?.polygonFill};` : ""
-			}">pentagon</icon>`, {
-				tooltip: "GeometryPolygon"
-			}),
-			...super.drawHierarchyDatatypeGenerics(),
-			context_menu: veButton(() => {
-				try { this.history.draw(this.keyframes_ui); } catch (e) {}
-				super.open("instance", { name: this.name, ...this.window_options });
-			}, {
-				attributes: { class: "order-101" },
-				name: "<icon>more_vert</icon>",
-				tooltip: "More Actions"
-			})
-		},  {
-			attributes: {
-				"data-is-selected": this.selected,
-				"data-is-visible": (is_visible) ? "true" : "false",
-				"data-selected-geometry": (main.brush.selected_geometry?.id === this.id),
-				"data-type": "GeometryPolygon"
-			},
-			do_not_display: true,
-			instance: this,
-			name: this.name,
-			name_options: {
-				onprogramchange: () => {
-					this.drawHierarchyDatatype();
-				},
-				onuserchange: (v) => {
-					this.name = v;
-				}
-			}
-		});
-		delete this._current_keyframe;
-		return this.hierarchy_datatype;
-	}
-	
-	getActionsBarElement () {
-		//Declare local instance variables
-		let actions_bar_el = super.getActionsBarElement();
-		
-		let context_menu_button = veButton(() => {
-			try { this.history.draw(this.keyframes_ui); } catch (e) {}
-			this.open("instance", { name: this.name, ...this.window_options });
-		}, {
-			attributes: { class: "order-101" },
-			name: "<icon>more_vert</icon>",
-			tooltip: "More Actions"
-		});
-			context_menu_button.bind(actions_bar_el);
-		
-		//Return statement
-		return actions_bar_el;
-	}
-	
-	open (arg0_type, arg1_options) {
-		//Convert from parameters
-		let type = (arg0_type) ? arg0_type : "instance";
-		let options = (arg1_options) ? arg1_options : {};
-		
-		//Declare local instance variables
-		if (!this.interface) this.interface = veInterface({
-			information: veHTML(() => {
-				//Declare local instance variables
-				let area_km2 = (this.geometry && this.isOpen("instance")) ?
-					this.geometry.getArea()/1000000 : 0;
-				
-				//Return statement
-				return `ID: ${this.id} | Area: ${String.formatNumber(area_km2)}km^2`;
-			}, { width: 99, x: 0, y: 0 }),
-			move_to_brush: veButton(() => DALS.Timeline.parseAction("select_geometry", [{
-				type: "Brush", select_geometry_id: this.id
-			}]), { name: "Move To Brush", limit: () => (main.brush.selected_geometry?.id !== this.id), x: 0, y: 1 }),
-			finish_polygon: veButton(() => DALS.Timeline.parseAction("deselect_geometry", [{
-				type: "Brush", select_geometry_id: false
-			}]), { name: "Finish Polygon", limit: () => (main.brush.selected_geometry?.id === this.id), x: 0, y: 1 }),
-			
-			selected: veCheckbox(this.selected, {
-				name: "Selected",
-				onuserchange: (v) => this.selected = v,
-				x: 1, y: 1
-			}),
-			debug: veButton(() => {
-				console.log(`$geometry - naissance.GeometryPolygon (ID: ${this.id}):`, this);
-				window.$geometry = this;
-			}, {
-				name: "Debug",
-				x: 2, y: 1
-			}),
-			
-			actions_bar: veRawInterface(this.drawHierarchyDatatypeGenerics(), {
-				name: "<b>Quick Actions:</b>",
-				style: {
-					alignItems: "center",
-					display: "flex",
-					"[component='ve-button']": { marginLeft: "var(--padding)" }
-				},
-				width: 99
-			})
-		}, { is_folder: false });
-		if (!this.edit_symbol_ui) this.edit_symbol_ui = veInterface({
-			edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
-				name: "Label",
-				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
-			}),
-			edit_polygon: new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
-				name: "Polygon",
-				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
-			}),
-			edit_stroke: new UI_LineSymbol(main.settings.default_line_symbol, {
-				name: "Stroke",
-				special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
-			})
-		}, { name: "Edit Symbol" });
-		if (!this.keyframes_ui) this.keyframes_ui = veInterface({}, {
-			name: `Keyframes`, open: true
-		});
-		if (!this.variables_ui) super.drawVariablesEditor();
-		this.update();
-		
-		//Call super.open for ve.Class
-		super.open(type, options);
+		return {
+			edit_symbol_ui: veInterface({
+				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
+					name: "Label",
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+				}),
+				edit_polygon: new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
+					name: "Polygon",
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+				}),
+				edit_stroke: new UI_LineSymbol(main.settings.default_line_symbol, {
+					name: "Stroke",
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+				})
+			}, { name: "Edit Symbol" })
+		};
 	}
 };

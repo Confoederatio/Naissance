@@ -51,20 +51,8 @@ global.UI_FeatureLayerWindow = class extends ve.Class {
 				local_array.push((Array.isArray(local_geometry_tags)) ? local_geometry_tags.join(", ") : "");
 				
 				//4. Actions column
-				let actions_bar_el = local_geometry.getActionsBarElement();
-				let brush_button = veButton((v, e) => {
-					if (main.brush.selected_geometry?.id !== e.element.geometry?.id) {
-						main.brush.selected_geometry = e.element.geometry;
-						this.CRUD.redrawSelections();
-					}
-				}, {
-					name: "<icon>brush</icon>",
-					tooltip: "Move to Brush",
-				});
-				brush_button.element.geometry = local_geometry;
-				actions_bar_el.prepend(brush_button.element);
-				
-				local_array.push(actions_bar_el);
+				let actions_bar = local_geometry.getQuickActionsComponent({ mode: "small" });
+				local_array.push(actions_bar.element);
 				
 				//Return statement
 				return local_array;

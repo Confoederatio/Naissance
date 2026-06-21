@@ -16,7 +16,7 @@ naissance.Renderer = class extends ve.Class {
 	/**
 	 * Returns the ordered z-indexes of all Geometries within each Feature based on {@link UI_LeftbarHierarchy}.
 	 */
-	getRenderingOrder (arg0_entity_obj) { //[WIP] - Finish function body
+	getRenderingOrder (arg0_entity_obj) {
 		//Convert from parameters
 		let entity_obj = (arg0_entity_obj) ? arg0_entity_obj : undefined;
 		
@@ -25,19 +25,28 @@ naissance.Renderer = class extends ve.Class {
 		
 		//1. Base Hierarchy handling
 		if (!entity_obj) {
-			//Iterate over all naissance.Feature.instances
+			//First, collect all top-level features into a temporary static array
+			let top_level_features = [];
 			Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
-				if (!local_feature.parent)
-					rendering_order.push(local_feature);
-				rendering_order = rendering_order.concat(this.getRenderingOrder(local_feature));
+				if (!local_feature.parent) top_level_features.push(local_feature);
 			});
 			
-			//Iterate over all naissance.Geometry.instances
+			//Now, iterate over the static list of top-level features to build the final order
+			for (let i = 0; i < top_level_features.length; i++) {
+				let local_feature = top_level_features[i];
+				
+				//Add the feature itself to the order
+				rendering_order.push(local_feature);
+				//Then, recursively get and concatenate all its descendants
+				rendering_order = rendering_order.concat(this.getRenderingOrder(local_feature));
+			}
+			
+			//Iterate over all naissance.Geometry.instances and append top-level ones to the end
 			Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
 				if (!local_geometry.parent) rendering_order.push(local_geometry);
 			});
 		}
-		//2. naissance.Feature handling
+		//2. naissance.Feature handling (Recursive step)
 		else {
 			//(Real Groups) naissance.Group, naissance.Layer handling
 			if (entity_obj.entities) {
@@ -68,13 +77,27 @@ naissance.Renderer = class extends ve.Class {
 	 */
 	update () {
 		//Declare local instance variables
-		let current_z_index = 0;
 		let rendering_order = this.getRenderingOrder();
+		this.active_symbol_functions = naissance.Mapmode.getActiveSymbolFunctions();
 		
-		//Iterate over all entities in rendering order in reverse
-		for (let i = rendering_order.length - 1; i >= 0; i--)
+		//Iterate over all entities in rendering_order
+		for (let i = 0; i < rendering_order.length; i++)
 			if (rendering_order[i].draw)
 				rendering_order[i].draw();
+	}
+	
+	static getAllTags () {
+		//Declare local instance variables
+		let all_tags = [];
+		
+		//Iterate over all naissance.Geometry.instances and fetch their tags
+		Object.iterate(naissance.Geometry.instances, (local_key, local_value) => {
+			if (local_value?.metadata?.tags)
+				all_tags = [...new Set([...all_tags, ...local_value.metadata.tags])];
+		});
+		
+		//Return statement
+		return all_tags;
 	}
 	
 	static getDefaultLabelSymbol () {

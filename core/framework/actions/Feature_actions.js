@@ -8,6 +8,9 @@ if (!global.naissance) global.naissance = {};
  * - `.feature_id`: {@link Object}|{@link string} - Identifier. The {@link naissance.Feature} ID to target changes for, if any.
  * <br>
  * - ##### Extraneous Commands:
+ * - `.add_column`: {@link Object}
+ *   - `.key`: {@link string}
+ *   - `.values`: {@link Array}<{@link Array}<{@link Object}|{@link number}, {@link any}, ...>> - [date, value] map.
  * - `.add_variable`: {@link Object}
  *   - `.date`: {@link Object}|{@link number}|{@link string} - If string, either 'start'/'end'.
  *   - `.key`: {@link string}
@@ -37,6 +40,24 @@ naissance.Feature.parseAction = async function (arg0_json) {
 		if (feature_obj.class_name)
 			if (["FeatureGroup", "FeatureLayer", "FeatureSketchMap", "FeatureTileLayer"].includes(feature_obj.class_name))
 				await naissance[feature_obj.class_name].parseAction(json);
+		
+		//add_column
+		if (json.add_column !== undefined) {
+			let all_geometries = feature_obj.getAllGeometries();
+			let all_geometry_ids = [];
+			
+			//Iterate over all_geometries and append IDs for parsing
+			for (let i = 0; i < all_geometries.length; i++)
+				if (all_geometries[i].id) all_geometry_ids.push(all_geometries[i].id);
+			
+			naissance.Geometry.parseActionForGeometries(all_geometry_ids, {
+				command: "add_column",
+				key: "add_column",
+				name: "Add F.Field",
+				type: "Geometry",
+				value: json.add_column,
+			});
+		}
 		
 		//add_variable
 		if (json.add_variable !== undefined) {

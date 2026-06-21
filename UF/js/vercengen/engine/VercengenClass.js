@@ -22,6 +22,9 @@ if (!global.ve) global.ve = {};
  * 
  * ##### Static Fields:
  * - `.instances`: {@link Array}<this:{@link ve.Class}>
+ *   
+ * ##### Static Methods:
+ * - <span color=00ffff>{@link ve.Class.getVercengenComponents|getVercengenComponents}</span>(arg0_object:{@link Object}) | {@link Array}<{@link ve.Component}>
  * 
  * @class
  * @memberof ve
@@ -244,5 +247,32 @@ ve.Class = class {
 			class_components_obj: class_components_obj,
 			instance_components_obj: instance_components_obj
 		};
+	}
+	
+	/**
+	 * Filters for a list of Vercengen Components at the top-level of an Object.
+	 * - Static method of: {@link ve.Class}
+	 * 
+	 * @param {Object} arg0_object
+	 * 
+	 * @returns {ve.Component[]}
+	 */
+	static getVercengenComponents (arg0_object) {
+		//Convert from parameters
+		let object = (arg0_object) ? arg0_object : {};
+		
+		//Declare local instance variables
+		let return_obj = {};
+		
+		//Iterate over Object and return if .is_vercengen_component and !local_value.options?.ignore_component
+		Object.iterate(object, (local_key, local_value) => {
+			try {
+				if (local_value.is_vercengen_component && !local_value.options?.ignore_component)
+					return_obj[local_key] = local_value;
+			} catch (e) {}
+		});
+		
+		//Return statement
+		return return_obj;
 	}
 };

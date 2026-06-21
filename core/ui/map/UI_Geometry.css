@@ -1,0 +1,14 @@
+[naissance-ui="geometry-actions-bar"] {
+    align-items: center;
+    display: flex;
+}
+[naissance-ui="geometry-actions-bar"].large {
+    margin-right: calc(var(--cell-padding)*3 + 1px);
+
+    [component="ve-button"] {
+        margin-right: var(--padding);
+    }
+    [component="ve-button"]:nth-child(1 of [component="ve-button"]:not(.ve-display-none)) {
+        margin-left: auto;
+    }
+}

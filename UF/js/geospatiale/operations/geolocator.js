@@ -72,7 +72,7 @@
 		console.log(`Fetching data from ${url}:`);
 		try {
 			let response = await fetch(url, { 
-				headers: { "User-Agent": "Geospatiale III/0.2 (vf@confoederatio.org)" } 
+				headers: { "User-Agent": "Naissance HGIS" } 
 			});
 			if (!response.ok) console.error(`HTTP Error. Status: ${response.status}`);
 			let results = await response.json();
@@ -107,5 +107,106 @@
 		} catch (e) {
 			console.error(e);
 		}
+	};
+	
+	/**
+	 * Performs a Nominatim search and returns the results in JSON form.
+	 * @alias Geospatiale.getNominatimSearch
+	 * 
+	 * @param {string} arg0_search_query
+	 * 
+	 * @returns {Promise<Object[]>|undefined}
+	 */
+	Geospatiale.getNominatimSearch = async function (arg0_search_query) {
+		//Convert from parameters
+		let search_query = arg0_search_query;
+		
+		if (!search_query || search_query.length === 0) return; //Internal guard clause if search_query is nonexistent
+		
+		//Declare local instance variables
+		let params = new URLSearchParams({
+			q: search_query,
+			format: "jsonv2",
+			addressdetails: "1",
+			entrances: "1",
+			extratags: "1"
+		});
+		let url = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
+		
+		console.log(`Fetching data from ${url}:`);
+		try {
+			let response = await fetch(url, {
+				headers: { "User-Agent": "Naissance HGIS" }
+			});
+			if (!response.ok) console.error(`HTTP Error. Status: ${response.status}`);
+			return await response.json(); //Return statement
+		} catch (e) { console.error(e); }
+	};
+	
+	Geospatiale.getPhotonExtent = function (arg0_result_obj) {
+		//Convert from parameters
+		let result_obj = arg0_result_obj;
+		
+		//Declare local instance variables
+		if (result_obj.properties.extent) {
+			let bbox = result_obj.properties.extent;
+			
+			//Return statement
+			return {
+				xmin: parseFloat(bbox[0]),
+				xmax: parseFloat(bbox[2]),
+				ymin: parseFloat(bbox[1]),
+				ymax: parseFloat(bbox[3])
+			};
+		} else {
+			let coords = result_obj.geometry.coordinates;
+			
+			//Return statement
+			return {
+				xmin: coords[0] - 0.05,
+				xmax: coords[0] + 0.05,
+				ymin: coords[1] - 0.05,
+				ymax: coords[1] + 0.05
+			};
+		}
+	};
+	
+	Geospatiale.getPhotonSearch = async function (arg0_search_query) {
+		//Convert from parameters
+		let search_query = arg0_search_query;
+		
+		if (!search_query || search_query.length === 0) return; //Internal guard clause if search_query is nonexistent
+		
+		//Declare local instance variables
+		let params = new URLSearchParams({
+			q: search_query
+		});
+		let url = `https://photon.komoot.io/api/?${params.toString()}`;
+		
+		console.log(`Fetching data from ${url}:`);
+		try {
+			let response = await fetch(url, {
+				headers: { "User-Agent": "Naissance HGIS" }
+			});
+			if (!response.ok) console.error(`HTTP Error. Status: ${response.status}`);
+			return await response.json(); //Return statement
+		} catch (e) { console.error(e); }
+	};
+	
+	Geospatiale.getPhotonSearchName = function (arg0_result_obj) {
+		//Convert from parameters
+		let result_obj = arg0_result_obj;
+		
+		//Declare local instance variables
+		let name_array = [];
+		let properties_obj = result_obj.properties;
+		
+		if (properties_obj.osm_value) name_array.push(properties_obj.osm_value);
+		if (properties_obj.city) name_array.push(properties_obj.city);
+		if (properties_obj.state) name_array.push(properties_obj.state);
+		if (properties_obj.country) name_array.push(properties_obj.country);
+		
+		//Return statement
+		return name_array.join(", ");
 	};
 }

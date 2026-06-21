@@ -13,6 +13,7 @@ if (!global.naissance) global.naissance = {};
  *   - `.node_editor_file`: {@link string}
  *   - `.node_editor_value`: {@link Object}
  *   - `.special_function`: {@link function} | {@link maptalks.Geometry}[] - Called upon mapmode being shown or drawn.
+ *   - `.symbol_function`: {@link function} | {@link Object} - Alters the symbol of extant Geometries when being updated.
  *   - `.tooltip`: {@link string}
  * 
  * @type {naissance.Mapmode}
@@ -116,6 +117,7 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 	
 	show () {
 		if (!main.user.mapmodes.includes(this.id)) main.user.mapmodes.push(this.id);
+		main.renderer.update(); //Update Renderer first
 		naissance.Mapmode.draw();
 		
 		if (this.options.onshow) this.options.onshow(this);
@@ -133,6 +135,9 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 					local_mapmode = naissance.Mapmode.instances[x];
 					break;
 				}
+			
+			//Internal guard clause if local_mapmode.options.special_function doesn't exist
+			if (!local_mapmode?.options?.special_function) continue;
 			
 			//Remove all current geometries before resetting
 			for (let x = 0; x < local_mapmode.geometries.length; x++)
@@ -165,6 +170,28 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 				}
 			}
 		}
+	}
+	
+	static getActiveSymbolFunctions () {
+		//Declare local instance variables
+		let active_mapmodes = [];
+		let active_symbol_functions = [];
+		
+		//Iterate over all main.user.mapmodes and collect the actual instances
+		for (let i = 0; i < main.user.mapmodes.length; i++)
+			for (let x = 0; x < naissance.Mapmode.instances.length; x++)
+				if (naissance.Mapmode.instances[x].id === main.user.mapmodes[i]) {
+					active_mapmodes.push(naissance.Mapmode.instances[x]);
+					break;
+				}
+		
+		//Iterate over all active_mapmodes and collect active_symbol_functions
+		for (let i = 0; i < active_mapmodes.length; i++)
+			if (typeof active_mapmodes[i].options.symbol_function === "function")
+				active_symbol_functions.push(active_mapmodes[i].options.symbol_function);
+		
+		//Return statement
+		return active_symbol_functions;
 	}
 	
 	/**

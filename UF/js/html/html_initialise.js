@@ -32,6 +32,8 @@
 					delete HTML.ctrl_pressed;
 				}
 			});
+			
+			//HTML.mouse_x, HTML.mouse_y tracker
 			document.addEventListener("mousemove", (e) => {
 				/**
 				 * The current mouse X position.
@@ -44,6 +46,14 @@
 				 */
 				HTML.mouse_y = e.clientY;
 			});
+			document.addEventListener("click", (e) => {
+				HTML.mouse_x = e.clientX;
+				HTML.mouse_y = e.clientY;
+			}, { capture: true });
+			document.addEventListener("contextmenu", (e) => {
+				HTML.mouse_x = e.clientX;
+				HTML.mouse_y = e.clientY;
+			}, { capture: true });
 		}
 		
 		//Vercengen CSS handler

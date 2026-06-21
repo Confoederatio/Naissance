@@ -6,6 +6,7 @@ global.UI_DateMenu = class extends ve.Class {
 		super();
 		
 		let navbar_el = document.querySelector(".ve.navbar");
+		let navbar_height = ((navbar_el) ? navbar_el.offsetHeight : 0);
 		this.is_playing = false;
 		this.tick_speed = 1000;
 		// Initialize step as a default if not set
@@ -18,7 +19,8 @@ global.UI_DateMenu = class extends ve.Class {
 				if (this.is_playing) return;
 				DALS.Timeline.parseAction("load_date",  [{ set_date: v }, { refresh_date: true }]);
 				naissance.Mapmode.draw();
-			}
+			},
+			x: 0, y: 0
 		});
 		
 		this.time_controls = veRawInterface({
@@ -62,9 +64,26 @@ global.UI_DateMenu = class extends ve.Class {
 				}, { 
 					can_rename: false, 
 					name: "Time Controls", 
-					width: "20rem" 
+					width: "20rem",
+					x: `calc(${window.innerWidth}px - 20rem - 8px)`,
+					y: this.instance_window.element.offsetHeight + navbar_height + 16
 				});
 			}, { name: "<icon>settings</icon>", tooltip: "Settings" }),
+			help: veButton(() => {
+				veToast(`No help yet, sorry! We're working on it. Check on the Discord for updates.`);
+			}, { 
+				name: "<icon>question_mark</icon> Help"
+			})
+		}, {
+			style: {
+				alignItems: "baseline",
+				display: "flex",
+				justifyContent: "end",
+				"[component='ve-button']": {
+					marginRight: "var(--cell-padding)"
+				}
+			},
+			x: 1, y: 0
 		});
 		
 		super.open("instance", {
@@ -74,9 +93,9 @@ global.UI_DateMenu = class extends ve.Class {
 			},
 			mode: "static_window",
 			name: "Date",
-			width: "24rem",
+			width: "26rem",
 			x: 8,
-			y: ((navbar_el) ? navbar_el.offsetHeight : 0) + 8
+			y: navbar_height + 8
 		});
 	}
 	

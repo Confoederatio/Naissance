@@ -11,8 +11,8 @@ if (!global.naissance) global.naissance = {};
  * - #### Extraneous Commands:
  * - `.create_point`: {@link Object}
  *   - `.coordinates`: {@link Array}<{@link maptalks.Coordinate}>
- *   - `.do_not_refresh`: {@link boolean}
  *   - `.id`: {@link string}
+ *   - `.is_search`: {@link boolean}
  *   - `.name`: {@link string}
  * - #### Internal Commands:
  *   - `.set_coordinates`: {@link maptalks.Coordinate}
@@ -41,9 +41,13 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 				new_point.name = json.create_point.name;
 				delete new_point.fire_action_silently;
 			}
-			if (main.brush.selected_feature)
-				if (!json.create_point.do_not_refresh)
-					UI_LeftbarHierarchy.refresh();
+			
+			//Point handling; .is_search
+			if (!json.create_point.is_search) {
+				UI_LeftbarHierarchy.refresh();
+			} else {
+				UI_LeftbarHierarchy.do_not_refresh = true;
+			}
 		}
 	
 	//Parse commands for point_obj

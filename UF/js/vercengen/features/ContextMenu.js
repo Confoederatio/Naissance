@@ -60,7 +60,9 @@ ve.ContextMenu = class extends ve.Feature {
 		this.addContextMenu(this.components_obj, {
 			id: options.id,
 			height: options.height,
-			width: options.width
+			width: options.width,
+			
+			draggable: (!!options.draggable)
 		});
 	}
 	
