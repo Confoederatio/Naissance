@@ -43,8 +43,8 @@
 
 **Note.** Most of the dev builds are built for Windows, since that's what most use. If you are on MacOS/Linux and need tech support, please join the Discord.
 
-<ins>Stable Release (1.8.3, Windows):</ins>
-1. Download [Naissance 1.8.3b](https://drive.google.com/file/d/16WLJN43wDtxwncTU04aUpq8MY39Qpj9N/view?usp=sharing)
+<ins>Stable Release (1.9, Windows):</ins>
+1. Download [Naissance 1.9b](https://drive.google.com/file/d/1Xtm0GD1m-CKE7XYr6U4cuk2_N8DIqsB8/view)
 2. Extract ZIP file when downloaded.
 3. Run `naissance.exe`.
 
