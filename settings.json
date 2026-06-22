@@ -17,5 +17,16 @@
   "province_layer_opacity": 0.5,
   "locale": "",
   "hierarchy_ordering": "features_at_top",
-  "ui_scaling": 1
+  "ui_scaling": 1,
+  "default_point_symbol": {
+    "markerDx": 0,
+    "markerDy": 0,
+    "markerHeight": 40,
+    "markerWidth": 40,
+    "markerFile": "gfx/icons/marker_default.png"
+  },
+  "default_polygon_symbol": {
+    "polygonFill": "#1bbc9b",
+    "polygonOpacity": 0.7
+  }
 }
