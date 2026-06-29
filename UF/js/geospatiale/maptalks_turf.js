@@ -36,7 +36,6 @@
 			//Return statement
 			return turf.feature(geojson.geometry);
 		} catch (e) {
-			console.error(e);
 			if (typeof geometry === "object") return geometry;
 			return null;
 		}

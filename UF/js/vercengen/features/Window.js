@@ -443,6 +443,22 @@ ve.Window = class extends ve.Feature {
 		let height = arg1_height;
 		
 		//Apply style
+		if (typeof height === "function") {
+			if (this.height_logic_loop) clearInterval(this.height_logic_loop);
+			this.height_logic_loop = setInterval(() => {
+				let new_height = height();
+					if (typeof new_height === "number") new_height = `${new_height}px`;
+				this.element.style.height = new_height;
+			}, 100);
+		}
+		if (typeof width === "function") {
+			if (this.width_logic_loop) clearInterval(this.width_logic_loop);
+			this.width_logic_loop = setInterval(() => {
+				let new_width = width();
+					if (typeof new_width === "number") new_width = `${new_width}px`;
+				this.element.style.width = new_width;
+			});
+		}
 		HTML.applyTelestyle(this.element, {
 			...HTML.getCSSSize(width, height)
 		});

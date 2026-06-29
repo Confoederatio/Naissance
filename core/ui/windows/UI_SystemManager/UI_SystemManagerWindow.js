@@ -21,7 +21,7 @@ global.UI_SystemManagerWindow = class {
 			}
 		}, {
 			can_rename: false,
-			name: "System Manager",
+			name: "Advanced Tools",
 			height: "80dvh",
 			width: "80dvw",
 			

@@ -15,6 +15,9 @@ if (!global.naissance) global.naissance = {};
  *   - `.is_search`: {@link boolean}
  *   - `.name`: {@link string}
  * - #### Internal Commands:
+ *   - `.add_to_point`: {@link Object}
+ *     - `.date=main.date`: {@link Object}
+ *     - `.geometry`: {@link string}
  *   - `.set_coordinates`: {@link maptalks.Coordinate}
  */
 naissance.GeometryPoint.parseAction = async function (arg0_json) {
@@ -44,7 +47,7 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 			
 			//Point handling; .is_search
 			if (!json.create_point.is_search) {
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 			} else {
 				UI_LeftbarHierarchy.do_not_refresh = true;
 			}
@@ -52,9 +55,29 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 	
 	//Parse commands for point_obj
 	if (point_obj && point_obj instanceof naissance.GeometryPoint) {
+		//.add_to_point
+		if (json.add_to_point !== undefined) {
+			let date = (json.add_to_point.date) ? json.add_to_point.date : main.date;
+			let geometries = point_obj.getGeometries();
+			let ot_geometry = naissance.Geometry.instances[json.add_to_point.geometry];
+			let ot_geometries = ot_geometry.getGeometries();
+			
+			//Union with existing point if defined, if undefined replace geometry
+			if (ot_geometries) {
+				let maptalks_point_obj = new maptalks.MultiLineString();
+				
+				if (geometries) {
+					maptalks_point_obj.setGeometries(geometries.concat(ot_geometries));
+				} else {
+					maptalks_point_obj.setGeometries(ot_geometries);
+				}
+				point_obj.addKeyframe(date, maptalks_point_obj.toJSON());
+			}
+		}
+		
 		//.set_coordinates
 		if (json.set_coordinates) {
-			let maptalks_marker_obj = (this.geometry) ? this.geometry : new maptalks.Marker();
+			let maptalks_marker_obj = (point_obj.geometry) ? point_obj.geometry : new maptalks.Marker();
 			maptalks_marker_obj.setCoordinates(json.set_coordinates);
 			point_obj.addKeyframe(main.date, maptalks_marker_obj.toJSON());
 		}

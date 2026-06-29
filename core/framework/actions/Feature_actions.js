@@ -18,10 +18,19 @@ if (!global.naissance) global.naissance = {};
  * - `.clean_keyframes`: {@link Array}<{@link string}> - Cleans geometry keyframes for default symbols, redundant names. Options: ["symbol"]
  * - `.clean_geometry_tags`: {@link boolean}
  * - `.delete_feature`: {@link boolean}
+ * - `.feature_operation`: {@link Object}
+ *   - `.type`: {@link string} - Either 'difference'/'intersect'/'union'/'xor'.
+ *   -
+ *   - `.feature_id`: {@link string}
+ *   - `.geometry_id`: {@link string}
  * - `.flatten_all_geometries`: {@link boolean}
  * - `.move_all_entities_to_feature`: {@link string}
  * - `.set_name`: {@link string}
  * - `.set_visibility`: {@link boolean}
+ * - `.set_zoom`: {@link Object}
+ *   - `.is_start_keyframe=false`: {@link boolean}
+ *   - `.max_zoom`: {@link number}|{@link string} - 'delete' if a number.
+ *   - `.min_zoom`: {@link number}|{@link string} - 'delete' if a number.
  * - `.simplify_all_polygons`: {@link number}
  *
  * @param {Object|string} arg0_json
@@ -107,6 +116,14 @@ naissance.Feature.parseAction = async function (arg0_json) {
 			return;
 		}
 		
+		//feature_operation
+		if (json.feature_operation) {
+			naissance.Feature.operate.call(feature_obj,
+				json.feature_operation.type,
+				(json.feature_operation.feature_id) ? json.feature_operation.feature_id : json.feature_operation.geometry_id);
+			UI_Leftbar.refresh();
+		}
+		
 		//flatten_all_geometries
 		if (json.flatten_all_geometries) {
 			feature_obj.entities = feature_obj.getAllGeometries();
@@ -114,7 +131,7 @@ naissance.Feature.parseAction = async function (arg0_json) {
 			//Update parent ref for all promoted geometries
 			for (let i = 0; i < feature_obj.entities.length; i++)
 				feature_obj.entities[i].parent = feature_obj;
-			UI_LeftbarHierarchy.refresh();
+			UI_Leftbar.refresh();
 		}
 		
 		//move_all_entities_to_feature
@@ -143,7 +160,7 @@ naissance.Feature.parseAction = async function (arg0_json) {
 					if (!ot_feature_obj.entities) ot_feature_obj.entities = [];
 					ot_feature_obj.entities.push(local_entity);
 				}
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 			}
 		}
 		
@@ -158,6 +175,22 @@ naissance.Feature.parseAction = async function (arg0_json) {
 			} else if (json.set_visibility === false) {
 				feature_obj.hide();
 			}
+		
+		//set_zoom
+		if (json.set_zoom !== undefined) {
+			let all_geometries = feature_obj.getAllGeometries();
+			let all_geometry_ids = [];
+			
+			for (let i = 0; i < all_geometries.length; i++)
+				if (all_geometries[i].id) all_geometry_ids.push(all_geometries[i].id);
+			
+			naissance.Geometry.parseActionForGeometries(all_geometry_ids, {
+				command: "set_zoom",
+				key: "set_zoom",
+				name: "Set F.Zoom",
+				value: json.set_zoom,
+			});
+		}
 		
 		//simplify_all_polygons
 		if (json.simplify_all_polygons !== undefined) {

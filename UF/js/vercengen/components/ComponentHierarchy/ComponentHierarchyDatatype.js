@@ -85,6 +85,42 @@ ve.HierarchyDatatype = class extends ve.Component {
 	}
 	
 	/**
+	 * Returns whether the current datatype is collapsed.
+	 * - Accessor of: {@link ve.HierarchyDatatype}
+	 *
+	 * @alias is_collapsed
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @type {boolean}
+	 */
+	get is_collapsed () {
+		return this.element.classList.contains("nst-collapsed");
+	}
+	
+	/**
+	 * Sets the collapse state of the current datatype.
+	 * - Accessor of: {@link ve.HierarchyDatatype}
+	 *
+	 * @alias is_collapsed
+	 * @memberof ve.Component.ve.HierarchyDatatype
+	 * @param {boolean} arg0_value
+	 */
+	set is_collapsed (arg0_value) {
+		let value = arg0_value;
+		this.options.is_collapsed = value;
+		
+		if (value) {
+			this.element.classList.add("nst-collapsed");
+		} else {
+			this.element.classList.remove("nst-collapsed");
+		}
+		
+		let button_el = this.element.querySelector(".nst-button");
+		if (button_el) {
+			button_el.innerHTML = (value) ? "+" : "-";
+		}
+	}
+	
+	/**
 	 * Returns the present name value of the hierarchy datatype.
 	 * - Accessor of {@link ve.HierarchyDatatype}
 	 *

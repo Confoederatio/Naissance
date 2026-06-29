@@ -21,6 +21,8 @@
 					 */
 					HTML.ctrl_pressed = true;
 				}
+				if (e.keyCode === 16) //Shift
+					HTML.shift_pressed = true;
 			});
 			document.addEventListener("keyup", (e) => {
 				if (e.keyCode === 17) { //Ctrl
@@ -31,6 +33,8 @@
 					}
 					delete HTML.ctrl_pressed;
 				}
+				if (e.keyCode === 16) //Shift
+					delete HTML.shift_pressed;
 			});
 			
 			//HTML.mouse_x, HTML.mouse_y tracker

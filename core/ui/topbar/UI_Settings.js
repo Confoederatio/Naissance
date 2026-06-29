@@ -74,7 +74,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 									onuserchange: (v) => {
 										main.settings.hierarchy_ordering = v;
 										UI_Settings.saveSettings();
-										UI_LeftbarHierarchy.refresh();
+										UI_Leftbar.refresh();
 									}
 								}),
 								hierarchy_recommended_max_geometries_in_layer: new ve.Number(Math.returnSafeNumber(main.settings.hierarchy_recommended_max_geometries_in_layer, 100), {
@@ -261,7 +261,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 				
 				//Load state
 				setTimeout(() => {
-					DALS.Timeline.parseAction("load_save", [{ load_save: load_data }]);
+					DALS.Timeline.parseAction("load_save", [{ load_save: load_data }], true);
 				}, 100);
 			}
 	}

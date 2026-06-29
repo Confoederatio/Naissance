@@ -563,3 +563,11 @@ table:has([component="ve-log"]) { table-layout: fixed; }
         opacity: 1;
     }
 }
+
+/* -- ve.Wiki -- */
+[component="ve-wiki"] {
+    height: 100%;
+}
+#feature-body > [component="ve-wiki"] {
+    height: calc(100% - var(--padding));
+}

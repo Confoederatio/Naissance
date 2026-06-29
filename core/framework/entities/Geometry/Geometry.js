@@ -195,7 +195,7 @@ naissance.Geometry = class extends naissance.Entity {
 		//Set selected, then update draw
 		this._selected = v;
 		this.draw();
-		UI_LeftbarHierarchy.refresh();
+		UI_Leftbar.refresh();
 	}
 	
 	addKeyframe (arg0_date, arg1_coords, arg2_symbol, arg3_data) {
@@ -226,6 +226,84 @@ naissance.Geometry = class extends naissance.Entity {
 					console.log(`Geometry logged as:`, window.$geometry);
 					veToast(`Geometry logged to console.`);
 				}, { name: "Debug Geometry" }),
+				geometry_operation: veButton(() => {
+					let operation_names = {
+						difference: { name: "Difference" },
+						intersect: { name: "Intersect" },
+						union: { name: "Union" },
+						xor: { name: "XOR" }
+					};
+					let operation_target = () => (this.ui.geometry_operation_target || "geometry");
+					let operation_type = () => (this.ui.geometry_operation_type || "union");
+					
+					if (this.geometry_operation_window) this.geometry_operation_window.close();
+					
+					this.geometry_operation_window = veWindow({
+						geometry_operation_target: veSelect({
+							feature: { name: "Feature" },
+							geometry: { name: "Geometry" }
+						}, {
+							name: "Merge With Entity Type",
+							selected: operation_target(),
+							onuserchange: (v) => this.ui.geometry_operation_target = v
+						}),
+						geometry_operation_geometry: new UI_GeometryDatalist(this.ui.geometry_operation_geometry, {
+							name: "Geometry",
+							filter_types: ["GeometryPolygon"],
+							limit: () => {
+								let target = operation_target();
+								if (target === "geometry") return true;
+								return false;
+							},
+							onuserchange: (v) => this.ui.geometry_operation_geometry = v
+						}),
+						geometry_operation_feature: new UI_FeatureDatalist(this.ui.geometry_operation_feature, {
+							name: "Feature",
+							filter_types: ["FeatureGroup", "FeatureLayer"],
+							limit: () => {
+								let target = operation_target();
+								if (target === "feature") return true;
+								return false;
+							},
+							onuserchange: (v) => this.ui.geometry_operation_feature = v
+						}),
+						operation_type: veSelect(operation_names, {
+							name: "Operation Type",
+							selected: operation_type(),
+							onuserchange: (v) => this.ui.geometry_operation_type = v
+						}),
+						confirm: veButton(() => {
+							//Declare local instance variables
+							let geometry_operation_type = operation_type();
+							let target = operation_target();
+							let target_geometry_id = (target === "geometry") ? this.ui.geometry_operation_geometry : undefined;
+							let target_feature_id = (target === "feature") ? this.ui.geometry_operation_feature : undefined;
+							
+							//Run feature operation
+							DALS.Timeline.parseAction("geometry_operation", {
+								geometry_obj: this.id,
+								geometry_operation: {
+									type: geometry_operation_type,
+									feature_id: target_feature_id,
+									geometry_id: target_geometry_id,
+								}
+							});
+							
+							let ot_name;
+							if (target_geometry_id) ot_name = naissance.Geometry.instances[target_geometry_id]?.name;
+							if (target_feature_id) ot_name = naissance.Feature.instances[target_feature_id]?.name;
+							
+							veToast(`Performed ${operation_names[geometry_operation_type].name} on ${this.name} using ${ot_name}.`);
+						}, { name: "Confirm" })
+					}, {
+						name:`Feature Operation (${this.name})`,
+						can_rename: false,
+						width: "20rem"
+					});
+				}, {
+					name: "Geometry Operation",
+					limit: () => this.class_name === "GeometryPolygon"
+				}),
 				link_geometry: veButton(() => {
 					if (this.link_geometry_window) this.link_geometry_window.close();
 					this.link_geometry_window = veWindow({
@@ -320,6 +398,78 @@ naissance.Geometry = class extends naissance.Entity {
 						width: "20rem"
 					})
 				}, { name: "Manage Relations" }),
+				merge_geometry: veButton(() => {
+					if (this.merge_geometry_window) this.merge_geometry_window.close();
+					this.merge_geometry_window = veWindow({
+						merge_geometry_with: new UI_GeometryDatalist(this.ui.merge_geometry_id, {
+							name: "Merge Geometry",
+							filter_types: [this.class_name],
+							onuserchange: (v) => this.ui.merge_geometry_id = v
+						}),
+						confirm: veButton(() => {
+							if (!this.ui.merge_geometry_id) {
+								veToast(`<icon>warning</icon> You must select a valid Geometry to merge this Geometry with.`)
+								return;
+							}
+							
+							let ot_geometry = naissance.Geometry.instances[this.ui.merge_geometry_id];
+							if (!ot_geometry) {
+								veToast(`<icon>warning</icon> This geometry no longer exists.`);
+								return;
+							}
+							
+							DALS.Timeline.parseAction("merge_geometry", [{
+								geometry_obj: this.id,
+								merge_geometry: ot_geometry.id
+							}]);
+							this.merge_geometry_window.close();
+							veToast(`Successfully merged ${this.name} and ${ot_geometry.name}.`);
+						})
+					}, {
+						name: "Merge Geometry",
+						can_rename: false
+					});
+				}, { name: "Merge Geometry" }),
+				set_zoom_visibility: veButton(() => {
+					if (this.set_zoom_window) this.set_zoom_window.close();
+					this.set_zoom_window = veWindow({
+						information: veHTML(`To remove the zoom attribute, type -1 as the value instead.`),
+						
+						min_zoom: veNumber(this.ui.set_zoom_min, {
+							name: "Minimum Zoom Level",
+							onuserchange: (v) => this.ui.set_zoom_min = v
+						}),
+						max_zoom: veNumber(this.ui.set_zoom_max, {
+							name: "Maximum Zoom Level",
+							onuserchange: (v) => this.ui.set_zoom_max = v
+						}),
+						is_start_keyframe: veToggle(this.ui.set_zoom_is_start, {
+							name: "Modify Zoom at Starting Keyframe",
+							onuserchange: (v) => this.ui.set_zoom_is_start = v
+						}),
+						
+						confirm: veButton(() => {
+							let current_min = (this.ui.set_zoom_min !== undefined) ? this.ui.set_zoom_min : -1;
+							let current_max = (this.ui.set_zoom_max !== undefined) ? this.ui.set_zoom_max : -1;
+							
+							DALS.Timeline.parseAction("set_zoom", [{
+								geometry_obj: this.id,
+								set_zoom: {
+									is_start_keyframe: (this.ui.set_zoom_is_start),
+									max_zoom: (current_max === -1) ? "delete" : current_max,
+									min_zoom: (current_min === -1) ? "delete" : current_min
+								}
+							}]);
+							
+							veToast(`Successfully updated zoom visibility for ${this.name}.`);
+							this.set_zoom_window.close();
+						}, { name: "Confirm" })
+					}, {
+						name: `Set Zoom (${this.name})`,
+						can_rename: false,
+						width: "20rem"
+					});
+				}, { name: "Set Zoom Visibility" }),
 				unlink_geometry: veButton(() => {
 					let linked_geometry = naissance.Geometry.instances[this.metadata.linked_id];
 					
@@ -505,6 +655,18 @@ naissance.Geometry = class extends naissance.Entity {
 	}
 	
 	/**
+	 * Returns the currently displayed geometries of a Naissance Geometry.
+	 *
+	 * @returns {maptalks.Geometry[]|undefined}
+	 */
+	getGeometries () {
+		//Return statement
+		if (!this.geometry) return;
+		if (this.geometry instanceof maptalks.MultiGeometry) return this.geometry.getGeometries();
+		return [this.geometry];
+	}
+	
+	/**
 	 * Returns all keyframes that change the current geometry. Returns either the timestamp/date. Dates by default.
 	 * 
 	 * @param {Object} [arg0_options]
@@ -535,9 +697,6 @@ naissance.Geometry = class extends naissance.Entity {
 		}
 		return unique_timestamps;
 	}
-	
-	
-	//console.time(`1. Differencing ${all_timestamps[i]} (${i}/${all_timestamps.length})`);
 	
 	/**
 	 * Returns the Maptalks geometry at the specific date.
@@ -758,11 +917,12 @@ naissance.Geometry = class extends naissance.Entity {
 				if (linked_geometry_keyframe?.value?.[1]) symbol_obj = linked_geometry_keyframe.value[1];
 			}
 		}
-		for (let i = 0; i < active_symbol_functions.length; i++)
-			symbol_obj = {
-				...symbol_obj,
-				...active_symbol_functions[i](this)
-			};
+		if (active_symbol_functions)
+			for (let i = 0; i < active_symbol_functions.length; i++)
+				symbol_obj = {
+					...symbol_obj,
+					...active_symbol_functions[i](this)
+				};
 		
 		//Return statement
 		return symbol_obj;
@@ -976,8 +1136,7 @@ naissance.Geometry = class extends naissance.Entity {
 			old_date = JSON.parse(JSON.stringify(main.date));
 			UI_DateMenu.setDate(options.date);
 		}
-		console.log(options.key, dals_value_array);
-		DALS.Timeline.parseAction(options.key, dals_value_array);
+		DALS.Timeline.parseAction(options.key, dals_value_array, true);
 		if (options.date)
 			UI_DateMenu.setDate(old_date);
 	};

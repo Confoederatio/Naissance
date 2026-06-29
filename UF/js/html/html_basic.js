@@ -262,6 +262,38 @@
 	};
 	
 	/**
+	 * Checks if an {@link HTMLElement} is visible. Does not check if it is within viewport bounds.
+	 * @alias HTML.elementIsVisible
+	 * 
+	 * @param {HTMLElement} arg0_el
+	 * 
+	 * @returns {boolean}
+	 */
+	HTML.elementIsVisible = function (arg0_el) {
+		//Convert from parameters
+		let el = (typeof arg0_el === "object") ? arg0_el : document.querySelector(arg0_el);
+		
+		if (!el) return false; //Internal guard clause if el doesn't exist
+		
+		//Run .checkVisibility
+		if (typeof el.checkVisibility === "function")
+			//Return statement
+			return el.checkVisibility({
+				checkOpacity: true,
+				checkVisibilityCSS: true
+			});
+		
+		//Fallback if .checkVisibility is not supported
+		let element_style = window.getComputedStyle(el);
+		let is_hidden = (element_style.display === "none" || element_style.visibility === "hidden" || element_style.opacity === "0");
+		
+		//Return statement
+		if (is_hidden) return false;
+		let element_rect = el.getBoundingClientRect();
+		return !!(element_rect.width && element_rect.height);
+	};
+	
+	/**
 	 * Traverses an ordered list with `arg1_function` executing in sequential order.
 	 * @alias HTML.listToObject
 	 * 

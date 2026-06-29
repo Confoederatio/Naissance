@@ -8,6 +8,7 @@
  * - `arg0_value`: {@link Object} - The {@link maptalks.Map} `.options` that determines the projection and base layer.
  * - `arg1_options`: {@link Object}
  *   - `.base_layer_options`: {@link Object}
+ *   - `.onmapload`: {@link function}(v:{@link ve.Map})
  * 
  * ##### Instance:
  * - `.map`: {@link maptalks.Map}
@@ -15,6 +16,9 @@
  * 
  * ##### Methods:
  * - <span color=00ffff>{@link ve.Component.Map.clear|clear}</span>()
+ * - <span color=00ffff>{@link ve.Component.Map.getDefaultBaseLayer|getDefaultBaseLayer}</span>() | {@link maptalks.TileLayer}
+ * - <span color=00ffff>{@link ve.Component.Map.getDefaultSpatialReference|getDefaultSpatialReference}</span>() | { projection: {@link string} }</span>>
+ * - <span color=00ffff>{@link ve.Component.Map.initialiseMap|initialiseMap}</span>(arg0_value:{@link Object})
  * 
  * @augments ve.Component
  * @memberof ve.Component
@@ -78,13 +82,8 @@ ve.Map = class extends ve.Component {
 		let value = arg0_value;
 		
 		//Declare local instance variables
-		this.map = new maptalks.Map(this.element, value);
-			this.map.on("click", (e) => {
-				this.map.mouse_click_coords = e.coordinate.toJSON();
-			});
-			this.map.on("mousemove", (e) => {
-				this.map.mouse_hover_coords = e.coordinate.toJSON();
-			});
+		this.initialiseMap(value);
+		this.fireFromBinding();
 	}
 	
 	/**
@@ -149,6 +148,47 @@ ve.Map = class extends ve.Component {
 		return {
 			projection: "EPSG:3857" //Ensure that both Maptalks and Leaflet use the same projection
 		}
+	}
+	
+	/**
+	 * Ensures that the Maptalks instance is initialised safely.
+	 * 
+	 * @param arg0_value
+	 * 
+	 * @returns {maptalks.Map|undefined}
+	 */
+	initialiseMap (arg0_value) {
+		//Convert from parameters
+		let value = arg0_value;
+		
+		//Declare local instance variables
+		let container_height = this.element.offsetHeight;
+		let container_width = this.element.offsetWidth;
+		
+		//Ensure safe initialisation to prevent Canvas context errors
+		if (container_height === 0 || container_width === 0) {
+			let resize_observer = new ResizeObserver((observer_entries) => {
+				let observed_entry = observer_entries[0];
+				let content_rect = observed_entry.contentRect;
+				
+				if (content_rect.width > 0 && content_rect.height > 0) {
+					resize_observer.disconnect();
+					this.initialiseMap(value);
+				}
+			});
+			resize_observer.observe(this.element);
+			return;
+		}
+		
+		//Initialise map instantly if container is visible
+		this.map = new maptalks.Map(this.element, value);
+			this.map.on("click", (e) => {
+				this.map.mouse_click_coords = e.coordinate.toJSON();
+			});
+			this.map.on("mousemove", (e) => {
+				this.map.mouse_hover_coords = e.coordinate.toJSON();
+			});
+		if (this.options.onmapload) this.options.onmapload(this);
 	}
 }
 

@@ -37,7 +37,7 @@ naissance.FeatureSketchMap.parseAction = async function (arg0_json) {
 				new_sketch_map.setID(json.create_sketch_map.id);
 			
 			if (!json.create_sketch_map.do_not_refresh)
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 		}
 	
 	//Parse commands for sketch_map_obj

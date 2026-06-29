@@ -480,6 +480,8 @@ global.path = require("path");
 			"UF/js/vercengen/components/ComponentScriptManager/blockly/blockly_toolbox.js",
 			"UF/js/vercengen/components/ComponentScriptManager/core",
 			"UF/js/vercengen/components/ComponentScriptManager/monaco/monaco_startup.js",
+			//ve.Wiki
+			"!UF/js/vercengen/components/ComponentWiki/wiki_preload.js",
 			
 			"UF/js/vercengen/features",
 			

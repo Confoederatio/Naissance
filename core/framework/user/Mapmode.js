@@ -127,6 +127,17 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 		//Declare local instance variables
 		let z_index_obj = naissance.Mapmode.getZIndexes();
 		
+		//Remove all_label_geometries attached to a mapmode
+		let all_label_geometries = main.layers.label_layer.getGeometries();
+		
+		//Iterate over all_label_geometries and check for .properties.is_mapmode
+		for (let i = 0; i < all_label_geometries.length; i++) {
+			let local_properties = all_label_geometries[i].getProperties();
+			
+			if (local_properties?.is_mapmode)
+				all_label_geometries[i].remove();
+		}
+		
 		//Iterate over all main.user.mapmodes in order and render them
 		for (let i = 0; i < main.user.mapmodes.length; i++) {
 			let local_mapmode;
@@ -156,7 +167,7 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 				
 				if (new_geometries !== undefined) {
 					local_mapmode.geometries = new_geometries;
-				} else {
+				} else if (new_geometries) {
 					console.warn(`naissance.Mapmode: ${local_mapmode.id}.special_function does not return a valid geometries array.`);
 				}
 				
@@ -166,7 +177,13 @@ naissance.Mapmode = class extends ve.Class { //[WIP] - Finish class body
 					
           local_geometry.config("interactive", !main.settings.disable_mapmode_interactivity);
 					local_geometry.remove();
-					local_geometry.addTo(local_mapmode_layer);
+					
+					if (!(local_geometry instanceof maptalks.Label)) {
+						local_geometry.addTo(local_mapmode_layer);
+					} else {
+						local_geometry.setProperties({ is_mapmode: true });
+						local_geometry.addTo(main.layers.label_layer);
+					}
 				}
 			}
 		}

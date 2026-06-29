@@ -1,6 +1,6 @@
 {
   "name": "naissance-hgis",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Historical GIS project for 3D map editing, geoprocessing, visualisation, and simulation over the long run.",
   "main": "main.js",
   "scripts": {
@@ -83,6 +83,7 @@
     "electron-icon-maker": "^0.0.5"
   },
   "dependencies": {
+    "@electron/remote": "^2.1.3",
     "acorn": "^5.0.3",
     "acorn-dynamic-import": "^2.0.2",
     "acorn-jsx-walk": "^1.0.1",

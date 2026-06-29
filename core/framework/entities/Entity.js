@@ -19,6 +19,12 @@ naissance.Entity = class extends ve.Class {
 		let hierarchy_obj = {};
 		let icon_style = "";
 		let symbol_obj = (naissance[this.class_name].hierarchy_symbol || {});
+		let show_features = true;
+		let show_geometries = true;
+			if (this.class_name === "FeatureLayer") {
+				if (!this.metadata.show_layer_features) show_features = false;
+				if (!this.metadata.show_layer_geometries) show_geometries = false;
+			}
 		
 		let symbol_name = (symbol_obj.name) ? symbol_obj.name : this.class_name;
 		
@@ -79,39 +85,40 @@ naissance.Entity = class extends ve.Class {
 					
 					//naissance.FeatureGroup, naissance.FeatureLayer handling
 					if (local_entity instanceof naissance.Feature && local_entity.drawHierarchyDatatype) {
-						hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype(options);
+						if (show_features)
+							hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype(options);
 					} else {
 						//naissance.Feature generic handling
-						if (options.hide_features) continue; //Internal guard clause if features are meant to be hidden
-						if (local_entity instanceof naissance.Feature) {
-							hierarchy_obj[local_key] = new ve.HierarchyDatatype({
-								icon: new ve.HTML(`<icon>inventory_2</icon>`, {
-									tooltip: local_entity.class_name } )
-							}, { instance: local_entity });
-						}
-						//naissance.Geometry generic handling
-						if (options.hide_geometries) continue; //Internal guard clause if geometries are meant to be hidden
-						if (local_entity instanceof naissance.Geometry) {
-							if (local_entity.drawHierarchyDatatype) {
-								hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
-							} else { //[WIP] - Implement naissance.Geometry.name accessor
+						if (show_features)
+							if (local_entity instanceof naissance.Feature) {
 								hierarchy_obj[local_key] = new ve.HierarchyDatatype({
-									icon: new ve.HTML(`<icon>shapes</icon>`, {
+									icon: new ve.HTML(`<icon>inventory_2</icon>`, {
 										tooltip: local_entity.class_name } )
-								}, {
-									instance: local_entity,
-									name: local_entity.name,
-									name_options: {
-										onprogramchange: () => {
-											this.drawHierarchyDatatype();
-										},
-										onuserchange: (v) => {
-											local_entity.name = v;
-										}
-									}
-								});
+								}, { instance: local_entity });
 							}
-						}
+						//naissance.Geometry generic handling
+						if (show_geometries)
+							if (local_entity instanceof naissance.Geometry) {
+								if (local_entity.drawHierarchyDatatype) {
+									hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype();
+								} else { //[WIP] - Implement naissance.Geometry.name accessor
+									hierarchy_obj[local_key] = new ve.HierarchyDatatype({
+										icon: new ve.HTML(`<icon>shapes</icon>`, {
+											tooltip: local_entity.class_name } )
+									}, {
+										instance: local_entity,
+										name: local_entity.name,
+										name_options: {
+											onprogramchange: () => {
+												this.drawHierarchyDatatype();
+											},
+											onuserchange: (v) => {
+												local_entity.name = v;
+											}
+										}
+									});
+								}
+							}
 					}
 				}
 		}
@@ -154,7 +161,7 @@ naissance.Entity = class extends ve.Class {
 			oncollapse: (v, e) => {
 				this.is_collapsed = v;
 				if (v === false)
-					UI_LeftbarHierarchy.refresh();
+					UI_Leftbar.refresh();
 			},
 			type: (!this.entities) ? "item" : "group"
 		});

@@ -439,12 +439,8 @@ naissance.History = class extends ve.Class {
 	
 	moveKeyframe (arg0_date, arg1_date) {
 		//Convert from parameters
-		let date = Date.convertTimestampToDate(arg0_date);
-		let ot_date = Date.convertTimestampToDate(arg1_date);
-		
-		//Declare local instance variables
-		let ot_timestamp = Date.getTimestamp(ot_date);
-		let timestamp = Date.getTimestamp(date);
+		let timestamp = Date.getTimestamp(arg0_date);
+		let ot_timestamp = Date.getTimestamp(arg1_date);
 		
 		//Internal guard clause if timestamps are the same
 		if (timestamp === ot_timestamp) return;
@@ -453,7 +449,7 @@ naissance.History = class extends ve.Class {
 		let keyframe_obj = this.keyframes[timestamp];
 		
 		if (keyframe_obj) {
-			keyframe_obj.date = ot_date;
+			keyframe_obj.date = Date.getDate(ot_timestamp);
 			keyframe_obj.timestamp = ot_timestamp;
 			this.keyframes[ot_timestamp] = this.keyframes[timestamp];
 			

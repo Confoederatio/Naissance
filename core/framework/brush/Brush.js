@@ -231,7 +231,7 @@ naissance.Brush = class extends ve.Class {
 		this._selected_feature = v;
 		if (old_selected_feature && old_selected_feature.draw) {
 			old_selected_feature.draw(); //Update draw
-			UI_LeftbarHierarchy.refresh();
+			UI_Leftbar.refresh();
 		}
 	}
 	

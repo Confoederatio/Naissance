@@ -1,7 +1,9 @@
 //Import modules
+const {ipcRenderer} = require("electron");
 global.child_process = require("child_process");
 global.cubic_spline = require("cubic-spline");
 global.electron = require("electron");
+global.electron_remote = require("@electron/remote");
 global.exec = require("child_process").exec;
 global.fs = require("fs");
 global.JSDOM = require("jsdom").JSDOM;
@@ -46,13 +48,18 @@ global.l4p = "./livemap/4.view/politics/";
 		
 		//Initialise global.scene
 		global.scene = new ve.Scene({
-			map_component: new ve.Map()
+			map_component: new ve.Map(undefined, {
+				onmapload: (v) => initialiseMap(v)
+			})
 		});
-			global.map = scene.map_component.map;
+  };
+	
+	global.initialiseMap = function () {
+		global.map = scene.map_component.map;
 		
-    //Declare global variables
+		//Declare global variables
 		global.main_navbar = new UI_Navbar();
-    global.main = {
+		global.main = {
 			hierarchy: {},
 			interfaces: {
 				//Leftbar
@@ -62,6 +69,7 @@ global.l4p = "./livemap/4.view/politics/";
 				edit_brush_keyframes: new UI_BrushKeyframes(),
 				edit_selected_geometries_ui: new UI_EditSelectedGeometries(),
 				mapmodes_ui: new UI_Mapmodes(),
+				wiki_ui: new UI_Wiki(),
 				
 				//Topbar
 				date_ui: new UI_DateMenu(),
@@ -69,7 +77,7 @@ global.l4p = "./livemap/4.view/politics/";
 			},
 			_layers: { //Layers which are not appended to the map but kept internally
 				province_layers: [], //Array of all current naissance.Layers that are flagged as 'provinces'
-				provinces: new maptalks.VectorLayer("province_layer", [], { hitDetect: true, interactive: false }) 
+				provinces: new maptalks.VectorLayer("province_layer", [], { hitDetect: true, interactive: false })
 			},
 			layers: {
 				//Foreground layers
@@ -84,9 +92,9 @@ global.l4p = "./livemap/4.view/politics/";
 					forceRenderOnRotating: true,
 					forceRenderOnZooming: true,
 					
-					hitDetect: false, 
-					interactive: false, 
-					zIndex: 6 
+					hitDetect: false,
+					interactive: false,
+					zIndex: 6
 				}),
 				selection_layer: new maptalks.VectorLayer("selection_layer", [], { hitDetect: false, interactive: false, zIndex: 5 }),
 				entity_layer: new maptalks.VectorLayer("entity_layer", [], {
@@ -103,14 +111,14 @@ global.l4p = "./livemap/4.view/politics/";
 				_mapmodes: {},
 				mapmodes: []
 			}
-    };
+		};
 		
 		if (!global.naissance) global.naissance = {};
-			main.map.settings = {
-				autoload_last_date: true
-			};
-			UI_Settings.loadSettings();
-			main.user.brush = new naissance.Brush();
+		main.map.settings = {
+			autoload_last_date: true
+		};
+		UI_Settings.loadSettings();
+		main.user.brush = new naissance.Brush();
 		
 		//1.1. Append all layers to map
 		Object.iterate(main.layers, (local_key, local_value) => local_value.addTo(map));
@@ -135,7 +143,7 @@ global.l4p = "./livemap/4.view/politics/";
 		
 		//3. Set datee
 		UI_DateMenu.setDate(Date.getCurrentDate());
-  };
+	};
 	
 	global.loadSettings = function () {
 		//Try to read from svea_settings.json if possible
@@ -185,6 +193,7 @@ global.l4p = "./livemap/4.view/politics/";
 			"core",
 			"core/framework/brush",
 			"core/framework/actions",
+			"!core/ui/rightbar/ui_wiki.css",
 			"histmap",
 			"livemap",
 		],

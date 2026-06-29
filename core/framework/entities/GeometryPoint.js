@@ -26,6 +26,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 		let derender_geometry = false;
 		
+		if (this.geometry) this.geometry.remove(); //Remove geometry to preserve flash behaviour
+		
 		//1. Set this.value from current relative keyframe
 		this.value = this.history.getKeyframe({
 			date: main.date,
@@ -59,16 +61,20 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
-					this.geometry.setSymbol({
-						...default_symbol,
-					});
-					if (this.value[1] && this.geometry) 
-						this.geometry.setSymbol({
-							...this.geometry.getSymbol(),
-							...this.value[1]
-						});
 					if (this._is_being_moved)
 						this.geometry.flash(250, 1000000);
+					
+					//Set symbol after flash
+					let symbol_obj = { ...default_symbol };
+					
+					if (this.value[1] && this.geometry) 
+						symbol_obj = {
+							...symbol_obj,
+							...this.geometry.getSymbol(),
+							...this.value[1]
+						}
+					
+					this.geometry.setSymbol(symbol_obj);
 					main.layers.entity_layer.addGeometry(this.geometry);
 				}
 				if (this.value[2] && !this.value[2]?.label_symbol?.hide) {
@@ -109,23 +115,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			} catch (e) { console.error(e); }
 		}
 		
-		//4. Draw this.selected_geometry
-		try {
-			this.selected_geometry = undefined;
-			
-			if (this.geometry && this.selected) {
-				this.selected_geometry = this.geometry.copy();
-				this.selected_geometry.setSymbol({
-					lineColor: `rgb(255, 255, 0)`,
-					lineDasharray : (main.brush.selected_geometry?.id !== this.id) ? [10, 10, 10] : undefined,
-					lineOpacity: 0.5,
-					lineWidth: 4
-				});
-				main.layers.selection_layer.addGeometry(this.selected_geometry);
-			}
-		} catch (e) { console.error(e); }
-		
-		//5. Add bindings
+		//4. Add bindings
 		if (this.geometry) {
 			this.history.draw(this.keyframes_ui);
 			
@@ -134,7 +124,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			});
 		}
 		
-		//6. Derender geometry handler
+		//5. Derender geometry handler
 		if (derender_geometry) {
 			if (this.geometry) this.geometry.remove();
 			if (this.label_geometries)

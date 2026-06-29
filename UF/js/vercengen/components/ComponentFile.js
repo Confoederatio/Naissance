@@ -10,7 +10,7 @@
  *   - `.do_not_display=false`: {@link boolean} - Whether to display the file name to the left of the select file prompt
  *   - `.is_folder=false`: {@link boolean} - Whether the input is asking for a folder.
  *   - `.multifile=false`: {@link boolean} - Whether the input can accept multiple files/folders.
- *   - `.save_function`: {@link function} - If set, the current component will be a save prompt.
+ *   - `.save_function`: {@link function} | {@link Object}|{@link string} - If set, the current component will be a save prompt.
  * 
  * ##### Instance:
  * - `.v`: {@link string}

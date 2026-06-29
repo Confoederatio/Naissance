@@ -39,7 +39,7 @@ global.UI_Leftbar = class extends ve.Class {
 							new UI_SystemManagerWindow();
 						}, {
 							name: `<icon>handyman</icon><span style = "padding-left: 0.25rem; padding-right: 0.5rem;">Advanced Tools</span>`,
-							tooltip: `Tools for modelling and extending Naissance, as well as a System Manager for tasks.`,
+							tooltip: `Advanced tools for modelling, scraping, and extending Naissance.`,
 							style: { "#name": { alignItems: "center", display: "flex" }, marginLeft: "0.25rem" }
 						})
 					}),
@@ -48,7 +48,7 @@ global.UI_Leftbar = class extends ve.Class {
 			},
 			timeline: {
 				name: "Timeline",
-				components_obj: {}
+				components_obj: { timeline: new UI_LeftbarTimeline().value }
 			},
 			undo_redo: {
 				name: "Undo/Redo",
@@ -94,5 +94,11 @@ global.UI_Leftbar = class extends ve.Class {
 			x: 8,
 			y: ((navbar_el) ? navbar_el.offsetHeight : 0) + 8
 		});
+	}
+	
+	static refresh () {
+		//Draw instantiated components
+		UI_LeftbarHierarchy.refresh();
+		UI_LeftbarTimeline.refresh();
 	}
 };

@@ -175,7 +175,7 @@ global.UI_LeftbarHierarchy = class {
 			onprogramchange: (v, e) => {
 				if (v === "") {
 					delete UI_LeftbarHierarchy.do_not_refresh;
-					UI_LeftbarHierarchy.refresh();
+					UI_Leftbar.refresh();
 				} else {
 					this.hierarchy.element.prepend(e.element);
 				}
@@ -197,7 +197,7 @@ global.UI_LeftbarHierarchy = class {
 		
 		if (value.length === 0) {
 			delete UI_LeftbarHierarchy.do_not_refresh;
-			UI_LeftbarHierarchy.refresh();
+			UI_Leftbar.refresh();
 		} else {
 			let checkEntity = (local_entity) => {
 				//Declare local instance variables

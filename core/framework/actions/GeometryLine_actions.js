@@ -15,6 +15,7 @@ if (!global.naissance) global.naissance = {};
  *   - `.name`: {@link string}
  * - #### Internal Commands:
  *   - `.add_to_line`: {@link Object}
+ *     - `.date=main.date`: {@link Object}
  *     - `.geometry`: {@link string}
  *   - `.remove_from_line`: {@link number} - The index of the multiline to remove.
  */
@@ -39,13 +40,14 @@ naissance.GeometryLine.parseAction = async function (arg0_json) {
 			}
 			if (main.brush.selected_feature)
 				if (!json.create_line.do_not_refresh)
-					UI_LeftbarHierarchy.refresh();
+					UI_Leftbar.refresh();
 		}
 	
 	//Parse commands for line_obj
 	if (line_obj && line_obj instanceof naissance.GeometryLine) {
 		//add_to_line
 		if (json.add_to_line !== undefined) {
+			let date = (json.add_to_line.date) ? json.add_to_line.date : main.date;
 			let geometry = line_obj.geometry;
 			let ot_geometry = maptalks.Geometry.fromJSON(json.add_to_line.geometry);
 			
@@ -56,9 +58,9 @@ naissance.GeometryLine.parseAction = async function (arg0_json) {
 				let maptalks_line_obj = new maptalks.MultiLineString();
 				maptalks_line_obj.setGeometries(all_geometries.concat(all_ot_geometries));
 				
-				line_obj.addKeyframe(main.date, maptalks_line_obj.toJSON());
+				line_obj.addKeyframe(date, maptalks_line_obj.toJSON());
 			} else {
-				line_obj.addKeyframe(main.date, ot_geometry.toJSON());
+				line_obj.addKeyframe(date, ot_geometry.toJSON());
 			}
 		}
 		

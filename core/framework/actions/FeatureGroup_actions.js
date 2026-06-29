@@ -26,6 +26,6 @@ naissance.FeatureGroup.parseAction = async function (arg0_json) {
 				new_group.setID(json.create_group.id);
 			
 			if (!json.create_group.do_not_refresh)
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 		}
 };

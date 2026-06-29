@@ -111,7 +111,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 						if (!this.metadata) this.metadata = {};
 						this.metadata.show_layer_features = true;
 					}
-					UI_LeftbarHierarchy.refresh();
+					UI_Leftbar.refresh();
 				}
 			}),
 			show_geometries: veToggle(this.metadata?.show_layer_geometries, {
@@ -122,12 +122,12 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					let showLayerGeometries = () => {
 						if (!this.metadata) this.metadata = {};
 						this.metadata.show_layer_geometries = true;
-						UI_LeftbarHierarchy.refresh();
+						UI_Leftbar.refresh();
 					};
 					
 					if (v === false) {
 						if (this.metadata) delete this.metadata.show_layer_geometries;
-						UI_LeftbarHierarchy.refresh();
+						UI_Leftbar.refresh();
 					} else {
 						if (all_geometries.length > max_recommended) {
 							veConfirm(`This Layer contains ${String.formatNumber(all_geometries.length)} geometries. Are you sure you want to view its scene tree? (Recommended: ${String.formatNumber(max_recommended)})`, {

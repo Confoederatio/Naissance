@@ -417,6 +417,83 @@ naissance.Feature = class extends naissance.Entity {
 						}, { name: "Confirm" })
 					}, { name: `Clean ${options.name} Keyframes`, can_rename: false });
 				}, { name: `Clean ${options.name} Keyframes` }),
+				feature_operation: veButton(() => {
+					let operation_names = {
+						difference: { name: "Difference" },
+						intersect: { name: "Intersect" },
+						union: { name: "Union" },
+						xor: { name: "XOR" }
+					};
+					let operation_target = () => (this.ui.feature_operation_target || "geometry");
+					let operation_type = () => (this.ui.feature_operation_type || "union");
+					
+					if (this.feature_operation_window) this.feature_operation_window.close();
+					
+					this.feature_operation_window = veWindow({
+						feature_operation_target: veSelect({
+							feature: { name: "Feature" },
+							geometry: { name: "Geometry" }
+						}, {
+							name: "Merge With Entity Type",
+							selected: operation_target(),
+							onuserchange: (v) => this.ui.feature_operation_target = v
+						}),
+						feature_operation_geometry: new UI_GeometryDatalist(this.ui.feature_operation_geometry, {
+							name: "Geometry",
+							filter_types: ["GeometryPolygon"],
+							limit: () => {
+								let target = operation_target();
+								if (target === "geometry") return true;
+								return false;
+							},
+							onuserchange: (v) => this.ui.feature_operation_geometry = v
+						}),
+						feature_operation_feature: new UI_FeatureDatalist(this.ui.feature_operation_feature, {
+							name: "Feature",
+							filter_types: ["FeatureGroup", "FeatureLayer"],
+							limit: () => {
+								let target = operation_target();
+								if (target === "feature") return true;
+								return false;
+							},
+							onuserchange: (v) => this.ui.feature_operation_feature = v
+						}),
+						operation_type: veSelect(operation_names, {
+							name: "Operation Type",
+							selected: operation_type(),
+							onuserchange: (v) => this.ui.feature_operation_type = v
+						}),
+						confirm: veButton(() => {
+							//Declare local instance variables
+							let feature_operation_type = operation_type();
+							let target = operation_target();
+							let target_geometry_id = (target === "geometry") ? this.ui.feature_operation_geometry : undefined;
+							let target_feature_id = (target === "feature") ? this.ui.feature_operation_feature : undefined;
+							
+							//Run feature operation
+							DALS.Timeline.parseAction("feature_operation", {
+								feature_obj: this.id,
+								feature_operation: {
+									type: feature_operation_type,
+									feature_id: target_feature_id,
+									geometry_id: target_geometry_id,
+								}
+							});
+							
+							let ot_name;
+							if (target_geometry_id) ot_name = naissance.Geometry.instances[target_geometry_id]?.name;
+							if (target_feature_id) ot_name = naissance.Feature.instances[target_feature_id]?.name;
+							
+							veToast(`Performed ${operation_names[feature_operation_type].name} on ${this.name} using ${ot_name}.`);
+						}, { name: "Confirm" })
+					}, {
+						name:`Feature Operation (${this.name})`,
+						can_rename: false,
+						width: "20rem"
+					});
+				}, {
+					name: "Feature Operation"
+				}),
 				flatten_all_geometries: veButton(() => {
 					veConfirm(`Are you sure you want to flatten all geometries in ${this.name}?`, {
 						special_function: () => {
@@ -536,6 +613,46 @@ naissance.Feature = class extends naissance.Entity {
 						}, { name: "Confirm" })
 					}, { name: "Move Entities To", can_rename: false })
 				}, { name: `Move Entities To ${options.name}` }),
+				set_zoom_visibility: veButton(() => {
+					if (this.set_zoom_window) this.set_zoom_window.close();
+					this.set_zoom_window = veWindow({
+						information: veHTML(`To remove the zoom attribute, type -1 as the value instead.`),
+						
+						min_zoom: veNumber(this.ui.set_zoom_min, {
+							name: "Minimum Zoom Level",
+							onuserchange: (v) => this.ui.set_zoom_min = v
+						}),
+						max_zoom: veNumber(this.ui.set_zoom_max, {
+							name: "Maximum Zoom Level",
+							onuserchange: (v) => this.ui.set_zoom_max = v
+						}),
+						is_start_keyframe: veToggle(this.ui.set_zoom_is_start, {
+							name: "Modify Zoom at Starting Keyframe",
+							onuserchange: (v) => this.ui.set_zoom_is_start = v
+						}),
+						
+						confirm: veButton(() => {
+							let current_min = (this.ui.set_zoom_min !== undefined) ? this.ui.set_zoom_min : -1;
+							let current_max = (this.ui.set_zoom_max !== undefined) ? this.ui.set_zoom_max : -1;
+							
+							DALS.Timeline.parseAction("set_zoom", [{
+								feature_obj: this.id,
+								set_zoom: {
+									is_start_keyframe: (this.ui.set_zoom_is_start),
+									max_zoom: (current_max === -1) ? "delete" : current_max,
+									min_zoom: (current_min === -1) ? "delete" : current_min
+								}
+							}]);
+							
+							veToast(`Successfully updated zoom visibility for ${this.name}.`);
+							this.set_zoom_window.close();
+						}, { name: "Confirm" })
+					}, {
+						name: `Set Zoom (${this.name})`,
+						can_rename: false,
+						width: "20rem"
+					});
+				}, { name: "Set Zoom Visibility" }),
 				simplify_polygons: veButton(() => {
 					if (this.simplify_polygons_window) this.simplify_polygons_window.close();
 					this.simplify_polygons_window = veWindow({
@@ -925,6 +1042,29 @@ naissance.Feature = class extends naissance.Entity {
 		return all_timestamps.sort((a, b) => a - b);
 	}
 	
+	getTurfGeometry () {
+		//Declare local instance variables
+		let all_geometries = this.getAllGeometries();
+		let turf_geometry;
+		
+		//Iterate over all_geometries to fetch turf_geometry
+		for (let i = 0; i < all_geometries.length; i++)
+			if (all_geometries[i] instanceof naissance.GeometryPolygon)
+				if (all_geometries[i].geometry) {
+					let local_geometry = all_geometries[i].geometry;
+					let local_turf_geometry = Geospatiale.convertMaptalksToTurf(local_geometry);
+					
+					if (!turf_geometry) {
+						turf_geometry = local_turf_geometry;
+					} else {
+						turf_geometry = turf.union(turf.featureCollection([turf_geometry, local_turf_geometry]));
+					}
+				}
+		
+		//Return statement
+		return turf_geometry;
+	}
+	
 	hide () {
 		//Declare local instance variables
 		this._is_visible = false;
@@ -959,8 +1099,16 @@ naissance.Feature = class extends naissance.Entity {
 				tooltip: "Show Feature"
 			}),
 			delete_button: veButton(() => {
-				DALS.Timeline.parseAction("delete_feature", [{ feature_obj: this.id, delete_feature: true }]);
-				super.close("instance");
+				veConfirm(`Are you sure you want to delete ${this.name}?`, {
+					special_function: () => {
+						//Declare local instance variables
+						let old_name = this.name;
+						
+						super.close("instance");
+						DALS.Timeline.parseAction("delete_feature", [{ feature_obj: this.id, delete_feature: true }]);
+						veToast(`Deleted ${old_name}.`);
+					}
+				});
 			}, {
 				attributes: { class: "order-100 onhover-visible" },
 				name: "<icon>delete</icon>",
@@ -1010,7 +1158,7 @@ naissance.Feature = class extends naissance.Entity {
 		
 		//Rerender deleted feature and remove it from the map
 		if (this.draw) this.draw();
-		UI_LeftbarHierarchy.refresh();
+		UI_Leftbar.refresh();
 	}
 	
 	setID (arg0_id) {

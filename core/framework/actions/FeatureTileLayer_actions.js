@@ -32,7 +32,7 @@ naissance.FeatureTileLayer.parseAction = async function (arg0_json) {
 				new_tile_layer.setID(json.create_tile_layer.id);
 			
 			if (!json.create_tile_layer.do_not_refresh)
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 		}
 	
 	//Parse commands for tile_layer_obj
@@ -58,7 +58,7 @@ naissance.FeatureTileLayer.parseAction = async function (arg0_json) {
 			map.removeBaseLayer();
 			map.setBaseLayer(tile_layer_obj.layer);
 			tile_layer_obj.is_base_layer = true;
-			UI_LeftbarHierarchy.refresh();
+			UI_Leftbar.refresh();
 		}
 		
 		//set_options

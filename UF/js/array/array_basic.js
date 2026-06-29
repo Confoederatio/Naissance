@@ -374,6 +374,24 @@
 	};
 	
 	/**
+	 * Creates a unique array and returns it, using strict equality. For loose equality, see {@link Array.unique}.
+	 * @alias Array.strictUnique
+	 * 
+	 * @param {any[]} arg0_array
+	 * @param {any[]} arg1_array
+	 * 
+	 * @returns {any[]}
+	 */
+	Array.strictUnique = function (arg0_array, arg1_array) {
+		//Convert from parameters
+		let array = arg0_array;
+		let ot_array = arg1_array;
+		
+		//Return statement
+		return [...new Set([...array, ...ot_array])];
+	};
+	
+	/**
 	 * Returns a list/{@link Array} from a given input value.
 	 * @alias Array.toArray
 	 *

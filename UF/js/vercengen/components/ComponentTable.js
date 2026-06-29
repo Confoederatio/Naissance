@@ -13,9 +13,12 @@
  *   - `.non_sortable_columns`: {@link number} - The indices that shouldn't be sortable.
  *   - `.ondraw`: {@link function}(v:{@link ve.Table})
  *   - `.oncellclick`: {@link function}(v:{@link Array}<{@link any}>, e:{@link Event})
+ *   - `.oncellrightclick`: {@link function}(v:{@link Array}<{@link any}>, e:{@link Event})
  *   - `.onrowclick`: {@link function}(v:{@link any}, e:{@link Event})
+ *   - `.onrowrightclick`: {@link function}(v:{@link any}, e:{@link Event})
  *   - `.page_sizes=ve.registry.settings.Table.page_sizes`: {@link number[]} - Set by default to [10, 20, 50, 100].
  *   - `.page_size=50`: {@link number}
+ *   - `.retain=false`: {@link boolean}
  *   - `.sortable=true`: {@link boolean}
  *   - `.sort_ascending=true`: {@link boolean}
  *   - `.sort_column`: {@link number} - Which column should have its sort indicator active. 0-indexed.
@@ -29,6 +32,8 @@
  * - <span color=00ffff>{@link ve.Table.convertToTable|convertToTable}</span>() | {@link ve.Table}
  * - <span color=00ffff>{@link ve.Table.draw|draw}</span>()
  * - <span color=00ffff>{@link ve.Table.drawPages|drawPages}</span>()
+ * - <span color=00ffff>{@link ve.Table.getPageFromIndex|getPageFromIndex}</span>(arg0_index:{@link number})
+ * - <span color=00ffff>{@link ve.Table.jumpToIndex|jumpToIndex}</span>(arg0_index:{@link number})
  * - <span color=00ffff>{@link ve.Table.sort|sort}<span>(arg0_index:{@link number})
  * 
  * @augments ve.Component
@@ -58,7 +63,7 @@ ve.Table = class extends ve.Component {
     options.hide_columns = (options.hide_columns) ? options.hide_columns : [];
 		options.non_sortable_columns = (options.non_sortable_columns) ? options.non_sortable_columns : [];
 		options.page_size = Math.returnSafeNumber(options.page_size, 50);
-		options.page_sizes = ve.registry.settings.Table.page_sizes;
+		options.page_sizes = (options.page_sizes) ? options.page_sizes : ve.registry.settings.Table.page_sizes;
 		options.sortable = (options.sortable !== undefined) ? options.sortable : true;
 		options.sort_ascending = (options.sort_ascending !== undefined) ? 
 			options.sort_ascending : true;
@@ -113,9 +118,11 @@ ve.Table = class extends ve.Component {
 			//First row is headers, remaining are data
 			[this._headers, ...this._rows] = value;
 		}
-		this.current_page = 0;
-		this.options.sort_column = null;
-		this.draw();
+		if (!this.options.retain) {
+			this.current_page = 0;
+			this.options.sort_column = null;
+		}
+		if (!this.do_not_draw) this.draw();
 	}
 	
 	/**
@@ -251,9 +258,10 @@ ve.Table = class extends ve.Component {
 					
 				//oncellclick handler
 				if (this.options.oncellclick)
-					local_td_el.addEventListener("click", (e) => {
-						this.options.oncellclick(cell_data, e);
-					});
+					local_td_el.addEventListener("click", (e) => this.options.oncellclick(cell_data, e));
+				//oncellrightclick handler
+				if (this.options.oncellrightclick)
+					local_tr_el.addEventListener("contextmenu", (e) => this.options.oncellrightclick(row_data, e));
 				
 				//Push row
 				local_tr_el.appendChild(local_td_el);
@@ -261,9 +269,11 @@ ve.Table = class extends ve.Component {
 			
 			//onrowclick handler
 			if (this.options.onrowclick)
-				local_tr_el.addEventListener("click", (e) => {
-					this.options.onrowclick(row_data, e);
-				});
+				local_tr_el.addEventListener("click", (e) => this.options.onrowclick(row_data, e));
+			
+			//onrowrightclick handler
+			if (this.options.onrowrightclick)
+				local_tr_el.addEventListener("contextmenu", (e) => this.options.onrowrightclick(row_data, e));
 			
 			tbody_el.appendChild(local_tr_el);
 		});
@@ -366,6 +376,19 @@ ve.Table = class extends ve.Component {
 	}
 	
 	/**
+	 * Returns the page a given row index is on.
+	 * - Method of: {@link ve.Table}
+	 * 
+	 * @param {number} arg0_row_index
+	 * 
+	 * @returns {number}
+	 */
+	getPageFromIndex (arg0_row_index) {
+		//Return statement
+		return Math.floor((Math.returnSafeNumber(arg0_row_index) - 1)/this.options.page_size);
+	}
+	
+	/**
 	 * Returns the current view state of the component.
 	 * - Method of: {@link ve.Table}
 	 * 
@@ -383,6 +406,21 @@ ve.Table = class extends ve.Component {
 			sort_ascending: this.options.sort_ascending,
 			sort_column: this.options.sort_column
 		};
+	}
+	
+	/**
+	 * Navigates to the page containing the specified row index and draws it.
+	 * - Method of: {@link ve.Table}
+	 * 
+	 * @param {number} arg0_index
+	 */
+	jumpToIndex (arg0_index) {
+		//Convert from parameters
+		let target_page = this.getPageFromIndex(arg0_index);
+		
+		//Declare local instance variables; refresh displkay
+		this.current_page = target_page;
+		this.draw();
 	}
 
   /**
@@ -447,7 +485,7 @@ ve.Table = class extends ve.Component {
 		if (view_obj.current_page !== undefined) this.current_page = view_obj.current_page;
     if (view_obj.hide_columns !== undefined) this.options.hide_columns = view_obj.hide_columns;
 		if (view_obj.items_per_page !== undefined) this.options.page_size = view_obj.items_per_page;
-		if (view_obj.sort_column !== undefined) {
+		if (typeof view_obj.sort_column === "number") {
 			if (view_obj.sort_ascending !== undefined) this.options.sort_ascending = view_obj.sort_ascending;
 			this.sort(view_obj.sort_column, { do_not_change_sort_order: true });
 		} else {

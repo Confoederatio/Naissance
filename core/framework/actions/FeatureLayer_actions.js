@@ -35,7 +35,7 @@ naissance.FeatureLayer.parseAction = async function (arg0_json) {
 			new_layer.setID(json.create_layer.id);
 			
 			if (!json.create_layer.do_not_refresh)
-				UI_LeftbarHierarchy.refresh();
+				UI_Leftbar.refresh();
 		}
 	
 	//Parse commands for layer_obj

@@ -3,11 +3,12 @@ let { app, BrowserWindow, dialog, ipcMain, session, shell } = require("electron"
 let fs = require("fs");
 let path = require("path");
 let readline = require("readline");
+let remote_main = require("@electron/remote/main");
 let { performance } = require("perf_hooks");
 
 //Metadata - Title
 let latest_fps = 0;
-let naissance_version = "1.9b California";
+let naissance_version = "1.91 Leyte";
 let title_update_interval;
 let win;
 
@@ -22,16 +23,15 @@ let win;
         contextIsolation: false,
         enableRemoteModule: false,
         nodeIntegration: true,
-        webSecurity: false
+        webSecurity: false,
+        webviewTag: true
       },
       
       icon: path.join(process.cwd(), `gfx/logo.png`)
     });
     
     //Load file; open Inspect Element
-    //win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
-    
     win.loadFile("index.html");
     
     //Listen for FPS updates from the renderer process
@@ -41,14 +41,25 @@ let win;
     
     //Update the title every second with the latest data
     title_update_interval = setInterval(function () {
-      let memory_usage = process.memoryUsage();
+      let is_destroyed = !win || win.isDestroyed();
+      if (is_destroyed) {
+        clearInterval(title_update_interval);
+        return;
+      }
       
+      let memory_usage = process.memoryUsage();
       let heap_used_mb = (memory_usage.heapUsed/1024/1024).toFixed(2);
       let rss_mb = (memory_usage.rss/1024/1024).toFixed(2);
-      let title_string = `Naissance HGIS ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
+      let title_string = `Naissance ${naissance_version} - FPS: ${latest_fps} | RAM: RSS ${rss_mb}MB/Heap ${heap_used_mb}MB`;
       
       win.setTitle(title_string);
     }, 1000);
+    
+    //Clean up memory and intervals on close
+    win.on("closed", function () {
+      clearInterval(title_update_interval);
+      win = null;
+    });
     
     //<a href> handling
     //Intercept link clicks that would navigate the current window
@@ -83,24 +94,43 @@ let win;
     } catch (e) {
       console.warn(e);
     }
+    
+    //Return statement
+    return win;
   }
 }
 
 //App handling
 {
+  app.commandLine.appendSwitch("disable-site-isolation-trials");
   app.commandLine.appendSwitch("enable-features", "SharedArrayBuffer");
   app.commandLine.appendSwitch('js-flags', '--max-old-space-size=32128 --expose-gc');
   
   //Launch app when ready
   app.whenReady().then(() => {
+    remote_main.initialize();
+    
     //Create the window and instantiate it
-    createWindow();
+    let win = createWindow();
+    remote_main.enable(win.webContents);
     
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
     app.on("ready", () => {
       Menu.setApplicationMenu(null);
+    });
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      if (details.responseHeaders['Access-Control-Allow-Origin']) {
+        // Force the header to be a single value (*) to satisfy Chromium
+        details.responseHeaders['Access-Control-Allow-Origin'] = ['*'];
+      }
+      
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+        }
+      });
     });
   });
   

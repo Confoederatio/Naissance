@@ -52,7 +52,7 @@ naissance.GeometryPolygon.parseAction = async function (arg0_json) {
 			}
 			if (main.brush.selected_feature)
 				if (!json.create_polygon.do_not_refresh)
-					UI_LeftbarHierarchy.refresh();
+					UI_Leftbar.refresh();
 		}
 	
 	//Parse commands for polygon_obj
