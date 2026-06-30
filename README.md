@@ -1,5 +1,7 @@
-# Naissance HGIS
-
+<div align = "center">
+  <img src = "https://i.postimg.cc/W47txMqX/naissance-logo-square.png" height = "64"> <img src = "https://i.postimg.cc/0NCrhpK4/naissance-logo.png" height = "64">
+</div>
+<br>
 <table>
   <tr>
     <td width = "50%" valign = "top">
@@ -23,9 +25,14 @@
   </tr>
 </table>
 
+<div align = "left">
 <img src = "https://i.postimg.cc/3ND2B1zL/crd-coat-of-arms-logo.png" height = "48"> <img src = "https://i.postimg.cc/ZZk34WkC/vercengen-logo.png" height = "48">
+</div>
+<div align = "left">
 
 [![Join our community!](https://img.shields.io/discord/548994743925997570?label=Discord&style=for-the-badge)](https://discord.gg/89kQY2KFQz) ![](https://img.shields.io/github/languages/code-size/Confoederatio/Naissance?style=for-the-badge)
+
+</div>
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
 - Documentation (Naissance): [confoederatiodocs.info](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance/Naissance)
