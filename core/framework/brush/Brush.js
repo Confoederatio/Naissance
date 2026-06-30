@@ -268,7 +268,12 @@ naissance.Brush = class extends ve.Class {
 			all_geometries.push(geometry);
 			
 			let maptalks_line_obj = new maptalks.MultiLineString();
-				maptalks_line_obj.setGeometries(all_geometries);
+				try {
+					console.log(all_geometries);
+					maptalks_line_obj.setGeometries(all_geometries);	
+				} catch (e) {
+					console.error(`The following geometries were invalid:`, all_geometries);
+				}
 			
 			//Return statement
 			return maptalks_line_obj;

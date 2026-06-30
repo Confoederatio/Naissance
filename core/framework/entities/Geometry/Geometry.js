@@ -228,6 +228,7 @@ naissance.Geometry = class extends naissance.Entity {
 				}, { name: "Debug Geometry" }),
 				geometry_operation: veButton(() => {
 					let operation_names = {
+						buffer: { name: "Buffer" },
 						difference: { name: "Difference" },
 						intersect: { name: "Intersect" },
 						union: { name: "Union" },
@@ -272,12 +273,31 @@ naissance.Geometry = class extends naissance.Entity {
 							selected: operation_type(),
 							onuserchange: (v) => this.ui.geometry_operation_type = v
 						}),
+						
+						buffer_distance: veNumber(this.ui.geometry_operation_buffer_distance, {
+							name: "Buffer Distance",
+							limit: () => operation_type() === "buffer",
+							onuserchange: (v) => this.ui.geometry_operation_buffer_distance = v
+						}),
+						
 						confirm: veButton(() => {
 							//Declare local instance variables
 							let geometry_operation_type = operation_type();
+							let options = {};
 							let target = operation_target();
 							let target_geometry_id = (target === "geometry") ? this.ui.geometry_operation_geometry : undefined;
 							let target_feature_id = (target === "feature") ? this.ui.geometry_operation_feature : undefined;
+							
+							//Buffer handling
+							let buffer_distance = Math.returnSafeNumber(this.ui.geometry_operation_buffer_distance, 0);
+							if (geometry_operation_type === "buffer") {
+								if (buffer_distance === 0) {
+									veToast(`<icon>warning</icon> Buffer distance must not be 0.`);
+									return;
+								}
+								
+								options.distance = buffer_distance;
+							}
 							
 							//Run feature operation
 							DALS.Timeline.parseAction("geometry_operation", {
@@ -286,6 +306,7 @@ naissance.Geometry = class extends naissance.Entity {
 									type: geometry_operation_type,
 									feature_id: target_feature_id,
 									geometry_id: target_geometry_id,
+									options: options
 								}
 							});
 							
@@ -973,9 +994,9 @@ naissance.Geometry = class extends naissance.Entity {
 						this.geometry.getLength()/1000 : 0;
 					return `${format_string} | Length: ${String.formatNumber(length_km)}km`;
 				} else if (this.class_name === "GeometryPoint") {
-					let coordinates = (this.geometry && this.isOpen("instance")) ?
-						this.geometry.getCoordinates().toJSON() : { x: 0, y: 0 }
-					return `${format_string} | X: ${String.formatNumber(coordinates.x, 4)}, Y: ${String.formatNumber(coordinates.y, 4)}`;
+					let coords = this.geometry.getCoordinates();
+					
+					return `${format_string} | ${String.truncate(String.formatMaptalksCoords(coords), 40)} (${String.formatNumber(coords.length)} total)`;
 				}
 					
 			}),

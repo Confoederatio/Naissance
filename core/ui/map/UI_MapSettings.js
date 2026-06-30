@@ -77,17 +77,26 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 				projection: {
 					code: "proj4-custom",
 					project: (c) => {
-						if (!Array.isArray(c.toArray())) return new maptalks.Coordinate([0, 0]);
 						let pc = proj4js_transform.forward(c.toArray());
 						
 						//If projection returns invalid or NaN, return neutral coords
-						if (!pc || isNaN(pc[0]) || isNaN(pc[1])) pc = [0, 0];
+						if (!pc || isNaN(pc[0]) || isNaN(pc[1]))
+							pc = (window.last_coord) ? window.last_coord : [0, 0];
+						
+						//Return statement
+						window.last_coord = pc;
 						return new maptalks.Coordinate(pc);
 					},
 					unproject: (pc) => {
-						if (!Array.isArray(pc.toArray())) return new maptalks.Coordinate([0, 0]);
+						if (!Array.isArray(Array.toArray(pc)))
+							return new maptalks.Coordinate([0, 0]);
 						let result = proj4js_transform.inverse(pc.toArray());
-						if (!result || isNaN(result[0]) || isNaN(result[1])) result = [0, 0];
+						
+						if (!result || isNaN(result[0]) || isNaN(result[1]))
+							result = (window.last_coord) ? window.last_coord : [0, 0];
+						
+						//Return statement
+						window.last_coord = result;
 						return new maptalks.Coordinate(result);
 					},
 					measure: "EPSG:4326"

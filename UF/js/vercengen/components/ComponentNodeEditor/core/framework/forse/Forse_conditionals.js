@@ -12,7 +12,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -35,7 +35,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -58,7 +58,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -81,7 +81,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -104,7 +104,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -127,7 +127,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -150,7 +150,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -173,7 +173,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -195,7 +195,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "boolean"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_boolean) => {
+		special_function: function (arg0_boolean) {
 			//Convert from parameters
 			let boolean = arg0_boolean;
 			
@@ -211,7 +211,7 @@ ve.NodeEditor.Forse.conditionals = {
 		name: loc("ve.registry.localisation.Forse_node_false"),
 		category: loc("ve.registry.localisation.Forse_category_conditionals"),
 		output_type: "boolean",
-		special_function: () => {
+		special_function: function () {
 			//Return statement
 			return {
 				display_value: loc("ve.registry.localisation.Forse_value_false"),
@@ -223,7 +223,7 @@ ve.NodeEditor.Forse.conditionals = {
 		name: loc("ve.registry.localisation.Forse_node_true"),
 		category: loc("ve.registry.localisation.Forse_category_conditionals"),
 		output_type: "boolean",
-		special_function: () => {
+		special_function: function () {
 			//Return statement
 			return {
 				display_value: loc("ve.registry.localisation.Forse_value_true"),
@@ -235,7 +235,7 @@ ve.NodeEditor.Forse.conditionals = {
 		name: loc("ve.registry.localisation.Forse_node_null"),
 		category: loc("ve.registry.localisation.Forse_category_conditionals"),
 		output_type: "any",
-		special_function: () => {
+		special_function: function () {
 			//Return statement
 			return {
 				display_value: loc("ve.registry.localisation.Forse_value_null"),
@@ -247,7 +247,7 @@ ve.NodeEditor.Forse.conditionals = {
 		name: loc("ve.registry.localisation.Forse_node_undefined"),
 		category: loc("ve.registry.localisation.Forse_category_conditionals"),
 		output_type: "any",
-		special_function: () => {
+		special_function: function () {
 			//Return statement
 			return {
 				display_value: loc("ve.registry.localisation.Forse_value_undefined"),
@@ -268,7 +268,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -288,7 +288,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable) => {
+		special_function: function (arg0_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			
@@ -310,7 +310,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;
@@ -333,7 +333,7 @@ ve.NodeEditor.Forse.conditionals = {
 			type: "any"
 		}],
 		output_type: "boolean",
-		special_function: (arg0_variable, arg1_variable) => {
+		special_function: function (arg0_variable, arg1_variable) {
 			//Convert from parameters
 			let variable = arg0_variable;
 			let ot_variable = arg1_variable;

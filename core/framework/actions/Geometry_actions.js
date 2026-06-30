@@ -11,10 +11,13 @@ if (!global.naissance) global.naissance = {};
  * - `.clean_keyframes`: {@link Array}<{@link string}> - Arguments: ["symbol"]. Whether to clean keyframes, including the default `main.brush.getBrushSymbol()` (if symbol is enabled), as well as any duplicates.
  * - `.delete_geometry`: {@link boolean}
  * - `.geometry_operation`: {@link Object}
- *   - `.type`: {@link string} - Either 'difference'/'intersect'/'union'/'xor'.
+ *   - `.type`: {@link string} - Either 'buffer'/'difference'/'intersect'/'union'/'xor'.
  *   -
  *   - `.feature_id`: {@link string}
  *   - `.geometry_id`: {@link string}
+ *   
+ *   - Special options ('buffer')
+ *     - `.distance`: {@link number} - The number of kilometres to buffer by.
  * - `.merge_geometry`: {@link string} - Merges a geometry with the target geometry ID.
  * - `.move_keyframe`: {@link number}
  *   - `.date`: {@link Object} - The date of the keyframe to move.
@@ -143,7 +146,8 @@ naissance.Geometry.parseAction = async function (arg0_json) { //[WIP] - Add vari
 		if (json.geometry_operation) {
 			let maptalks_geometry = naissance.Geometry.operate.call(geometry_obj, 
 				json.geometry_operation.type, 
-				(json.geometry_operation.feature_id) ? json.geometry_operation.feature_id : json.geometry_operation.geometry_id);
+				(json.geometry_operation.feature_id) ? json.geometry_operation.feature_id : json.geometry_operation.geometry_id,
+				json.geometry_operation.options);
 			maptalks_geometry = (maptalks_geometry === null) ? null : maptalks_geometry.toJSON();
 			geometry_obj.history.addKeyframe(main.date, maptalks_geometry);
 		}

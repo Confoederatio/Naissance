@@ -1,7 +1,8 @@
-naissance.Geometry.operate = function (arg0_type, arg1_entity_id) {
+naissance.Geometry.operate = function (arg0_type, arg1_entity_id, arg2_options) {
 	//Convert from parameters
 	let type = (arg0_type) ? arg0_type : "union";
 	let entity_id = arg1_entity_id;
+	let options = (arg2_options) ? arg2_options : {};
 	
 	//Declare local instance variables
 	let ot_turf_geometry;
@@ -22,7 +23,9 @@ naissance.Geometry.operate = function (arg0_type, arg1_entity_id) {
 	}
 	
 	if (ot_turf_geometry)
-		if (type === "difference") {
+		if (type === "buffer") {
+			turf_geometry = turf.buffer(ot_turf_geometry, options.distance, { units: "kilometers" });
+		} else if (type === "difference") {
 			if (turf_geometry) {
 				turf_geometry = turf.difference(turf.featureCollection([turf_geometry, ot_turf_geometry]));
 			} else {

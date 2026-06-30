@@ -20,10 +20,54 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		this.updateOwner();
 	}
 	
+	_drawLabels () {
+		//Declare local instance variables
+		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
+		
+		if (this.value[2] && !this.value[2]?.label_symbol?.hide) {
+			//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
+			if (this.geometry) {
+				let label_geometries = (this.value[2].label_geometries) ?
+					this.value[2].label_geometries : [];
+				let label_name = (this.value[2].label_name) ?
+					this.value[2].label_name : this.value[2].name;
+				if (!label_name) return;
+				
+				//1. .label_coordinates
+				if (label_geometries.length === 0) {
+					let all_coordinates = this.geometry.getCoordinates();
+					
+					for (let i = 0; i < all_coordinates.length; i++)
+						this.label_geometries[i] = new maptalks.Marker(all_coordinates[i]);
+				} else {
+					for (let i = 0; i < label_geometries.length; i++)
+						this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
+				}
+				
+				//Iterate over all this.label_geometries, apply settings
+				for (let i = 0; i < this.label_geometries.length; i++) {
+					//2. .label_name/.name
+					if (label_geometries.length === 0) {
+						this.label_geometries[i].setSymbol({
+							textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
+							textName: label_name,
+							...default_label_symbol,
+							...this.value[2].label_symbol
+						});
+						
+						if (main.settings.hide_labels_by_default)
+							this.label_geometries[i].hide();
+					}
+					
+					this.label_geometries[i].addTo(main.layers.label_layer);
+				}
+			}
+		}
+	}
+	
 	draw () {
 		//Declare local instance variables
 		let default_symbol = naissance.Renderer.getDefaultSymbol();
-		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 		let derender_geometry = false;
 		
 		if (this.geometry) this.geometry.remove(); //Remove geometry to preserve flash behaviour
@@ -60,12 +104,10 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				
 				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
-					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
-					if (this._is_being_moved)
-						this.geometry.flash(250, 1000000);
+					if (this.selected_index === undefined) this.selected_index = 0;
 					
-					//Set symbol after flash
-					let symbol_obj = { ...default_symbol };
+					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
+					let symbol_obj = default_symbol;
 					
 					if (this.value[1] && this.geometry) 
 						symbol_obj = {
@@ -73,44 +115,27 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 							...this.geometry.getSymbol(),
 							...this.value[1]
 						}
-					
 					this.geometry.setSymbol(symbol_obj);
 					main.layers.entity_layer.addGeometry(this.geometry);
-				}
-				if (this.value[2] && !this.value[2]?.label_symbol?.hide) {
-					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
-					if (this.geometry) {
-						let label_geometries = (this.value[2].label_geometries) ?
-							this.value[2].label_geometries : [];
-						let label_name = (this.value[2].label_name) ?
-							this.value[2].label_name : this.value[2].name;
-						
-						//1. .label_coordinates
-						if (label_geometries.length === 0) {
-							this.label_geometries[0] = new maptalks.Marker(this.geometry.getCoordinates());
-						} else {
-							for (let i = 0; i < label_geometries.length; i++)
-								this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
-						}
-						
-						//Iterate over all this.label_geometries, apply settings
-						for (let i = 0; i < this.label_geometries.length; i++) {
-							//2. .label_name/.name
-							if (label_geometries.length === 0) {
-								this.label_geometries[i].setSymbol({
-									textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
-									textName: label_name,
-									...default_label_symbol,
-									...this.value[2].label_symbol
-								});
-								
-								if (main.settings.hide_labels_by_default)
-									this.label_geometries[i].hide();
-							}
+					
+					this._drawLabels();
+					
+					//3.1. Draw selection
+					if (this.selected || this._is_being_moved)
+						if (this.selected_index !== undefined) {
+							let coordinates = maptalks.Coordinate.toNumberArrays(this.geometry.getCoordinates());
+							let selected_coords = coordinates[this.selected_index];
 							
-							this.label_geometries[i].addTo(main.layers.label_layer);
+							if (selected_coords) {
+								this.selected_geometry = new maptalks.Marker(coordinates[this.selected_index]);
+								this.selected_geometry.setSymbol({
+									...symbol_obj,
+									markerFile: "./gfx/icons/marker_default_selected.png",
+									markerOpacity: 0.5
+								});
+								main.layers.selection_layer.addGeometry(this.selected_geometry);
+							}
 						}
-					}
 				}
 			} catch (e) { console.error(e); }
 		}
@@ -119,8 +144,10 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		if (this.geometry) {
 			this.history.draw(this.keyframes_ui);
 			
-			this.geometry.addEventListener("click", () => {
+			this.geometry.addEventListener("click", (e) => {
+				this.selected_index = e.pickGeometryIndex;
 				this.open("instance", { name: this.name, ...this.window_options });
+				this.draw(); //Refreshes select geometry
 			});
 		}
 		
@@ -137,32 +164,79 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 	drawUI () {
 		//Return statement
 		return {
-			move_marker: veButton((v, local_component) => {
-				if (!this._is_being_moved) {
-					veToast(`Click a new location on the map to move this marker to.`);
+			actions_bar: veRawInterface({
+				add_marker: veButton((v, local_component) => {
+					if (!this._is_adding_marker) {
+						veToast(`Click a new location on the map to add a new marker.`);
+						
+						this._is_adding_marker = true;
+						this.draw();
+						local_component.name = "Cancel Adding Marker";
+						
+						map.once("click", (e) => {
+							DALS.Timeline.parseAction("add_point_position", [{
+								type: "GeometryPoint",
+								geometry_obj: this.id,
+								add_coordinates: e.coordinate.toJSON()
+							}]);
+							
+							delete this._is_adding_marker;
+							this.draw();
+							local_component.name = `Add Marker`;
+						});
+					} else {
+						veToast(`Cancelled adding new marker.`);
+						
+						delete this._is_adding_marker;
+						this.draw();
+						local_component.name = `Add Marker`;
+					}
+				}, { name: "Add Marker" }),
+				delete_marker: veButton(() => {
+					DALS.Timeline.parseAction("delete_point", [{
+						type: "GeometryPoint",
+						geometry_obj: this.id,
+						delete_coordinates: Math.returnSafeNumber(this.selected_index)
+					}]);
 					
-					this._is_being_moved = true;
-					this.draw();
-					local_component.name = `Cancel Moving Marker`;
-					
-					map.once("click", (e) => {
-						DALS.Timeline.parseAction("set_point_position", [{
-							geometry_obj: this.id,
-							set_coordinates: e.coordinate.toJSON()
-						}]);
+					veToast(`Deleted selected marker in collection.`);
+					this.close("instance");
+				}, { name: "Delete Marker" }),
+				move_marker: veButton((v, local_component) => {
+					if (!this._is_being_moved) {
+						veToast(`Click a new location on the map to move this marker to.`);
+						
+						this._is_being_moved = true;
+						this.draw();
+						local_component.name = `Cancel Moving Marker`;
+						
+						map.once("click", (e) => {
+							DALS.Timeline.parseAction("move_point_position", [{
+								type: "GeometryPoint",
+								geometry_obj: this.id,
+								move_coordinates: {
+									index: Math.returnSafeNumber(this.selected_index),
+									coordinates: e.coordinate.toJSON()
+								}
+							}]);
+							
+							delete this._is_being_moved;
+							this.draw();
+							local_component.name = `Move Marker`;
+						});
+					} else {
+						veToast(`Cancelled marker movement.`);
 						
 						delete this._is_being_moved;
 						this.draw();
 						local_component.name = `Move Marker`;
-					});
-				} else {
-					veToast(`Cancelled marker movement.`);
-					
-					delete this._is_being_moved;
-					this.draw();
-					local_component.name = `Move Marker`;
+					}
+				}, { name: "Move Marker" }),
+			}, {
+				style: {
+					"[component='ve-button']": { marginLeft: "var(--padding)" }
 				}
-			}, { name: "Move Marker", x: 0, y: 1 }),
+			}),
 			edit_symbol_ui: veInterface({
 				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
 					name: "Label",

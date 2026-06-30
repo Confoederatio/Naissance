@@ -31,7 +31,7 @@ global.UI_CreateGeometry = class extends ve.Class {
 					[DALS_command]: {
 						id: select_geometry_id,
 						name: geometry_name.v,
-						coordinates: (this.type === "GeometryPoint") ? (map.mouse_click_coords || map.mouse_hover_coords) : undefined
+						coordinates: (this.type === "GeometryPoint") ? [(map.mouse_click_coords || map.mouse_hover_coords)] : undefined
 					}
 				}, {
 					type: "Brush",

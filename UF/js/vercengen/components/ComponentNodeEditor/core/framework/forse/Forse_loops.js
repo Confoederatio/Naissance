@@ -125,10 +125,14 @@ ve.NodeEditor.Forse.loops = {
 			//Return statement
 			return {
 				display_value: loc("ve.registry.localisation.Forse_display_wait_ms", delay_time),
-				run: async () => {
-					await new Promise((resolve) => setTimeout(resolve, delay_time));
+				run: async function () {
+					await new Promise(function (resolve) { 
+						setTimeout(resolve, delay_time); 
+					});
 					ve.NodeEditorDatatype.draw(local_node.options.node_editor, true);
-					await new Promise((resolve) => setTimeout(resolve, 10));
+					await new Promise(function (resolve) { 
+						setTimeout(resolve, 10); 
+					});
 				},
 				value: value
 			};

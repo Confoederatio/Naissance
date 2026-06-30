@@ -1,3 +1,225 @@
+/**
+ * Imports a file into the given Feature if possible.
+ * 
+ * @param {string} arg0_file_path
+ * @param {string} [arg1_type] - Either 'csv'/'geojson'/'gpx'/'kml'/'kmz'/'naissance'/'osm'/'polyline'/'shp'/'topojson'/'wkt'.
+ * @param {Object} [arg2_options] - Key map once converted into GeoJSON.
+ */
+naissance.Feature.importFile = function (arg0_file_path, arg1_type, arg2_options) {
+	//Convert from parameters
+	let file_path = path.resolve(arg0_file_path);
+	let type = (arg1_type) ? arg1_type : "geojson";
+	let options = (arg2_options) ? arg2_options : {};
+	
+	if (!fs.existsSync(file_path)) {
+		console.error(`File ${file_path} does not exist.`);
+		return;
+	}
+	
+	//Handle .naissance files
+	if (type === "csv") {
+		maptalks.Formats.csv(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "geojson") {
+		naissance.Feature.importGeoJSON.call(this, fs.readFileSync(file_path, "utf8"), options);
+	} else if (type === "gpx") {
+		maptalks.Formats.gpx(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "kml") {
+		maptalks.Formats.kml(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "kmz") {
+		Geospatiale.maptalks_GeoKMZ.toGeoJSON(file_path).then((geojson) => 
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "naissance") {
+		let json = JSON.parse(fs.readFileSync(file_path, "utf8"));
+		
+		//Iterate over JSON to load in each class
+		Object.iterate(json, (local_key, local_value) => {
+			if (local_value.class_name) {
+				//1. Handle naissance.Geometry classes
+				if (local_value.type === "geometry") {
+					let geometry_obj = new naissance[local_value.class_name]({ is_import: true });
+					
+					//ID/History/Metadata deserialisation
+					if (local_value.id) {
+						let has_id = naissance.Geometry.instances[local_value.id];
+						
+						if (!has_id) {
+							geometry_obj.setID(local_value.id);
+						} else {
+							local_value.metadata.linked_id = local_value.id;
+						}
+					}
+					geometry_obj.history.fromJSON(local_value.history);
+					if (local_value.metadata) geometry_obj.metadata = local_value.metadata;
+					
+					geometry_obj.parent = this;
+					this.entities.push(geometry_obj);
+				}
+				//2. Handle naissance.Feature classes
+				else if (local_value.type === "feature") {
+					let feature_obj = new naissance[local_value.class_name](undefined, {
+						metadata: local_value.metadata
+					});
+					
+					if (local_value.value) feature_obj.json = local_value.value;
+				}
+				
+				//3. Features must be rendered separately
+				Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
+					if (local_feature.json) {
+						local_feature.fromJSON(local_feature.json);
+						try {
+							//if (local_feature.draw) local_feature.draw();
+						} catch (e) { console.warn(e); }
+						
+						local_feature.parent = this;
+						this.entities.push(local_feature);
+					}
+				});
+			}
+		});
+	} else if (type === "osm") {
+		maptalks.Formats.osm(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "polyline") {
+		maptalks.Formats.polyline(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "shp") {
+		shp(fs.readFileSync(file_path)).then((geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "topojson") {
+		maptalks.Formats.topojson(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	} else if (type === "wkt") {
+		maptalks.Formats.wkt(file_path, (err, geojson) =>
+			naissance.Feature.importGeoJSON.call(this, geojson, options));
+	}
+};
+
+/**
+ * Imports a GeoJSON object into the current Feature.
+ *
+ * @param {Object|string} arg0_geojson_obj
+ * @param {Object} [arg1_options]
+ *  @param {string} [arg1_options.id_key] - The ID key to look for in .properties.
+ *  @param {string} [arg1_options.lineColor_key]
+ *  @param {string} [arg1_options.lineOpacity_key]
+ *  @param {string} [arg1_options.lineWidth_key]
+ *  @param {string} [arg1_options.name_key] - The name key to look for in .properties.
+ *  @param {string} [arg1_options.polygonFill_key]
+ *  @param {string} [arg1_options.polygonOpacity_key]
+ *  
+ *  @param {string} [arg1_options.end_year_key]
+ *  @param {string} [arg1_options.end_month_key]
+ *  @param {string} [arg1_options.end_day_key]
+ *  @param {string} [arg1_options.end_hour_key]
+ *  @param {string} [arg1_options.end_minute_key]
+ *
+ *  @param {string} [arg1_options.start_year_key]
+ *  @param {string} [arg1_options.start_month_key]
+ *  @param {string} [arg1_options.start_day_key]
+ *  @param {string} [arg1_options.start_hour_key]
+ *  @param {string} [arg1_options.start_minute_key]
+ */
+naissance.Feature.importGeoJSON = function (arg0_geojson_obj, arg1_options) {
+	//Convert from parameters
+	let geojson_obj = (typeof arg0_geojson_obj === "string") ? JSON.parse(arg0_geojson_obj) : arg0_geojson_obj;
+	let options = (arg1_options) ? arg1_options : {};
+
+	//Declare local instance variables
+	let maptalks_type_map = {
+		"LineString": "MultiLineString",
+		"Point": "MultiPoint",
+		"Polygon": "MultiPolygon",
+
+		"MultiPoint": "MultiPoint",
+		"MultiPolygon": "MultiPolygon",
+		"MultiLineString": "MultiLineString",
+	};
+	let naissance_type_map = {
+		"LineString": "GeometryLine",
+		"Point": "GeometryPoint",
+		"Polygon": "GeometryPolygon",
+
+		"MultiPoint": "GeometryPoint",
+		"MultiPolygon": "GeometryPolygon",
+		"MultiLineString": "GeometryLine",
+	};
+
+	//Iterate over all geojson_obj entries
+	for (let i = 0; i < geojson_obj.features.length; i++) {
+		let local_feature = geojson_obj.features[i];
+		if (!local_feature.geometry?.type) continue; //Internal guard clause if type is not defined
+		
+		let local_feature_type = local_feature.geometry.type;
+
+		let is_singular = ["LineString", "Point"].includes(local_feature_type);
+		
+		let local_maptalks_type = maptalks_type_map[local_feature_type];
+		let local_naissance_type = naissance_type_map[local_feature_type];
+		let local_properties = (local_feature.properties) ? JSON.parse(JSON.stringify(local_feature.properties)) : {};
+
+		if (!local_maptalks_type || !local_naissance_type) continue; //Internal guard clause for non-geometries
+
+		let local_coords = (is_singular) ? [local_feature.geometry.coordinates] : local_feature.geometry.coordinates;
+
+		//Construct symbol
+		let local_symbol = (local_properties?.maptalks_symbol) ? local_properties.maptalks_symbol : {};
+			if (options.lineColor_key) local_symbol.lineColor = Object.getValue(local_properties, options.lineColor_key);
+			if (options.lineOpacity_key) local_symbol.lineOpacity = Object.getValue(local_properties, options.lineOpacity_key);
+			if (options.lineWidth_key) local_symbol.lineWidth = Object.getValue(local_properties, options.lineWidth_key);
+			if (options.polygonFill_key) local_symbol.polygonFill = Object.getValue(local_properties, options.polygonFill_key);
+			if (options.polygonOpacity_key) local_symbol.polygonOpacity = Object.getValue(local_properties, options.polygonOpacity_key);
+
+		//Construct date objects
+		let local_start_date = {
+			year: (options.start_year_key) ? (Object.getValue(local_properties, options.start_year_key) || 1) : main.date.year,
+			month: (options.start_month_key) ? (Object.getValue(local_properties, options.start_month_key) || 1) : main.date.month,
+			day: (options.start_day_key) ? (Object.getValue(local_properties, options.start_day_key) || 1) : main.date.day,
+			hour: (options.start_hour_key) ? (Object.getValue(local_properties, options.start_hour_key) || 0) : main.date.hour,
+			minute: (options.start_minute_key) ? (Object.getValue(local_properties, options.start_minute_key) || 0) : main.date.minute
+		};
+		let local_end_date = {
+			year: (options.end_year_key) ? (Object.getValue(local_properties, options.end_year_key) || 1) : 0,
+			month: (options.end_month_key) ? (Object.getValue(local_properties, options.end_month_key) || 1) : 1,
+			day: (options.end_day_key) ? (Object.getValue(local_properties, options.end_day_key) || 1) : 1,
+			hour: (options.end_hour_key) ? (Object.getValue(local_properties, options.end_hour_key) || 0) : 0,
+			minute: (options.end_minute_key) ? (Object.getValue(local_properties, options.end_minute_key) || 0) : 0
+		};
+
+		let geometry_obj;
+		let local_id = (options.id_key) ? Object.getValue(local_properties, options.id_key) : undefined;
+
+		//Merge logic: Look for existing global instance
+		if (local_id !== undefined) geometry_obj = naissance.Geometry.instances[local_id];
+
+		if (!geometry_obj) {
+			geometry_obj = new naissance[local_naissance_type]({ is_import: true });
+			geometry_obj.parent = this;
+			if (local_id !== undefined) geometry_obj.setID(local_id);
+		}
+
+		//Ensure the entity is linked to this feature, even if it already existed globally
+		if (!this.entities.includes(geometry_obj)) this.entities.push(geometry_obj);
+
+		//Set name and properties
+		if (options.name_key) {
+			let local_name = Object.getValue(local_properties, options.name_key);
+			if (local_name) local_properties.name = local_name;
+		}
+
+		//Create maptalks geometry and add keyframe
+		let local_maptalks_geometry = new maptalks[local_maptalks_type](local_coords);
+		geometry_obj.history.addKeyframe(local_start_date, local_maptalks_geometry.toJSON(), local_symbol, local_properties);
+
+		//Add end date keyframe if applicable
+		let has_end_date = (local_end_date.year !== 0);
+		if (has_end_date) geometry_obj.history.addKeyframe(local_end_date, null);
+	}
+};
+
 naissance.Feature.operate = function (arg0_type, arg1_entity_id) {
 	//Convert from parameters
 	let type = (arg0_type) ? arg0_type : "union";
@@ -38,7 +260,7 @@ naissance.Feature.operate = function (arg0_type, arg1_entity_id) {
 					let geometry_obj = new naissance[ot_geometries[i].class_name]({ is_import: true });
 					geometry_obj.addKeyframe(main.date, ot_geometries[i].geometry.toJSON());
 					geometry_obj.parent = this;
-					geometry_obj.entities.push(ot_geometries[i]);
+					this.entities.push(ot_geometries[i]);
 				}
 			}
 		} else {

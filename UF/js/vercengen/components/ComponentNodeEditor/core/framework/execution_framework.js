@@ -245,7 +245,8 @@
 							
 							//Set to is_running and execute node
 							if (!preview_mode && descriptor && typeof descriptor.run === "function") {
-								await descriptor.run();
+								this.main.variables[local_node.id] = await descriptor.run.call(this);
+								value = this.main.variables[local_node.id];
 								if (!preview_mode && this._abort_execution) { is_aborted = true; break; }
 							}
 							results.push(value);
@@ -288,7 +289,8 @@
 						information_obj.alluvial_width = Math.returnSafeNumber(last_descriptor?.alluvial_width, 1);
 						information_obj.value = (last_descriptor?.display_value !== undefined) ?
 							last_descriptor.display_value : `${this.main.variables[local_node.id]}`;
-						information_obj.value = information_obj.value.truncate(information_obj.value, 40);
+						if (typeof information_obj.value === "string")
+							information_obj.value = String.truncate(information_obj.value, 40);
 						ve.NodeEditorDatatype.draw(this, true);
 					}
 				}));

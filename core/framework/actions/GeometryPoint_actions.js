@@ -15,9 +15,14 @@ if (!global.naissance) global.naissance = {};
  *   - `.is_search`: {@link boolean}
  *   - `.name`: {@link string}
  * - #### Internal Commands:
+ *   - `.add_coordinates`: {@link Array}<{@link Array}<{@link number}, {@link number}>>
  *   - `.add_to_point`: {@link Object}
  *     - `.date=main.date`: {@link Object}
  *     - `.geometry`: {@link string}
+ *   - `.delete_coordinates`: {@link number} - The index of the coordinates to delete.
+ *   - `.move_coordinates`: {@link Object}
+ *     - `.coordinates`: {@link Array}<{@link number}, {@link number}>
+ *     - `.index=0`: {@link number}
  *   - `.set_coordinates`: {@link maptalks.Coordinate}
  */
 naissance.GeometryPoint.parseAction = async function (arg0_json) {
@@ -35,7 +40,7 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 			let new_point = new naissance.GeometryPoint();
 				new_point.setID(json.create_point.id);
 			if (json.create_point.coordinates !== undefined) {
-				let maptalks_marker_obj = new maptalks.Marker();
+				let maptalks_marker_obj = new maptalks.MultiPoint();
 				maptalks_marker_obj.setCoordinates(json.create_point.coordinates);
 				new_point.addKeyframe(main.date, maptalks_marker_obj.toJSON());
 			}
@@ -55,6 +60,16 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 	
 	//Parse commands for point_obj
 	if (point_obj && point_obj instanceof naissance.GeometryPoint) {
+		//.add_coordinates
+		if (json.add_coordinates) try {
+			json.add_coordinates = Array.toArray(json.add_coordinates);
+			
+			let multipoint_coords = maptalks.Coordinate.toNumberArrays(point_obj.geometry.getCoordinates());
+				multipoint_coords = multipoint_coords.concat(json.add_coordinates);
+				point_obj.geometry.setCoordinates(multipoint_coords);
+				point_obj.addKeyframe(main.date, point_obj.geometry.toJSON());
+		} catch (e) {}
+		
 		//.add_to_point
 		if (json.add_to_point !== undefined) {
 			let date = (json.add_to_point.date) ? json.add_to_point.date : main.date;
@@ -64,7 +79,7 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 			
 			//Union with existing point if defined, if undefined replace geometry
 			if (ot_geometries) {
-				let maptalks_point_obj = new maptalks.MultiLineString();
+				let maptalks_point_obj = new maptalks.MultiPoint();
 				
 				if (geometries) {
 					maptalks_point_obj.setGeometries(geometries.concat(ot_geometries));
@@ -75,10 +90,37 @@ naissance.GeometryPoint.parseAction = async function (arg0_json) {
 			}
 		}
 		
+		//.delete_coordinates
+		if (json.delete_coordinates !== undefined && point_obj.geometry) {
+			let coords = point_obj.geometry.getCoordinates();
+			let delete_indexes = Array.toArray(json.delete_coordinates);
+			
+			//Iterate over coords and remove them if included in delete_indexes
+			for (let i = coords.length - 1; i >= 0; i--)
+				if (delete_indexes.includes(i)) coords.splice(i, 1);
+			if (coords.length === 0) {
+				point_obj.remove();
+			} else {
+				point_obj.geometry.setCoordinates(coords);
+				point_obj.addKeyframe(main.date, point_obj.geometry.toJSON());
+			}
+		}
+		
+		//.move_coordinates
+		if (json.move_coordinates) {
+			let multipoint_obj = point_obj.geometry;
+			let multipoint_coords = maptalks.Coordinate.toNumberArrays(multipoint_obj.getCoordinates());
+			
+			if (multipoint_coords[json.move_coordinates.index] !== undefined)
+				multipoint_coords[json.move_coordinates.index] = json.move_coordinates.coordinates;
+			multipoint_obj.setCoordinates(multipoint_coords);
+			point_obj.addKeyframe(main.date, multipoint_obj.toJSON());
+		}
+		
 		//.set_coordinates
 		if (json.set_coordinates) {
-			let maptalks_marker_obj = (point_obj.geometry) ? point_obj.geometry : new maptalks.Marker();
-			maptalks_marker_obj.setCoordinates(json.set_coordinates);
+			let maptalks_marker_obj = (point_obj.geometry) ? point_obj.geometry : new maptalks.MultiPoint();
+			maptalks_marker_obj.setCoordinates([json.set_coordinates]);
 			point_obj.addKeyframe(main.date, maptalks_marker_obj.toJSON());
 		}
 	}

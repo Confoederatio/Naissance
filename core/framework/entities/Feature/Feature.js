@@ -507,6 +507,130 @@ naissance.Feature = class extends naissance.Entity {
 				}, {
 					name: "Flatten All Geometries"
 				}),
+				import_file: veButton(() => {
+					let import_file_type = (this.ui.import_file_type || "geojson");
+					if (!this.ui.import_file_options) this.ui.import_file_options = {};
+					
+					if (this.import_file_window) this.import_file_window.close();
+					this.import_file_window = veWindow({
+						file_type: veSelect({
+							csv: { name: "CSV (.csv)" },
+							geojson: { name: "GeoJSON (.geojson)" },
+							gpx: { name: "GPX (.gpx)" },
+							kml: { name: "KML (.kml)" },
+							kmz: { name: "KMZ (.kmz)" },
+							naissance: { name: "Naissance (.naissance)" },
+							osm: { name: "OSM (.osm)" },
+							polyline: { name: "Polyline (.polyline)" },
+							shp: { name: "Shapefile (.shp)" },
+							topojson: { name: "TopoJSON (.topojson)" }
+						}, {
+							name: "File Type",
+							onuserchange: (v) => this.ui.import_file_type = v,
+							selected: import_file_type
+						}),
+						file_path: veFile(this.ui.import_file_path, {
+							name: "Select File",
+							onuserchange: (v) => this.ui.import_file_path = v
+						}),
+						feature_properties: veInterface({
+							information: veHTML(`Feature properties map start/end dates and symbol properties into Naissance. Leaving a field blank means that it will not be passed when importing the file.`),
+							
+							id_key: veText(this.ui.import_id_key, { name: "ID Key", onuserchange: (v) => this.ui.import_id_key = v }),
+							symbol_properties: veInterface({
+								lineColor_key: veText(this.ui.import_lineColor_key, { name: "Line Color Key", onuserchange: (v) => this.ui.import_lineColor_key = v }),
+								lineOpacity_key: veText(this.ui.import_lineOpacity_key, { name: "Line Opacity Key", onuserchange: (v) => this.ui.import_lineOpacity_key = v }),
+								lineWidth_key: veText(this.ui.import_lineWidth_key, { name: "Line Width Key", onuserchange: (v) => this.ui.import_lineWidth_key = v }),
+								name_key: veText(this.ui.import_name_key, { name: "Name Key", onuserchange: (v) => this.ui.import_name_key = v }),
+								polygonFill_key: veText(this.ui.import_polygonFill_key, { name: "Polygon Fill Key", onuserchange: (v) => this.ui.import_polygonFill_key = v }),
+								polygonOpacity_key: veText(this.ui.import_polygonOpacity_key, { name: "Polygon Opacity Key", onuserchange: (v) => this.ui.import_polygonOpacity_key = v }),
+							}, { name: "Symbol" }),
+							
+							start_date: veInterface({
+								start_year_key: veText(this.ui.import_start_year_key, { name: "Start Year Key", onuserchange: (v) => this.ui.import_start_year_key = v }),
+								start_month_key: veText(this.ui.import_start_month_key, { name: "Start Month Key", onuserchange: (v) => this.ui.import_start_month_key = v }),
+								start_day_key: veText(this.ui.import_start_day_key, { name: "Start Day Key", onuserchange: (v) => this.ui.import_start_day_key = v }),
+								start_hour_key: veText(this.ui.import_start_hour_key, { name: "Start Hour Key", onuserchange: (v) => this.ui.import_start_hour_key = v }),
+								start_minute_key: veText(this.ui.import_start_minute_key, { name: "Start Minute Key", onuserchange: (v) => this.ui.import_start_minute_key = v }),
+							}, { name: "Start Date" }),
+							
+							end_date: veInterface({
+								end_year_key: veText(this.ui.import_end_year_key, { name: "End Year Key", onuserchange: (v) => this.ui.import_end_year_key = v }),
+								end_month_key: veText(this.ui.import_end_month_key, { name: "End Month Key", onuserchange: (v) => this.ui.import_end_month_key = v }),
+								end_day_key: veText(this.ui.import_end_day_key, { name: "End Day Key", onuserchange: (v) => this.ui.import_end_day_key = v }),
+								end_hour_key: veText(this.ui.import_end_hour_key, { name: "End Hour Key", onuserchange: (v) => this.ui.import_end_hour_key = v }),
+								end_minute_key: veText(this.ui.import_end_minute_key, { name: "End Minute Key", onuserchange: (v) => this.ui.import_end_minute_key = v })
+							}, { name: "End Date" })
+						}, { 
+							name: "Special Properties",
+							limit: () => this.ui.import_file_type !== "naissance"
+						}),
+						confirm: veButton(() => {
+							//Declare local instance variables
+							let import_file_type = (this.ui.import_file_type || "geojson");
+							
+							if (this.class_name === "FeatureLayer" && import_file_type === "naissance") {
+								veToast(`<icon>warning</icon> Naissance files can only be imported into a FeatureGroup.`);
+								return;
+							}
+							if (!this.ui.import_file_path) {
+								veToast(`<icon>warning</icon> You must select a file to import.`);
+								return;
+							}
+							
+							let local_options = {
+								id_key: this.ui.import_id_key,
+								lineColor_key: this.ui.import_lineColor_key,
+								lineOpacity_key: this.ui.import_lineOpacity_key,
+								lineWidth_key: this.ui.import_lineWidth_key,
+								name_key: this.ui.import_name_key,
+								polygonFill_key: this.ui.import_polygonFill_key,
+								polygonOpacity_key: this.ui.import_polygonOpacity_key,
+								
+								end_year_key: this.ui.import_end_year_key,
+								end_month_key: this.ui.import_end_month_key,
+								end_day_key: this.ui.import_end_day_key,
+								end_hour_key: this.ui.import_end_hour_key,
+								end_minute_key: this.ui.import_end_minute_key,
+								
+								start_year_key: this.ui.import_start_year_key,
+								start_month_key: this.ui.import_start_month_key,
+								start_day_key: this.ui.import_start_day_key,
+								start_hour_key: this.ui.import_start_hour_key,
+								start_minute_key: this.ui.import_start_minute_key
+							};
+							
+							//Strip anything without a .length > 0 from local_options
+							Object.iterate(local_options, (local_key, local_value) => {
+								if (typeof local_value !== "string") {
+									delete local_options[local_key];
+								} else {
+									local_value = local_value.trim();
+									if (local_value.length === 0) delete local_options[local_key];
+								}
+							});
+							
+							//Execute action
+							DALS.Timeline.parseAction(`import_file_${import_file_type}`, [{
+								feature_obj: this.id,
+								import_file: {
+									type: import_file_type,
+									file_path: this.ui.import_file_path[0],
+									options: local_options
+								}
+							}]);
+							
+							veToast(`Import request for ${import_file_type} file sent to ${this.name}.`);
+						}, { name: "Confirm" })
+					}, {
+						name: `Import File (${this.name})`,
+						can_rename: false,
+						width: "20rem"
+					})
+				}, {
+					name: "Import File",
+					limit: () => ["FeatureGroup", "FeatureLayer"].includes(this.class_name)
+				}),
 				merge_layers: veButton(() => {
 					if (this.merge_layers_window) this.merge_layers_window.close();
 					this.merge_layers_window = veWindow({

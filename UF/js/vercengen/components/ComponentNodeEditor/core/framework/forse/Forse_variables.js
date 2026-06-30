@@ -11,6 +11,7 @@ ve.NodeEditor.Forse.variables_get_obj = {
 		};
 	}
 };
+
 ve.NodeEditor.Forse.variables = {
 	//Variables
 	set_any: {
@@ -119,7 +120,9 @@ ve.NodeEditor.Forse.variables = {
 			
 			//Return statement
 			return {
-				display_value: (value) ? loc("ve.registry.localisation.Forse_display_variable_value", key, loc("ve.registry.localisation.Forse_value_true")) : loc("ve.registry.localisation.Forse_display_variable_value", key, loc("ve.registry.localisation.Forse_value_false")),
+				display_value: (value) ? 
+					loc("ve.registry.localisation.Forse_display_variable_value", key, loc("ve.registry.localisation.Forse_value_true")) : 
+					loc("ve.registry.localisation.Forse_display_variable_value", key, loc("ve.registry.localisation.Forse_value_false")),
 				value: value
 			};
 		}
@@ -228,7 +231,7 @@ ve.NodeEditor.Forse.variables = {
 	set_object: {
 		name: loc("ve.registry.localisation.Forse_node_set_object"),
 		category: loc("ve.registry.localisation.Forse_category_variables"),
-		input_parameters:	[{
+		input_parameters: [{
 			name: loc("ve.registry.localisation.Forse_param_arg0_key"),
 			type: "any"
 		}, {

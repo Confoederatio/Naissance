@@ -19,6 +19,7 @@ if (!global.ve) global.ve = {};
 			let local_component = local_value.deref();
 			
 			//Check if timestamp is valid
+			if (!local_component) continue;
 			if (local_component._timestamp) {
 				if (heuristic_free_start === -1 || local_component._timestamp < start_timestamp + heuristic_free_start) continue;
 				if (heuristic_free_end === -1 || local_component._timestamp > timestamp - heuristic_free_end) continue;

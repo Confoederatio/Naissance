@@ -65,7 +65,7 @@ global.UI_OSMSearch = class extends ve.Component {
 					create_point: {
 						id: select_geometry_id,
 						name: local_properties.name,
-						coordinates: local_geometry.coordinates,
+						coordinates: [local_geometry.coordinates],
 						is_search: true
 					}
 				}, {

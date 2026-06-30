@@ -22,9 +22,56 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		this.updateOwner();
 	}
 	
-	draw () {
+	_drawLabels () {
 		//Declare local instance variables
 		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
+		
+		if (this.value[2]) {
+			//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
+			if (this.geometry && !this.value[2]?.label_symbol?.hide) {
+				let label_geometries = (this.value[2].label_geometries) ?
+					this.value[2].label_geometries : [];
+				let label_name = (this.value[2].label_name) ?
+					this.value[2].label_name : this.value[2].name;
+				if (!label_name) return;
+				
+				//1. .label_coordinates
+				if (label_geometries.length === 0) {
+					if (!this.geometry.getGeometries) {
+						this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
+					} else {
+						let all_geometries = this.geometry.getGeometries();
+						
+						for (let i = 0; i < all_geometries.length; i++)
+							this.label_geometries[i] = new maptalks.Marker(all_geometries[i].getCenter());
+					}
+				} else {
+					for (let i = 0; i < label_geometries.length; i++)
+						this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
+				}
+				
+				//Iterate over all this.label_geometries, apply settings
+				for (let i = 0; i < this.label_geometries.length; i++) {
+					//2. .label_name/.name
+					if (label_geometries.length === 0) {
+						this.label_geometries[i].setSymbol({
+							textName: label_name,
+							...default_label_symbol,
+							...this.value[2].label_symbol
+						});
+						
+						if (main.settings.hide_labels_by_default)
+							this.label_geometries[i].hide();
+					}
+					
+					this.label_geometries[i].addTo(main.layers.label_layer);
+				}
+			}
+		}
+	}
+	
+	draw () {
+		//Declare local instance variables
 		let derender_geometry = false;
 		
 		//1. Set this.value from current relative keyframe
@@ -61,47 +108,8 @@ naissance.GeometryLine = class extends naissance.Geometry {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
 					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
 					main.layers.entity_layer.addGeometry(this.geometry);
-				}
-				if (this.value[2]) {
-					//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
-					if (this.geometry && !this.value[2]?.label_symbol?.hide) {
-						let label_geometries = (this.value[2].label_geometries) ?
-							this.value[2].label_geometries : [];
-						let label_name = (this.value[2].label_name) ?
-							this.value[2].label_name : this.value[2].name;
-						
-						//1. .label_coordinates
-						if (label_geometries.length === 0) {
-							if (!this.geometry.getGeometries) {
-								this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
-							} else {
-								let all_geometries = this.geometry.getGeometries();
-								
-								for (let i = 0; i < all_geometries.length; i++)
-									this.label_geometries[i] = new maptalks.Marker(all_geometries[i].getCenter());
-							}
-						} else {
-							for (let i = 0; i < label_geometries.length; i++)
-								this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
-						}
-						
-						//Iterate over all this.label_geometries, apply settings
-						for (let i = 0; i < this.label_geometries.length; i++) {
-							//2. .label_name/.name
-							if (label_geometries.length === 0) {
-								this.label_geometries[i].setSymbol({
-									textName: label_name,
-									...default_label_symbol,
-									...this.value[2].label_symbol
-								});
-								
-								if (main.settings.hide_labels_by_default)
-									this.label_geometries[i].hide();
-							}
-							
-							this.label_geometries[i].addTo(main.layers.label_layer);
-						}
-					}
+					
+					this._drawLabels(); //Draw labels
 				}
 			} catch (e) { console.error(e); }
 		}

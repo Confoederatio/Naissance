@@ -248,6 +248,32 @@
 	};
 	
 	/**
+	 * Formats a Maptalks coords array into a valid string.
+	 * @alias String.formatMaptalksCoords
+	 * 
+	 * @param {maptalks.Coordinate[]} arg0_coords
+	 * 
+	 * @returns {string}
+	 */
+	String.formatMaptalksCoords = function (arg0_coords) {
+		//Convert from parameters
+		let coords = arg0_coords;
+		
+		//Declare local instance variables
+		let coords_string = [];
+		
+		//Function body
+		coords = maptalks.Coordinate.toNumberArrays(coords);
+		
+		for (let i = 0; i < coords.length; i++)
+			coords_string.push(`X: ${String.formatNumber(coords[i][0], 4)}, Y: ${String.formatNumber(coords[i][1], 4)}`);
+		coords_string = coords_string.join("; ");
+		
+		//Return statement
+		return coords_string;
+	};
+	
+	/**
 	 * Formats a number based off of the selected locale, rounding it to the specified number of places.
 	 * @alias String.formatNumber
 	 * 

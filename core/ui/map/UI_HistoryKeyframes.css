@@ -7,6 +7,14 @@
     }
     > table > tbody > tr {
         [id="0-0"] { width: 6rem; }
-        [id="1-0"] { width: 50%; }
+        [id="1-0"] {
+            > [component="ve-html"] {
+                max-height: 8rem;
+                overflow-y: auto;
+            }
+            max-width: 15rem;
+            width: 50%;
+            word-break: break-word;
+        }
     }
 }

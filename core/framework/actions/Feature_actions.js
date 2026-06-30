@@ -24,6 +24,10 @@ if (!global.naissance) global.naissance = {};
  *   - `.feature_id`: {@link string}
  *   - `.geometry_id`: {@link string}
  * - `.flatten_all_geometries`: {@link boolean}
+ * - `.import_file`: {@link Object}
+ *   - `.file_path`: {@link string}
+ *   - `.type`: {@link string} - Either 'csv'/'geojson'/'gpx'/'kml'/'kmz'/'naissance'/'osm'/'polyline'/'shp'/'topojson'/'wkt'.
+ *   - `.options`: {@link Object}
  * - `.move_all_entities_to_feature`: {@link string}
  * - `.set_name`: {@link string}
  * - `.set_visibility`: {@link boolean}
@@ -133,6 +137,13 @@ naissance.Feature.parseAction = async function (arg0_json) {
 				feature_obj.entities[i].parent = feature_obj;
 			UI_Leftbar.refresh();
 		}
+		
+		//import_file
+		if (json.import_file)
+			if (feature_obj.entities) {
+				naissance.Feature.importFile.call(feature_obj, json.import_file.file_path, json.import_file.type, json.import_file.options);
+				UI_Leftbar.refresh();
+			}
 		
 		//move_all_entities_to_feature
 		if (json.move_all_entities_to_feature !== undefined) {
