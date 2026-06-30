@@ -31,7 +31,7 @@
 
 </div>
 <div align = "center">
-<img src = "https://i.postimg.cc/3ND2B1zL/crd-coat-of-arms-logo.png" height = "48"> <img src = "https://i.postimg.cc/ZZk34WkC/vercengen-logo.png" height = "48">
+<img src = "https://i.postimg.cc/3ND2B1zL/crd-coat-of-arms-logo.png" height = "64"> <img src = "https://i.postimg.cc/ZZk34WkC/vercengen-logo.png" height = "64">
 </div><br>
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
