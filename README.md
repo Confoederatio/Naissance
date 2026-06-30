@@ -28,7 +28,7 @@
 [![Join our community!](https://img.shields.io/discord/548994743925997570?label=Discord&style=for-the-badge)](https://discord.gg/89kQY2KFQz) ![](https://img.shields.io/github/languages/code-size/Confoederatio/Naissance?style=for-the-badge)
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
-- Documentation (Naissance): [confoederatiodocs.info](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance+HGIS/Naissance+HGIS)
+- Documentation (Naissance): [confoederatiodocs.info](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance/Naissance)
 - Documentation (Vercengen): [confoederatio.org/Vercengen](https://confoederatio.org/Vercengen/)
 
 ### Abstract.
