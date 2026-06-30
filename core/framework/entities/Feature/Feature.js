@@ -737,6 +737,15 @@ naissance.Feature = class extends naissance.Entity {
 						}, { name: "Confirm" })
 					}, { name: "Move Entities To", can_rename: false })
 				}, { name: `Move Entities To ${options.name}` }),
+				select_all_geometries: veButton(() => {
+					//Declare local instance variables
+					let all_geometries = this.getAllGeometries();
+					
+					//Iterate over all_geometries
+					for (let i = 0; i < all_geometries.length; i++)
+						if (all_geometries[i].geometry) all_geometries[i].selected = true;
+					veToast(`Selected all geometries in ${this.name}.`);
+				}, { name: "Select All Geometries" }),
 				set_zoom_visibility: veButton(() => {
 					if (this.set_zoom_window) this.set_zoom_window.close();
 					this.set_zoom_window = veWindow({

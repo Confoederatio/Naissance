@@ -26,7 +26,13 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 			clear_brush: veButton(() => {
 				DALS.Timeline.parseAction("clear_brush", [{ type: "Brush", select_geometry_id: false }]);
 				this.interface.close();
-			}, { name: "Clear Brush", limit: () => main.brush._selected_geometry })
+				
+				//Deselect everything else currently selected
+				let selected_geometries = naissance.Brush.getSelectedGeometries();
+				
+				for (let i = 0; i < selected_geometries.length; i++)
+					selected_geometries[i].selected = false;
+			}, { name: "Clear Brush", limit: () => naissance.Brush.getSelectedGeometries().length })
 		}, { id: "ui_map_context_menu" });
 		
 		this.logic_loop = setInterval(() => {

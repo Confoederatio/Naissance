@@ -24,7 +24,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		//Declare local instance variables
 		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 		
-		if (this.value[2] && !this.value[2]?.label_symbol?.hide) {
+		if (this.value[2]) {
 			//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
 			if (this.geometry) {
 				let label_geometries = (this.value[2].label_geometries) ?
@@ -32,6 +32,12 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 				let label_name = (this.value[2].label_name) ?
 					this.value[2].label_name : this.value[2].name;
 				if (!label_name) return;
+				
+				let label_symbol = {
+					...default_label_symbol,
+					...this.value[2].label_symbol
+				};
+				if (label_symbol.hide_label) return;
 				
 				//1. .label_coordinates
 				if (label_geometries.length === 0) {
@@ -50,9 +56,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 					if (label_geometries.length === 0) {
 						this.label_geometries[i].setSymbol({
 							textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
+							...label_symbol,
 							textName: label_name,
-							...default_label_symbol,
-							...this.value[2].label_symbol
 						});
 						
 						if (main.settings.hide_labels_by_default)

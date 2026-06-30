@@ -480,6 +480,19 @@ naissance.Brush = class extends ve.Class {
 		return has_selected_geometry;
 	}
 	
+	static getSelectedGeometries () {
+		//Declare local instance variables
+		let selected_geometries = [];
+		
+		//Iterate over naissance.Geometry.instances and check for .selected
+		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
+			if (local_geometry.selected) selected_geometries.push(local_geometry);
+		});
+		
+		//Return statement
+		return selected_geometries;
+	}
+	
 	static setSelectedLabelSymbol (arg0_symbol_obj) {
 		//Convert from parameters
 		let symbol_obj = (arg0_symbol_obj) ? arg0_symbol_obj : {};
@@ -528,13 +541,12 @@ naissance.Brush = class extends ve.Class {
 		
 		//Iterate over naissance.Geometry.instances and check for .selected
 		Object.iterate(naissance.Geometry.instances, (local_key, local_geometry) => {
-			json_obj.value.push({
-				type: "Geometry",
-				
-				geometry_id: local_geometry.id,
-				set_properties: properties_obj
-			});
+			if (local_geometry.selected)
+				json_obj.value.push({
+					geometry_obj: local_geometry.id,
+					set_properties: properties_obj
+				});
 		});
-		DALS.Timeline.parseAction(json_obj);
+		DALS.Timeline.parseAction("set_selected_properties", json_obj);
 	}
 };
