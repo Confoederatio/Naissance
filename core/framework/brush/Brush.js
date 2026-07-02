@@ -202,6 +202,22 @@ naissance.Brush = class extends ve.Class {
 						whiteSpace: "nowrap"
 					}
 				}
+			}),
+			fill_truncate: veNumber(2, {
+				binding: "this.fill_truncate",
+				name: "Fill Truncate",
+				limit: () => this.mode === "fill_tool",
+				min: 0,
+				tooltip: "Determines precision when using the fill tool.<br>0 to disable.",
+				x: 0, y: 1
+			}),
+			fill_buffer: veNumber(500, {
+				binding: "this.fill_buffer",
+				name: "Fill Buffer (m)",
+				limit: () => this.mode === "fill_tool",
+				min: 0,
+				tooltip: "Determines the buffer when using the fill tool.<br>0 to disable.",
+				x: 1, y: 1
 			})
 		}, { name: "Brush Optimisation:", open: true });
 		this.information_display = veHTML(() => {
@@ -375,43 +391,53 @@ naissance.Brush = class extends ve.Class {
 	
 	handleEvents () {
 		//Map event handlers
-		map.on("click", (e) => { //[WIP] - Finish fill handler
-			//Internal guard clause if fill tool with polygon is not selected
-			if (!(main.brush.mode === "fill_tool" && this._selected_geometry && this._selected_geometry instanceof naissance.GeometryPolygon)) return;
-			if (!main._layers.provinces) return; //Internal guard clause if main._layers.provinces is not defined
-			
-			//Iterate over all_geometries in main._layers.provinces; check if e.coordinate is inside the target geometry, if so, fill it
-			let all_geometries = main._layers.provinces.getGeometries();
-			
-			for (let i = 0; i < all_geometries.length; i++)
-				if (all_geometries[i].containsPoint(e.coordinate)) {
-					if (this._selected_geometry.getLayer()?._type === "provinces") {
-						veToast(`<icon>warning</icon> You cannot use the fill tool on Polygons that are currently in a Province Layer!`);
-						break;
-					}
-					
-					//Buffer so that provinces aren't irregular
-					if (!HTML.ctrl_pressed) {
-						DALS.Timeline.parseAction("add_to_polygon", [{
-							geometry_obj: this._selected_geometry.id,
-							add_to_polygon: { geometry: all_geometries[i].toJSON() }
-						}]);
-					} else {
-						DALS.Timeline.parseAction("remove_from_polygon", [{
-							geometry_obj: this._selected_geometry.id,
-							remove_from_polygon: { geometry: all_geometries[i].toJSON() }
-						}]);
-					}
+		map_component.on("click", (e) => {
+			if (main.brush.mode === "fill_tool") {
+				if (!(this._selected_geometry && this._selected_geometry instanceof naissance.GeometryPolygon)) return;
+				if (this._selected_geometry.getLayer()?.type === "provinces") {
+					veToast(`<icon>warning</icon> You cannot use the fill tool on Polygons that are currently in a Province Layer!`);
+					return;
 				}
+				
+				//Fill bucket logic
+				map.identify({
+					coordinate: e.coordinate,
+					layers: [main.layers.entity_layer],
+				}, (geometries) => {
+					for (let i = 0; i < geometries.length; i++) 
+						if (geometries[i]._naissance_province) {
+							let turf_geometry = Geospatiale.convertMaptalksToTurf(geometries[i]);
+							
+							if (this.fill_buffer !== 0)
+								turf_geometry = turf.buffer(turf_geometry, this.fill_buffer/1000, { units: "kilometers" });
+							if (this.fill_truncate !== 0) 
+								turf_geometry = turf.truncate(turf_geometry, { precision: this.fill_truncate });
+							
+							if (!HTML.ctrl_pressed) {
+								DALS.Timeline.parseAction("add_to_polygon", [{
+									geometry_obj: this._selected_geometry.id,
+									add_to_polygon: { geometry: turf_geometry }
+								}]);
+							} else {
+								DALS.Timeline.parseAction("remove_from_polygon", [{
+									geometry_obj: this._selected_geometry.id,
+									remove_from_polygon: { geometry: turf_geometry }
+								}]);
+							}
+							
+							break;
+						}
+				});
+			}
 		});
-		map.on("mousedown", (e) => {
+		
+		map_component.on("mousedown", (e) => {
 			setTimeout(() =>{
 				if (this.disabled) return;
 				if (HTML.left_click || HTML.right_click) map.config("draggable", false);
-				if (HTML.middle_click) this.node_editor.disable(); //[WIP] - This needs to be changed to allow for panning whilst still having this.node_editor active
 			});			
 		});
-		map.on("mouseup", (e) => {
+		map_component.on("mouseup", (e) => {
 			map.config("draggable", true);
 			if (HTML.middle_click)
 				if (main.brush._selected_geometry instanceof naissance.GeometryLine)
@@ -419,19 +445,19 @@ naissance.Brush = class extends ve.Class {
 		});
 		
 		//Context menu handler
-		map.on("contextmenu", (e) => {
+		map_component.on("contextmenu", (e) => {
       if (!this.disabled) main.interfaces.ui_map_context_menu = new UI_MapContextMenu();
 		});
 		
 		//Cursor handler
-		map.on("mousemove", (e) => {
+		map_component.on("mousemove", (e) => {
 			this.cursor.setCoordinates(e.coordinate);
 			if (this.disabled || ["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode)) return;
 			
 			if (this._selected_geometry instanceof naissance.GeometryPolygon && (HTML.left_click || HTML.right_click)) {
 				//Internal guard clause if in provinces layer
 				let layer_obj = this._selected_geometry.getLayer();
-					if (layer_obj?._type === "provinces") return;
+					if (layer_obj?.type === "provinces") return;
 				let processed_geometry = (HTML.left_click) ?
 					this.getAddPolygon(this.cursor) : this.getRemovePolygon(this.cursor);
 				

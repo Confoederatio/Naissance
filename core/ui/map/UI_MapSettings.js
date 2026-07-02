@@ -77,7 +77,8 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 				projection: {
 					code: "proj4-custom",
 					project: (c) => {
-						let pc = proj4js_transform.forward(c.toArray());
+						let pc;
+						try { proj4js_transform.forward(c.toArray()); } catch (e) {}
 						
 						//If projection returns invalid or NaN, return neutral coords
 						if (!pc || isNaN(pc[0]) || isNaN(pc[1]))
@@ -90,7 +91,8 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 					unproject: (pc) => {
 						if (!Array.isArray(Array.toArray(pc)))
 							return new maptalks.Coordinate([0, 0]);
-						let result = proj4js_transform.inverse(pc.toArray());
+						let result;
+							try { proj4js_transform.inverse(pc.toArray()); } catch (e) {}
 						
 						if (!result || isNaN(result[0]) || isNaN(result[1]))
 							result = (window.last_coord) ? window.last_coord : [0, 0];

@@ -46,7 +46,8 @@ ve.Map = class extends ve.Component {
 			this.element.setAttribute("component", "ve-map");
 		this.element.id = this.id;
 		this.element.instance = this;
-		HTML.setAttributesObject(this.element, options.attributes);
+			HTML.setAttributesObject(this.element, options.attributes);
+		this.event_map = [];
 		
 		this.options = options;
 		this.map = undefined;
@@ -151,7 +152,20 @@ ve.Map = class extends ve.Component {
 	}
 	
 	/**
+	 * Handles default events for the given map.
+	 */
+	handleEvents () {
+		this.map.on("click", (e) => {
+			this.map.mouse_click_coords = e.coordinate.toJSON();
+		});
+		this.map.on("mousemove", (e) => {
+			this.map.mouse_hover_coords = e.coordinate.toJSON();
+		});
+	}
+	
+	/**
 	 * Ensures that the Maptalks instance is initialised safely.
+	 * - Method of: {@link ve.Map}
 	 * 
 	 * @param arg0_value
 	 * 
@@ -182,13 +196,54 @@ ve.Map = class extends ve.Component {
 		
 		//Initialise map instantly if container is visible
 		this.map = new maptalks.Map(this.element, value);
-			this.map.on("click", (e) => {
-				this.map.mouse_click_coords = e.coordinate.toJSON();
-			});
-			this.map.on("mousemove", (e) => {
-				this.map.mouse_hover_coords = e.coordinate.toJSON();
-			});
+			this.handleEvents();
 		if (this.options.onmapload) this.options.onmapload(this);
+	}
+	
+	/**
+	 * Registers a map event listener with the current component.
+	 * - Method of: {@link ve.Map}
+	 * 
+	 * @param {maptalks.Event} arg0_event
+	 * @param {function} arg1_function
+	 */
+	on (arg0_event, arg1_function) {
+		//Convert from parameters
+		let e = arg0_event;
+		let fn = arg1_function;
+		
+		//Add the event listener to the map
+		this.event_map.push([e, fn]);
+		this.map.on(e, fn);
+	}
+	
+	/**
+	 * Refreshes the current map display, but does not reattach event listeners.
+	 * - Method of: {@link ve.Map}
+	 */
+	refresh () {
+		//Iterate over all_layers and remove them
+		let all_layers = this.map.getLayers();
+		
+		for (let i = 0; i < all_layers.length; i++)
+			this.map.removeLayer(all_layers[i]);
+		
+		//Declare local instance variables
+		let json = this.map.toJSON();
+		
+		//Remove map, then reload JSON
+		this.map.remove();
+		
+		this.map = maptalks.Map.fromJSON(this.element, json);
+		this.handleEvents();
+		
+		//Iterate over all events in this.event map and reattach them
+		for (let i = 0; i < this.event_map.length; i++)
+			this.map.on(this.event_map[i][0], this.event_map[i][1]);
+		
+		//Re-add all layers
+		for (let i = 0; i < all_layers.length; i++)
+			this.map.addLayer(all_layers[i]);
 	}
 }
 

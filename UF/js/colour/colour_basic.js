@@ -214,6 +214,38 @@
 	};
 	
 	/**
+	 * Generates a random hex colour from a string.
+	 * @alias Colour.generateHexFromString
+	 *
+	 * @param {string} arg0_string
+	 *
+	 * @returns {string}
+	 */
+	Colour.generateHexFromString = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let colour = "#";
+		let hash = 0;
+		
+		//Split and hash
+		string.split("").forEach(char => {
+			hash = char.charCodeAt(0) + ((hash << 5) - hash);
+		});
+		
+		//Iterate over all R, G, B components
+		for (let i = 0; i < 3; i++) {
+			let local_value = (hash >> (i * 8)) & 0xff;
+			
+			colour += local_value.toString(16).padStart(2, "0");
+		}
+		
+		//Return statement
+		return colour;
+	};
+	
+	/**
 	 * Returns a random [R, G, B] colour.
 	 * @alias Colour.generateRandomColour
 	 * 
@@ -222,6 +254,37 @@
 	Colour.generateRandomColour = function () {
 		//Return statement
 		return [Math.randomNumber(0, 255), Math.randomNumber(0, 255), Math.randomNumber(0, 255)];
+	};
+	
+	/**
+	 * Generates a random RGB colour from a string.
+	 * @alias Colour.generateRGBFromString
+	 *
+	 * @param {string} arg0_string
+	 *
+	 * @returns {number[]}
+	 */
+	Colour.generateRGBFromString = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Declare local instance variables
+		let colour = []
+		let hash = 0;
+		
+		//Split and hash
+		string.split("").forEach(char => {
+			hash = char.charCodeAt(0) + ((hash << 5) - hash);
+		});
+		
+		//Iterate over all RGB components
+		for (let i = 0; i < 3; i++) {
+			let value = (hash >> (i * 8)) & 0xff;
+			colour.push(value);
+		}
+		
+		//Return statement
+		return colour;
 	};
 	
 	/**

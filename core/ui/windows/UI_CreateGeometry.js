@@ -46,7 +46,6 @@ global.UI_CreateGeometry = class extends ve.Class {
 	open () {
 		//Declare local instance variables
 		let DALS_command = `create_${this.type.replace("Geometry", "").toLowerCase()}`;
-		console.log(DALS_command)
 		
 		if (this.interface) this.interface.remove();
 		this.interface = veContextMenu(this.draw(), {

@@ -11,7 +11,7 @@ naissance.Renderer = class extends ve.Class {
 	 * - Method of: {@link naissance.Renderer}
 	 */
 	handleEvents () {
-		map.on("zoomend", () => {
+		map_component.on("zoomend", () => {
 			//Call this.update() in the correct order
 			this.update();
 		});

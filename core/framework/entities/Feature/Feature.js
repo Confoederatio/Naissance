@@ -25,10 +25,8 @@ naissance.Feature = class extends naissance.Entity {
 		//Push to naissance.Feature.instances
 		naissance.Feature.instances[this.id] = this;
 		setTimeout(() => {
-			if (main.brush.selected_feature?.entities && !this.cannot_nest_self) { //Sanity check to make sure .cannot_nest_self is invalid for nesting
-				this.parent = main.brush.selected_feature;
-				main.brush.selected_feature.entities.push(this);
-			}
+			if (main.brush.selected_feature?.entities && !this.cannot_nest_self) //Sanity check to make sure .cannot_nest_self is invalid for nesting
+				this.moveToFeature(main.brush.selected_feature);
 		});
 	}
 	
@@ -59,6 +57,16 @@ naissance.Feature = class extends naissance.Entity {
 			this._parent = value;
 		if (value === undefined)
 			this._parent = undefined;
+	}
+	
+	addEntity (arg0_entity, arg1_do_not_refresh) {
+		//Convert from parameters
+		let entity = arg0_entity;
+		let do_not_refresh = arg1_do_not_refresh;
+		
+		//Declare local instance variables
+		entity.moveToFeature(this);
+		if (!do_not_refresh) this.drawHierarchyDatatype();
 	}
 	
 	drawActionsPalette (arg0_options) {
@@ -530,9 +538,27 @@ naissance.Feature = class extends naissance.Entity {
 							selected: import_file_type
 						}),
 						file_path: veFile(this.ui.import_file_path, {
-							name: "Select File",
+							name: "Select File(s)",
+							multifile: true,
 							onuserchange: (v) => this.ui.import_file_path = v
 						}),
+						behaviour: veInterface({
+							flatten_when_importing: veCheckbox(this.ui.import_file_flatten_when_importing, {
+								name: "Flatten When Importing",
+								tooltip: "Will not create separate groups for different files during import.",
+								onuserchange: (v) => this.ui.import_file_flatten_when_importing = v
+							}),
+							latitude_formula: veText(this.ui.import_file_lat_formula, {
+								name: "Latitude Formula",
+								tooltip: "<kbd>lat, y</kbd>: (float) refers to the Latitude of the coordinate.",
+								onuserchange: (v) => this.ui.import_file_lat_formula = v
+							}),
+							longitude_formula: veText(this.ui.import_file_lng_formula, {
+								name: "Longitude Formula",
+								tooltip: "<kbd>lng, x</kbd>: (float) refers to the Latitude of the coordinate.",
+								onuserchange: (v) => this.ui.import_file_lng_formula = v
+							})
+						}, { name: "Behaviour" }),
 						feature_properties: veInterface({
 							information: veHTML(`Feature properties map start/end dates and symbol properties into Naissance. Leaving a field blank means that it will not be passed when importing the file.`),
 							
@@ -579,6 +605,9 @@ naissance.Feature = class extends naissance.Entity {
 							}
 							
 							let local_options = {
+								lat_formula: this.ui.import_file_lat_formula,
+								lng_formula: this.ui.import_file_lng_formula,
+								
 								id_key: this.ui.import_id_key,
 								lineColor_key: this.ui.import_lineColor_key,
 								lineOpacity_key: this.ui.import_lineOpacity_key,
@@ -611,24 +640,40 @@ naissance.Feature = class extends naissance.Entity {
 							});
 							
 							//Execute action
-							DALS.Timeline.parseAction(`import_file_${import_file_type}`, [{
-								feature_obj: this.id,
-								import_file: {
-									type: import_file_type,
-									file_path: this.ui.import_file_path[0],
-									options: local_options
-								}
-							}]);
+							let import_file_paths = this.ui.import_file_path;
+							let separate_groups = (import_file_paths.length > 1 && !this.ui.import_file_flatten_when_importing);
 							
+							//Iterate over all import_file_paths
+							for (let i = 0; i < import_file_paths.length; i++) try {
+								let local_group = this;
+								if (separate_groups) {
+									local_group = new naissance.FeatureGroup();
+									local_group.moveToFeature(this);
+								}
+								
+								DALS.Timeline.parseAction(`import_file_${import_file_type}`, [{
+									feature_obj: local_group.id,
+									import_file: {
+										type: import_file_type,
+										file_path: this.ui.import_file_path[i],
+										options: local_options
+									}
+								}]);
+								console.log(`Imported File ${i + 1}/${import_file_paths.length} for ${this.name} using ${import_file_type}.`);
+							} catch (e) {
+								console.error(`Error importing File ${i + 1}/${import_file_paths.length}`, e);
+							}
+							
+							UI_Leftbar.refresh();
 							veToast(`Import request for ${import_file_type} file sent to ${this.name}.`);
 						}, { name: "Confirm" })
 					}, {
-						name: `Import File (${this.name})`,
+						name: `Import File(s) (${this.name})`,
 						can_rename: false,
 						width: "20rem"
 					})
 				}, {
-					name: "Import File",
+					name: "Import File(s)",
 					limit: () => ["FeatureGroup", "FeatureLayer"].includes(this.class_name)
 				}),
 				merge_layers: veButton(() => {

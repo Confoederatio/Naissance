@@ -123,6 +123,10 @@ naissance.Entity = class extends ve.Class {
 				}
 		}
 		
+		//Check if this is a group
+		let is_group = Boolean(this.entities);
+			if (!show_features && !show_geometries) is_group = false;
+		
 		//Return statement
 		this.hierarchy_datatype = new ve.HierarchyDatatype({
 			icon: new ve.HTML(`${(symbol_obj.icon) ? `<icon style="${icon_style}">${symbol_obj.icon}</icon>` : ""}`, {
@@ -163,9 +167,52 @@ naissance.Entity = class extends ve.Class {
 				if (v === false)
 					UI_Leftbar.refresh();
 			},
-			type: (!this.entities) ? "item" : "group"
+			type: (!is_group) ? "item" : "group"
 		});
 		delete this._current_keyframe;
 		return this.hierarchy_datatype;
+	}
+	
+	/**
+	 * Fetches the layer that the current {@link naissance.Entity} is appended to, if anything. Used for masking.
+	 *
+	 * @returns {naissance.FeatureLayer}
+	 */
+	getLayer () {
+		if (!this.parent) return; //Internal guard clause if we have reached the top
+		
+		//Recursively traverse upwards until we hit a FeatureLayer
+		if (this.parent?.class_name === "FeatureLayer") {
+			return this.parent;
+		} else {
+			return this.parent.getLayer();
+		}
+	}
+	
+	moveToFeature (arg0_feature_obj) {
+		//Convert from parameters
+		let feature_obj = (arg0_feature_obj instanceof naissance.Feature) ?
+			arg0_feature_obj : naissance.Feature.instances[arg0_feature_obj];
+		
+		if (feature_obj?.id === this.id) return; //Features can't contain themselves
+		
+		//Splice out of other features
+		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
+			if (local_feature.entities)
+				for (let i = local_feature.entities.length - 1; i >= 0; i--)
+					if (local_feature.entities[i].id === this.id)
+						local_feature.entities.splice(i, 1);
+		});
+		
+		//If the target feature does not already have the entity, push it there
+		if (feature_obj?.entities) {
+			if (!feature_obj.hasEntity(this)) {
+				//Reassign to target Feature
+				feature_obj.entities.push(this);
+				this.parent = feature_obj;
+			}
+		} else if (!feature_obj) {
+			delete this.parent;
+		}
 	}
 };

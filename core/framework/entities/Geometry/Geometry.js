@@ -740,30 +740,6 @@ naissance.Geometry = class extends naissance.Entity {
 	}
 	
 	/**
-	 * Fetches the layer that the current {@link naissance.Geometry} is appended to, if anything. Used for masking.
-	 *
-	 * @returns {naissance.FeatureLayer}
-	 */
-	getLayer () {
-		//Declare local instance variables
-		let all_feature_keys = Object.keys(naissance.Feature.instances);
-		
-		//Iterate over all_feature_keys naissance.Feature.instances
-		for (let i = 0; i < all_feature_keys.length; i++) {
-			let local_feature = naissance.Feature.instances[all_feature_keys[i]];
-			
-			if (local_feature instanceof naissance.FeatureLayer) {
-				let local_geometries = local_feature.getAllGeometries();
-				
-				for (let x = 0; x < local_geometries.length; x++)
-					if (local_geometries[x].id === this.id)
-						//Return statement
-						return local_feature;
-			}
-		}
-	}
-	
-	/**
 	 * Returns a quick actions component with the specified size.
 	 * 
 	 * @param {Object} [arg0_options]

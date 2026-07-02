@@ -153,24 +153,9 @@ naissance.Feature.parseAction = async function (arg0_json) {
 				let local_entities = [...feature_obj.entities];
 				
 				//Iterate over local_entities
-				for (let i = 0; i < local_entities.length; i++) {
-					let local_entity = local_entities[i];
-					
-					//Remove from old parent .entities array
-					if (local_entity.parent && local_entity.parent.entities) {
-						let parent_entities = local_entity.parent.entities;
-						
-						//Iterate over all parent_entities and splice out the entity being moved
-						for (let x = parent_entities.length - 1; x >= 0; x--)
-							if (parent_entities[x].id === local_entity.id)
-								parent_entities.splice(x, 1);
-					}
-					
-					//Move to target feature
-					local_entity.parent = ot_feature_obj;
-					if (!ot_feature_obj.entities) ot_feature_obj.entities = [];
-					ot_feature_obj.entities.push(local_entity);
-				}
+				for (let i = 0; i < local_entities.length; i++)
+					local_entities[i].moveToFeature(ot_feature_obj);
+				
 				UI_Leftbar.refresh();
 			}
 		}

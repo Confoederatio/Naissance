@@ -72,7 +72,13 @@ global.UI_LeftbarHierarchy = class {
 			if (!local_instance) return;
 			
 			if (local_instance instanceof naissance.Feature && local_instance.entities !== undefined) {
-				DALS.Timeline.parseAction("select_feature", [{ type: "Brush", select_feature_id: local_instance.id }]);
+				let already_selected = (main.brush.selected_feature?.id === local_instance.id);
+				
+				if (!already_selected) {
+					DALS.Timeline.parseAction("select_feature", [{ type: "Brush", select_feature_id: local_instance.id }]);
+				} else {
+					DALS.Timeline.parseAction("deselect_feature", [{ type: "Brush", select_feature_id: false }]);
+				}
 			} else {
 				let already_selected = (main.brush.selected_geometry?.id === local_instance.id);
 				
@@ -121,26 +127,15 @@ global.UI_LeftbarHierarchy = class {
 		}
 		
 		if (allow_reassignment[0]) {
-			Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
-				if (local_feature.entities)
-					for (let i = local_feature.entities.length - 1; i >= 0; i--)
-						if (local_feature.entities[i].id === instance.id)
-							local_feature.entities.splice(i, 1);
-			});
+			//Moves to a new feature if possible, 
+			instance.moveToFeature(new_parent);
 			
-			if (new_parent && new_parent.entities) {
-				let new_parent_entity_els = e.on_stop_data.newParentItem.querySelectorAll("ol > li[component='ve-hierarchy-datatype']");
-				new_parent.entities = [];
-				for (let i = 0; i < new_parent_entity_els.length; i++) try {
-					new_parent.entities.push(new_parent_entity_els[i].instance.options.instance);
-				} catch (err) { console.warn(err); }
-				instance.parent = new_parent;
-			} else {
-				instance.parent = undefined;
+			//Root level handling
+			if (!new_parent) {
 				let root_level_els = this.hierarchy.element.querySelectorAll(":scope > ol > li[component='ve-hierarchy-datatype']");
-				let root_instances = Array.from(root_level_els).map(el => el.instance.options.instance);
+				let root_instances = Array.from(root_level_els).map((el) => el.instance.options.instance);
 				
-				let sort_fn = (a, b) => (root_instances.indexOf(a) - root_instances.indexOf(b));
+				let sort_fn = (a, b) => root_instances.indexOf(a) - root_instances.indexOf(b);
 				
 				let sorted_features = Object.values(naissance.Feature.instances).sort(sort_fn);
 				let new_feature_map = {};

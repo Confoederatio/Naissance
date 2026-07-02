@@ -460,6 +460,25 @@
 	};
 	
 	/**
+	 * Checks to see if the value is a pure Math expression.
+	 * @alias String.isMathExpression
+	 * 
+	 * @returns {boolean}
+	 */
+	String.isMathExpression = function (arg0_string) {
+		if (typeof arg0_string !== "string") return false; //Internal guard clause
+		
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Regex only allows numbers, operators (+-*/%**), parens, lat, lng, and Math.something()
+		let safe_regex = /^(?:[0-9\?\:\.\+\-\*\/\%\(\)\,\s]|lat|y|lng|x|Math\.[a-z0-9]+(?:\s*\()?)*$/gi;
+		
+		//Return statement
+		return safe_regex.test(string);
+	};
+	
+	/**
 	 * Checks whether a given string is loosely a valid URL.
 	 * @alias String.isURL
 	 *

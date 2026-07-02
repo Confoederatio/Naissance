@@ -16,79 +16,16 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		 * @type {Array<naissance.Feature|naissance.Geometry>}
 		 */
 		this.entities = (arg0_entities) ? arg0_entities : [];
+		this.metadata = {
+			show_layer_features: true
+		};
 		this.options = (arg1_options) ? arg1_options : {};
 		this.window = new UI_FeatureLayerWindow(this);
 		
 		//Declare local instance variables
 		this._name = "New Layer";
-		this._type = "default"; //Either 'default'/'provinces'
+		this.type = "default"; //Either 'default'/'provinces'
 		this._ui = {};
-	}
-	
-	get type () {
-		//Return statement
-		return this._type;
-	}
-	
-	set type (arg0_value) {
-		//Convert from parameters
-		let value = (arg0_value) ? arg0_value : "default";
-		
-		//Declare local instance variables
-		let province_layers = main._layers.province_layers;
-		
-		//Parse value if 'default'/'provinces'
-		if (value === "default") {
-			//Extant type is provinces, remove from main._layers.province_layers, recalculate provinces
-			if (this.type === "provinces") {
-				//Splice from province_layers
-				for (let i = 0; i < province_layers.length; i++)
-					if (province_layers[i].id === this.id)
-						main._layers.province_layers.splice(i, 1);
-				
-				//Recalculate naissance.FeatureLayer.getProvincesLayer()
-				naissance.FeatureLayer.fetchProvincesLayer();
-				if (this._provinces_is_visible)
-					this.show();
-				delete this._provinces_is_visible;
-			}
-		} else if (value === "provinces") {
-			//Add to main._layers.province_layers if not already included
-			let is_duplicate = false;
-			
-			//Iterate over all province_layers, only push to province_layers if it is not a duplicate
-			for (let i = 0; i < province_layers.length; i++)
-				if (province_layers[i].id === this.id) {
-					is_duplicate = true;
-					break;
-				}
-			
-			if (!is_duplicate)
-				province_layers.push(this);
-			
-			//Recalculate naissance.FeatureLayer.getProvincesLayer()
-			naissance.FeatureLayer.fetchProvincesLayer();
-			this._provinces_is_visible = JSON.parse(JSON.stringify(this._is_visible));
-			this.hide();
-		}
-		
-		//Set this._type
-		this._type = value;
-	}
-	
-	addEntity (arg0_naissance_obj, arg1_do_not_refresh) {
-		//Convert from parameters
-		let naissance_obj = arg0_naissance_obj;
-		let do_not_refresh = arg1_do_not_refresh;
-		
-		//Declare local instance variables
-		let has_entity = this.hasEntity(naissance_obj);
-		
-		if (!has_entity && !(naissance_obj instanceof naissance.Feature && naissance_obj.id === this.id)) {
-			naissance_obj.parent = this;
-			this.entities.push(naissance_obj);
-			if (!do_not_refresh) this.drawHierarchyDatatype();
-		}
 	}
 	
 	drawUI () {
@@ -150,10 +87,13 @@ naissance.FeatureLayer = class extends naissance.Feature {
 				name: "Layer Type",
 				selected: this._type,
 				
-				onuserchange: (v) => DALS.Timeline.parseAction("set_layer_type", [{
-					feature_obj: this.id,
-					set_layer_option: { key: "type", value: v }
-				}])
+				onuserchange: (v) => {
+					DALS.Timeline.parseAction("set_layer_type", [{
+						feature_obj: this.id,
+						set_layer_option: { key: "type", value: v }
+					}]);
+					main.renderer.update();
+				}
 			}),
 			
 			actions: this.drawActionsPalette({
@@ -196,7 +136,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 		
 		//Draw HierarchyDatatype if possible; switch type at bottom
 		this.drawHierarchyDatatype();
-		this.type = (json.type) ? json.type : "default";
+		this.type = (json._type) ? json._type : "default";
 	}
 	
 	/**
@@ -285,74 +225,7 @@ naissance.FeatureLayer = class extends naissance.Feature {
 			is_collapsed: this.is_collapsed,
 			metadata: this.metadata,
 			options: this.options,
-			type: this._type,
+			_type: this.type
 		});
-	}
-	
-	static fetchProvincesLayer () {
-		//Declare local instance variables
-		let all_feature_collections = [];
-		let province_layers = main._layers.province_layers;
-		
-		//Declare local instance variables
-		let maptalks_geometries = [];
-		
-		//1. Populate maptalks_geometries
-		if (province_layers.length === 1) {
-			let all_geometries = province_layers[0].getAllGeometries();
-			
-			//Iterate over all_geometries and append them to maptalks_geometries
-			for (let i = 0; i < all_geometries.length; i++)
-				if (all_geometries[i] instanceof naissance.GeometryPolygon)
-					if (all_geometries[i].current_geometry)
-						maptalks_geometries.push(all_geometries[i].current_geometry);
-		} else if (province_layers.length > 1) {
-			//Iterate over all province_layers and convert them to geometry collections
-			for (let i = 0; i < province_layers.length; i++) {
-				let local_geometries = province_layers[i].getAllGeometries();
-				let raw_geometries = [];
-				
-				//Iterate over all local_geometries and filter for naissance.GeometryPolygon
-				for (let x = 0; x < local_geometries.length; x++)
-					if (local_geometries[x] instanceof naissance.GeometryPolygon)
-						if (local_geometries[x].current_geometry)
-							raw_geometries.push(Geospatiale.convertMaptalksToTurf(local_geometries[x].current_geometry));
-				
-				//Create new turf.featureCollection() and parse it out to GeoJSON
-				all_feature_collections.push(turf.featureCollection(raw_geometries));
-			}
-			
-			//Iterate over all_geometry_collections and difference them using Geospatiale.planarOverlay; return turf.featureCollection()
-			let result = all_feature_collections[0];
-			
-			for (let i = 1; i < all_feature_collections.length; i++)
-				result = Geospatiale.planarOverlay(result, all_feature_collections[i]);
-			
-			for (let local_feature of result.features) {
-				let local_maptalks_geometry = Geospatiale.convertTurfToMaptalks(local_feature.geometry);
-				maptalks_geometries.push(local_maptalks_geometry);
-			}
-		}
-		
-		//2. Refresh layer
-		main._layers.provinces.clear(); //Clear all geometries in layer first
-		if (province_layers.length > 0)
-			main._layers.provinces.addGeometry(maptalks_geometries);
-		
-		//3. Draw layer onto map
-		let provinces_layer = main._layers.provinces;
-		
-		//Iterate over all_geometries
-		let all_geometries = provinces_layer.getGeometries();
-		
-		for (let i = 0; i < all_geometries.length; i++)
-			all_geometries[i].setSymbol({
-				polygonFill: Colour.randomHex(),
-				polygonOpacity: Math.returnSafeNumber(main.settings.province_layer_opacity, 0.5)
-			});
-		provinces_layer.addTo(map);
-		
-		//Return statement
-		return main._layers.provinces;
 	}
 };

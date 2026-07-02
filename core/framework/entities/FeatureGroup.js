@@ -20,21 +20,6 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		this._name = "New Group";
 	}
 	
-	addEntity (arg0_naissance_obj, arg1_do_not_refresh) {
-		//Convert from parameters
-		let naissance_obj = arg0_naissance_obj;
-		let do_not_refresh = arg1_do_not_refresh;
-		
-		//Declare local instance variables
-		let has_entity = this.hasEntity(naissance_obj);
-		
-		if (!has_entity) {
-			naissance_obj.parent = this;
-			this.entities.push(naissance_obj);
-			if (!do_not_refresh) this.drawHierarchyDatatype();
-		}
-	}
-	
 	drawUI () {
 		//Return statement
 		return {

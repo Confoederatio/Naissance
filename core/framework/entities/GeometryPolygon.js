@@ -116,6 +116,10 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//1. Set this.value from current relative keyframe
 		if (this.history._hasTimestampAfter(main.timestamp)) {
+			//Declare local instance variables
+			let layer = this.getLayer();
+			let is_province = (layer?.type === "provinces");
+			
 			this.value = this.history.getKeyframe({ 
 				date: main.timestamp,
 				guaranteed_indexes: [1]
@@ -136,12 +140,27 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			try {
 				if (this.value[0]) {
 					this.geometry = maptalks.Geometry.fromJSON(this.value[0]);
-					if (this.geometry) this.geometry.setSymbol({
-						...naissance.Renderer.getDefaultSymbol({ exclude: ["point"] }),
-						...this.value?.[1],
-					});
 					main.layers.entity_layer.addGeometry(this.geometry);
-					this._drawLabels();
+					
+					//Normal rendering
+					if (!is_province) {
+						this.geometry.setSymbol({
+							...naissance.Renderer.getDefaultSymbol({ exclude: ["point"] }),
+							...this.value?.[1],
+						});
+						this._drawLabels();
+					}
+					//Provinces rendering
+					else {
+						this.geometry.setSymbol({
+							lineColor: "#000000",
+							lineDasharray: [5, 5, 5], 
+							lineWidth: 1,
+							polygonFill: Colour.generateHexFromString(String(this.id)),
+							polygonOpacity: 0.5
+						});
+						this.geometry._naissance_province = true;
+					}
 				}
 			} catch (e) { console.error(e); }
 			
@@ -162,7 +181,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			} catch (e) { console.error(e); }
 			
 			//5. Add bindings
-			if (this.geometry)
+			if (this.geometry && !is_province)
 				this.geometry.addEventListener("click", (e) => {
 					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
 						this.open("instance", { name: this.name, ...this.window_options });

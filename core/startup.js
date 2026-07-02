@@ -56,6 +56,7 @@ global.l4p = "./livemap/4.view/politics/";
 	
 	global.initialiseMap = function () {
 		global.map = scene.map_component.map;
+		global.map_component = scene.map_component;
 		
 		//Declare global variables
 		global.main_navbar = new UI_Navbar();
@@ -126,14 +127,14 @@ global.l4p = "./livemap/4.view/politics/";
 		//1.2. Add event handlers to map
 		//mousedown
 		let mousedown_dictionary = ["left_click", "middle_click", "right_click"];
-		map.on("mousedown", (e) => {
+		map_component.on("mousedown", (e) => {
 			for (let i = 0; i < mousedown_dictionary.length; i++)
 				delete HTML[mousedown_dictionary[i]];
 			HTML[mousedown_dictionary[e.domEvent.which - 1]] = true;
 		});
 		
 		//mouseup
-		map.on("mouseup", (e) => {
+		map_component.on("mouseup", (e) => {
 			for (let i = 0; i < mousedown_dictionary.length; i++)
 				delete HTML[mousedown_dictionary[i]];
 		});

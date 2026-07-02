@@ -32,7 +32,14 @@ global.UI_MapContextMenu = class UI_MapContextMenu extends ve.Class {
 				
 				for (let i = 0; i < selected_geometries.length; i++)
 					selected_geometries[i].selected = false;
-			}, { name: "Clear Brush", limit: () => naissance.Brush.getSelectedGeometries().length })
+			}, { name: "Clear Brush", limit: () => naissance.Brush.getSelectedGeometries().length }),
+			refresh_map: veButton(() => {
+				map_component.refresh();
+				map = map_component.map;
+			}, { 
+				name: "Refresh Map",
+				tooltip: "Useful if cursor interactions are out of sync."
+			})
 		}, { id: "ui_map_context_menu" });
 		
 		this.logic_loop = setInterval(() => {

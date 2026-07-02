@@ -103,6 +103,9 @@ naissance.Feature.importFile = function (arg0_file_path, arg1_type, arg2_options
  *
  * @param {Object|string} arg0_geojson_obj
  * @param {Object} [arg1_options]
+ *  @param {string} [arg1_options.lat_formula]
+ *  @param {string} [arg1_options.lng_formula]
+ *
  *  @param {string} [arg1_options.id_key] - The ID key to look for in .properties.
  *  @param {string} [arg1_options.lineColor_key]
  *  @param {string} [arg1_options.lineOpacity_key]
@@ -110,7 +113,7 @@ naissance.Feature.importFile = function (arg0_file_path, arg1_type, arg2_options
  *  @param {string} [arg1_options.name_key] - The name key to look for in .properties.
  *  @param {string} [arg1_options.polygonFill_key]
  *  @param {string} [arg1_options.polygonOpacity_key]
- *  
+ *
  *  @param {string} [arg1_options.end_year_key]
  *  @param {string} [arg1_options.end_month_key]
  *  @param {string} [arg1_options.end_day_key]
@@ -147,23 +150,48 @@ naissance.Feature.importGeoJSON = function (arg0_geojson_obj, arg1_options) {
 		"MultiPolygon": "GeometryPolygon",
 		"MultiLineString": "GeometryLine",
 	};
+	
+	let lat_fn = (options.lat_formula && String.isMathExpression(options.lat_formula)) ? 
+		new Function("lat", "lng", "let y = lat; return " + options.lat_formula) : null;
+	let lng_fn = (options.lng_formula && String.isMathExpression(options.lat_formula)) ? new Function("lat", "lng", "let x = lng; return " + options.lng_formula) : null;
+	
+	let transformCoords = function (input_coords) {
+		if (typeof input_coords[0] === "number") {
+			let old_lng = input_coords[0];
+			let old_lat = input_coords[1];
+			let new_lng = (lng_fn) ? lng_fn(old_lat, old_lng) : old_lng;
+			let new_lat = (lat_fn) ? lat_fn(old_lat, old_lng) : old_lat;
+			
+			return [new_lng, new_lat];
+		} else {
+			for (let i = 0; i < input_coords.length; i++) {
+				input_coords[i] = transformCoords(input_coords[i]);
+			}
+			return input_coords;
+		}
+	};
 
 	//Iterate over all geojson_obj entries
 	for (let i = 0; i < geojson_obj.features.length; i++) {
 		let local_feature = geojson_obj.features[i];
 		if (!local_feature.geometry?.type) continue; //Internal guard clause if type is not defined
-		
+
 		let local_feature_type = local_feature.geometry.type;
 
 		let is_singular = ["LineString", "Point"].includes(local_feature_type);
-		
+
 		let local_maptalks_type = maptalks_type_map[local_feature_type];
 		let local_naissance_type = naissance_type_map[local_feature_type];
 		let local_properties = (local_feature.properties) ? JSON.parse(JSON.stringify(local_feature.properties)) : {};
 
 		if (!local_maptalks_type || !local_naissance_type) continue; //Internal guard clause for non-geometries
 
-		let local_coords = (is_singular) ? [local_feature.geometry.coordinates] : local_feature.geometry.coordinates;
+		//Deep clone coordinates to prevent modifying original object
+		let local_coords = (is_singular) ?
+			[local_feature.geometry.coordinates] :local_feature.geometry.coordinates;
+
+		//Apply transformation formulas if provided
+		if (lat_fn || lng_fn) local_coords = transformCoords(local_coords);
 
 		//Construct symbol
 		let local_symbol = (local_properties?.maptalks_symbol) ? local_properties.maptalks_symbol : {};
@@ -196,7 +224,9 @@ naissance.Feature.importGeoJSON = function (arg0_geojson_obj, arg1_options) {
 		if (local_id !== undefined) geometry_obj = naissance.Geometry.instances[local_id];
 
 		if (!geometry_obj) {
-			geometry_obj = new naissance[local_naissance_type]({ is_import: true });
+			geometry_obj = new naissance[local_naissance_type]({
+				is_import: true
+			});
 			geometry_obj.parent = this;
 			if (local_id !== undefined) geometry_obj.setID(local_id);
 		}
