@@ -245,7 +245,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			edit_symbol_ui: veInterface({
 				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
 					name: "Label",
-					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ ...v, _id: this.id })
+					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v, _id: this.id })
 				}),
 				edit_point: new UI_PointSymbol(main.settings.default_point_symbol, {
 					name: "Point",

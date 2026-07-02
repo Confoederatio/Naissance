@@ -1,7 +1,7 @@
 {
   "disable_autoload": true,
   "autoloading_mode": "disable_autoload",
-  "sort_settings_alphabetically": false,
+  "sort_settings_alphabetically": true,
   "font_registry": [
     "Arial",
     "Barlow",
@@ -25,5 +25,8 @@
   "default_polygon_symbol": {
     "polygonFill": "#1bbc9b",
     "polygonOpacity": 0.7
+  },
+  "default_label_symbol": {
+    "hide_label": false
   }
 }

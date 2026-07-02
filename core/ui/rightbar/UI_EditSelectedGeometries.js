@@ -7,7 +7,7 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 		//Declare local instance variables
 		this.label_symbol = new UI_LabelSymbol(main.settings.default_label_symbol, {
 			name: "Label Symbol",
-			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
+			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v })
 		});
 		this.line_symbol = new UI_LineSymbol(main.settings.default_line_symbol, {
 			name: "Line Symbol",
