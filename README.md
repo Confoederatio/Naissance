@@ -119,6 +119,8 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 
 **Note.** Vector to raster conversions depend on GeoJSON <-> GeoPNG. Vectorisation uses kNN-binning thresholds or unique colour IDs, and rasterisation uses GeoPNGs with associated IDs. Model building for raster geoprocessing is handled via the Node Editor.
 
+For multi-device geoprocessing, see Collation's multithreading branch.
+
 Raster Formats:
 - .asc (ASC)
 - .nc (NetCDF)
