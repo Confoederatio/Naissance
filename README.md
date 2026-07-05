@@ -112,7 +112,7 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 <details>
   <summary><h3>Supported File Formats.</h3></summary>
 
-**Note.** Vector to raster conversions depend on GeoJSON <-> GeoPNG. Vectorisation uses kNN-binning thresholds or unique colour IDs, and rasterisation uses GeoPNGs with associated IDs. 
+**Note.** Vector to raster conversions depend on GeoJSON <-> GeoPNG. Vectorisation uses kNN-binning thresholds or unique colour IDs, and rasterisation uses GeoPNGs with associated IDs. Model building for raster geoprocessing is handled via the Node Editor.
 
 Raster Formats:
 - .asc (ASC)
