@@ -75,7 +75,7 @@ Maps are saved as `.naissance` files, or in the case of Livemaps, as mapmodes wi
 
 Naissance HGIS is compatible with anything in the npm, Python (both regular pip and `.ipynb` notebooks), R, and LMStudio ecosystems via Vercengen. UI components are additionally just as extensible, as they need only store an `.element`: HTMLElement and `.v` (state value), and can be composed on the fly. Since it is Electron-based, it slots into native web map libraries unlike legacy GIS.
 
-These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, CSV, GeoJSON, GeoPNG, GeoTIFF, KML/KMZ, NC, OSM, SHP, and other file formats are supported by default; alongside Proj4JS live-warping. Projections can also be adjusted via mathematical expressions. 
+These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, CSV, GeoJSON, GeoPNG, GeoTIFF, KML/KMZ, NC, OSM, SHP, and other file formats are supported by default; alongside Proj4JS live-warping. Projections can also be adjusted via mathematical expressions where Proj4 is not sufficient. 
 
 Blacktraffic scrapers rely on Chrome (Puppeteer) and Firefox (Selenium) and can capture Deck.gl, Leaflet, MapLibre, Maptalks and OpenLayers geometries. 3D geometries beyond 2.5D use .gltf files and 3D Tiles (ideally via Blender), with full Three.js support. 2D operations use a custom fork of [Turf.js](https://github.com/ConfoederatioVF/Turf.performant).
 
