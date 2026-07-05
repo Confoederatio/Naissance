@@ -75,7 +75,7 @@ Maps are saved as `.naissance` files, or in the case of Livemaps, as mapmodes wi
 
 Naissance HGIS is compatible with anything in the npm, Python (both regular pip and `.ipynb` notebooks), R, and LMStudio ecosystems via Vercengen. UI components are additionally just as extensible, as they need only store an `.element`: HTMLElement and `.v` (state value), and can be composed on the fly. Since it is Electron-based, it slots into native web map libraries unlike legacy GIS.
 
-These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, CSV, GeoJSON, GeoPNG, GeoTIFF, KML/KMZ, NC, OSM, SHP, and other file formats are supported by default; alongside Proj4JS live-warping. Rasters can be converted to vector and vice-versa via GeoJSON <-> GeoPNG. Projections can also be adjusted via mathematical expressions. 
+These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, CSV, GeoJSON, GeoPNG, GeoTIFF, KML/KMZ, NC, OSM, SHP, and other file formats are supported by default; alongside Proj4JS live-warping. Projections can also be adjusted via mathematical expressions. 
 
 Blacktraffic scrapers rely on Chrome (Puppeteer) and Firefox (Selenium) and can capture Deck.gl, Leaflet, MapLibre, Maptalks and OpenLayers geometries. 3D geometries beyond 2.5D use .gltf files and 3D Tiles (ideally via Blender), with full Three.js support. 2D operations use a custom fork of [Turf.js](https://github.com/ConfoederatioVF/Turf.performant).
 
@@ -107,4 +107,38 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 - Deprojector (Beta; Raster) - Arbitrary projection-to-projection georeferencing using ML. These scripts are currently a proof-of-concept and not recommended for production.
   - [[Tool (Github)]](https://github.com/Confoederatio/Deprojector) 
 
+</details>
+<details>
+  <summary><h3>Supported File Formats.</h3></summary>
+
+**Note.** Vector to raster conversions depend on GeoJSON <-> GeoPNG. Vectorisation uses kNN-binning thresholds or unique colour IDs, and rasterisation uses GeoPNGs with associated IDs. 
+
+Raster Formats:
+- .asc (ASC)
+- .nc (NetCDF)
+- .png (GeoPNG) - Either KNN-threshold binning or ID based.
+- .tif (GeoTIFF)
+
+Scripting Formats:
+- Excel/Google Sheets (via DatavisSuite/Spreadsheet)
+- .ipynb (Jupyter Notebook)
+- .js (JavaScript)
+- .R (R)
+- .py (Python)
+- .ve-ne (Forse/Vercengen)
+
+Vector Formats:
+- .csv (CSV)
+- .gltf (glTF)
+- .gpx (GPX)
+- .json (GeoJSON)
+- .kml (KML)
+- .kmz (KMZ)
+- .naissance (Naissance)
+- .osm (OSM)
+- .polyline (Polyline)
+- .shp/.zip (Shapefile)
+- .topojson (TopoJSON)
+- .wkt (WKT)
+  
 </details>
