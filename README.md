@@ -81,7 +81,7 @@ Naissance HGIS is compatible with anything in the npm, Python (both regular pip 
 
 These libraries and utils can also be used in the visual script editor (alongside GDAL/GRASS/Magick/SAGA if they are installed). ASC, CSV, GeoJSON, GeoPNG, GeoTIFF, KML/KMZ, NC, OSM, SHP, and other file formats are supported by default; alongside Proj4JS live-warping (including all strings from https://epsg.io/). Projections can also be adjusted via mathematical expressions where Proj4 is not sufficient. 
 
-Blacktraffic scrapers rely on Chrome (Puppeteer) and Firefox (Selenium) and can capture Deck.gl, Leaflet, MapLibre, Maptalks and OpenLayers geometries. 3D geometries beyond 2.5D use .gltf files and 3D Tiles (ideally via Blender), with full Three.js support. 2D operations use a custom fork of [Turf.js](https://github.com/ConfoederatioVF/Turf.performant), with Geospatiale for advanced operations.
+Blacktraffic scrapers rely on Chrome (Puppeteer) and Firefox (Selenium) and can capture Deck.gl, Leaflet, MapLibre, Maptalks and OpenLayers geometries. 3D geometries beyond 2.5D use .gltf files and 3D Tiles (ideally via Blender), with full Three.js support. 2D operations use [Turf.performant](https://github.com/ConfoederatioVF/Turf.performant) (a custom fork of Turf.js), with Geospatiale for advanced operations.
 
 <details>
   <summary><h3>Naissance World Model (Datasets).</h3></summary>
