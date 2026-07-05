@@ -28,5 +28,6 @@
   },
   "default_label_symbol": {
     "hide_label": false
-  }
+  },
+  "wiki_service": "obsidian"
 }
