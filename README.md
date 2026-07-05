@@ -48,7 +48,7 @@
 
 Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools. Brushes are designed around vector-as-raster technology, and have 0m precision for operations as well as snap-to features.
 
-A built-in stateful office suite is also available for IDEs, spreadsheets/graphing, word processing, and browsing, courtesy of Vercengen.
+An integrated office suite is also available for IDEs, spreadsheets/graphing, word processing, and browsing.
 
 <details open>
   <summary><h3>Installation.</h3></summary>
