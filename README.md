@@ -44,7 +44,7 @@
 > [!NOTE]
 > This repository contains **production** builds for Naissance HGIS. If you require leading capabilities, including pre-packaged Livemap/Histmap scripts, consider using [Naissance Collation](https://github.com/Confoederatio/Collation) instead.
 
-**Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes, and a ground-up Undo/Redo Tree system allows for branches, merges, and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
+**Naissance HGIS** is a 3D map editor for geospatial data with a focus on ease-of-use and capability. History is managed via keyframes (either static or interpolated based on use-case), and a ground-up Undo/Redo Tree system allows for branches, merges, and commits. Users can create groups, layers, overlays, and utilise brushes much like in traditional raster editing programs in addition to traditional vector-based editing tools.
 
 <details open>
   <summary><h3>Installation.</h3></summary>
