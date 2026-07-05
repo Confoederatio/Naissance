@@ -118,6 +118,18 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 										UI_Settings.refresh();
 										UI_Settings.saveSettings();
 									}
+								}),
+								wiki_service: veSelect({
+									obsidian: { name: "Obsidian Publish" },
+									wikijs: { name: "Wiki.js" }
+								}, {
+									name: "Wiki Service",
+									selected: (main.settings.wiki_service || "obsidian"),
+									tooltip: "Changes the Confoederatio wiki service used by default.",
+									onuserchange: (v) => {
+										main.settings.wiki_service = v;
+										UI_Settings.saveSettings();
+									},
 								})
 							}
 						},

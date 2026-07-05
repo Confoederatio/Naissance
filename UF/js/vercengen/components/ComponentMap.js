@@ -18,7 +18,10 @@
  * - <span color=00ffff>{@link ve.Component.Map.clear|clear}</span>()
  * - <span color=00ffff>{@link ve.Component.Map.getDefaultBaseLayer|getDefaultBaseLayer}</span>() | {@link maptalks.TileLayer}
  * - <span color=00ffff>{@link ve.Component.Map.getDefaultSpatialReference|getDefaultSpatialReference}</span>() | { projection: {@link string} }</span>>
+ * - <span color=00ffff>{@link ve.Component.Map.handleEvents|handleEvents}</span>()
  * - <span color=00ffff>{@link ve.Component.Map.initialiseMap|initialiseMap}</span>(arg0_value:{@link Object})
+ * - <span color=00ffff>{@link ve.Component.Map.on|on}</span>(arg0_event:{@link string}, arg1_function:{@link function})
+ * - <span color=00ffff>{@link ve.Component.Map.refresh|refresh}</span>()
  * 
  * @augments ve.Component
  * @memberof ve.Component
@@ -153,6 +156,9 @@ ve.Map = class extends ve.Component {
 	
 	/**
 	 * Handles default events for the given map.
+	 * 
+	 * @alias handleEvents
+	 * @memberof ve.Component.ve.Map
 	 */
 	handleEvents () {
 		this.map.on("click", (e) => {
@@ -166,6 +172,9 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Ensures that the Maptalks instance is initialised safely.
 	 * - Method of: {@link ve.Map}
+	 * 
+	 * @alias initialiseMap
+	 * @memberof ve.Component.ve.Map
 	 * 
 	 * @param arg0_value
 	 * 
@@ -204,6 +213,9 @@ ve.Map = class extends ve.Component {
 	 * Registers a map event listener with the current component.
 	 * - Method of: {@link ve.Map}
 	 * 
+	 * @alias on
+	 * @memberof ve.Component.ve.Map
+	 * 
 	 * @param {maptalks.Event} arg0_event
 	 * @param {function} arg1_function
 	 */
@@ -220,6 +232,9 @@ ve.Map = class extends ve.Component {
 	/**
 	 * Refreshes the current map display, but does not reattach event listeners.
 	 * - Method of: {@link ve.Map}
+	 * 
+	 * @alias refresh
+	 * @memberof ve.Component.ve.Map
 	 */
 	refresh () {
 		//Iterate over all_layers and remove them
@@ -245,7 +260,7 @@ ve.Map = class extends ve.Component {
 		for (let i = 0; i < all_layers.length; i++)
 			this.map.addLayer(all_layers[i]);
 	}
-}
+};
 
 //Functional binding
 

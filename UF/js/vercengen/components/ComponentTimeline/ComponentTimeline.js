@@ -42,7 +42,9 @@
  * 
  * ##### Methods:
  * - <span color=00ffff>{@link ve.UndoRedo.draw|draw}</span>() - 
- * 
+ *
+ * @augments ve.Component
+ * @memberof ve.Component
  * @type {ve.Timeline}
  */
 ve.Timeline = class extends ve.Component {
@@ -122,4 +124,14 @@ ve.Timeline = class extends ve.Component {
 		this.options.keyframes = keyframes_obj;
 		this.draw();
 	}
+};
+
+//Functional binding
+
+/**
+ * @returns {ve.Timeline}
+ */
+veTimeline = function () {
+	//Return statement
+	return new ve.Timeline(...arguments);
 };

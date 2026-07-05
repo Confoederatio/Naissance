@@ -5,7 +5,9 @@
  * - `arg0_value=Date.getCurrentDate()`: {@link number}|{@link Object} - The Date at which to start the Chronology.
  * - `arg1_options`: {@link Object}
  *   - `.timeline_instance`: {@link ve.Timeline}
- * 
+ *
+ * @augments ve.Component
+ * @memberof ve.Component
  * @type {ve.TimelineChronology}
  */
 ve.TimelineChronology = class extends ve.Component {
@@ -176,4 +178,14 @@ ve.TimelineChronology = class extends ve.Component {
 		if (this.current_index !== undefined)
 			this.table.jumpToIndex(this.current_index);
 	}
+};
+
+//Functional binding
+
+/**
+ * @returns {ve.TimelineChronology}
+ */
+veTimelineChronology = function () {
+	//Return statement
+	return new ve.TimelineChronology(...arguments);
 };

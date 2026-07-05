@@ -113,9 +113,12 @@
  * - {@link ve.Component.ve.Telephone|veTelephone}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * - {@link ve.Component.ve.Text|veText}(arg0_value:{@link string}, arg1_options: {@link Object}) | {@link string}
  * - {@link ve.Component.ve.Time|veTime}(arg0_value:{hour:{@link number}, minute:{@link number}}, arg1_options:{@link Object}) | {hour:{@link number}, minute:{@link number}}
+ * - {@link ve.Component.ve.Timeline|veTimeline}(arg0_value:{@link number}|{@link Object}, arg1_options:{@link Object}) | {@link Object} - Returns the date the timeline is currently focused on.
+ *   - {@link ve.Component.ve.TimelineChronology|veTimelineChronology}(arg0_value:{@link number}|{@link Object}, arg1_options:{@link Object}) | {@link Object} - Returns the date the timeline chronology is currently focused on.
  * - {@link ve.Component.ve.Toggle|veToggle}(arg0_value:{@link boolean}, arg1_options:{@link Object}) | {@link boolean}
  * - {@link ve.Component.ve.UndoRedo|veUndoRedo}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string} - The {@link DALS.Timeline} ID that the UndoRedo component is currently navigating.
  * - {@link ve.Component.ve.URL|veURL}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
+ * - {@link ve.Component.ve.Wiki|veWiki}(arg0_value:{@link string}, arg1_options:{@link Object}) | {@link string}
  * 
  * @class
  * @memberof ve
