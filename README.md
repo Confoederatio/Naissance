@@ -35,7 +35,8 @@
 </div><br>
 
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
-- Documentation (Naissance): [docs.confoederatio.org/Naissance](https://docs.confoederatio.org/Naissance) | [Mirror (confoederatiodocs.info)](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance/Naissance)
+- Documentation (Naissance): [docs.confoederatio.org/Naissance](https://docs.confoederatio.org/Naissance)
+  - [Mirror (confoederatiodocs.info)](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance/Naissance)
 - Documentation (Vercengen): [confoederatio.org/Vercengen](https://confoederatio.org/Vercengen/)
 
 ### Abstract.
