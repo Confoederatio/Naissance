@@ -37,6 +37,7 @@
 - E-mail: [vf@confoederatio.org](mailto:vf@confoederatio.org)
 - Documentation (Naissance): [confoederatiodocs.info](https://confoederatiodocs.info/CRD+(Confoederatio%2C+Research+Division)/Documentation/Software/Naissance/Naissance)
 - Documentation (Vercengen): [confoederatio.org/Vercengen](https://confoederatio.org/Vercengen/)
+- Element Matrix: [element.confoederatio.org](https://matrix.to/#/#confoederatio:matrix.confoederatio.org)
 
 ### Abstract.
 
