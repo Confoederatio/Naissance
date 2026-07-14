@@ -42,7 +42,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 				let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
 				let hide_labels_under_km2 = Math.returnSafeNumber(main.settings.hide_labels_under_km2, 1000);
 				
-				//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
+				//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[1].label_symbol
 				if (this.geometry) {
 					let label_geometries = (this.value[2].label_geometries) ?
 						this.value[2].label_geometries : [];
@@ -52,7 +52,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 					
 					let label_symbol = {
 						...default_label_symbol,
-						...this.value[2].label_symbol
+						...this.value[1].label_symbol
 					};
 					if (label_symbol.hide_label) return;
 					

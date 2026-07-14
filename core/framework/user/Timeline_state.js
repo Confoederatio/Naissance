@@ -28,28 +28,52 @@
 		if (json === undefined) json = [];
 		if (!Array.isArray(json)) json = [json];
 		
+		//Declare local instance variables
+		let scope_map = naissance.Action.scope_map;
+		
 		//Iterate over multi-value packet (MVP) and filter it down to superclass single-value packets (SVPs)
 		for (let i = 0; i < json.length; i++) {
-			if (json[i].feature_obj) {
-				await naissance.Feature.parseAction(json[i]);
-			} else if (json[i].geometry_obj) {
-				await naissance.Geometry.parseAction(json[i]);
-			} else {
-				if (json[i].type) {
-					await naissance[json[i].type].parseAction(json[i]);
-				} else {
-					if (json[i].load_save)
-						DALS.Timeline.loadState(json[i].load_save);
-					if (json[i].set_date) {
-						UI_DateMenu.setDate(json[i].set_date);
-					} else if (json[i].refresh_date === true) {
-						Object.iterate(naissance.Geometry.instances, (local_key, local_value) =>{
-							local_value.draw();
-							local_value.update();
-						});
-						naissance.Mapmode.draw();
-						UI_Leftbar.refresh();
+			//New handling (Actions Palette)
+			if (json[i].feature_obj || json[i].geometry_obj || json[i].type) {
+				let feature_obj = naissance.Feature.instances[json[i].feature_obj];
+				let geometry_obj = naissance.Geometry.instances[json[i].geometry_obj]; 
+				let naissance_obj;
+				
+				if (feature_obj) naissance_obj = feature_obj;
+				if (geometry_obj) naissance_obj = geometry_obj;
+				
+				//Iterate over all scopes and handle their actions
+				let scopes = naissance.Action.getScopes((naissance_obj || json[i].type));
+				
+				for (let x = 0; x < scopes.length; x++) {
+					let local_scope_map = scope_map[scopes[x]];
+					if (!local_scope_map) continue;
+					
+					//Iterate over all_scope_keys
+					let all_scope_keys = Object.keys(local_scope_map);
+					
+					for (let y = 0; y < all_scope_keys.length; y++) {
+						let local_action = local_scope_map[all_scope_keys[y]];
+						
+						if (json[i][local_action.key] !== undefined && typeof local_action.special_function === "function")
+							await local_action.special_function({
+								naissance_obj,
+								...json[i]
+							});
 					}
+				}
+			} else {
+				if (json[i].load_save)
+					DALS.fromJSON(json[i].load_save);
+				if (json[i].set_date) {
+					UI_DateMenu.setDate(json[i].set_date);
+				} else if (json[i].refresh_date === true) {
+					Object.iterate(naissance.Geometry.instances, (local_key, local_value) =>{
+						local_value.draw();
+						local_value.update();
+					});
+					naissance.Mapmode.draw();
+					UI_Leftbar.refresh();
 				}
 			}
 		}
@@ -59,7 +83,7 @@
 			new DALS.Action({
 				options: {
 					key: key,
-					name: key
+					name: String.formalise(key)
 				},
 				value: json
 			});
@@ -72,13 +96,13 @@
 
 //State save/load functions
 {
-	DALS.Timeline.loadState = function (arg0_json) { //[WIP] - Finish function body
+	DALS.fromJSON = function (arg0_json) {
 		//Convert from parameters
 		let json = (arg0_json) ? arg0_json : {};
 		if (typeof json === "string") json = JSON.parse(json);
 		
 		//0. Clear map
-		console.log(`DALS.Timeline.loadState called.`);
+		console.log(`DALS.fromJSON called.`);
 		{
 			//Clear _layers
 			main._layers.province_layers = [];
@@ -141,7 +165,7 @@
 		main.layers.cursor_layer.addGeometry(main.brush.cursor);
 	};
 	
-	DALS.Timeline.saveState = function () { //[WIP] - Finish function body for naissance.Feature
+	DALS.toJSON = function () { //[WIP] - Finish function body for naissance.Feature
 		//Declare local instance variables
 		let json_obj = {};
 		

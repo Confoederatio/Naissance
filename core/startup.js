@@ -1,5 +1,5 @@
 //Import modules
-const {ipcRenderer} = require("electron");
+const { ipcRenderer } = require("electron");
 global.child_process = require("child_process");
 global.cubic_spline = require("cubic-spline");
 global.electron = require("electron");
@@ -120,6 +120,7 @@ global.l4p = "./livemap/4.view/politics/";
 		};
 		UI_Settings.loadSettings();
 		main.user.brush = new naissance.Brush();
+		naissance.Action.initialise();
 		
 		//1.1. Append all layers to map
 		Object.iterate(main.layers, (local_key, local_value) => local_value.addTo(map));
@@ -142,7 +143,7 @@ global.l4p = "./livemap/4.view/politics/";
 		//2. Set aliases
 		main.brush = main.user.brush;
 		
-		//3. Set datee
+		//3. Set date
 		UI_DateMenu.setDate(Date.getCurrentDate());
 	};
 	

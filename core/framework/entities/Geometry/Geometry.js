@@ -75,8 +75,9 @@ naissance.Geometry = class extends naissance.Entity {
 	
 	constructor () {
 		super();
-		this.history = new naissance.History({}, {
+		this.history = new History({}, {
 			_id: () => this.id,
+			draw_keyframe_function: naissance.History.draw_keyframe_function,
 			localisation_function: naissance.Geometry.history_localisation_function
 		});
 		this.id = Class.generateRandomID(naissance.Geometry);
@@ -208,317 +209,6 @@ naissance.Geometry = class extends naissance.Entity {
 		//Declare local instance variables
 		this.history.addKeyframe(date, coords, symbol, data);
 		this.draw();
-	}
-	
-	drawActionsPalette (arg0_options) {
-		//Convert from parameters
-		let options = (arg0_options) ? arg0_options : {};
-		
-		//Declare local instance variables
-		if (!this.ui) this.ui = {};
-		
-		//Open this.actions_palette_window
-		if (this.actions_palette_window) this.actions_palette_window.close();
-		this.actions_palette_window = veWindow({
-			actions_palette: veSearchSelect({
-				debug_geometry: veButton(() => {
-					window.$geometry = this;
-					console.log(`Geometry logged as:`, window.$geometry);
-					veToast(`Geometry logged to console.`);
-				}, { name: "Debug Geometry" }),
-				geometry_operation: veButton(() => {
-					let operation_names = {
-						buffer: { name: "Buffer" },
-						difference: { name: "Difference" },
-						intersect: { name: "Intersect" },
-						union: { name: "Union" },
-						xor: { name: "XOR" }
-					};
-					let operation_target = () => (this.ui.geometry_operation_target || "geometry");
-					let operation_type = () => (this.ui.geometry_operation_type || "union");
-					
-					if (this.geometry_operation_window) this.geometry_operation_window.close();
-					
-					this.geometry_operation_window = veWindow({
-						geometry_operation_target: veSelect({
-							feature: { name: "Feature" },
-							geometry: { name: "Geometry" }
-						}, {
-							name: "Merge With Entity Type",
-							selected: operation_target(),
-							onuserchange: (v) => this.ui.geometry_operation_target = v
-						}),
-						geometry_operation_geometry: new UI_GeometryDatalist(this.ui.geometry_operation_geometry, {
-							name: "Geometry",
-							filter_types: ["GeometryPolygon"],
-							limit: () => {
-								let target = operation_target();
-								if (target === "geometry") return true;
-								return false;
-							},
-							onuserchange: (v) => this.ui.geometry_operation_geometry = v
-						}),
-						geometry_operation_feature: new UI_FeatureDatalist(this.ui.geometry_operation_feature, {
-							name: "Feature",
-							filter_types: ["FeatureGroup", "FeatureLayer"],
-							limit: () => {
-								let target = operation_target();
-								if (target === "feature") return true;
-								return false;
-							},
-							onuserchange: (v) => this.ui.geometry_operation_feature = v
-						}),
-						operation_type: veSelect(operation_names, {
-							name: "Operation Type",
-							selected: operation_type(),
-							onuserchange: (v) => this.ui.geometry_operation_type = v
-						}),
-						
-						buffer_distance: veNumber(this.ui.geometry_operation_buffer_distance, {
-							name: "Buffer Distance",
-							limit: () => operation_type() === "buffer",
-							onuserchange: (v) => this.ui.geometry_operation_buffer_distance = v
-						}),
-						
-						confirm: veButton(() => {
-							//Declare local instance variables
-							let geometry_operation_type = operation_type();
-							let options = {};
-							let target = operation_target();
-							let target_geometry_id = (target === "geometry") ? this.ui.geometry_operation_geometry : undefined;
-							let target_feature_id = (target === "feature") ? this.ui.geometry_operation_feature : undefined;
-							
-							//Buffer handling
-							let buffer_distance = Math.returnSafeNumber(this.ui.geometry_operation_buffer_distance, 0);
-							if (geometry_operation_type === "buffer") {
-								if (buffer_distance === 0) {
-									veToast(`<icon>warning</icon> Buffer distance must not be 0.`);
-									return;
-								}
-								
-								options.distance = buffer_distance;
-							}
-							
-							//Run feature operation
-							DALS.Timeline.parseAction("geometry_operation", {
-								geometry_obj: this.id,
-								geometry_operation: {
-									type: geometry_operation_type,
-									feature_id: target_feature_id,
-									geometry_id: target_geometry_id,
-									options: options
-								}
-							});
-							
-							let ot_name;
-							if (target_geometry_id) ot_name = naissance.Geometry.instances[target_geometry_id]?.name;
-							if (target_feature_id) ot_name = naissance.Feature.instances[target_feature_id]?.name;
-							
-							veToast(`Performed ${operation_names[geometry_operation_type].name} on ${this.name} using ${ot_name}.`);
-						}, { name: "Confirm" })
-					}, {
-						name:`Feature Operation (${this.name})`,
-						can_rename: false,
-						width: "20rem"
-					});
-				}, {
-					name: "Geometry Operation",
-					limit: () => this.class_name === "GeometryPolygon"
-				}),
-				link_geometry: veButton(() => {
-					if (this.link_geometry_window) this.link_geometry_window.close();
-					this.link_geometry_window = veWindow({
-						link_geometry_with: new UI_GeometryDatalist(this.ui.link_geometry_with_id, {
-							name: "Link to Geometry:",
-							onuserchange: (v) => this.ui.link_geometry_with_id = v
-						}),
-						confirm: veButton(() => {
-							//Internal guard clauses to prevent invalid operations
-							if (!this.ui.link_geometry_with_id) {
-								veToast(`<icon>warning</icon> You must select a valid Geometry to link to.`)
-								return;
-							}
-							
-							let linked_geometry = naissance.Geometry.instances[this.ui.link_geometry_with_id];
-							
-							if (!linked_geometry) {
-								veToast(`<icon>warning</icon> The linked geometry no longer exists.`);
-								return;
-							}
-							if (linked_geometry.class_name !== this.class_name) {
-								veToast(`<icon>warning</icon> You may only link to geometries of the same type.`);
-								return;
-							}
-							if (linked_geometry?.metadata?.linked_id) {
-								veToast(`<icon>warning</icon> You cannot recursively link geometries.`);
-								return;
-							}
-							
-							let from_layer = this.getLayer();
-							let to_layer = linked_geometry.getLayer();
-							
-							if (from_layer.id === to_layer.id) {
-								veToast(`<icon>warning</icon> You cannot claim geometries are identical within the same layer. Move ${this.name} to a new layer first.`);
-								return;
-							}
-							
-							if (!this.metadata) this.metadata = {};
-							this.metadata.linked_id = this.ui.link_geometry_with_id;
-							
-							veToast(`Linked ${this.name} with ${linked_geometry.name}`);
-							this.link_geometry_window.close();
-						}, { name: "Confirm" })
-					}, { name: "Link Geometry", can_rename: false });
-				}, { name: "Link Geometry" }),
-				manage_relations: veButton(() => {
-					if (this.add_relation_window) this.add_relation_window.close();
-					this.add_relation_window = veWindow({
-						add_remove: veSelect({
-							add: { name: "Start" },
-							remove: { name: "End" }
-						}, {
-							name: "Start/End Relationship",
-							onuserchange: (v) => this.ui.add_relation_modifier = v,
-							selected: (this.ui.add_relation_with_id) ? this.ui.add_relation_with_id : "add"
-						}),
-						relation_mode: veSelect({
-							clear: { name: "Clear" },
-							direct: { name: "Direct" },
-							indirect: { name: "Indirect" },
-							remove_direct: { name: "Remove Direct" },
-							remove_indirect: { name: "Remove Indirect" },
-							replace: { name: "Replace" }
-						}, {
-							name: "Mode",
-							tooltip: "Direct relationships are with other geometries, indirect relations are detached (similar to tags).",
-							
-							onuserchange: (v) => this.ui.add_relation_mode = v,
-							selected: (this.ui.add_relation_mode) ? this.ui.add_relation_mode : "direct",
-						}),
-						relation_with: new UI_GeometryDatalist(this.ui.add_relation_with_id, {
-							name: "Add Relation with Geometry:",
-							limit: () => !["clear", "indirect", "remove_indirect"].includes(this.ui.add_relation_mode),
-							onuserchange: (v) => this.ui.add_relation_with_id = v
-						}),
-						relation_date: veDate((this.ui.add_relation_date !== undefined) ? this.ui.add_relation_date : main.date, {
-							name: "Relation Date:",
-							onuserchange: (v) => this.ui.add_relation_date = v,
-							tooltip: "The date at which this relation begins."
-						}),
-						relation_name: veText(this.ui.add_relation_type, {
-							name: "Relation Name:",
-							limit: () => !["clear"].includes(this.ui.add_relation_mode),
-							onuserchange: (v) => this.ui.add_relation_type = v
-						}),
-						confirm: veButton(() => {
-							naissance.Geometry.Action_manageRelations.call(this);
-						}, { name: "Confirm" })
-					}, {
-						name: "Manage Relations",
-						can_rename: false,
-						width: "20rem"
-					})
-				}, { name: "Manage Relations" }),
-				merge_geometry: veButton(() => {
-					if (this.merge_geometry_window) this.merge_geometry_window.close();
-					this.merge_geometry_window = veWindow({
-						merge_geometry_with: new UI_GeometryDatalist(this.ui.merge_geometry_id, {
-							name: "Merge Geometry",
-							filter_types: [this.class_name],
-							onuserchange: (v) => this.ui.merge_geometry_id = v
-						}),
-						confirm: veButton(() => {
-							if (!this.ui.merge_geometry_id) {
-								veToast(`<icon>warning</icon> You must select a valid Geometry to merge this Geometry with.`)
-								return;
-							}
-							
-							let ot_geometry = naissance.Geometry.instances[this.ui.merge_geometry_id];
-							if (!ot_geometry) {
-								veToast(`<icon>warning</icon> This geometry no longer exists.`);
-								return;
-							}
-							
-							DALS.Timeline.parseAction("merge_geometry", [{
-								geometry_obj: this.id,
-								merge_geometry: ot_geometry.id
-							}]);
-							this.merge_geometry_window.close();
-							veToast(`Successfully merged ${this.name} and ${ot_geometry.name}.`);
-						})
-					}, {
-						name: "Merge Geometry",
-						can_rename: false
-					});
-				}, { name: "Merge Geometry" }),
-				set_zoom_visibility: veButton(() => {
-					if (this.set_zoom_window) this.set_zoom_window.close();
-					this.set_zoom_window = veWindow({
-						information: veHTML(`To remove the zoom attribute, type -1 as the value instead.`),
-						
-						min_zoom: veNumber(this.ui.set_zoom_min, {
-							name: "Minimum Zoom Level",
-							onuserchange: (v) => this.ui.set_zoom_min = v
-						}),
-						max_zoom: veNumber(this.ui.set_zoom_max, {
-							name: "Maximum Zoom Level",
-							onuserchange: (v) => this.ui.set_zoom_max = v
-						}),
-						is_start_keyframe: veToggle(this.ui.set_zoom_is_start, {
-							name: "Modify Zoom at Starting Keyframe",
-							onuserchange: (v) => this.ui.set_zoom_is_start = v
-						}),
-						
-						confirm: veButton(() => {
-							let current_min = (this.ui.set_zoom_min !== undefined) ? this.ui.set_zoom_min : -1;
-							let current_max = (this.ui.set_zoom_max !== undefined) ? this.ui.set_zoom_max : -1;
-							
-							DALS.Timeline.parseAction("set_zoom", [{
-								geometry_obj: this.id,
-								set_zoom: {
-									is_start_keyframe: (this.ui.set_zoom_is_start),
-									max_zoom: (current_max === -1) ? "delete" : current_max,
-									min_zoom: (current_min === -1) ? "delete" : current_min
-								}
-							}]);
-							
-							veToast(`Successfully updated zoom visibility for ${this.name}.`);
-							this.set_zoom_window.close();
-						}, { name: "Confirm" })
-					}, {
-						name: `Set Zoom (${this.name})`,
-						can_rename: false,
-						width: "20rem"
-					});
-				}, { name: "Set Zoom Visibility" }),
-				unlink_geometry: veButton(() => {
-					let linked_geometry = naissance.Geometry.instances[this.metadata.linked_id];
-					
-					delete this.metadata.linked_id;
-					if (linked_geometry) {
-						veToast(`Unlinked geometry from ${linked_geometry.name}.`);
-					} else {
-						veToast(`Cleared reference to stale geometry.`);
-					}
-				}, {
-					name: "Unlink Geometry",
-					limit: () => this?.metadata?.linked_id
-				})
-			}, {
-				display: "inline",
-				placeholder: "Search for action ...",
-				style: {
-					"> [component='ve-button']": {
-						display: "inline",
-						padding: 0
-					}
-				}
-			})
-		}, {
-			name: `Geometry Actions (${this.name})`,
-			can_rename: false,
-			width: "30rem"
-		});
 	}
 	
 	/**
@@ -688,38 +378,6 @@ naissance.Geometry = class extends naissance.Entity {
 	}
 	
 	/**
-	 * Returns all keyframes that change the current geometry. Returns either the timestamp/date. Dates by default.
-	 * 
-	 * @param {Object} [arg0_options]
-	 *  @param {boolean} [arg0_options.return_timestamps=false]
-	 * 
-	 * @returns {Object[]|number[]}
-	 */
-	getGeometryKeyframes (arg0_options) {
-		//Convert from parameters
-		let options = (arg0_options) ? arg0_options : {};
-		
-		//Declare local instance variables
-		let unique_timestamps = [];
-		
-		//Iterate over all .history.keyframes
-		Object.iterate(this.history.keyframes, (local_key, local_value) => {
-			if (local_value.value[0] !== undefined)
-				unique_timestamps.push(Date.convertTimestampToInt(local_key));
-		});
-		
-		if (!options.return_timestamps) {
-			let unique_dates = [];
-			
-			//Return statement
-			for (let i = 0; i < unique_timestamps.length; i++)
-				unique_dates.push(Date.convertTimestampToDate(unique_timestamps[i]));
-			return unique_dates;
-		}
-		return unique_timestamps;
-	}
-	
-	/**
 	 * Returns the Maptalks geometry at the specific date.
 	 * 
 	 * @param {Object|number} [arg0_date]
@@ -859,7 +517,7 @@ naissance.Geometry = class extends naissance.Entity {
 				}),
 				
 				open_actions_palette: veButton(() => {
-					this.drawActionsPalette();
+					naissance.Action.openActionsPalette(this);
 				}, {
 					name: "<icon>more_vert</icon>",
 					tootlip: "Open Actions Palette"
@@ -878,7 +536,48 @@ naissance.Geometry = class extends naissance.Entity {
 		});
 	}
 	
-	getRelations () { return naissance.Geometry.getRelations.call(this); }
+	getRelations () {
+		//Return statement
+		return naissance.Geometry.getRelations.call(this); 
+	}
+	
+	/**
+	 * Fetches all timestamps within a date range/selection.
+	 * 
+	 * @param {Object[]|number[]|string} [arg0_date_type="current_date"] - Either a date range (Array), or 'all_keyframes'/'current_date'/'end_keyframe'/'start_keyframe'
+	 * 
+	 * @returns {number[]|string[]}
+	 */
+	getTimestamps (arg0_date_type) {
+		//Convert from parameters
+		let date_type = (arg0_date_type || "current_date");
+		
+		//Declare local instance variables
+		let all_timestamps = this.history.getTimestamps().map(Number);
+		let timestamps = [];
+		
+		//Fetch timestamps to edit based on date_type
+		if (date_type === "all_keyframes") {
+			timestamps = all_timestamps;
+		} else if (date_type === "current_date") {
+			timestamps.push(main.timestamp);
+		} else if (date_type === "end_keyframe") {
+			timestamps.push(all_timestamps[all_timestamps.length - 1]);
+		} else if (date_type === "start_keyframe") {
+			timestamps.push(all_timestamps[0]);
+		} else if (Array.isArray(date_type)) {
+			let end_timestamp = Date.getTimestamp(date_type[1]);
+			let start_timestamp = Date.getTimestamp(date_type[0]);
+			
+			//Iterate over all .history.keyframes between start_timestamp and end_timestamp and push them
+			for (let i = 0; i < all_timestamps.length; i++)
+				if (all_timestamps[i] >= start_timestamp && all_timestamps[i] <= end_timestamp) 
+					timestamps.push(all_timestamps[i]);
+		}
+		
+		//Return sorted timestamps
+		return timestamps;
+	}
 	
 	/**
 	 * Returns the actual symbol_obj for the given Geometry.
@@ -985,7 +684,12 @@ naissance.Geometry = class extends naissance.Entity {
 		
 		
 		//Call super.open for naissance.Entity
-		super.open(type, options);
+		super.open(type, {
+			onuserchange: (v) => {
+				if (v.name) this.name = v;
+			},
+			...options
+		});
 	}
 	
 	/**
@@ -1009,7 +713,7 @@ naissance.Geometry = class extends naissance.Entity {
 		delete naissance.Geometry.instances[this.id];
 		
 		//Rerender deleted geometry and remove it from the map
-		this.history = new naissance.History();
+		this.history = new History();
 		if (!do_not_refresh)
 			this.draw();
 	}
@@ -1137,38 +841,6 @@ naissance.Geometry = class extends naissance.Entity {
 		if (options.date)
 			UI_DateMenu.setDate(old_date);
 	};
-	
-	static setGeometries (arg0_geometry_ids, arg1_geometries, arg2_options) { 
-		//Convert from parameters
-		let geometry_ids = Array.toArray(arg0_geometry_ids);
-		let geometries = Array.toArray(arg1_geometries);
-		let options = (arg2_options) ? arg2_options : {};
-		
-		//Parse action for geometries
-		naissance.Geometry.parseActionForGeometries(geometry_ids, {
-			command: "set_geometry",
-			key: "set_geometries",
-			name: "Set Geometries",
-			value: (i) => (geometries[i]) ? geometries[i] : undefined,
-			...options
-		});
-	}
-	
-	static setProperties (arg0_geometry_ids, arg1_properties_obj, arg2_options) {
-		//Convert from parameters
-		let geometry_ids = Array.toArray(arg0_geometry_ids);
-		let properties_obj = (arg1_properties_obj) ? arg1_properties_obj : {};
-		let options = (arg2_options) ? arg2_options : {};
-		
-		//Parse action for geometries
-		naissance.Geometry.parseActionForGeometries(geometry_ids, {
-			command: "set_properties",
-			key: "set_geometry_properties",
-			name: "Set Geometry Properties",
-			value: properties_obj,
-			...options
-		});
-	}
 	
 	static setSymbols (arg0_geometry_ids, arg1_symbol_obj, arg2_options) {
 		//Convert from parameters

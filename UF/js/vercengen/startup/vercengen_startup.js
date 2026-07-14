@@ -460,6 +460,7 @@ global.path = require("path");
 			...((options.is_browser) ? browser_load_patterns : []),
 			
 			//DALS, Vercengen Components
+			"UF/js/dals/DALS.js",
 			"UF/js/dals/Timeline.js",
 			"UF/js/dals/Timeline_state.js",
 			"UF/js/vercengen/engine",
@@ -484,6 +485,10 @@ global.path = require("path");
 			"!UF/js/vercengen/components/ComponentWiki/wiki_preload.js",
 			
 			"UF/js/vercengen/features",
+			
+			//Vercengen-dependent imports
+			//History
+			"UF/js/date/History.js",
 			
 			...((options.is_browser) ? [] : [
 				"!UF/libraries",

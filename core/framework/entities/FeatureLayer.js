@@ -94,13 +94,6 @@ naissance.FeatureLayer = class extends naissance.Feature {
 					}]);
 					main.renderer.update();
 				}
-			}),
-			
-			actions: this.drawActionsPalette({
-				name: "Layer",
-				type: "layer",
-				
-				move_to_filters: ["FeatureLayer"]
 			})
 		};
 	}

@@ -68,41 +68,10 @@ global.UI_MapSettings = class UI_MapSettings extends ve.Class { //[WIP] - Finish
 		let proj4js_string = (arg0_proj4js_string) ? arg0_proj4js_string : "";
 		let do_not_add_to_undo_redo = arg1_do_not_add_to_undo_redo;
 		
-		//Declare local instance variables
-		let proj4js_transform = proj4("WGS84", proj4js_string);
-		
 		//Fire action
 		if (proj4js_string.length > 0)
-			DALS.Timeline.parseAction("set_map_projection", [{ type: "Renderer", set_map_spatial_reference: {
-				projection: {
-					code: "proj4-custom",
-					project: (c) => {
-						let pc;
-						try { proj4js_transform.forward(c.toArray()); } catch (e) {}
-						
-						//If projection returns invalid or NaN, return neutral coords
-						if (!pc || isNaN(pc[0]) || isNaN(pc[1]))
-							pc = (window.last_coord) ? window.last_coord : [0, 0];
-						
-						//Return statement
-						window.last_coord = pc;
-						return new maptalks.Coordinate(pc);
-					},
-					unproject: (pc) => {
-						if (!Array.isArray(Array.toArray(pc)))
-							return new maptalks.Coordinate([0, 0]);
-						let result;
-							try { proj4js_transform.inverse(pc.toArray()); } catch (e) {}
-						
-						if (!result || isNaN(result[0]) || isNaN(result[1]))
-							result = (window.last_coord) ? window.last_coord : [0, 0];
-						
-						//Return statement
-						window.last_coord = result;
-						return new maptalks.Coordinate(result);
-					},
-					measure: "EPSG:4326"
-				},
+			DALS.Timeline.parseAction("set_map_spatial_reference", [{ type: "Renderer", set_map_spatial_reference: {
+				projection: proj4js_string,
 				fullExtent: config.defines.map.custom_projections_full_extent,
 				resolutions: config.defines.map.custom_projections_resolutions
 			} }], do_not_add_to_undo_redo);

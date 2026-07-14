@@ -22,10 +22,16 @@ if (!global.DALS) global.DALS = {};
  * ##### Methods:
  * - <span color=00ffff>{@link DALS.Action.delete|delete}</span>(arg0_options:{ removed_from_timeline:{@link boolean} }) - Deletes the present action and removes it from the associated timeline.
  * - <span color=00ffff>{@link DALS.Action.jumpTo|jumpTo}</span>() - Forces program state to jump to the present action.
+ * - <span color=00ffff>{@link DALS.Action.toJSON|toJSON}</span>() | {@link Object} - Returns the JSON object of the current Action.</span>
  * 
  * ##### Static Fields:
  * - `.instances`: {@link Object}<{@link DALS.Action}>
+ *   
+ * ##### Static Methods:
+ * - <span color=00ffff>{@link DALS.Action.fromJSON|fromJSON}</span>(arg0_json:{@link Object}|{@link string}) | {@link DALS.Action} - Creates an Action from JSON and returns it.
  * 
+ * @class
+ * @memberof DALS
  * @type {DALS.Action}
  */
 DALS.Action = class {
@@ -50,11 +56,11 @@ DALS.Action = class {
 		if (ve.registry.settings.UndoRedo.manual_commits && !(json?.value?.load_save && json?.value?.type === "global"))
 			return;
 		
-		this.id = Class.generateRandomID(DALS.Action);
+		this.id = (json.id) ? json.id : Class.generateRandomID(DALS.Action);
 		this.options = (json.options) ? json.options : {};
 			this.name = (this.options.name) ? this.options.name : "New Action";
-		this.timeline = undefined; //Populated upon .addAction()
-		this.value = json;
+		this.timeline = (json.timeline || null); //Populated upon .addAction()
+		this.value = json.value;
 		
 		//Assign Action to DALS.Timeline
 		if (!this.options.timeline) {
@@ -115,5 +121,38 @@ DALS.Action = class {
 	 */
 	jumpTo () {
 		this.timeline.jumpToAction(this.id);
+	}
+	
+	/**
+	 * Returns the JSON object of the current Action.
+	 * - Method of: {@link DALS.Action}
+	 * 
+	 * @returns {Object}
+	 */
+	toJSON () {
+		//Return statement
+		return {
+			id: this.id,
+			options: this.options,
+			timeline: this.timeline,
+			value: this.value
+		};
+	}
+	
+	/**
+	 * Creates a new Action from a JSON Object and assigns it to the timeline needed.
+	 * - Static method of: {@link DALS.Action}
+	 * 
+	 * @param {Object|string} arg0_json
+	 * 
+	 * @returns {DALS.Action}
+	 */
+	static fromJSON (arg0_json) {
+		//Convert from parameters
+		let json = (typeof arg0_json === "string") ? 
+			JSON.parse(arg0_json) : arg0_json;
+		
+		//Create new Action from json
+		return new DALS.Action(json);
 	}
 };

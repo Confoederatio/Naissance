@@ -476,4 +476,26 @@
 			return item;
 		});
 	};
+	
+	/**
+	 * Ensures a unique push into an array.
+	 * @alias Array.uniquePush
+	 * 
+	 * @param {any[]} arg0_array
+	 * @param {any} argn_arguments
+	 * 
+	 * @returns {any[]}
+	 */
+	Array.uniquePush = function (arg0_array, ...argn_arguments) {
+		//Convert from parameters
+		let array = arg0_array;
+		
+		//Iterate over argn_arguments and push them into array if not already included
+		for (let i = 0; i < argn_arguments.length; i++)
+			if (array.indexOf(argn_arguments[i]) === -1)
+				array.push(argn_arguments[i]);
+		
+		//Return statement
+		return array;
+	};
 }

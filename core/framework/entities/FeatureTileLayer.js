@@ -7,6 +7,9 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		icon: "map",
 		name: "Tile Layer"
 	};
+	static options = {
+		disable_actions_palette: true
+	};
 	
 	constructor (arg0_options) {
 		super();

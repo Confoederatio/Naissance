@@ -42,9 +42,7 @@
 			
 			//Iterate over all unique_categories and sanitise their names
 			for (let x = 0; x < unique_categories.length; x++)
-				filter_names_obj[`data-${unique_categories[x]
-				.toLowerCase().replace(/[^a-z0-9]/g, "_")}`
-					] = unique_categories[x];
+				filter_names_obj[`data-${String.snakecase(unique_categories[x])}`] = unique_categories[x];
 			
 			//Iterate over all node types and check if they should be appended to the current category
 			Object.iterate(this.options.node_types, (local_key, local_value) => {

@@ -1,28 +1,3 @@
-//Initialise class
-if (!global.DALS) global.DALS = {
-	/**
-	 * This is an example of how to declare documentation for a specific variable.
-	 *
-	 * @type {DALS.Timeline}
-	 * @typedef {DALS.timeline}
-	 */
-	timeline: undefined
-};
-
-//Define DALS.timeline as DALS.Timeline.current_timeline
-Object.defineProperty(DALS, "timeline", {
-	get () {
-		return DALS.Timeline.current_timeline;
-	},
-	
-	/**
-	 * @param {string} v
-	 */
-	set (v) {
-		DALS.Timeline.current_timeline = v;
-	}
-});
-
 /**
  * <span color = "yellow">{@link DALS.Timeline}</span>: Represents a singular timeline in an undo/redo tree within the Delta Action Logging System (DALS). `.value` is structured as an {@link Array}<{@link Object}>, with [0] representing the head state, and subsequent elements state mutations.
  * 
@@ -49,16 +24,21 @@ Object.defineProperty(DALS, "timeline", {
  * - <span color=00ffff>{@link DALS.Timeline.jumpToStart|jumpToStart}</span>()
  * - <span color=00ffff>{@link DALS.Timeline.removeAction|removeAction}</span>(arg0_action_id:{@link number}|{@link string}) - `arg0_action_id` is either the index of the action, or its `.id`.
  * 
+ * - <span color=00ffff>{@link DALS.Timeline.fromJSON|fromJSON}</span>(arg0_json:{@link Object}|{@link string}) | {@link DALS.Timeline}
+ * - <span color=00ffff>{@link DALS.Timeline.toJSON|toJSON}</span>() | {@link Object}
+ * 
  * ##### Static Fields:
  * - `.current_index`: {@link number} - The index of the current timeline the state is at.
  * - `.current_timeline`: {@link string} - The ID of the current timeline being displayed.
  * - `.instances`: {@link Array}<{@link DALS.Timeline}>
  * 
  * ##### Static Methods:
+ * - <span color=00ffff>{@link DALS.Timeline.fromJSON|fromJSON}</span>(arg0_json:{@link Object}|{@link string}, arg1_options:{@link Object})
  * - <span color=00ffff>{@link DALS.Timeline.getTimeline|getTimeline}</span>(arg0_timeline_id:{@link string}) | {@link DALS.Timeline} - Returns a DALS.Timeline object given a timeline ID.
- * - <span color=00ffff>{@link DALS.Timeline.load|load}</span>(arg0_file_path:{@link string}) - Loads a new head state from a given file.
  * - <span color=00ffff>{@link DALS.Timeline.jumpToTimeline|jumpToTimeline}</span>(arg0_timeline_id:{@link string}) - Jumps to the head state of a specific timeline.
- * - <span color=00ffff>{@link DALS.Timeline.save|save}</span>(arg0_file_path:{@link string}) - Saves the present state to a given file.
+ * - <span color=00ffff>{@link DALS.Timeline.load|load}</span>(arg0_file_path:{@link string}, arg1_options:{@link Object})
+ * - <span color=00ffff>{@link DALS.Timeline.save|save}</span>(arg0_file_path:{@link string})
+ * - <span color=00ffff>{@link DALS.Timeline.toJSON|toJSON}</span>() | {@link Object}
  * 
  * @class
  * @memberof DALS
@@ -87,7 +67,7 @@ DALS.Timeline = class {
 		this.name = (options.name) ? options.name : `${loc("ve.registry.localisation.UndoRedo_timeline")} ${this.id}`;
 		this.options = options;
 		this.parent_timeline = options.parent_timeline;
-		this.value = [DALS.Timeline.saveState()];
+		this.value = [DALS.toJSON()];
 		
 		//Ensure that the current timeline is always the last timeline created/split off
 		if (options.current_timeline !== false)
@@ -191,7 +171,7 @@ DALS.Timeline = class {
 			this.value = [];
 			delete DALS.Timeline.current_timeline;
 			DALS.Timeline.instances = [];
-			DALS.Timeline.loadState({});
+			DALS.fromJSON({});
 		} else {
 			//1. Reassign all branched timelines to this timeline's .parent_timeline
 			for (let i = 0; i < DALS.Timeline.instances.length; i++) {
@@ -214,6 +194,45 @@ DALS.Timeline = class {
 					break;
 				}
 		}
+	}
+	
+	/**
+	 * Overwrites the current timeline instance with data from a JSON object.
+	 * - Method of: {@link DALS.Timeline}
+	 *
+	 * @param {Object|string} arg0_json
+	 *
+	 * @returns {DALS.Timeline}
+	 */
+	fromJSON (arg0_json) {
+		//Convert from parameters
+		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
+		
+		//Declare local instance variables
+		this.id = json.id;
+		this.initial_timeline = (json.initial_timeline !== undefined) ? json.initial_timeline : this.initial_timeline;
+		this.name = json.name;
+		this.parent_timeline = json.parent_timeline;
+		this.date_created = new Date(json.date_created);
+		this.last_modified = new Date(json.last_modified);
+		
+		//Reconstruct value array. [0] is the head state JSON
+		this.value = [json.value[0]];
+		
+		//Reconstruct Actions for indices [1...n]
+		for (let i = 1; i < json.value.length; i++) {
+			let action_json = json.value[i];
+			
+			//Inject current timeline ID into options to ensure the Action constructor attaches correctly
+			if (!action_json.options) action_json.options = {};
+			action_json.options.timeline = this.id;
+			
+			//Re-instantiate action; the constructor handles placement into this.value
+			DALS.Action.fromJSON(action_json);
+		}
+		
+		//Return statement
+		return this;
 	}
 	
 	/**
@@ -323,12 +342,12 @@ DALS.Timeline = class {
 			timeline_graph[local_id].timeline_index = first_action.options.timeline_index;
 			timeline_graph[local_id].timeline_group_index = i;
 			timeline_graph[local_id].value = group;
-				timeline_graph[local_id].value.options = first_action.value.options;
-					timeline_graph[local_id].value.options.domain = [
+				timeline_graph[local_id].options = first_action.options;
+					timeline_graph[local_id].options.domain = [
 						first_action.options.timeline_index,
 						group[group.length - 1].options.timeline_index
 					];
-			timeline_graph[local_id].value.options.length = group.length;
+			timeline_graph[local_id].options.length = group.length;
 			timeline_graph[local_id].x = i;
 			timeline_graph[local_id].y = current_y_offset;
 			
@@ -470,7 +489,7 @@ DALS.Timeline = class {
 		//2. Load initial state at head
 		DALS.Timeline.current_index = 0;
 		DALS.Timeline.current_timeline = this.id;
-		await Promise.resolve(DALS.Timeline.loadState(this.value[0]));
+		await Promise.resolve(DALS.fromJSON(this.value[0]));
 		
 		if (local_jump_token !== DALS.Timeline.jump_token)
 			return DALS.Timeline.current_index;
@@ -526,7 +545,7 @@ DALS.Timeline = class {
 		//Load initial state
 		DALS.Timeline.current_index = 0;
 		DALS.Timeline.current_timeline = this.id;
-		DALS.Timeline.loadState(this.value[0]);
+		DALS.fromJSON(this.value[0]);
 	}
 	
 	/**
@@ -569,6 +588,82 @@ DALS.Timeline = class {
 		if (action_index >= 1)
 			for (let i = this.value.length - 1; i >= action_index; i--)
 				this.value.splice(i, 1);
+	}
+	
+	/**
+	 * Returns a JSON representation of the current timeline.
+	 * - Method of: {@link DALS.Timeline}
+	 *
+	 * @returns {Object}
+	 */
+	toJSON () {
+		//Declare local instance variables
+		let serialised_values = [];
+		
+		//Iterate over value; if element is an Action, call its toJSON, otherwise keep as is (for head state)
+		for (let i = 0; i < this.value.length; i++) {
+			let local_value = this.value[i];
+			
+			serialised_values.push((local_value instanceof DALS.Action) ? local_value.toJSON() : local_value);
+		}
+		
+		//Return statement
+		return {
+			id: this.id,
+			initial_timeline: this.initial_timeline,
+			name: this.name,
+			parent_timeline: this.parent_timeline,
+			value: serialised_values,
+			date_created: this.date_created,
+			last_modified: this.last_modified
+		};
+	}
+	
+	/**
+	 * Reconstructs all timelines from a JSON object or string.
+	 * - Static method of: {@link DALS.Timeline}
+	 *
+	 * @param {Object|string} arg0_json
+	 * @param {Object} [arg1_options]
+	 *  @param {boolean} [arg1_options.do_not_overwrite=false] - If true, existing timelines and actions are preserved.
+	 */
+	static async fromJSON (arg0_json, arg1_options) {
+		//Convert from parameters
+		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
+		let options = (arg1_options) ? arg1_options : {};
+		
+		//1. Wipe existing registry if overwriting is enabled
+		if (!options.do_not_overwrite) {
+			DALS.Timeline.instances = [];
+			DALS.Action.instances = [];
+		}
+		
+		//2. Reconstruct each timeline object from the JSON array
+		if (json.timelines)
+			for (let i = 0; i < json.timelines.length; i++) {
+				let path_data = json.timelines[i];
+				let local_timeline = DALS.Timeline.getTimeline(path_data.id);
+				
+				//If timeline doesn't exist, create a shell to be populated
+				if (!local_timeline)
+					local_timeline = new DALS.Timeline({
+						current_timeline: false,
+					});
+				
+				local_timeline.fromJSON(path_data);
+			}
+		
+		//3. Re-seat global pointers and synchronize application state if overwriting
+		if (!options.do_not_overwrite) {
+			DALS.Timeline.current_index = (json.current_index !== undefined) ? json.current_index : 0;
+			DALS.Timeline.current_timeline = json.current_timeline;
+			
+			let active_timeline = DALS.Timeline.getTimeline(DALS.Timeline.current_timeline);
+			
+			//Perform jump to sync the application state with the loaded current_index
+			if (active_timeline)
+				await active_timeline.jumpToAction(DALS.Timeline.current_index);
+		}
 	}
 	
 	/**
@@ -657,23 +752,25 @@ DALS.Timeline = class {
 	}
 	
 	/**
-	 * Loads in a new state based upon the JSON data contained at a file path.
+	 * Loads DALS from a given filepath.
 	 * - Static method of: {@link DALS.Timeline}
 	 * 
 	 * @param {string} arg0_file_path
+	 * @param {Object} [arg1_options] - The same options passed for {@link DALS.Timeline.fromJSON}.
 	 */
-	static load (arg0_file_path) {
+	static load (arg0_file_path, arg1_options) {
 		//Convert from parameters
 		let file_path = arg0_file_path.toString();
+		let options = (arg1_options) ? arg1_options : {};
 		
-		//Read file, then attempt to call DALS.Timeline.loadState() with it
+		//Read file, then attempt to call DALS.Timeline.fromJSON() with it
 		fs.readFile(file_path, "utf8", (err, data) => {
 			if (err) {
 				console.log(err);
 				return;
 			}
-			DALS.Timeline.loadState(data);
-		})
+			DALS.Timeline.fromJSON(data, options);
+		});
 	}
 	
 	/**
@@ -727,19 +824,42 @@ DALS.Timeline = class {
 	}
 	
 	/**
-	 * Saves the present state as JSON to a new file path.
+	 * Saves DALS to an existing file if possible.
 	 * - Static method of: {@link DALS.Timeline}
 	 * 
 	 * @param {string} arg0_file_path
 	 */
 	static save (arg0_file_path) {
 		//Convert from parameters
-		let file_path = arg0_file_path.toString();
+		let file_path = arg0_file_path;
 		
-		//Declare local instance variables
-		fs.writeFile(file_path, JSON.stringify(DALS.Timeline.saveState()), (err) => {
+		//Write to file
+		fs.writeFile(file_path, JSON.stringify(DALS.Timeline.toJSON()), (err) => {
 			if (err) console.error(err);
 		});
+	}
+	
+	/**
+	 * Serialises all DALS.Timeline instances and global registry state into a single JSON-compatible object.
+	 * - Static method of: {@link DALS.Timeline}
+	 *
+	 * @returns {Object}
+	 */
+	static toJSON () {
+		//Declare local instance variables
+		let serialised_timelines = [];
+		
+		//Iterate over all instances and call their respective toJSON methods
+		for (let i = 0; i < DALS.Timeline.instances.length; i++) {
+			serialised_timelines.push(DALS.Timeline.instances[i].toJSON());
+		}
+		
+		//Return statement
+		return {
+			current_index: DALS.Timeline.current_index,
+			current_timeline: DALS.Timeline.current_timeline,
+			timelines: serialised_timelines,
+		};
 	}
 	
 	/**

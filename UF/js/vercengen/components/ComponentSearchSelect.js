@@ -116,10 +116,10 @@ ve.SearchSelect = class extends ve.Component {
 					//Iterate over all local_value.element.attributes
 					for (let x = 0; x < all_component_els[i].attributes.length; x++) {
 						let local_attribute = all_component_els[i].attributes[x].nodeName;
+						let local_attribute_value = all_component_els[i].attributes[x].nodeValue;
 						
-						if (local_attribute.startsWith("data-"))
-							if (!all_unique_attributes.includes(local_attribute))
-								all_unique_attributes.push(local_attribute);
+						if (local_attribute.startsWith("data-") && local_attribute_value !== "false")
+							Array.uniquePush(all_unique_attributes, local_attribute);
 					}
 				all_unique_attributes.sort();
 				

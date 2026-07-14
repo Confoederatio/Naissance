@@ -302,6 +302,39 @@
 	};
 	
 	/**
+	 * Deletes a value at a given variable string.
+	 * @alias Object.deleteValue
+	 * 
+	 * @param {Object} arg0_object
+	 * @param {string} arg1_variable_string
+	 * 
+	 * @returns {Object}
+	 */
+	Object.deleteValue = function (arg0_object, arg1_variable_string) {
+		//Convert from parameters
+		let object = arg0_object;
+		let variable_string = (arg1_variable_string) ? arg1_variable_string : "";
+		
+		//Declare local instance variables
+		let all_keys = variable_string.split(".");
+		let current_obj = object;
+		
+		//Iterate up to the second-to-last key
+		for (let i = 0; i < all_keys.length - 1; i++) try {
+			if (current_obj[all_keys[i]] === undefined)
+				return object;
+			current_obj = current_obj[all_keys[i]];
+		} catch (e) { console.error(e); }
+		
+		//Delete the value at the last key if available
+		if (current_obj)
+			delete current_obj[all_keys[all_keys.length - 1]];
+		
+		//Return statement
+		return object;
+	};
+	
+	/**
 	 * Moves all keys into the 1st nesting.
 	 * @alias Object.flatten
 	 * 

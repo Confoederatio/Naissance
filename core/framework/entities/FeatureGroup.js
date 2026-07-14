@@ -20,18 +20,6 @@ naissance.FeatureGroup = class extends naissance.Feature {
 		this._name = "New Group";
 	}
 	
-	drawUI () {
-		//Return statement
-		return {
-			actions: this.drawActionsPalette({
-				name: "Group",
-				type: "group",
-				
-				move_to_filters: ["FeatureGroup"]
-			})
-		};
-	}
-	
 	fromJSON (arg0_json) {
 		//Convert from parameters
 		let json = (typeof arg0_json !== "object") ? JSON.parse(arg0_json) : arg0_json;

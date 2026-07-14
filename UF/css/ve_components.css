@@ -528,6 +528,17 @@ table:has([component="ve-log"]) { table-layout: fixed; }
 
 /* -- ve.UndoRedo -- */
 [component="ve-undo-redo"] {
+    height: 100%;
+    overflow: hidden;
+    padding-left: 0;
+    
+    > [component="ve-page-menu"] {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        padding-left: 0;
+    }
+    
     [data-is-selected="true"] {
         background: var(--body-colour);
         color: var(--bg-primary-colour);

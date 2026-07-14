@@ -35,7 +35,7 @@ naissance.GeometryLine = class extends naissance.Geometry {
 				
 				let label_symbol = {
 					...default_label_symbol,
-					...this.value[2].label_symbol
+					...this.value[1].label_symbol
 				};
 				if (label_symbol.hide_label) return;
 				

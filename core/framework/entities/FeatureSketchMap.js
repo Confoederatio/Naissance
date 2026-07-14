@@ -7,6 +7,9 @@ naissance.FeatureSketchMap = class extends naissance.Feature {
 		icon: "app_registration",
 		name: "Sketch Map"
 	};
+	static options = {
+		disable_actions_palette: true
+	};
 	
 	constructor (arg0_entities, arg1_options) {
 		super();

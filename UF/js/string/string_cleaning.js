@@ -3,6 +3,21 @@
 	if (!global.String) global.String = {};
 	
 	/**
+	 * Converts a string to sanitised snakecase.
+	 * 
+	 * @param {string} arg0_string
+	 * 
+	 * @returns {string}
+	 */
+	String.snakecase = function (arg0_string) {
+		//Convert from parameters
+		let string = arg0_string;
+		
+		//Return statement
+		return string.toLowerCase().replace(/[^a-z0-9]/g, "_");
+	};
+	
+	/**
 	 * Strips Markdown from a string.
 	 * @alias String.stripMarkdown
 	 * 
