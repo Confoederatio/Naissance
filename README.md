@@ -54,8 +54,8 @@ An integrated office suite is also available for IDEs, spreadsheets/graphing, wo
 
 **Note.** Most of the dev builds are built for Windows, since that's what most use. If you are on MacOS/Linux and need tech support, please join the Discord.
 
-<ins>Stable Release (1.9.3, Windows):</ins>
-1. Download [Naissance 1.9.3b](https://drive.google.com/file/d/1nC_lJdeNy6Ati9Rir94Xr0z9lRuLHVZH/view?usp=sharing)
+<ins>Stable Release (1.9.4, Windows):</ins>
+1. Download [Naissance 1.9.4b](https://drive.google.com/file/d/131QenJvalhLx40bjjhMXWjH9qgNuZovG/view?usp=sharing)
 2. Extract ZIP file when downloaded.
 3. Run `naissance.exe`.
 
