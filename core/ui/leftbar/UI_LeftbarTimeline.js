@@ -90,8 +90,10 @@ global.UI_LeftbarTimeline = class { //[WIP] - Add Shift/Ctrl + Left/Right Arrow 
 				if (HTML.shift_pressed) amount = 5;
 				if (HTML.ctrl_pressed) amount = 10;
 				
-				if (key === "ArrowLeft") UI_LeftbarTimeline.jumpToPreviousKeyframe(amount);
-				if (key === "ArrowRight") UI_LeftbarTimeline.jumpToNextKeyframe(amount);
+				if (!HTML.ctrl_pressed) {
+					if (key === "ArrowLeft") UI_LeftbarTimeline.jumpToPreviousKeyframe(amount);
+					if (key === "ArrowRight") UI_LeftbarTimeline.jumpToNextKeyframe(amount);
+				}
 			});
 		}
 		

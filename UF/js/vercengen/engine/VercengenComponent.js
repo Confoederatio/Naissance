@@ -571,6 +571,10 @@ ve.Component = class {
 	 * - Method of: {@link ve.Component}
 	 */
 	remove () {
+		//Guard clause against recursive teardown loops
+		if (this._is_removing) return;
+		this._is_removing = true;
+		
 		//Declare local instance variables
 		let all_keys = Object.keys(this);
 		if (all_keys.length === 0) return; //Internal guard clause if already cleared
@@ -592,20 +596,26 @@ ve.Component = class {
 				}
 		
 		//Remove everything else
-		if (this.options.onremove) this.options.onremove(this); //Fire .options.onremove if it exists
+		if (this?.options?.onremove) this.options.onremove(this); //Fire .options.onremove if it exists
 		
-		//Iterate over this and delete it
-		if (this.components_obj)
-			Object.iterate(this.components_obj, (local_key, local_value) => {
-				if (local_value && local_value.remove) local_value.remove();
+		//Iterate over components_obj and clean up references
+		if (this.components_obj) {
+			let local_components_obj = this.components_obj;
+			this.components_obj = undefined;
+			Object.iterate(local_components_obj, (local_key, local_value) => {
+				if (local_value && typeof local_value.remove === "function") local_value.remove();
 			});
+		}
+		
 		for (let i = 0; i < all_keys.length; i++) {
-			let local_value = this[all_keys[i]];
+			let local_key = all_keys[i];
+			let local_value = this[local_key];
 			
-			if (local_value === undefined) continue;
+			if (local_value === undefined || local_key === "_is_removing") continue;
+			this[local_key] = undefined; //Unset reference first to break circular dependency before recursion
+			
 			if (local_value instanceof HTMLElement || local_value instanceof ve.Component)
 				local_value.remove();
-			this[all_keys[i]] = undefined; //This is more performant than delete since Object shapes are preserved
 		}
 		Object.setPrototypeOf(this, null); //Set this to null - [WARN] - This might not optimise heap; remains to be seen in production
 		

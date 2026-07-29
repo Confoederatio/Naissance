@@ -67,10 +67,18 @@ naissance.BrushNodeEditor = class extends ve.Class {
 	}
 	
 	onclick (e) {
-		if (HTML.ctrl_pressed && ["FreeHandLineString", "LineString"].includes(this.mode))
-			return; //Remove isn't valid for GeometryLine
+		//Declare local instance variables
+		let is_line = ["FreeHandLineString", "LineString"].includes(this.mode);
+		let is_node_brush = ["node", "node_override", "node_transfer"].includes(main.brush.mode);
+		
+		if (is_line && HTML.ctrl_pressed)
+			if (HTML.ctrl_pressed)
+				return; //Remove isn't valid for GeometryLine
 		
 		if (this.coords.length === 0) {
+			if (is_line && !is_node_brush && main.brush._selected_geometry?.isOpen("instance"))
+					return; //We don't want users trying to click a line to suddenly get a popup from it
+			
 			this.disable();
 			this.enable(); //We need to make sure that the NodeEditor is active in this state
 			this.type = (HTML.ctrl_pressed) ? "remove" : "add";
@@ -113,9 +121,9 @@ naissance.BrushNodeEditor = class extends ve.Class {
 		if (selected_geometry) {
 			let is_geometry_line = selected_geometry instanceof naissance.GeometryLine;
 			
-			// Ensure LineString is used for lines, otherwise check node_editor_mode or default to Polygon
+			//Ensure LineString is used for lines, otherwise check node_editor_mode or default to Polygon
 			if (is_node_brush || is_geometry_line) {
-				this.mode = is_geometry_line ? "LineString" : (selected_geometry.node_editor_mode || "Polygon");
+				this.mode = (is_geometry_line) ? "LineString" : (selected_geometry.node_editor_mode || "Polygon");
 				this.enable();
 			} else {
 				this.disable();

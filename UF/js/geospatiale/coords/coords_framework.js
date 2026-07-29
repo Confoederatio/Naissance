@@ -31,4 +31,29 @@
 		//Return statement
 		return R*c;
 	};
+	
+	/**
+	 * Parses a coords string into [lng, lat] coords.
+	 * @alias Geospatiale.parseCoords
+	 * 
+	 * @param {string} arg0_coords
+	 * 
+	 * @returns {Array.<number[]>}
+	 */
+	Geospatiale.parseCoords = function (arg0_coords) {
+		//Convert from parameters
+		let coords = arg0_coords;
+		
+		//Declare local instance variables
+		let match;
+		let regex = /\[?\s*([-+]?\d*\.?\d+)\s*,\s*([-+]?\d*\.?\d+)\s*\]?/g;
+		let results = [];
+		
+		//Try to coerce coords string into actual [lng, lat]
+		while ((match = regex.exec(coords)) !== null)
+			results.push([parseFloat(match[1]), parseFloat(match[2])]);
+		
+		//Return statements
+		return results;
+	};
 }

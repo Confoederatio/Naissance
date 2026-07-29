@@ -32,54 +32,79 @@ naissance.Feature.importFile = function (arg0_file_path, arg1_type, arg2_options
 		Geospatiale.maptalks_GeoKMZ.toGeoJSON(file_path).then((geojson) => 
 			naissance.Feature.importGeoJSON.call(this, geojson, options));
 	} else if (type === "naissance") {
+		let created_entities = [];
 		let json = JSON.parse(fs.readFileSync(file_path, "utf8"));
 		
 		//Iterate over JSON to load in each class
 		Object.iterate(json, (local_key, local_value) => {
 			if (local_value.class_name) {
-				//1. Handle naissance.Geometry classes
+				let naissance_obj;
+				
+				//1.1. Handle naissance.Geometry classes
 				if (local_value.type === "geometry") {
-					let geometry_obj = new naissance[local_value.class_name]({ is_import: true });
+					naissance_obj = new naissance[local_value.class_name]({ is_import: true });
 					
 					//ID/History/Metadata deserialisation
 					if (local_value.id) {
 						let has_id = naissance.Geometry.instances[local_value.id];
 						
 						if (!has_id) {
-							geometry_obj.setID(local_value.id);
+							naissance_obj.setID(local_value.id);
 						} else {
-							local_value.metadata.linked_id = local_value.id;
+							if (!naissance_obj.metadata) naissance_obj.metadata = {};
+							naissance_obj.metadata.linked_id = local_value.id;
 						}
 					}
-					geometry_obj.history.fromJSON(local_value.history);
-					if (local_value.metadata) geometry_obj.metadata = local_value.metadata;
 					
-					geometry_obj.parent = this;
-					this.entities.push(geometry_obj);
+					if (local_value.history) naissance_obj.history.fromJSON(local_value.history);
+					if (local_value.metadata) naissance_obj.metadata = Object.assign(naissance_obj.metadata || {}, local_value.metadata);
 				}
-				//2. Handle naissance.Feature classes
+				//1.2. Handle naissance.Feature classes
 				else if (local_value.type === "feature") {
-					let feature_obj = new naissance[local_value.class_name](undefined, {
+					naissance_obj = new naissance[local_value.class_name](undefined, {
 						metadata: local_value.metadata
 					});
 					
-					if (local_value.value) feature_obj.json = local_value.value;
+					if (local_value.id) {
+						let has_id = naissance.Feature.instances[local_value.id];
+						
+						if (!has_id) {
+							naissance_obj.setID(local_value.id);
+						} else {
+							if (!naissance_obj.metadata) naissance_obj.metadata = {};
+							naissance_obj.metadata.linked_id = local_value.id;
+						}
+					}
+					
+					if (local_value.value) naissance_obj.json = local_value.value;
 				}
 				
-				//3. Features must be rendered separately
-				Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {
-					if (local_feature.json) {
-						local_feature.fromJSON(local_feature.json);
-						try {
-							//if (local_feature.draw) local_feature.draw();
-						} catch (e) { console.warn(e); }
-						
-						local_feature.parent = this;
-						this.entities.push(local_feature);
-					}
-				});
+				//1.3. Set parent and nesting
+				if (naissance_obj) {
+					naissance_obj.parent = this;
+					this.entities.push(naissance_obj);
+					created_entities.push(naissance_obj);
+				}
 			}
 		});
+		
+		//2. Second Pass: Features must be rendered/initialized after all instances are created
+		for (let i = 0; i < created_entities.length; i++) {
+			let local_entity = created_entities[i];
+			
+			if (local_entity.type === "feature" && local_entity.json) {
+				local_entity.fromJSON(local_entity.json);
+				
+				try {
+					if (local_entity.draw) local_entity.draw();
+				} catch (e) {
+					console.warn(e);
+				}
+			}
+		}
+		
+		//3. Post-load UI refresh
+		if (typeof UI_Leftbar !== "undefined") UI_Leftbar.refresh();
 	} else if (type === "osm") {
 		maptalks.Formats.osm(file_path, (err, geojson) =>
 			naissance.Feature.importGeoJSON.call(this, geojson, options));

@@ -42,8 +42,10 @@ naissance.Entity = class extends ve.Class {
 			let is_visible = false;
 			
 			try {
-				if (current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length)
-					is_visible = true;
+				if (
+					(current_keyframe.value[0] !== undefined && Object.keys(current_keyframe.value[0]).length) &&
+					!current_keyframe.value?.[2]?.hidden //Manual hidden attribute
+				) is_visible = true;
 			} catch (e) {}
 			
 			//Set attributes
@@ -67,6 +69,7 @@ naissance.Entity = class extends ve.Class {
 			
 			//Set Feature attributes
 			attributes_obj["data-entities"] = this.entities.length;
+			attributes_obj["data-is-visible"] = String(this._is_visible);
 			
 			//Delete any self-references; already assigned entities with other .parent
 			for (let i = this.entities.length - 1; i >= 0; i--)

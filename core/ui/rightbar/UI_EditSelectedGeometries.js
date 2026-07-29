@@ -5,19 +5,24 @@ global.UI_EditSelectedGeometries = class extends ve.Class {
 	
 	draw () {
 		//Declare local instance variables
-		this.label_symbol = new UI_LabelSymbol(main.settings.default_label_symbol, {
+		let label_symbol = structuredClone(main.settings.default_label_symbol);
+		let line_symbol = structuredClone(main.settings.default_line_symbol);
+		let point_symbol = structuredClone(main.settings.default_point_symbol);
+		let polygon_symbol = structuredClone(main.settings.default_polygon_symbol);
+		
+		this.label_symbol = new UI_LabelSymbol(label_symbol, {
 			name: "Label Symbol",
 			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v })
 		});
-		this.line_symbol = new UI_LineSymbol(main.settings.default_line_symbol, {
+		this.line_symbol = new UI_LineSymbol(line_symbol, {
 			name: "Line Symbol",
 			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
 		});
-		this.point_symbol = new UI_PointSymbol(main.settings.default_point_symbol, {
+		this.point_symbol = new UI_PointSymbol(point_symbol, {
 			name: "Point Symbol",
 			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
 		});
-		this.polygon_symbol = new UI_PolygonSymbol(main.settings.default_polygon_symbol, {
+		this.polygon_symbol = new UI_PolygonSymbol(polygon_symbol, {
 			name: "Polygon Symbol",
 			special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol(v)
 		});

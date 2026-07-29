@@ -7,6 +7,21 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		
 		colour: "stroke"
 	};
+	static labelling_options = {
+		autolabel_function: (naissance_obj) => {
+			if (naissance_obj.geometry.getGeometries) {
+				let all_geometries = naissance_obj.geometry.getGeometries();
+				
+				for (let i = 0; i < all_geometries.length; i++)  {
+					let local_label_geometry = new maptalks.Marker(all_geometries[i].getCenter());
+					naissance_obj.label_geometries.push(local_label_geometry);
+				}
+			} else {
+				let local_label_geometry = new maptalks.Marker(naissance_obj.geometry.getCenter());
+				naissance_obj.label_geometries.push(local_label_geometry);
+			}
+		}
+	};
 	
 	constructor () {
 		super();
@@ -22,59 +37,13 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		this.updateOwner();
 	}
 	
-	_drawLabels () {
-		if (this.value[2])
-			if (this.geometry) {
-				//Declare local instance variables
-				let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
-				let label_geometries = (this.value[2].label_geometries) ?
-					this.value[2].label_geometries : [];
-				let label_name = (this.value[2].label_name) ?
-					this.value[2].label_name : this.value[2].name;
-				if (!label_name) return;
-				
-				let label_symbol = {
-					...default_label_symbol,
-					...this.value[1].label_symbol
-				};
-				if (label_symbol.hide_label) return;
-				
-				//1. .label_coordinates
-				if (label_geometries.length === 0) {
-					if (!this.geometry.getGeometries) {
-						this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
-					} else {
-						let all_geometries = this.geometry.getGeometries();
-						
-						for (let i = 0; i < all_geometries.length; i++)
-							this.label_geometries[i] = new maptalks.Marker(all_geometries[i].getCenter());
-					}
-				} else {
-					for (let i = 0; i < label_geometries.length; i++)
-						this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
-				}
-				
-				//Iterate over all this.label_geometries, apply settings
-				for (let i = 0; i < this.label_geometries.length; i++) {
-					//2. .label_name/.name
-					if (label_geometries.length === 0) {
-						this.label_geometries[i].setSymbol({
-							...label_symbol,
-							textName: label_name,
-						});
-						
-						if (main.settings.hide_labels_by_default)
-							this.label_geometries[i].hide();
-					}
-					
-					this.label_geometries[i].addTo(main.layers.label_layer);
-				}
-			}
-	}
-	
 	draw () {
 		//Declare local instance variables
 		let derender_geometry = false;
+		
+		//Remove geometry first to handle it
+		if (this.selected_geometry) this.selected_geometry.remove();
+		this.selected_geometry = undefined;
 		
 		//1. Set this.value from current relative keyframe
 		this.value = this.history.getKeyframe({ 
@@ -111,15 +80,13 @@ naissance.GeometryLine = class extends naissance.Geometry {
 					if (this.value[1] && this.geometry) this.geometry.setSymbol(this.value[1]);
 					main.layers.entity_layer.addGeometry(this.geometry);
 					
-					this._drawLabels(); //Draw labels
+					this.drawLabels(); //Draw labels
 				}
 			} catch (e) { console.error(e); }
 		}
 		
 		//4. Draw this.selected_geometry
 		try {
-			this.selected_geometry = undefined;
-			
 			if (this.geometry && this.selected) {
 				this.selected_geometry = this.geometry.copy();
 				this.selected_geometry.setSymbol({
@@ -136,20 +103,19 @@ naissance.GeometryLine = class extends naissance.Geometry {
 		if (this.geometry) {
 			this.history.draw(this.keyframes_ui);
 			
-			this.geometry.addEventListener("click", (e) => {
-				if (!["node", "node_override", "node_transfer"].includes(main.brush.mode) && !HTML.ctrl_pressed)
-					this.open("instance", { name: this.name, ...this.window_options });
-				
-				if (
-					HTML.ctrl_pressed &&
-					main.brush._selected_geometry?.id === this.id
-					&& e.pickGeometryIndex !== undefined
-				) {
-					//Remove this index from the line instead
-					DALS.Timeline.parseAction("remove_from_line", [{
-						geometry_obj: main.brush._selected_geometry.id,
-						remove_from_line: e.pickGeometryIndex
-					}]);
+			this.handleOnclick({
+				special_function: (e) => {
+					if (
+						HTML.ctrl_pressed &&
+						main.brush._selected_geometry?.id === this.id
+						&& e.pickGeometryIndex !== undefined
+					) {
+						//Remove this index from the line instead
+						DALS.Timeline.parseAction("remove_from_line", [{
+							geometry_obj: main.brush._selected_geometry.id,
+							remove_from_line: e.pickGeometryIndex
+						}]);
+					}
 				}
 			});
 		}
@@ -170,6 +136,8 @@ naissance.GeometryLine = class extends naissance.Geometry {
 			edit_symbol_ui: veInterface({
 				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
 					name: "Label",
+					enable_custom_labels: true,
+					geometry_obj: this,
 					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v, _id: this.id })
 				}),
 				edit_stroke: new UI_LineSymbol(main.settings.default_line_symbol, {

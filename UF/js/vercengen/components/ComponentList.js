@@ -11,6 +11,7 @@
  *   - `.do_not_display_info_button=false`: {@link boolean}
  *   - `.max`: {@link number} - The maximum number of elements in the array.
  *   - `.min=0`: {@link number} - The minimum number of elements in the array.
+ *   - `.onadd`: {@link function}(v:{@link ve.Component}, e:{@link ve.List})
  *   - `.ondelete`: {@link function}(v:{@link ve.Component}, e:{@link ve.List})
  *   - `.options`: {@link Object} - The `.options` field to pass onto elements in the array.
  *   - `.placeholder`: {@link ve.Component} - An instance used as a template for new items. Required if initialising with an empty array.
@@ -148,7 +149,10 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
 		//Push item to end of stack
 		//Ensure class_name is valid before attempting creation
 		if (this.class_name && global[`ve${this.class_name}`]) {
-			this.value.push(this.source_component.copy());
+			let copied_component = this.source_component.copy();
+			this.value.push(copied_component);
+			if (this.options.onadd) 
+				this.options.onadd(copied_component, this);
 			this.draw();
 		} else {
 			console.error(`ve.List: Cannot add item. Unknown class: ve${this.class_name}`);
@@ -264,7 +268,9 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
                 veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
                 return;
               }
-              this.value.splice(get_current_idx(), 0, this.source_component.copy());
+							let new_component = this.source_component.copy();
+              this.value.splice(get_current_idx(), 0, new_component);
+							if (this.options.onadd) this.options.onadd(new_component, this);
               this.draw();
               this.fireToBinding();
             }, {
@@ -277,7 +283,9 @@ ve.List = class extends ve.Component { //[WIP] - Make empty lists valid
                 veToast(`<icon>warning</icon> ${loc("ve.registry.localisation.List_error_max_items_reached", String.formatNumber(this.options.max))}`);
                 return;
               }
-              this.value.splice(get_current_idx() + 1, 0, this.source_component.copy());
+							let new_component = this.source_component.copy();
+              this.value.splice(get_current_idx() + 1, 0, new_component);
+							if (this.options.onadd) this.options.onadd(new_component, this);
               this.draw();
               this.fireToBinding();
             }, {

@@ -1,8 +1,9 @@
 if (!global.naissance) global.naissance = {};
 naissance.History = class {
-	static draw_keyframe_function (arg0_options) {
+	static draw_keyframe_function (arg0_history, arg1_options) {
 		//Convert from parameters
-		let options = (arg0_options) ? arg0_options : {};
+		let history_obj = arg0_history;
+		let options = (arg1_options) ? arg1_options : {};
 		
 		//Declare local instance variables
 		let components_obj = options.components_obj;
@@ -29,12 +30,12 @@ naissance.History = class {
 				}),
 				move_keyframe: veButton(() => {
 					let move_keyframe_window = veWindow({
-						new_date: veDate(JSON.parse(JSON.stringify(local_value.date)), { name: "New Date" }),
+						new_date: veDate(local_value.timestamp, { name: "New Date" }),
 						confirm: veButton(() => {
 							DALS.Timeline.parseAction("move_keyframe", [{
-								geometry_obj: this.options._id(),
+								geometry_obj: history_obj.options._id(),
 								move_keyframe: {
-									date: local_value.date,
+									date: local_value.timestamp,
 									ot_date: move_keyframe_window.new_date.v
 								}
 							}]);
@@ -50,7 +51,7 @@ naissance.History = class {
 				}),
 				remove_keyframe: veButton((e) => {
 					DALS.Timeline.parseAction("delete_keyframe", [
-						{ geometry_obj: this.options._id(), remove_keyframe: local_key },
+						{ geometry_obj: history_obj.options._id(), remove_keyframe: local_key },
 						{ refresh_date: true }
 					]);
 				}, {
@@ -69,56 +70,54 @@ naissance.History = class {
 		
 		let local_keyframe_ui = components_obj[`t_${local_key}`];
 		local_keyframe_ui.element.addEventListener("contextmenu", (e) => {
-			if (this.keyframe_context_menu) this.keyframe_context_menu.close();
+			if (history_obj.keyframe_context_menu) history_obj.keyframe_context_menu.close();
 			
-			this.keyframe_context_menu = veContextMenu({
+			history_obj.keyframe_context_menu = veContextMenu({
 				copy_timestamp: veButton(() => {
 					navigator.clipboard.writeText(local_key);
 					veToast(`Copied timestamp to keyboard.`);
 				}, { name: "Copy Timestamp" }),
 				copy_geometry_to_date: veButton(() => {
-					let timestamp = Date.getTimestamp(main.date);
-					
-					this.addKeyframe(timestamp, ...[local_value.value[0]]);
+					history_obj.addKeyframe(main.timestamp, ...[local_value.value[0]]);
 					veToast(`Copied geometry keyframe to present date.`);
 				}, { name: "Copy Geometry To Date" }),
 				
 				//Edit Symbol, Edit Properties
 				edit_symbol_button: veButton(() => {
-					if (this.edit_symbol_object_window) this.edit_symbol_object_window.close();
-					this.edit_symbol_object_window = veWindow({
+					if (history_obj.edit_symbol_object_window) history_obj.edit_symbol_object_window.close();
+					history_obj.edit_symbol_object_window = veWindow({
 						symbol_obj: veObjectEditor(local_value.value[1], {
-							onuserchange: (v) => this.edit_symbol_object = v
+							onuserchange: (v) => history_obj.edit_symbol_object = v
 						}),
 						confirm: veButton(() => {
-							if (this.edit_symbol_object)
-								if (Object.keys(this.edit_symbol_object).length > 0) {
-									this.addKeyframe(local_key, undefined, this.edit_symbol_object);
+							if (history_obj.edit_symbol_object)
+								if (Object.keys(history_obj.edit_symbol_object).length > 0) {
+									history_obj.addKeyframe(local_key, undefined, history_obj.edit_symbol_object);
 									veToast(`Edited symbol at timestamp.`);
 								} else {
 									local_value.value[1] = undefined;
 									veToast(`Deleted symbol at timestamp.`);
 								}
-							this.getKeyframe({ refresh_localisation: true });
+							history_obj.getKeyframe({ refresh_localisation: true });
 						}, { name: "Confirm" })
 					}, { name: "Edit Symbol", can_rename: false, width: "20rem" })
 				}, { name: "Edit Symbol" }),
 				edit_properties_button: veButton(() => {
-					if (this.edit_properties_object_window) this.edit_properties_object_window.close();
-					this.edit_properties_object_window = veWindow({
+					if (history_obj.edit_properties_object_window) history_obj.edit_properties_object_window.close();
+					history_obj.edit_properties_object_window = veWindow({
 						symbol_obj: veObjectEditor(local_value.value[2], {
-							onuserchange: (v) => this.edit_properties_object = v
+							onuserchange: (v) => history_obj.edit_properties_object = v
 						}),
 						confirm: veButton(() => {
-							if (this.edit_properties_object)
-								if (Object.keys(this.edit_properties_object).length > 0) {
-									this.addKeyframe(local_key, undefined, undefined, this.edit_properties_object);
+							if (history_obj.edit_properties_object)
+								if (Object.keys(history_obj.edit_properties_object).length > 0) {
+									history_obj.addKeyframe(local_key, undefined, undefined, history_obj.edit_properties_object);
 									veToast(`Edited properties at timestamp.`);
 								} else {
 									local_value.value[2] = undefined;
 									veToast(`Deleted properties at timestamp.`);
 								}
-							this.getKeyframe({ refresh_localisation: true });
+							history_obj.getKeyframe({ refresh_localisation: true });
 						}, { name: "Confirm" })
 					}, { name: "Edit Properties", can_rename: false, width: "20rem" });
 				}, { name: "Edit Properties" })

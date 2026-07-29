@@ -65,15 +65,20 @@
 			} else {
 				if (json[i].load_save)
 					DALS.fromJSON(json[i].load_save);
+				if (json[i].load_savefile)
+					DALS.load(json[i].load_savefile);
 				if (json[i].set_date) {
 					UI_DateMenu.setDate(json[i].set_date);
 				} else if (json[i].refresh_date === true) {
+					let is_playing = UI_DateMenu.isPlaying();
+					
 					Object.iterate(naissance.Geometry.instances, (local_key, local_value) =>{
 						local_value.draw();
 						local_value.update();
 					});
+					naissance.GeometryMedia.syncToDate();
 					naissance.Mapmode.draw();
-					UI_Leftbar.refresh();
+					if (!is_playing) UI_Leftbar.refresh();
 				}
 			}
 		}
@@ -142,6 +147,7 @@
 					});
 					
 					if (local_value.id) feature_obj.setID(local_value.id);
+					if (local_value.is_visible === false) feature_obj._is_visible = false;
 					if (local_value.value) feature_obj.json = local_value.value;
 				}
 			}
@@ -152,6 +158,7 @@
 			local_feature.fromJSON(local_feature.json);
 			try {
 				if (local_feature.draw) local_feature.draw();
+				if (local_feature._is_visible === false) local_feature.hide();
 			} catch (e) { console.warn(e); }
 		});
 		
@@ -165,7 +172,7 @@
 		main.layers.cursor_layer.addGeometry(main.brush.cursor);
 	};
 	
-	DALS.toJSON = function () { //[WIP] - Finish function body for naissance.Feature
+	DALS.toJSON = function () {
 		//Declare local instance variables
 		let json_obj = {};
 		
@@ -182,7 +189,9 @@
 				history: local_geometry.history.toJSON(),
 				metadata: local_geometry.metadata,
 				type: "geometry"
-			};
+			}
+			
+			//Visibility is handled via keyframes, so the same sort of handling naissance.Feature needs isn't required
 		});
 		
 		//Iterate over all naissance.Feature.instances and serialise them
@@ -194,6 +203,12 @@
 				type: "feature",
 				value: local_feature.toJSON()
 			};
+			
+			let local_json = json_obj[local_feature.id];
+			if (!local_feature._is_visible)
+				local_json.is_visible = false;
+			
+			console.log(`Serialised as:`, local_json);
 		});
 		
 		//Return statement

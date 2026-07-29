@@ -365,7 +365,7 @@
 	 * 
 	 * @param arg0_number
 	 * @param arg1_places
-	 * @returns {string}
+	 * @returns {number}
 	 */
 	Math.roundNumber = function (arg0_number, arg1_places) {
 		//Convert from parameters
@@ -373,7 +373,7 @@
 		let places = Math.returnSafeNumber(arg1_places, 1);
 		
 		//Declare local instance variables
-		return number.toFixed(places);
+		return parseFloat(number.toFixed(places));
 	};
 	
 	Math.sigfig = function (arg0_number, arg1_sigfigs) {

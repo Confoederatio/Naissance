@@ -43,7 +43,7 @@ global.UI_LeftbarHierarchy = class {
 		UI_LeftbarHierarchy.instances.push(this);
 	}
 	
-	applySelectionClasses () {
+	applyClasses () {
 		let all_hierarchy_els = this.hierarchy.element.querySelectorAll("li[component='ve-hierarchy-datatype']");
 		
 		for (let i = 0; i < all_hierarchy_els.length; i++) {
@@ -298,15 +298,22 @@ global.UI_LeftbarHierarchy = class {
 				more_button: new ve.Button(() => {
 					if (main.interfaces.add_other_features) main.interfaces.add_other_features.remove();
 					main.interfaces.add_other_features = veWindow({
+						create_image_overlay: new ve.Button(() => {
+							let geometry_id = Class.generateRandomID(naissance.Geometry);
+							DALS.Timeline.parseAction("create_media", { 
+								type: "GeometryMedia", create_media: { id: geometry_id } });
+						}, { attributes: { class: "add-button" }, name: "<icon>image</icon> Create Media Overlay" }),
 						create_new_sketch_map: new ve.Button(() => {
 							let f_id = Class.generateRandomID(naissance.Feature);
-							DALS.Timeline.parseAction("create_sketch_map", [{ type: "FeatureSketchMap", create_sketch_map: { id: f_id } }]);
+							DALS.Timeline.parseAction("create_sketch_map", { 
+								type: "FeatureSketchMap", create_sketch_map: { id: f_id } });
 						}, { attributes: { class: "add-button" }, name: "<icon>app_registration</icon> Create Sketch Map" }),
 						create_new_tile_layer: new ve.Button(() => {
 							let f_id = Class.generateRandomID(naissance.Feature);
-							DALS.Timeline.parseAction("create_tile_layer", [{ type: "FeatureTileLayer", create_tile_layer: { id: f_id } }]);
+							DALS.Timeline.parseAction("create_tile_layer", { 
+								type: "FeatureTileLayer", create_tile_layer: { id: f_id } });
 						}, { attributes: { class: "add-button" }, name: "<icon>view_module</icon> Create Tile Layer" }),
-					}, { can_rename: false, name: "Add Features" });
+					}, { can_rename: false, name: "More Tools" });
 				}, { name: "<icon>add</icon> More", tooltip: "View Different Features" })
 			}, { attributes: { class: "create-bar" }}),
 			features: veRawInterface({})
@@ -330,10 +337,11 @@ global.UI_LeftbarHierarchy = class {
 		};
 		
 		this.drawTopbar(this.hierarchy.element);
-		this.applySelectionClasses();
+		this.applyClasses();
 	}
 	
 	static refresh () {
+		//console.trace("UI_LeftbarHierarchy.refresh");
 		if (UI_LeftbarHierarchy.do_not_refresh) return;
 		this.refresh_frame = true;
 		

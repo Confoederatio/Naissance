@@ -5,8 +5,8 @@
  * - `arg0_keyframes_obj`: {@link Object} - Map of keyframes.
  * - `arg1_options`: {@link Object}
  *   - `.components_obj`: {@link Object}
- *   - `.draw_keyframes_function`: {@link function}({ components_obj:{@link Object}, key:{@link string}, value:{@link Array}})
- *   - `.localisation_function`: {@link function}(arg0_new_keyframe:{@link HistoryKeyframe}, arg1_old_keyframe:{@link HistoryKeyframe}) | {@link string} - Localisation function to generate descriptions per keyframe. 
+ *   - `.draw_keyframes_function`: {@link function}(arg0_history:this, { components_obj:{@link Object}, key:{@link string}, value:{@link Array}})
+ *   - `.localisation_function`: {@link function}(arg0_history:this, arg1_new_keyframe:{@link HistoryKeyframe}, arg2_old_keyframe:{@link HistoryKeyframe}) | {@link string} - Localisation function to generate descriptions per keyframe. 
  *   
  * ##### Instance:
  * - `.do_not_draw=false`: {@link boolean}
@@ -290,7 +290,7 @@ global.History = class extends ve.Class {
 		//Iterate over all_keyframes and push it to components_obj
 		Object.iterate(this.keyframes, (local_key, local_value) => {
 			if (this.options.draw_keyframe_function)
-				this.options.draw_keyframe_function({
+				this.options.draw_keyframe_function(this, {
 					components_obj,
 					key: local_key,
 					value: local_value
@@ -418,7 +418,7 @@ global.History = class extends ve.Class {
 				//Parse localisation first, then concatenate
 				if (options.refresh_localisation)
 					local_keyframe.localisation = (this.options.localisation_function) ?
-						this.options.localisation_function(local_keyframe, return_keyframe) : "";
+						this.options.localisation_function(this, local_keyframe, return_keyframe) : "";
 				
 				if (!is_past_timestamp || remaining_guarantees.length > 0 || options.bake_keyframes) {
 					for (let x = 0; x < local_keyframe.value.length; x++) {

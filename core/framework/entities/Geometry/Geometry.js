@@ -2,7 +2,7 @@ if (!global.naissance) global.naissance = {};
 naissance.Geometry = class extends naissance.Entity {
 	static special_properties = ["hidden", "label_geometries", "label_name", "label_symbol", "max_zoom", "min_zoom", "name", "variables"];
 	
-	static history_localisation_function = (new_keyframe, old_keyframe) => {
+	static history_localisation_function = (history, new_keyframe, old_keyframe) => {
 		//Declare local instance variables
 		let return_string = [];
 		
@@ -177,14 +177,8 @@ naissance.Geometry = class extends naissance.Entity {
 	
 	get selected () {
 		//Declare local instance variables
-		let is_selected;
+		let is_selected = (this._selected || main.brush?.selected_geometry?.id === this.id);
 		
-		//Fetch is_selected
-		if (main.brush && main.brush.selected_geometry && main.brush.selected_geometry.id === this.id) {
-			is_selected = true;
-		} else {
-			is_selected = this._selected;
-		}
 		if (this.interface && this.interface.selected)
 			this.interface.selected.v = is_selected;
 		
@@ -193,8 +187,19 @@ naissance.Geometry = class extends naissance.Entity {
 	}
 	
 	set selected (v) {
-		//Set selected, then update draw
+		//Set underlying selection flag
 		this._selected = v;
+		
+		if (v === true) {
+			//Set as primary only if no primary geometry is currently active
+			if (!main.brush.selected_geometry)
+				main.brush.selected_geometry = this;
+		} else {
+			//If deselecting the primary geometry, reassign primary to another selected geometry if available
+			if (main.brush?.selected_geometry?.id === this.id)
+				main.brush.selected_geometry = undefined;
+		}
+		
 		this.draw();
 		UI_Leftbar.refresh();
 	}
@@ -209,6 +214,146 @@ naissance.Geometry = class extends naissance.Entity {
 		//Declare local instance variables
 		this.history.addKeyframe(date, coords, symbol, data);
 		this.draw();
+	}
+	
+	drawLabels () {
+		try {
+			if (!this.label_geometries) this.label_geometries = [];
+			
+			if (this.value && this.value[2] && this.geometry) {
+				let class_settings = (naissance[this.class_name]?.labelling_options || {});
+				let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
+				let saved_label_geometries = (this.value[2].label_geometries) ?
+					this.value[2].label_geometries : [];
+				let default_label_name = (this.value[2].label_name) ?
+					this.value[2].label_name : this.value[2].name;
+				
+				let is_autolabelled = (saved_label_geometries.length === 0);
+				let base_label_symbol = {
+					...default_label_symbol,
+					...(this.value[1]?.label_symbol || {})
+				};
+				if (base_label_symbol.hide_label) {
+					for (let i = 0; i < this.label_geometries.length; i++)
+						if (this.label_geometries[i]) this.label_geometries[i].remove();
+					this.label_geometries = [];
+					return;
+				}
+				
+				let target_layer = (is_autolabelled) ?
+					main.layers.label_layer : main.layers.overlay_label_layer;
+				let map_instance = (global.map || window.map || map);
+				
+				if (is_autolabelled) {
+					for (let i = 0; i < this.label_geometries.length; i++)
+						if (this.label_geometries[i]) this.label_geometries[i].remove();
+					this.label_geometries = [];
+					
+					if (class_settings.autolabel_function) class_settings.autolabel_function(this);
+					
+					for (let i = 0; i < this.label_geometries.length; i++) {
+						let local_label_geometry = this.label_geometries[i];
+						if (!local_label_geometry) continue;
+						
+						local_label_geometry.setSymbol({
+							...base_label_symbol,
+							...(class_settings.autolabel_symbol_function ? class_settings.autolabel_symbol_function(this) : {}),
+							textName: default_label_name || ""
+						});
+						local_label_geometry.addTo(target_layer);
+						
+						if (main.settings.hide_labels_by_default)
+							local_label_geometry.hide();
+					}
+				} else {
+					//Remove trailing geometries if array size reduced
+					while (this.label_geometries.length > saved_label_geometries.length) {
+						let removed_geom = this.label_geometries.pop();
+						if (removed_geom) removed_geom.remove();
+					}
+					
+					let new_label_geometries = [];
+					for (let i = 0; i < saved_label_geometries.length; i++) {
+						let label_json = saved_label_geometries[i];
+						let existing_geom = this.label_geometries[i];
+						let is_curved = (label_json.options?.type === "curved");
+						
+						let stored_symbol = label_json.options?.symbol_obj || label_json.symbol || {};
+						let final_symbol = {
+							...base_label_symbol,
+							...stored_symbol
+						};
+						if (!final_symbol.textName)
+							final_symbol.textName = default_label_name || "";
+						
+						if (is_curved) {
+							if (existing_geom instanceof Geospatiale.maptalks_CurvedLabel) {
+								existing_geom.setCoordinates(label_json.coords);
+								if (label_json.options?.style) existing_geom.style = { ...existing_geom.style, ...label_json.options.style };
+								if (final_symbol.textSize !== undefined) existing_geom.setFontSize(final_symbol.textSize);
+								if (final_symbol.textFill !== undefined) existing_geom.style.color = final_symbol.textFill;
+								if (final_symbol.textFaceName !== undefined) existing_geom.style.fontFamily = final_symbol.textFaceName;
+								existing_geom.setText(final_symbol.textName);
+								existing_geom.render();
+								
+								if (!existing_geom.options) existing_geom.options = {};
+								existing_geom.options.symbol_obj = final_symbol;
+								
+								saved_label_geometries[i] = existing_geom.toJSON();
+								saved_label_geometries[i].options.symbol_obj = final_symbol;
+								saved_label_geometries[i].symbol = final_symbol;
+								
+								new_label_geometries.push(existing_geom);
+							} else {
+								if (existing_geom) existing_geom.remove();
+								
+								let curved_json = { //[WIP] - Refactor later: this is not good, but we need to press this update out now
+									coords: label_json.coords,
+									options: {
+										...label_json.options,
+										text_string: final_symbol.textName,
+										base_font_size: Math.returnSafeNumber(final_symbol.textSize, label_json.options?.base_font_size || 16),
+										style: {
+											...(label_json.options?.style || {}),
+											fontFamily: final_symbol.textFaceName || label_json.options?.style?.fontFamily || "sans-serif",
+											color: final_symbol.textFill || label_json.options?.style?.color || "#ffffff"
+										},
+										symbol_obj: final_symbol
+									}
+								};
+								let curved_label = Geospatiale.maptalks_CurvedLabel.fromJSON(map_instance, curved_json);
+								curved_label.addTo(map_instance);
+								new_label_geometries.push(curved_label);
+							}
+						} else {
+							if (existing_geom instanceof Geospatiale.maptalks_CurvedLabel) {
+								existing_geom.remove();
+								existing_geom = null;
+							}
+							
+							if (existing_geom && typeof existing_geom.setSymbol === "function") {
+								existing_geom.setSymbol(final_symbol);
+								if (label_json.feature?.geometry?.coordinates)
+									existing_geom.setCoordinates(label_json.feature.geometry.coordinates);
+								new_label_geometries.push(existing_geom);
+							} else {
+								if (existing_geom) existing_geom.remove();
+								let straight_label = maptalks.Geometry.fromJSON(label_json);
+								straight_label.setSymbol(final_symbol);
+								straight_label.addTo(target_layer);
+								new_label_geometries.push(straight_label);
+							}
+						}
+					}
+					this.label_geometries = new_label_geometries;
+				}
+				
+				if (this.label_editor) {
+					this.label_editor.handleEvents();
+					this.label_editor.drawSelectedGeometries();
+				}
+			}
+		} catch (e) { console.error(e); }
 	}
 	
 	/**
@@ -445,7 +590,8 @@ naissance.Geometry = class extends naissance.Entity {
 			components_obj = {
 				selected: veCheckbox(this.selected, {
 					name: "Selected",
-					onuserchange: (v) => this.selected = v
+					onuserchange: (v) => this.selected = v,
+					style: { paddingLeft: 0 }
 				}),
 				
 				move_to_brush: veButton(() => {
@@ -520,7 +666,7 @@ naissance.Geometry = class extends naissance.Entity {
 					naissance.Action.openActionsPalette(this);
 				}, {
 					name: "<icon>more_vert</icon>",
-					tootlip: "Open Actions Palette"
+					tooltip: "More Actions"
 				}),
 			};
 		}
@@ -624,6 +770,24 @@ naissance.Geometry = class extends naissance.Entity {
 		return symbol_obj;
 	}
 	
+	handleOnclick (arg0_options) {
+		//Convert from parameters
+		let options = (arg0_options) ? arg0_options : {};
+		
+		//Initialise options
+		options.limit = (options.limit === undefined) ? true : options.limit;
+		
+		//Handle generic onclick event
+		if (this.geometry && options.limit)
+			this.geometry.addEventListener("click", (e)  => {
+				if (main.brush._selected_geometry?.class_name !== "GeometryMedia")
+					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
+						this.open("instance", { name: this.name, ...this.window_options });
+				
+				if (options.special_function) options.special_function(e);
+			});
+	}
+	
 	/**
 	 * Hides the present Geometry. Used by {@link naissance.Feature}, not internally used.
 	 */
@@ -672,15 +836,24 @@ naissance.Geometry = class extends naissance.Entity {
 					let coords = this.geometry.getCoordinates();
 					
 					return `${format_string} | ${String.truncate(String.formatMaptalksCoords(coords), 40)} (${String.formatNumber(coords.length)} total)`;
+				} else {
+					return format_string;
 				}
-					
+			}, {
+				style: { paddingLeft: 0, paddingTop: 0 }
 			}),
 			quick_actions: this.getQuickActionsComponent(),
 			
 			...((typeof this.drawUI === "function") ? this.drawUI() : {}),
 			...ve.Class.getVercengenComponents(this),
 			variables_ui: this.variables_ui
-		}, { is_folder: false });
+		}, { 
+			is_folder: false,
+			style: { 
+				padding: 0,
+				"> table > tbody > tr > td > [component]": { paddingLeft: 0 }
+			}
+		});
 		
 		
 		//Call super.open for naissance.Entity
@@ -716,6 +889,7 @@ naissance.Geometry = class extends naissance.Entity {
 		this.history = new History();
 		if (!do_not_refresh)
 			this.draw();
+		if (this.interface) this.interface.remove();
 	}
 	
 	/**

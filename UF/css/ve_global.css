@@ -9,6 +9,7 @@ canvas, iframe { user-select: none; }
 input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
     margin-left: var(--cell-padding);
 }
+textarea { font-family: var(--monospace-font-family), monospace; }
 
 .tippy-box { max-width: fit-content !important; }
 

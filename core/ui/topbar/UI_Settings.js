@@ -9,6 +9,7 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 			project: {
 				name: "Project",
 				components_obj: {
+					//Autoload
 					autoload_file_container: veRawInterface({
 						autoload_file_label: veHTML(`<b>Autoload File</b>`, { style: { display: "inline" } }),
 						autoload_file: veFile((main.settings.autoload_file) ? main.settings.autoload_file : path.join(process.cwd(), "saves/autosave.naissance"), {
@@ -39,6 +40,22 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 						},
 						selected: main.settings.autoloading_mode
 					}),
+					load_savefile_as: veSelect({
+						file: { name: "File" },
+						json: { name: "JSON" }
+					}, {
+						name: "Load Savefile As",
+						tooltip: "Loading savefiles by their path consumes less RAM, but means version control trees may not be lossless.",
+						
+						onuserchange: (v) => {
+							main.settings.load_savefile_as = v;
+							UI_Settings.saveSettings();
+						},
+						selected: (main.settings.load_savefile_as || "json")
+					}),
+					
+					//Other Settings
+					other_settings_label: veHTML(`<b>Other Settings</b>`, { style: { display: "inline" } }),
 					sort_settings_alphabetically: veToggle(main.settings.sort_settings_alphabetically, {
 						name: "Sort Settings Alphabetically",
 						onuserchange: (v) => {
@@ -268,7 +285,11 @@ global.UI_Settings = class extends ve.Class { //[WIP] - Add settings serialisati
 				
 				//Load state
 				setTimeout(() => {
-					DALS.Timeline.parseAction("load_save", [{ load_save: load_data }]);
+					if (main.settings.load_savefile_as === "file") {
+						DALS.Timeline.parseAction("load_save", [{ load_savefile: main.settings.autoload_file[0] }]);
+					} else {
+						DALS.Timeline.parseAction("load_save", [{ load_save: load_data }]);
+					}
 				}, 100);
 			}
 	}

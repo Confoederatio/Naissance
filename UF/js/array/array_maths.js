@@ -211,18 +211,18 @@
 		let y_values = Array.toArray(arg1_y_values).map(y => (y > 0 ? Math.log(y) : Math.log(1e-6)));
 		let x_to_interpolate = parseInt(arg2_x_to_interpolate);
 		
-		// 1. Calculate the Spline in log-space
+		//1. Calculate the Spline in log-space
 		let interpolation = new cubic_spline(x_values, y_values);
 		let interpolated_value = Math.exp(interpolation.at(x_to_interpolate));
 		
-		// 2. Find bounds only for clamping
+		//2. Find bounds only for clamping
 		let prev_val = -Infinity, next_val = Infinity;
 		for (let i = 0; i < x_values.length; i++) {
 			if (x_values[i] <= x_to_interpolate) prev_val = Math.exp(y_values[i]);
 			if (x_values[i] >= x_to_interpolate) { next_val = Math.exp(y_values[i]); break; }
 		}
 		
-		// 3. Clamp the SPLINE value, don't overwrite it with a linear one
+		//3. Clamp the spline value, don't overwrite it with a linear one
 		let lower = Math.min(prev_val, next_val);
 		let upper = Math.max(prev_val, next_val);
 		

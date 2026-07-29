@@ -115,7 +115,7 @@ ve.UndoRedo = class extends ve.Component {
 		
 		this.page_menu = new ve.PageMenu({
 			save_load: {
-				name: "Save/Load",
+				name: "Branches",
 				components_obj: {
 					file_actions_bar: veRawInterface({
 						information: veHTML(loc("ve.registry.localisation.UndoRedo_file_information", )),

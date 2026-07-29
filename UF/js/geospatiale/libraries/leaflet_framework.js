@@ -1,5 +1,12 @@
 if (!global.Geospatiale) global.Geospatiale = {};
 
+/**
+ * Converts a Leaflet symbol to Maptalks.
+ * 
+ * @param {Object} arg0_symbol
+ * 
+ * @returns {Object}
+ */
 Geospatiale.convertLeafletSymbolToMaptalks = function (arg0_symbol) {
 	//Convert from parameters
 	let symbol_obj = (arg0_symbol) ? arg0_symbol : {};
@@ -28,18 +35,23 @@ Geospatiale.convertLeafletSymbolToMaptalks = function (arg0_symbol) {
 	return return_obj;
 };
 
+/**
+ * Returns a Leaflet geometry type. Either 'polygon'/'line'/'point'.
+ * 
+ * @param {Object} arg0_geometry
+ * 
+ * @returns {string}
+ */
 Geospatiale.getLeafletGeometryType = function (arg0_geometry) {
 	//Convert from parameters
 	let geometry = arg0_geometry;
 	
 	//Return statement
 	if (geometry instanceof L.Polygon) {
-		return 'polygon';
+		return "polygon";
 	} else if (geometry instanceof L.Polyline) {
-		// Note: Polygons are instances of Polylines, 
-		// so we check Polygon first.
-		return 'line';
+		return "line";
 	} else if (geometry instanceof L.Marker || geometry instanceof L.CircleMarker) {
-		return 'point';
+		return "point";
 	}
 };

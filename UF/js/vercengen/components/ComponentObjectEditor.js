@@ -277,8 +277,7 @@ ve.ObjectEditor = class extends ve.Component { //[WIP] - Fix documentation; rewo
 			
 			style: {
 				".nst-content": { display: "flex", alignItems: "center", gap: "0px" },
-				'input': { maxWidth: "8rem" },
-				width: "20rem"
+				'input': { maxWidth: "8rem" }
 			}
 		});
 	}

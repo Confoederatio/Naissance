@@ -1145,7 +1145,7 @@ ve.registry.localisation = {
 	Table_previous: "Previous",
 	
 	//UndoRedo
-	UndoRedo_actions_map: "Actions Map",
+	UndoRedo_actions_map: "Graph",
 	UndoRedo_alphabetical_ascending: "Alphabetical (A-Z)",
 	UndoRedo_alphabetical_descending: "Alphabetical (Z-A)",
 	UndoRedo_branch_at_node: "Branch At Node",
@@ -1165,7 +1165,7 @@ ve.registry.localisation = {
 	UndoRedo_sorting_filter: "Sorting Filter",
 	UndoRedo_split_from_timeline: "Split From Timeline",
 	UndoRedo_timeline: "Timeline",
-	UndoRedo_timeline_view: "Timeline View",
+	UndoRedo_timeline_view: "Chronology",
 	UndoRedo_unlisted: "Unlisted",
 	
 	//WYSIWYG

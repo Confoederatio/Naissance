@@ -4,6 +4,9 @@ if (!global.Geospatiale)
 /**
  * Handles GeoKMZ/KML files for Maptalks and allows them to be rendered.
  * 
+ * @param {string} arg0_kmz_file
+ * @param {Object} [arg1_options]
+ * 
  * @type {Geospatiale.maptalks_GeoKMZ}
  */
 Geospatiale.maptalks_GeoKMZ = class {

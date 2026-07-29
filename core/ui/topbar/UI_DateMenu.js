@@ -186,7 +186,7 @@ global.UI_DateMenu = class extends ve.Class {
 				}
 			}
 			
-			// Update global state and UI
+			//Update global state and UI
 			UI_DateMenu.setDate(next);
 			//Schedule next tick
 			UI_DateMenu.logic_loop = setTimeout(tick, this.tick_speed);
@@ -195,10 +195,18 @@ global.UI_DateMenu = class extends ve.Class {
 		tick();
 	}
 	
+	static isPlaying () {
+		//Return statement
+		return main.interfaces.date_ui.is_playing;
+	}
+	
 	static setDate (arg0_date) {
 		//Convert from parameters
 		let date = (arg0_date !== undefined) ? arg0_date : main.interfaces.date_ui.date.v;
 			date = Date.convertTimestampToDate(date);
+		
+		//Round minutes since we don't support seconds yet
+		if (date.minute) date.minute = Math.round(date.minute);
 		
 		//Set date
 		main.date = date;

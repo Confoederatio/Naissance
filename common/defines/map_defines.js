@@ -11,6 +11,7 @@ config.defines.map = {
 		305.748113140705, 152.8740565703525, 76.43702828517625,
 		38.21851414258813], //The zoom level resolutions to display when a custom proj4js projection is set.
 	
+	default_image_src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", //Transparent image
 	default_maptalks_symbol: {
 		lineCap: "butt",
 		lineColor: "#000000",

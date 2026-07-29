@@ -14,6 +14,30 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		colour: "fill" //Either 'fill'/'stroke'
 	};
+	static labelling_options = {
+		autolabel_function: (naissance_obj) => {
+			let hide_labels_under_km2 = Math.returnSafeNumber(main.settings.hide_labels_under_km2, 1000);
+			
+			if (naissance_obj.geometry.getGeometries) {
+				let all_geometries = naissance_obj.geometry.getGeometries();
+				
+				for (let i = 0; i < all_geometries.length; i++) {
+					let local_area = all_geometries[i].getArea();
+					if (local_area < hide_labels_under_km2*1000000 && i > 0) continue; //Internal guard clause for small exclaves <1000km^2
+					
+					let label_geometry = new maptalks.Marker(all_geometries[i].getCenter());
+						label_geometry.area = local_area;
+						label_geometry.setZIndex(-local_area);
+					naissance_obj.label_geometries.push(label_geometry);
+				}
+			} else {
+				let label_geometry = new maptalks.Marker(naissance_obj.geometry.getCenter());
+					label_geometry.area = naissance_obj.geometry.getArea();
+					label_geometry.setZIndex(-label_geometry.area);
+				naissance_obj.label_geometries.push(label_geometry);
+			}
+		}
+	};
 	
 	constructor (arg0_options) {
 		//Convert from parameters
@@ -33,73 +57,6 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 		
 		//KEEP AT BOTTOM!
 		this.updateOwner();
-	}
-	
-	_drawLabels () {
-		try {
-			if (this.value[2]) {
-				//Declare local instance variables
-				let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
-				let hide_labels_under_km2 = Math.returnSafeNumber(main.settings.hide_labels_under_km2, 1000);
-				
-				//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[1].label_symbol
-				if (this.geometry) {
-					let label_geometries = (this.value[2].label_geometries) ?
-						this.value[2].label_geometries : [];
-					let label_name = (this.value[2].label_name) ?
-						this.value[2].label_name : this.value[2].name;
-					if (!label_name) return;
-					
-					let label_symbol = {
-						...default_label_symbol,
-						...this.value[1].label_symbol
-					};
-					if (label_symbol.hide_label) return;
-					
-					//1. .label_coordinates
-					if (label_geometries.length === 0) {
-						if (!this.geometry.getGeometries) {
-							this.label_geometries[0] = new maptalks.Marker(this.geometry.getCenter());
-							this.label_geometries[0].area = this.geometry.getArea();
-						} else {
-							let all_geometries = this.geometry.getGeometries();
-							
-							for (let i = 0; i < all_geometries.length; i++) {
-								let local_area = all_geometries[i].getArea();
-								if (local_area < hide_labels_under_km2*1000000 && i > 0) continue; //Internal guard clause for small exclaves <1000km^2
-								
-								let local_label_geometry = new maptalks.Marker(all_geometries[i].getCenter());
-								local_label_geometry.area = local_area;
-								this.label_geometries.push(local_label_geometry);
-							}
-						}
-					} else {
-						for (let i = 0; i < label_geometries.length; i++)
-							this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
-					}
-					
-					//Iterate over all this.label_geometries, apply settings
-					for (let i = 0; i < this.label_geometries.length; i++) {
-						let local_label_geometry = this.label_geometries[i];
-						if (!local_label_geometry) continue;
-						
-						//2. .label_name/.name
-						if (label_geometries.length === 0) {
-							this.label_geometries[i].setSymbol({
-								...label_symbol,
-								textName: label_name,
-							});
-							
-							if (main.settings.hide_labels_by_default)
-								this.label_geometries[i].hide();
-						}
-						if (local_label_geometry.area !== undefined)
-							local_label_geometry.setZIndex(-local_label_geometry.area);
-						local_label_geometry.addTo(main.layers.label_layer);
-					}
-				}
-			}
-		} catch (e) { console.error(e); }
 	}
 	
 	draw () {
@@ -148,7 +105,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 							...naissance.Renderer.getDefaultSymbol({ exclude: ["point"] }),
 							...this.value?.[1],
 						});
-						this._drawLabels();
+						this.drawLabels();
 					}
 					//Provinces rendering
 					else {
@@ -181,11 +138,7 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			} catch (e) { console.error(e); }
 			
 			//5. Add bindings
-			if (this.geometry && !is_province)
-				this.geometry.addEventListener("click", (e) => {
-					if (!["fill_tool", "node", "node_override", "node_transfer"].includes(main.brush.mode))
-						this.open("instance", { name: this.name, ...this.window_options });
-				});
+			this.handleOnclick({ limit: !is_province });
 		}
 	}
 	
@@ -195,6 +148,8 @@ naissance.GeometryPolygon = class extends naissance.Geometry {
 			edit_symbol_ui: veInterface({
 				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
 					name: "Label",
+					enable_custom_labels: true,
+					geometry_obj: this,
 					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v, _id: this.id })
 				}),
 				edit_polygon: new UI_PolygonSymbol(main.settings.default_polygon_symbol, {

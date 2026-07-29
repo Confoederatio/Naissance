@@ -531,6 +531,7 @@ table:has([component="ve-log"]) { table-layout: fixed; }
     height: 100%;
     overflow: hidden;
     padding-left: 0;
+    padding-top: 0;
     
     > [component="ve-page-menu"] {
         display: flex;

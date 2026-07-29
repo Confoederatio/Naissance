@@ -1,6 +1,8 @@
 /**
  * @param {Object} [arg1_options]
  *  @param {string} [arg1_options.name="Label Symbol"]
+ *  @param {boolean} [arg1_options.enable_custom_labels=false]
+ *  @param {naissance.Geometry} [arg1_options.geometry_obj]
  *  @param {function} [arg1_options.special_function] | {@link Object} - The function to call when setting the symbol. Uses Maptalks keys.
  */
 global.UI_LabelSymbol = class extends ve.Component {
@@ -50,6 +52,18 @@ global.UI_LabelSymbol = class extends ve.Component {
 				local_component.remove();
 			});
 		this.components_obj = {
+			...(this.options.enable_custom_labels ? {
+				open_label_editor: veButton(() => {
+					//Declare local instance variables
+					let geometry_obj = this.options.geometry_obj;
+					
+					//Open label editor
+					if (geometry_obj.label_editor) geometry_obj.label_editor.remove();
+					geometry_obj.label_editor = new naissance.GeometryLabelEditor(geometry_obj);
+					geometry_obj.label_editor.open();
+				}, { name: "Open Label Editor" })
+			} : {}),
+			
 			hide_label: veToggle(main.settings.hide_labels_by_default, {
 				name: "Hide Label",
 				onuserchange: (v) => {

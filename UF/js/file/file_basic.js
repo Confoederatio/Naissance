@@ -195,7 +195,45 @@
 	 * 
 	 * @returns {boolean}
 	 */
-	File.isFile = function (arg0_file_path) { return (!File.isFolder(arg0_file_path)); }
+	File.isFile = function (arg0_file_path) { return (!File.isFolder(arg0_file_path)); };
+	
+	/**
+	 * Checks whether the file extension is an image.
+	 * @alias File.isImage
+	 *
+	 * @param {string} arg0_file_path
+	 * 
+	 * @returns {boolean}
+	 */
+	File.isImage = function (arg0_file_path) {
+		//Convert from parameters
+		let file_path = arg0_file_path;
+		
+		//Declare local instance variables
+		let pattern_check = /\.(jpeg|jpg|gif|png|webp|svg|bmp)$|^data:image/i;
+		
+		//Return statement
+		return pattern_check.test(file_path);
+	};
+	
+	/**
+	 * Checks whether the file extension is a video.
+	 * @alias File.isVideo
+	 * 
+	 * @param {string} arg0_file_path
+	 * 
+	 * @returns {boolean}
+	 */
+	File.isVideo  = function (arg0_file_path) {
+		//Convert from parameters
+		let file_path = arg0_file_path;
+		
+		//Declare local instance variables
+		let pattern_check = /\.(mp4|mov|avi|wmv|flv|mkv|webm)$/i;
+		
+		//Return statement
+		return pattern_check.test(file_path);
+	};
 	
 	/**
 	 * Returns whether the given file path is a folder.

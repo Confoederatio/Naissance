@@ -167,6 +167,7 @@ naissance.Action = class {
 	 * 
 	 * @param {Object} arg0_naissance_obj
 	 * @param {Object} [arg1_options]
+	 *  @param {Object} [arg1_options.components_obj]
 	 *  @param {string} [arg1_options.name]
 	 *  @param {Object} [arg1_options.palette_options]
 	 */
@@ -195,6 +196,7 @@ naissance.Action = class {
 		
 		//Create new window
 		naissance_obj.actions_palette_window = veWindow({
+			...(options.components_obj || {}),
 			actions_palette: naissance.Action.drawActionsPalette(naissance_obj, { 
 				open: true, 
 				style: {

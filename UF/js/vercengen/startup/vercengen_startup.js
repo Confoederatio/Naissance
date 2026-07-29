@@ -429,11 +429,17 @@ global.path = require("path");
 			"UF/libraries/blockly.js",
 			"UF/libraries/bi_blockly/",
 			"!UF/libraries/js2blocks.mjs",
-			"UF/libraries/maptalks.min.js",
+			"UF/libraries/maptalks.js",
 			"UF/libraries/mapbox-gl.js",
 			"UF/libraries/mapbox-gl.css",
 			"UF/libraries/maptalks.mapboxgl.min.js",
 			"UF/libraries/maptalks.formats.js",
+			"UF/libraries/dat.gui.min.js",
+			"UF/libraries/three.min.js",
+			"UF/libraries/maptalks.three.js",
+			"UF/libraries/GLTFLoader.js",
+			
+			"UF/libraries/maptalksgl.js",
 			
 			//Leaflet
 			"UF/libraries/leaflet.css",

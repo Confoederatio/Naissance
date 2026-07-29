@@ -322,6 +322,7 @@ naissance.Feature = class extends naissance.Entity {
 		let delete_keys = ["_entities", "entities"]
 		
 		//Remove from naissance.Feature.instances
+		main.brush.selected_feature = undefined;
 		delete naissance.Feature.instances[this.id];
 		
 		Object.iterate(naissance.Feature.instances, (local_key, local_feature) => {

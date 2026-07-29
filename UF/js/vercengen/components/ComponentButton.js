@@ -56,7 +56,7 @@ ve.Button = class extends ve.Component {
 		//Add click event listener
 		this.button_el.addEventListener("click", (e) => {
 			if (this.value) this.value(e, this);
-			this.fireToBinding();
+			if (this.fireToBinding) this.fireToBinding();
 		});
 		this.name = options.name;
 		this.v = this.value;

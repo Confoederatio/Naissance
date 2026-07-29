@@ -32,6 +32,17 @@
  * @type {Object}
  */
 config.actions.feature = {
+	debug_feature: {
+		name: "Debug Feature",
+		scope: ["Feature"],
+		
+		draw_function: function () {
+			window.$feature = this;
+			console.log(`Feature logged as:`, window.$feature);
+			veToast(`Feature logged to console.`);
+			return undefined;
+		}
+	},
 	delete_feature: {
 		name: "Delete Feature",
 		scope: ["Feature"],

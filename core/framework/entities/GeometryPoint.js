@@ -5,6 +5,22 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		icon: "location_on",
 		name: "Point"
 	};
+	static labelling_options = {
+		autolabel_function: (naissance_obj) => {
+			let all_coordinates = naissance_obj.geometry.getCoordinates();
+			
+			for (let i = 0; i < all_coordinates.length; i++)  {
+				let local_label_geometry = new maptalks.Marker(all_coordinates[i]);
+				naissance_obj.label_geometries.push(local_label_geometry);
+			}
+		},
+		autolabel_symbol_function: (naissance_obj) => {
+			//Return statement
+			return {
+				textDy: (naissance_obj.geometry.getSymbol().markerHeight + 8)*-1,
+			};
+		}
+	};
 	
 	constructor () {
 		super();
@@ -20,62 +36,17 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		this.updateOwner();
 	}
 	
-	_drawLabels () {
-		//Declare local instance variables
-		let default_label_symbol = naissance.Renderer.getDefaultLabelSymbol();
-		
-		if (this.value[2]) {
-			//Fetch this.value[2].label_coordinates, this.value[2].label_name/name, this.value[2].label_symbol
-			if (this.geometry) {
-				let label_geometries = (this.value[2].label_geometries) ?
-					this.value[2].label_geometries : [];
-				let label_name = (this.value[2].label_name) ?
-					this.value[2].label_name : this.value[2].name;
-				if (!label_name) return;
-				
-				let label_symbol = {
-					...default_label_symbol,
-					...this.value[1].label_symbol
-				};
-				if (label_symbol.hide_label) return;
-				
-				//1. .label_coordinates
-				if (label_geometries.length === 0) {
-					let all_coordinates = this.geometry.getCoordinates();
-					
-					for (let i = 0; i < all_coordinates.length; i++)
-						this.label_geometries[i] = new maptalks.Marker(all_coordinates[i]);
-				} else {
-					for (let i = 0; i < label_geometries.length; i++)
-						this.label_geometries[i] = maptalks.Geometry.fromJSON(label_geometries[i]);
-				}
-				
-				//Iterate over all this.label_geometries, apply settings
-				for (let i = 0; i < this.label_geometries.length; i++) {
-					//2. .label_name/.name
-					if (label_geometries.length === 0) {
-						this.label_geometries[i].setSymbol({
-							textDy: (this.geometry.getSymbol().markerHeight + 8)*-1,
-							...label_symbol,
-							textName: label_name,
-						});
-						
-						if (main.settings.hide_labels_by_default)
-							this.label_geometries[i].hide();
-					}
-					
-					this.label_geometries[i].addTo(main.layers.label_layer);
-				}
-			}
-		}
-	}
-	
 	draw () {
 		//Declare local instance variables
 		let default_symbol = naissance.Renderer.getDefaultSymbol();
 		let derender_geometry = false;
 		
+		//Remove geometry first to handle it
 		if (this.geometry) this.geometry.remove(); //Remove geometry to preserve flash behaviour
+		if (this.selected_geometry) this.selected_geometry.remove();
+		
+		this.geometry = undefined;
+		this.selected_geometry = undefined;
 		
 		//1. Set this.value from current relative keyframe
 		this.value = this.history.getKeyframe({
@@ -99,13 +70,11 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		//3. Draw this.geometry, this.label from this.value onto map
 		if (!derender_geometry) {
 			try {
-				if (this.geometry) this.geometry.remove();
 				if (this.label_geometries)
 					for (let i = this.label_geometries.length - 1; i >= 0; i--) {
 						this.label_geometries[i].remove();
 						this.label_geometries.splice(i, 1);
 					}
-				if (this.selected_geometry) this.selected_geometry.remove();
 				
 				//Draw this.geometry, this.label_geometries, this.selected_geometry
 				if (this.value[0]) {
@@ -123,7 +92,7 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 					this.geometry.setSymbol(symbol_obj);
 					main.layers.entity_layer.addGeometry(this.geometry);
 					
-					this._drawLabels();
+					this.drawLabels();
 					
 					//3.1. Draw selection
 					if (this.selected || this._is_being_moved)
@@ -149,10 +118,11 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 		if (this.geometry) {
 			this.history.draw(this.keyframes_ui);
 			
-			this.geometry.addEventListener("click", (e) => {
-				this.selected_index = e.pickGeometryIndex;
-				this.open("instance", { name: this.name, ...this.window_options });
-				this.draw(); //Refreshes select geometry
+			this.handleOnclick({
+				special_function: (e) => {
+					this.selected_index = e.pickGeometryIndex;
+					this.draw(); //Refreshes select geometry
+				}
 			});
 		}
 		
@@ -245,6 +215,8 @@ naissance.GeometryPoint = class extends naissance.Geometry {
 			edit_symbol_ui: veInterface({
 				edit_label: new UI_LabelSymbol(main.settings.default_label_symbol, {
 					name: "Label",
+					enable_custom_labels: true,
+					geometry_obj: this,
 					special_function: (v) => UI_EditSelectedGeometries._makeSetSymbol({ label_symbol: v, _id: this.id })
 				}),
 				edit_point: new UI_PointSymbol(main.settings.default_point_symbol, {

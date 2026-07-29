@@ -57,7 +57,8 @@
         pointer-events: none;
         transition: opacity 0.1s ease;
     }
-    .nst-content:has(#metadata[is-visible="false"]) { opacity: 0.4; }
+    .nst-item[data-is-visible="false"] { opacity: 0.4; }
+    
     .nst-content:hover .onhover-visible {
         opacity: 1;
         pointer-events: auto;
