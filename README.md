@@ -129,6 +129,7 @@ Raster Formats:
 - .nc (NetCDF)
 - .png (GeoPNG) - Either KNN-threshold binning or ID based.
 - .tif (GeoTIFF)
+- Video formats: .avi, .gif, .mov, .mp4, .webm.
 
 Scripting Formats:
 - Excel/Google Sheets (via DatavisSuite/Spreadsheet)
