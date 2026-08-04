@@ -95,7 +95,7 @@ global.History = class extends ve.Class {
 	
 	/**
 	 * Checks whether the History has an entry after a given timestamp.
-	 * - Privtae method of: {@link History}
+	 * - Private method of: {@link History}
 	 * 
 	 * @param {number|Object} arg0_timestamp
 	 * 
@@ -318,16 +318,25 @@ global.History = class extends ve.Class {
 		//Convert from parameters
 		let json = (typeof arg0_json === "string") ? JSON.parse(arg0_json) : arg0_json;
 		
+		//Declare local instance variables
+		let keyframes_obj = (json.keyframes) ? json.keyframes : json;
+		
 		//Iterate over all_json_keys and assume them as keyframes
-		if (json.keyframes) {
-			let all_keyframes = Object.keys(json.keyframes).sort();
+		if (keyframes_obj) {
+			let all_keyframes = Object.keys(keyframes_obj).sort();
 			this.do_not_draw = true;
 			this.keyframes = {};
 			
 			for (let i = 0; i < all_keyframes.length; i++) {
 				let local_key = all_keyframes[i];
-				let local_keyframe = json.keyframes[local_key];
-				this.addKeyframe(local_key, ...local_keyframe.value);
+				let local_keyframe = keyframes_obj[local_key];
+				
+				if (Array.isArray(local_keyframe)) {
+					this.addKeyframe(local_key, ...local_keyframe);
+				} else {
+					//Legacy nested logic
+					this.addKeyframe(local_key, ...local_keyframe.value);
+				}
 			}
 			this.do_not_draw = false;
 		} else {
@@ -569,13 +578,11 @@ global.History = class extends ve.Class {
 	 * Outputs the current History as a JSON string.
 	 * - Method of: {@link History}
 	 * 
-	 * @returns {string}
+	 * @returns {Object}
 	 */
 	toJSON () {
 		//Convert from parameters
-		let json_obj = {
-			keyframes: {}
-		};
+		let json_obj = {};
 		
 		//Iterate over all this.keyframes and parse them to a minimal JSON contract
 		let all_keyframes = Object.keys(this.keyframes).sort();
@@ -584,10 +591,10 @@ global.History = class extends ve.Class {
 			let local_keyframe = this.keyframes[all_keyframes[i]];
 			
 			if (local_keyframe.value[0] === undefined) local_keyframe.value[0] = "undefined";
-			json_obj.keyframes[all_keyframes[i]] = { value: local_keyframe.value };
+			json_obj[all_keyframes[i]] = local_keyframe.value;
 		}
 		
 		//Return statement
-		return JSON.stringify(json_obj);
+		return json_obj;
 	}
 };

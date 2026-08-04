@@ -74,14 +74,21 @@ ve.DateLength = class extends ve.Component {
 	 * @type {{year: number, month: number, day: number, hour: number, minute: number}}
 	 */
 	get v () {
+		//Declare local instance variables
+		let year_val = parseInt(this.element.querySelector("#years").value);
+		let month_val = parseInt(this.element.querySelector("#months").value);
+		let day_val = parseInt(this.element.querySelector("#days").value);
+		let hour_val = parseInt(this.element.querySelector("#hours").value);
+		let minute_val = parseInt(this.element.querySelector("#minutes").value);
+		
 		//Return statement
-		return Date.convertTimestampToDate(Date.getTimestamp({
-			year: parseInt(this.element.querySelector(`#years`).value),
-			month: parseInt(this.element.querySelector(`#months`).value),
-			day: parseInt(this.element.querySelector(`#days`).value),
-			hour: parseInt(this.element.querySelector(`#hours`).value),
-			minute: parseInt(this.element.querySelector(`#minutes`).value)
-		}));
+		return {
+			year: (isNaN(year_val)) ? 0 : year_val,
+			month: (isNaN(month_val)) ? 0 : month_val,
+			day: (isNaN(day_val)) ? 0 : day_val,
+			hour: (isNaN(hour_val)) ? 0 : hour_val,
+			minute: (isNaN(minute_val)) ? 0 : minute_val
+		};
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 //Set ve.registry.localisation defaults
-ve.registry.localisation = {
+ve.registry.localisation = { //[WIP] - FR, DE locales are incomplete
 	//EN-GB (British English, Default)
 	
 	//ve.Component
@@ -694,6 +694,7 @@ ve.registry.localisation = {
 	FileExplorer_error_load_save_file: "Error loading savefile",
 	FileExplorer_eta_remaining: "£1£% - £2£ remaining",
 	FileExplorer_finished_moving_files: "Finished moving files",
+	FileExplorer_load_request: "Initiated load request for £1£",
 	FileExplorer_load_save_file: "Load Savefile",
 	FileExplorer_loaded_save_file: "Loaded savefile £1£",
 	FileExplorer_move_files: "Move £1£ files",
@@ -709,6 +710,7 @@ ve.registry.localisation = {
 	FileExplorer_rename_file_to: "Rename file £1£ to:",
 	FileExplorer_save_file: "Save File",
 	FileExplorer_save_file_as: "Save file as:",
+	FileExplorer_save_request: "Initiated save request for £1£",
 	FileExplorer_select: "Select",
 	FileExplorer_skip: "Skip",
 	FileExplorer_specified_file_path_already_exists: "The specified path already exists as a file! Delete it first before creating a new file with the same name.",
