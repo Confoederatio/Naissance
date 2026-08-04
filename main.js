@@ -8,7 +8,7 @@ let { performance } = require("perf_hooks");
 
 //Metadata - Title
 let latest_fps = 0;
-let naissance_version = "1.95b Gibraltar";
+let naissance_version = "1.96b Lion";
 let title_update_interval;
 let win;
 
@@ -104,7 +104,7 @@ let win;
 {
   app.commandLine.appendSwitch("disable-site-isolation-trials");
   app.commandLine.appendSwitch("enable-features", "SharedArrayBuffer");
-  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=32128 --expose-gc');
+  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=262144 --expose-gc');
   
   //Launch app when ready
   app.whenReady().then(() => {

@@ -62,10 +62,12 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 		//Declare local instance variables
 		let presets_obj = config.features.tile_layer.tilemap_presets;
 		let preset_obj = presets_obj[preset];
+		let resolution = (this.options.resolution && this.options.resolution !== "null") ? 
+			this.options.resolution : "";
 		
 		if (preset.startsWith("maptiler_")) {
 			this._DALS_addOptions({
-				urlTemplate: `https://api.maptiler.com/maps/${preset.replace("maptiler_", "")}/${(this.tile_layer_window.resolution.v !== "null") ? this.tile_layer_window.resolution.v : ""}{z}/{x}/{y}.png?key=${this.tile_layer_window.advanced_options.maptiler_key.v}`
+				urlTemplate: `https://api.maptiler.com/maps/${preset.replace("maptiler_", "")}/${resolution}{z}/{x}/{y}.png?key=${this.options.maptiler_key}`
 			});
 		} else {
 			this._DALS_addOptions({
@@ -118,7 +120,11 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 				}
 			}, {
 				name: "Resolution",
-				onuserchange: (v) => this._DALS_recalculatePreset(this.options.preset)
+				onuserchange: (v) => {
+					this.options.resolution = v;
+					this._DALS_recalculatePreset(this.options.preset);
+				},
+				selected: this.options.resolution
 			}),
 			set_preset: veSelect(preset_options, {
 				name: "Tilemap Preset",
@@ -129,7 +135,10 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 			}),
 			
 			advanced_options: veInterface({
-				maptiler_key: veText("xWbyIIrJg1lF1fmQFByp", { name: "Maptiler Key" }),
+				maptiler_key: veText(this.options.maptiler_key, { 
+					name: "Maptiler Key",
+					onuserchange: (v) => this.options.maptiler_key = v
+				}),
 				url_template: veURL("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
 					name: "URL Template",
 					onuserchange: (v) => this._DALS_addOptions({ urlTemplate: v })
@@ -150,7 +159,14 @@ naissance.FeatureTileLayer = class extends naissance.Feature {
 				})
 			}, { name: "Advanced Options" }),
 			
-			apply_as_base_layer: veButton(() => this._DALS_applyAsBaseLayer(), { name: "Apply as Base Layer" })
+			actions_bar: veRawInterface({
+				apply_as_base_layer: veButton(() => this._DALS_applyAsBaseLayer(), { name: "Apply as Base Layer" }),
+				debug_tile_layer: veButton(() => {
+					window.$feature = this;
+					console.log(`Logged debug feature to console as:`, $feature);
+					veToast(`Logged debug TileLayer to console.`);
+				}, { name: "Debug Tile Layer" })
+			})
 		};
 	}
 	

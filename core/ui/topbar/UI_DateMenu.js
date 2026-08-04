@@ -113,13 +113,20 @@ global.UI_DateMenu = class extends ve.Class {
 	playTimelapse () {
 		// Clean up any existing system-wide loop
 		if (UI_DateMenu.logic_loop) clearTimeout(UI_DateMenu.logic_loop);
-		if (this.end_date === undefined) 
+		if (this.end_date === undefined)
 			this.end_date = Date.convertTimestampToDate(JSON.parse(JSON.stringify((main.date))));
-		if (this.start_date === undefined) 
+		if (this.start_date === undefined)
 			this.start_date = Date.convertTimestampToDate(JSON.parse(JSON.stringify((main.date))));
 		
 		UI_DateMenu.setDate(this.start_date);
-		const tick = () => {
+		
+		let getDaysInMonth = (month, year) => {
+			let is_leap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+			let month_lengths = [0, 31, is_leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+			return month_lengths[month] || 30;
+		};
+		
+		let tick = () => {
 			// Stop if this specific instance is no longer playing
 			if (!this.is_playing) return;
 			
@@ -138,16 +145,21 @@ global.UI_DateMenu = class extends ve.Class {
 				next.hour += Math.floor(next.minute / 60);
 				next.minute %= 60;
 			}
+			while (next.minute < 0) {
+				next.minute += 60;
+				next.hour -= 1;
+			}
+			
 			if (next.hour >= 24) {
 				next.day += Math.floor(next.hour / 24);
 				next.hour %= 24;
 			}
-			// Basic day-to-month normalisation (assuming 30 days for simplicity, 
-			// or replace with a proper calendar check if needed)
-			while (next.day > 30) {
-				next.day -= 30;
-				next.month += 1;
+			while (next.hour < 0) {
+				next.hour += 24;
+				next.day -= 1;
 			}
+			
+			// Normalise month and year boundaries before evaluating month length
 			while (next.month > 12) {
 				next.month -= 12;
 				next.year += 1;
@@ -157,38 +169,63 @@ global.UI_DateMenu = class extends ve.Class {
 				next.year -= 1;
 			}
 			
+			// Normalise days using actual month capacity
+			let max_days = getDaysInMonth(next.month, next.year);
+			if (step.month && !step.day && next.day > max_days) {
+				next.day = max_days;
+			} else {
+				while (next.day > max_days) {
+					next.day -= max_days;
+					next.month += 1;
+					if (next.month > 12) {
+						next.month = 1;
+						next.year += 1;
+					}
+					max_days = getDaysInMonth(next.month, next.year);
+				}
+				while (next.day < 1) {
+					next.month -= 1;
+					if (next.month < 1) {
+						next.month = 12;
+						next.year -= 1;
+					}
+					next.day += getDaysInMonth(next.month, next.year);
+					max_days = getDaysInMonth(next.month, next.year);
+				}
+			}
+			
 			// 3. Robust Termination logic
 			if (this.end_date) {
-				const d1 = next;
-				const d2 = this.end_date;
+				let date_1 = next;
+				let date_2 = this.end_date;
 				
 				// Cascading comparison from largest to smallest unit
-				const isPast =
-					d1.year > d2.year ||
-					(d1.year === d2.year && (d1.month || 1) > (d2.month || 1)) ||
-					(d1.year === d2.year &&
-						(d1.month || 1) === (d2.month || 1) &&
-						(d1.day || 1) > (d2.day || 1)) ||
-					(d1.year === d2.year &&
-						(d1.month || 1) === (d2.month || 1) &&
-						(d1.day || 1) === (d2.day || 1) &&
-						(d1.hour || 0) > (d2.hour || 0)) ||
-					(d1.year === d2.year &&
-						(d1.month || 1) === (d2.month || 1) &&
-						(d1.day || 1) === (d2.day || 1) &&
-						(d1.hour || 0) === (d2.hour || 0) &&
-						(d1.minute || 0) > (d2.minute || 0));
+				let is_past =
+					date_1.year > date_2.year ||
+					(date_1.year === date_2.year && (date_1.month || 1) > (date_2.month || 1)) ||
+					(date_1.year === date_2.year &&
+						(date_1.month || 1) === (date_2.month || 1) &&
+						(date_1.day || 1) > (date_2.day || 1)) ||
+					(date_1.year === date_2.year &&
+						(date_1.month || 1) === (date_2.month || 1) &&
+						(date_1.day || 1) === (date_2.day || 1) &&
+						(date_1.hour || 0) > (date_2.hour || 0)) ||
+					(date_1.year === date_2.year &&
+						(date_1.month || 1) === (date_2.month || 1) &&
+						(date_1.day || 1) === (date_2.day || 1) &&
+						(date_1.hour || 0) === (date_2.hour || 0) &&
+						(date_1.minute || 0) > (date_2.minute || 0));
 				
-				if (isPast) {
+				if (is_past) {
 					this.is_playing = false;
 					console.log(`Quit playing.`, this.start_date, this.end_date);
 					return;
 				}
 			}
 			
-			//Update global state and UI
+			// Update global state and UI
 			UI_DateMenu.setDate(next);
-			//Schedule next tick
+			// Schedule next tick
 			UI_DateMenu.logic_loop = setTimeout(tick, this.tick_speed);
 		};
 		

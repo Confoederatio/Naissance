@@ -160,6 +160,15 @@ config.features.tile_layer = {
 				urlTemplate: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
 				subdomains: ["a", "b", "c"]
 			}
+		},
+		
+		//Yandex
+		yandex_satellite: {
+			name: "Yandex Satellite",
+			options: {
+				urlTemplate: "https://sat{s}.maps.yandex.net/tiles?l=sat&&v=2.26.0&x={x}&y={y}&z={z}",
+				subdomains: ["01", "02", "03", "04"]
+			}
 		}
 	}
 };
