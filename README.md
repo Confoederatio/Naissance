@@ -115,7 +115,7 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 
 - Collation (Vector) - ORBATs, territorial control, and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/Collation).
 - Harbinger - Turns arbitrary, noisy image data and text-scrapes into georeferenced geometries/ontologies using CV/ML techniques. Recommended only for higher-end devices.
-  - [[Toolkit (Github)]](https://github.com/ConfoederatioVF/Harbinger) 
+  - [[Toolkit (Github)]](https://github.com/ConfoederatioVF/Harbinger) | [[Harbinger.Deprojector]](https://github.com/ConfoederatioVF/Harbinger.Deprojector) | [[Harbinger.Segmentation]](https://github.com/ConfoederatioVF/Harbinger.Segmentation)
 
 </details>
 <details>
