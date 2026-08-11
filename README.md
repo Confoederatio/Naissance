@@ -114,8 +114,8 @@ For ready-made data analysis, you may find it useful to use Confoederatio histma
 #### Livemap:
 
 - Collation (Vector) - ORBATs, territorial control, and geospatialised news aggregation. Scripts for self-hosting are available [here](https://github.com/Confoederatio/Collation).
-- Deprojector (Beta; Raster) - Arbitrary projection-to-projection georeferencing using ML. These scripts are currently a proof-of-concept and not recommended for production.
-  - [[Tool (Github)]](https://github.com/Confoederatio/Deprojector) 
+- Harbinger - Turns arbitrary, noisy image data and text-scrapes into georeferenced geometries/ontologies using CV/ML techniques. Recommended only for higher-end devices.
+  - [[Toolkit (Github)]](https://github.com/ConfoederatioVF/Harbinger) 
 
 </details>
 <details>
