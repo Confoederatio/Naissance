@@ -19,13 +19,13 @@ naissance.Entity = class extends ve.Class {
 		let hierarchy_obj = {};
 		let icon_style = "";
 		let symbol_obj = (naissance[this.class_name].hierarchy_symbol || {});
-		let show_features = true;
-		let show_geometries = true;
+		let show_features = (options.show_features !== undefined) ? options.show_features : true;
+		let show_geometries = (options.show_geometries !== undefined) ? options.show_geometries : true;
 			if (this.class_name === "FeatureLayer") {
-				if (!this.metadata.show_layer_features) show_features = false;
-				if (!this.metadata.show_layer_geometries) show_geometries = false;
+				if (this.metadata.show_layer_features !== true) show_features = false;
+				if (this.metadata.show_layer_geometries !== true) show_geometries = false;
 			}
-		
+			
 		let symbol_name = (symbol_obj.name) ? symbol_obj.name : this.class_name;
 		
 		//Remove previous hierarchy_datatype; handle attributes
@@ -89,7 +89,11 @@ naissance.Entity = class extends ve.Class {
 					//naissance.FeatureGroup, naissance.FeatureLayer handling
 					if (local_entity instanceof naissance.Feature && local_entity.drawHierarchyDatatype) {
 						if (show_features)
-							hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype(options);
+							hierarchy_obj[local_key] = local_entity.drawHierarchyDatatype({
+								...options,
+								show_features,
+								show_geometries
+							});
 					} else {
 						//naissance.Feature generic handling
 						if (show_features)

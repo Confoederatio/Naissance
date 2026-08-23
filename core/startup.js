@@ -6,6 +6,7 @@ global.electron = require("electron");
 global.electron_remote = require("@electron/remote");
 global.exec = require("child_process").exec;
 global.fs = require("fs");
+global.geotiff = require("geotiff");
 global.JSDOM = require("jsdom").JSDOM;
 global.JSON5 = require("json5");
 global.mathjs = require("mathjs");

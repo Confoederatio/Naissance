@@ -31,7 +31,9 @@ config.actions.renderer = {
 			let spatial_reference = json.set_map_spatial_reference;
 			
 			//Coerce spatial_reference.projection if string
-			if (typeof spatial_reference.projection === "string") {
+			if (["EPSG:3857", "EPSG:4326"].includes(spatial_reference.projection)) {
+				map.setSpatialReference({ projection: spatial_reference.projection });
+			} else if (typeof spatial_reference.projection === "string") {
 				let proj4js_transform = proj4("WGS84", spatial_reference.projection);
 				
 				spatial_reference.projection = {
@@ -66,7 +68,7 @@ config.actions.renderer = {
 			}
 			
 			//Set spatial reference
-			map.setSpatialReference(json.set_map_spatial_reference);
+			map.setSpatialReference(spatial_reference);
 			
 			//Refresh naissance.FeatureTileLayers this.draw() call
 			Object.iterate(naissance.Feature.instances, (local_key, local_feature) =>

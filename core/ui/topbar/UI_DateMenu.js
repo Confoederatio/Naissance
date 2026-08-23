@@ -5,6 +5,7 @@ global.UI_DateMenu = class extends ve.Class {
 	constructor () {
 		super();
 		
+		//Declare local instance variables
 		let navbar_el = document.querySelector(".ve.navbar");
 		let navbar_height = ((navbar_el) ? navbar_el.offsetHeight : 0);
 		this.is_playing = false;
@@ -109,9 +110,8 @@ global.UI_DateMenu = class extends ve.Class {
 		});
 	}
 	
-	//[QUARANTINE]
 	playTimelapse () {
-		// Clean up any existing system-wide loop
+		//Clean up any existing system-wide loop
 		if (UI_DateMenu.logic_loop) clearTimeout(UI_DateMenu.logic_loop);
 		if (this.end_date === undefined)
 			this.end_date = Date.convertTimestampToDate(JSON.parse(JSON.stringify((main.date))));
@@ -120,29 +120,32 @@ global.UI_DateMenu = class extends ve.Class {
 		
 		UI_DateMenu.setDate(this.start_date);
 		
-		let getDaysInMonth = (month, year) => {
-			let is_leap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-			let month_lengths = [0, 31, is_leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-			return month_lengths[month] || 30;
+		let getDaysInMonth = (arg0_month, arg1_year) => {
+			let month_key = Date.all_months[arg0_month - 1];
+			if (!month_key) return 30;
+			let local_month = Date.months[month_key];
+			
+			//Return statement
+			return (Date.isLeapYear(arg1_year) && local_month.leap_year_days) ? local_month.leap_year_days : local_month.days;
 		};
 		
 		let tick = () => {
-			// Stop if this specific instance is no longer playing
-			if (!this.is_playing) return;
+			if (!this.is_playing) return; //Internal guard clause if this specific instance is no longer playing
 			
+			//Declare local instance variables
 			let next = { ...main.date };
 			let step = this.time_step || { year: 1 };
 			
-			// 1. Apply increments
+			//1. Apply increments
 			next.minute = (next.minute || 0) + (step.minute || 0);
 			next.hour = (next.hour || 0) + (step.hour || 0);
 			next.day = (next.day || 1) + (step.day || 0);
 			next.month = (next.month || 1) + (step.month || 0);
 			next.year = (next.year || 0) + (step.year || 0);
 			
-			// 2. Normalise units
+			//2. Normalise units
 			if (next.minute >= 60) {
-				next.hour += Math.floor(next.minute / 60);
+				next.hour += Math.floor(next.minute/60);
 				next.minute %= 60;
 			}
 			while (next.minute < 0) {
@@ -151,7 +154,7 @@ global.UI_DateMenu = class extends ve.Class {
 			}
 			
 			if (next.hour >= 24) {
-				next.day += Math.floor(next.hour / 24);
+				next.day += Math.floor(next.hour/24);
 				next.hour %= 24;
 			}
 			while (next.hour < 0) {
@@ -159,7 +162,7 @@ global.UI_DateMenu = class extends ve.Class {
 				next.day -= 1;
 			}
 			
-			// Normalise month and year boundaries before evaluating month length
+			//Normalise month and year boundaries before evaluating month length
 			while (next.month > 12) {
 				next.month -= 12;
 				next.year += 1;
@@ -169,7 +172,7 @@ global.UI_DateMenu = class extends ve.Class {
 				next.year -= 1;
 			}
 			
-			// Normalise days using actual month capacity
+			//Normalise days using actual month capacity
 			let max_days = getDaysInMonth(next.month, next.year);
 			if (step.month && !step.day && next.day > max_days) {
 				next.day = max_days;
@@ -194,27 +197,9 @@ global.UI_DateMenu = class extends ve.Class {
 				}
 			}
 			
-			// 3. Robust Termination logic
+			//3. Robust Termination logic
 			if (this.end_date) {
-				let date_1 = next;
-				let date_2 = this.end_date;
-				
-				// Cascading comparison from largest to smallest unit
-				let is_past =
-					date_1.year > date_2.year ||
-					(date_1.year === date_2.year && (date_1.month || 1) > (date_2.month || 1)) ||
-					(date_1.year === date_2.year &&
-						(date_1.month || 1) === (date_2.month || 1) &&
-						(date_1.day || 1) > (date_2.day || 1)) ||
-					(date_1.year === date_2.year &&
-						(date_1.month || 1) === (date_2.month || 1) &&
-						(date_1.day || 1) === (date_2.day || 1) &&
-						(date_1.hour || 0) > (date_2.hour || 0)) ||
-					(date_1.year === date_2.year &&
-						(date_1.month || 1) === (date_2.month || 1) &&
-						(date_1.day || 1) === (date_2.day || 1) &&
-						(date_1.hour || 0) === (date_2.hour || 0) &&
-						(date_1.minute || 0) > (date_2.minute || 0));
+				let is_past = Date.getTimestamp(next) > Date.getTimestamp(this.end_date);
 				
 				if (is_past) {
 					this.is_playing = false;
@@ -223,9 +208,8 @@ global.UI_DateMenu = class extends ve.Class {
 				}
 			}
 			
-			// Update global state and UI
+			//Update global state and UI; schedule next tick
 			UI_DateMenu.setDate(next);
-			// Schedule next tick
 			UI_DateMenu.logic_loop = setTimeout(tick, this.tick_speed);
 		};
 		
@@ -250,5 +234,6 @@ global.UI_DateMenu = class extends ve.Class {
 		main.timestamp = Date.getTimestamp(date);
 		main.interfaces.date_ui.date.v = date;
 		DALS.Timeline.parseAction("load_date", [{ refresh_date: true }], true);
+		UI_LeftbarTimeline.refresh();
 	}
 };
